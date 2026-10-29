@@ -1565,7 +1565,7 @@ Public Domain.
 
 ==============================================================================
 10. Source Han Sans
-Original file: FONT-LICENSE.txt
+Font copyright and SIL OFL 1.1 license (complete original text below)
 Source: https://github.com/adobe-fonts/source-han-sans/blob/2.004R/LICENSE.txt
 ==============================================================================
 

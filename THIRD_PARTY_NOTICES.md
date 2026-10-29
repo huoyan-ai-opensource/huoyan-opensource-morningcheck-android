@@ -55,7 +55,7 @@ UVCAndroid 1.0.13 的 libyuv 源码头注明 BSD 风格许可和 PATENTS 授权�
 
 ## 字体和项目自有文件
 
-`app/src/main/res/font/retail_sans_regular.ttf` 和 `retail_sans_bold.ttf` 是本项目使用的 Noto Sans SC 字体资源，其字体内版权声明为 Adobe 2014–2021、保留字体名称 `Source`。随库保留的 [FONT-LICENSE.txt](FONT-LICENSE.txt) 为 SIL OFL 1.1，中文参考译文收录在许可汇总中；字体许可不扩展为整个 App 的许可。
+`app/src/main/res/font/retail_sans_regular.ttf` 和 `retail_sans_bold.ttf` 是本项目使用的 Noto Sans SC 字体资源，其字体内版权声明为 Adobe 2014–2021、保留字体名称 `Source`。完整版权声明和 SIL OFL 1.1 字体许可保留在[许可原文汇总](docs/licenses/THIRD_PARTY_LICENSES.txt)第 10 节，中文参考译文见[字体许可译文](docs/licenses/THIRD_PARTY_LICENSES.zh-CN.md#source-han-sans)。原文与译文随交付包保留；OFL 仅适用于字体，不是整个 App 或客户端 JAR 的源码许可证。
 
 `app/src/main/libs/huoyan-morningcheck-client-2.0.0.jar` 来自本仓库 `huoyanClient` 模块。普通 App 构建消费这份已提交 JAR，不自动重编客户端源码；更新方式见[客户端交付说明](huoyanClient/README.md)。发行账号配置和激活资料不应作为第三方许可内容公开。
 

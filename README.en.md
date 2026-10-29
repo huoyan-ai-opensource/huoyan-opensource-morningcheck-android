@@ -1,71 +1,78 @@
 # Huoyan Open Source Morning Check Android App
 
-[简体中文](README.md) | English
+A native Android client for staff morning checks in **catering, canteens, and food production**. Run the complete App or integrate the client JAR into your own Android application.
 
-[GitHub repository](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android) · [Issues](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/issues)
+[简体中文](README.md) · [Website and activation](https://www.huoyan.cc) · [Downloads](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) · [Quick start](QUICKSTART.md) · [Documentation](docs/README.md)
 
-A native Android client for staff morning checks in catering, food production, and similar workplaces. Administrators manage staff and departments and enroll faces. Staff then complete identity, head, back-of-hand, and palm checks at the device. Records and captured evidence remain on the client device.
+**Everyone can use the source; AI recognition requires contacting Huoyan to activate the matching SDK.** See [usage and activation](USAGE.md) and [third-party notices](THIRD_PARTY_NOTICES.md) for the scope of the App source, SDK authorization, and bundled components.
 
-The App uses Java, XML layouts, and separate Activities. It connects to the independently installed Huoyan Morning Check 2.0 SDK. The App and client JAR source are available for everyone to use; AI recognition, detection, and enrollment require a compatible SDK, model, and activation. See [usage and activation](USAGE.md) (Chinese).
+## Choose how to use it
 
 | Goal | Start here |
 | --- | --- |
-| Install, activate, and complete a check | [Quick start](QUICKSTART.md) (Chinese) |
-| Build with Android Studio or the command line | [Build guide](docs/build.md) (Chinese) |
-| Integrate the SDK into your own App | [Client JAR](huoyanClient/README.md) · [Java examples](huoyanClient/samples) |
-| Read the Word guide offline | [English](app/src/main/libs/huoyan-morningcheck-client-2.0.0-integration-guide.en.docx) · [Chinese](app/src/main/libs/huoyan-morningcheck-client-2.0.0-integration-guide.zh-CN.docx) |
-| Check hardware and compatibility | [Hardware](docs/hardware.md) · [FAQ](docs/faq.md) · [Versions](docs/version-compatibility.md) (Chinese) |
-| Contribute or ask for help | [Contributing](CONTRIBUTING.md) · [Support](SUPPORT.md) · [Security](SECURITY.md) (Chinese) |
+| Install and try the complete App | [Quick start](QUICKSTART.md): install the App and SDK → activate and prepare models → add staff → enroll faces → run a check → view records |
+| Integrate recognition into your own App | [English integration guide](huoyanClient/INTEGRATION_GUIDE.en.md) · [Chinese integration guide](huoyanClient/INTEGRATION_GUIDE.md) · [Java example](huoyanClient/samples/MorningClientExample.java) |
+| Modify this project | [Build environment](docs/build.md) → [Code structure](docs/code-structure.md) → [Testing](docs/testing.md) → [Contributing](CONTRIBUTING.md) |
 
-## Features and scope
+The complete App uses package `cc.huoyan.opensource.morningcheck`; the JAR's public API is under `cc.huoyan.morningcheck.sdk.client`. The separately installed morning check SDK uses package `cc.huoyan.morningcheck`. The JAR handles communication and contains no inference engine or models.
 
-| Feature | Current behavior |
+## Features and interface
+
+- Staff and department management, unique required staff numbers, health certificate dates, search, filters, and pagination.
+- Face enrollment with staff selection and capture on one page, sample previews, single-image deletion, and clearing one staff member's samples.
+- Automatic identity, configured head, back-of-hand, and palm checks; temperature capture follows the rules. Continuous checks show a next-person countdown with an option to stay.
+- Local records and captured photos, date-range and result filters, pagination, and record details.
+- Camera2 and USB UVC cameras, serial thermometers with indoor/outdoor/trigger modes, and serial/GPIO lighting.
+- Speech, font size, security password, automatic entry after boot, and local/LAN SDK connection and activation settings.
+
+| Morning check | Department management |
 | --- | --- |
-| Staff and departments | Required unique staff numbers, names, health certificate dates, enabled state, department hierarchy, search, filters, and pagination |
-| Face enrollment | Select staff and capture on one page; view SDK sample images, delete one sample, or clear a staff member's samples |
-| Automatic check | Identity and temperature → configured mask/hat checks → backs of hands → palms → save results |
-| Continuous checks | Result countdown with an option to stay; the same person must leave the camera view before another round |
-| Records | Date range, result, department, name and staff number filters, pagination, details, and evidence images |
-| Hardware | Camera2 / USB UVC, serial thermometers, indoor/outdoor/trigger modes, serial/GPIO lighting |
-| Settings | Speech, font size, security password, automatic entry after boot, and workplace name |
-| SDK connection | Local AIDL or local/LAN WebSocket, installation guidance, activation, and authorization details |
+| ![Morning check test screen in landscape](docs/images/check-landscape.png) | ![Department management test screen in landscape](docs/images/departments-landscape.png) |
 
-Head checks and temperature capture follow the configured rules. Each round keeps its starting rules. Disabling temperature records an unmeasured value rather than a fabricated reading. Recognition quality and hardware support must be checked on the deployment device.
+These are historical Chinese test screens captured on October 21 and October 15, 2026, respectively. The check screen uses a simulated SDK with no camera or real-person capture, and its workplace name is hidden. The departments contain generic test data. Both editions show the same two-column layout; these images do not depict an English App interface or establish version 2.0.0 hardware acceptance. See [image details](docs/images/README.md). Landscape and portrait layouts are maintained in the [shared design source](design/huoyan-morningcheck.pen).
 
-Records and check photos are currently local only. Record upload, supplementary photos, manual review, and online App updates are not provided. Business-cloud staff import is separate from SDK activation and requires its own service configuration.
+## Downloads and activation
 
-## Interface example
+The App APK, client JAR, distribution ZIP, Chinese and English Word integration guides, and SHA-256 checksums are distributed through [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases). Both Word guides retain their project filenames inside the ZIP and in Assets; see [release requirements](docs/releasing.md). You can also [build from source](docs/build.md).
 
-![Department management in landscape](docs/images/departments-landscape.png)
+The SDK installation guide uses [morningcheck_sdk_lastest.apk](http://f.huoyan.cc/apk/morningcheck_sdk_lastest.apk) by default. Contact Huoyan through the [website](https://www.huoyan.cc) to confirm the device, chipset, application package, activation, and model support. The existing filename uses `lastest`; it is a moving SDK download address, not proof of a compatible fixed version. See [version compatibility](docs/version-compatibility.md).
 
-Department management with test departments and counts, captured on October 15, 2026. This image illustrates the layout; consult the current source for subsequent features and behavior.
+A successful connection, `init=0`, or `activate=0` does not establish readiness. The client's `isReady()` requires a connection, state `READY` or `OFFLINE`, `model_ready=true`, `certificate_valid=true`, and no lost key. `OFFLINE` supports local recognition, detection, and enrollment when those conditions hold; it does not make cloud APIs available. The SDK shell applies the final admission rules to each command. Follow the [quick start](QUICKSTART.md) for deployment.
 
-## Get started
+Rules determine whether to measure temperature or check masks and work caps; disabling temperature records an unmeasured value. Records and photos currently remain on the client device. Record upload, supplementary photos, manual review, and online App updates are not provided.
 
-1. Build and install the App using the [build guide](docs/build.md), then install the matching SDK on the device providing recognition.
-2. Contact Huoyan through [www.huoyan.cc](https://www.huoyan.cc) to confirm hardware, application package, and models, and obtain activation details.
-3. Configure cameras and any thermometer or light, add a test staff member, and enroll their face.
-4. Start a morning check and verify the saved result and evidence. Follow the [quick start](QUICKSTART.md) for the full procedure.
+## Build and test
 
-The project repository is [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android). Refer to the actual [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) and [Actions](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/actions) for downloads and build records, or build from source. App, JAR, and SDK versions are independent. The App and JAR both use `2.0.0` for this release baseline; future versions do not need to match. See [compatibility](docs/version-compatibility.md) and the [changelog](CHANGELOG.md).
+Use JDK/JBR **17**, Android SDK **35**, Build Tools **35.0.0**, and the included Gradle **8.14.3** Wrapper. Java source and target compatibility are **11**. This project does not build the native SDK engine and declares no NDK or CMake build. See the [build guide](docs/build.md) for Android Studio, SDK paths, and signing.
 
-## Build
+Windows PowerShell, after configuring `JAVA_HOME`:
 
-Use JDK 17, Android SDK 35, and the included Gradle Wrapper:
+```powershell
+.\gradlew.bat :app:assembleDebug
+.\gradlew.bat :app:testDebugUnitTest :huoyanClient:testDebugUnitTest
+```
+
+macOS / Linux:
 
 ```bash
 bash gradlew :app:assembleDebug
-bash gradlew :app:testDebugUnitTest :huoyanClient:testDebugUnitTest :huoyanClient:compileExample :huoyanClient:clientDistribution
+bash gradlew :app:testDebugUnitTest :huoyanClient:testDebugUnitTest
 ```
 
-On Windows PowerShell, replace `bash gradlew` with `.\gradlew.bat`. See the [build guide](docs/build.md) for the toolchain, SDK location, signing, and outputs.
+The App consumes the committed `app/src/main/libs/huoyan-morningcheck-client-2.0.0.jar`; an App build does not update it automatically. After changing client source, run `:huoyanClient:updateAppSdkJar` before rebuilding the App. Generate the complete client ZIP with `:huoyanClient:clientDistribution`. App and JAR versions are independent; both use `2.0.0` for this release baseline.
 
-The App consumes the committed `app/src/main/libs/huoyan-morningcheck-client-2.0.0.jar`. After changing client source or its version, run `:huoyanClient:updateAppSdkJar` before rebuilding the App. The client ZIP includes both Word guides, using the same filenames in the project, ZIP, and Release Assets. See [release requirements](docs/releasing.md). Build and release workflows are manual only.
+Debug uses the local debug signing key. Release defaults to the public [experimental key](signing/README.en.md), solely for noncommercial experiments and testing. Use your own key for production releases and configure it in the untracked `local.properties`. The experimental key's restrictions are separate from the use of Huoyan's own App source.
 
-## Documentation and terms
+## Documentation and collaboration
 
-The [documentation index](docs/README.md) covers builds, tests, deployment, and releases. [Code structure](docs/code-structure.md) explains Activities, the check pipeline, storage, and SDK sessions.
+| Topic | Documents |
+| --- | --- |
+| Run and use | [Quick start](QUICKSTART.md) · [Hardware](docs/hardware.md) · [FAQ](docs/faq.md) |
+| Develop and deliver | [Build](docs/build.md) · [Testing](docs/testing.md) · [Versions](docs/version-compatibility.md) · [Releasing](docs/releasing.md) · [Changelog](CHANGELOG.md) |
+| Client JAR | [English client README](huoyanClient/README.en.md) · [Account configuration and packaging](huoyanClient/PACKAGING.md) |
+| Word integration guides | [English](app/src/main/libs/huoyan-morningcheck-client-2.0.0-integration-guide.en.docx) · [Chinese](app/src/main/libs/huoyan-morningcheck-client-2.0.0-integration-guide.zh-CN.docx), alongside the JAR in `app/src/main/libs/` |
+| Support and contributions | [Support](SUPPORT.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Community guidelines](CODE_OF_CONDUCT.md) |
 
-[Usage and activation](USAGE.md) separates App/JAR source, SDK models, and third-party components. This repository has not selected a single standard license such as MIT or Apache 2.0 for the entire project. See [third-party notices](THIRD_PARTY_NOTICES.md) and [signing](signing/README.md).
+Submit ordinary issues and pull requests on [GitHub](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android). Include the source platform, commit, relevant versions, and any existing discussion links. Send activation codes, accounts, security reports, and employee data through the [private reporting channels](SECURITY.md).
 
-Remove face images, health certificates, activation codes, account tokens, and full device identifiers before public feedback. Report sensitive issues privately as described in [SECURITY.md](SECURITY.md).
+Maintainers trigger GitHub build checks and releases manually. Branch pushes, pull requests, and version tags do not automatically build or publish. See [release instructions](docs/releasing.md) and the coding-agent rules in [AGENTS.md](AGENTS.md).

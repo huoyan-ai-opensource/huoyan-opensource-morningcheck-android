@@ -712,7 +712,7 @@ Eclipse 公共许可证，第 1.0 版。
 
 ## Source Han Sans
 
-来源：仓库 [FONT-LICENSE.txt](../../FONT-LICENSE.txt)，对应原文汇总第 10 节。字体来自 Adobe 思源黑体，以下为该文件的完整中文参考译文。
+来源：[许可原文汇总](THIRD_PARTY_LICENSES.txt)第 10 节及其中标明的 Adobe 上游来源。字体来自 Adobe 思源黑体，以下为字体完整版权声明和 SIL OFL 1.1 的中文参考译文；许可仅适用于字体。
 
 Copyright 2014–2021 Adobe（http://www.adobe.com/），保留字体名称为 “Source”。
 

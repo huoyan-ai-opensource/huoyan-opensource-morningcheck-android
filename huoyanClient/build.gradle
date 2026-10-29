@@ -137,7 +137,7 @@ tasks.register('clientDistribution', Zip) {
     }
     from rootProject.files('USAGE.md', 'THIRD_PARTY_NOTICES.md', 'QUICKSTART.md',
             'SUPPORT.md', 'SECURITY.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md',
-            'CHANGELOG.md', 'AGENTS.md', 'Agents.en.md', 'FONT-LICENSE.txt',
+            'CHANGELOG.md', 'AGENTS.md', 'Agents.en.md',
             'local.properties.example')
     from(rootProject.file('docs')) {
         into 'docs'
