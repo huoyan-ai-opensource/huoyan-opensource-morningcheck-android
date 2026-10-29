@@ -60,7 +60,7 @@
                         android:layout_width="@dimen/dp_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="采集照片" />
+                        android:text="@string/ui_activity_record_design_record_detail_tab_photos_text" />
 
                     <TextView
                         android:id="@+id/record_photo_count"

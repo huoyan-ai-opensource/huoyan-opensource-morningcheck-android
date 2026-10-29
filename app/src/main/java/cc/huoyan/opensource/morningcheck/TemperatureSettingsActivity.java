@@ -22,6 +22,8 @@ import cc.huoyan.opensource.morningcheck.hardware.TemperatureSource;
  * 测温设置：独立 Activity 直接绑定对应 XML。
  */
 public final class TemperatureSettingsActivity extends BaseDeviceSettingsActivity {
+    // 配置继续沿用已有存储值，界面语言切换只能改变选项文案，不能改变串口读取方式。
+    private static final List<String> READ_MODES = Arrays.asList("串口被动上报", "串口主动查询");
     private TemperatureSource temperatureSource;
     private TemperatureSource.Listener readListener;
     private boolean reading;
@@ -57,30 +59,32 @@ public final class TemperatureSettingsActivity extends BaseDeviceSettingsActivit
         content.setPadding(0, 0, 0, 0);
         form.setSaveFromParentEnabled(false);
         List<String> modes = Arrays.asList(getResources().getStringArray(R.array.settings_temperature_modes));
-        Spinner mode = settingsSelect(form, R.id.settings_temperature_mode, modes, modes.indexOf(setting("temperature_mode", "串口被动上报")));
+        Spinner mode = settingsSelect(form, R.id.settings_temperature_mode, modes,
+                READ_MODES.indexOf(setting("temperature_mode", READ_MODES.get(0))));
         android.widget.ArrayAdapter<String> modeAdapter = new android.widget.ArrayAdapter<>(this, R.layout.item_setting_value, modes);
         modeAdapter.setDropDownViewResource(R.layout.item_spinner_option);
         mode.setAdapter(modeAdapter);
-        mode.setSelection(Math.max(0, modes.indexOf(setting("temperature_mode", "串口被动上报"))));
-        String[] selectedMode = {String.valueOf(mode.getSelectedItem())};
+        mode.setSelection(Math.max(0, READ_MODES.indexOf(setting("temperature_mode", READ_MODES.get(0)))));
+        String[] selectedMode = {READ_MODES.get(mode.getSelectedItemPosition())};
         TextView path = form.findViewById(R.id.settings_serial_path);
         path.setText(setting("serial_path", "/dev/ttyS4"));
-        SerialChoices.bind(this, path, true, "点选后立即生效", this::temperatureConfigurationChanged);
+        SerialChoices.bind(this, path, true, getString(R.string.i18n_b_select_applies), this::temperatureConfigurationChanged);
         TextView baud = form.findViewById(R.id.settings_baud);
         baud.setText(setting("baud", "115200"));
-        SerialChoices.bind(this, baud, false, "点选后立即生效", this::temperatureConfigurationChanged);
+        SerialChoices.bind(this, baud, false, getString(R.string.i18n_b_select_applies), this::temperatureConfigurationChanged);
         watchTemperatureField(form, path, "serial_path");
         watchTemperatureField(form, baud, "baud");
         mode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String value = String.valueOf(mode.getSelectedItem());
-                if (value.equals(selectedMode[0]) || form != formView || !uiReady()) return;
-                selectedMode[0] = value;
-                if (!modes.contains(value)) {
+                if (form != formView || !uiReady()) return;
+                if (position < 0 || position >= READ_MODES.size()) {
                     rejectTemperatureConfiguration(getString(R.string.settings_temperature_invalid_mode));
                     return;
                 }
+                String value = READ_MODES.get(position);
+                if (value.equals(selectedMode[0])) return;
+                selectedMode[0] = value;
                 prefs.edit().putString("temperature_mode", value).apply();
                 temperatureConfigurationChanged();
             }
@@ -300,8 +304,7 @@ public final class TemperatureSettingsActivity extends BaseDeviceSettingsActivit
             resetReadDisplay();
             return;
         }
-        List<String> modes = Arrays.asList(getResources().getStringArray(R.array.settings_temperature_modes));
-        if (!modes.contains(mode)) {
+        if (!READ_MODES.contains(mode)) {
             cancelReading();
             readingConfiguration = temperatureConfiguration(expectedForm);
             notice(getString(R.string.settings_temperature_invalid_mode));
@@ -356,7 +359,7 @@ public final class TemperatureSettingsActivity extends BaseDeviceSettingsActivit
             }
         };
         ensureTemperatureSource();
-        temperatureSource.start(path, baud, mode.equals(modes.get(1)));
+        temperatureSource.start(path, baud, mode.equals(READ_MODES.get(1)));
     }
 
     private void ensureTemperatureSource() {
@@ -430,7 +433,9 @@ public final class TemperatureSettingsActivity extends BaseDeviceSettingsActivit
 
     private String temperatureMode(View form) {
         Spinner mode = form.findViewById(R.id.settings_temperature_mode);
-        return mode == null ? setting("temperature_mode", "串口被动上报") : String.valueOf(mode.getSelectedItem());
+        int selected = mode == null ? -1 : mode.getSelectedItemPosition();
+        return selected < 0 || selected >= READ_MODES.size()
+                ? setting("temperature_mode", READ_MODES.get(0)) : READ_MODES.get(selected);
     }
 
     private String temperaturePath(View form) {

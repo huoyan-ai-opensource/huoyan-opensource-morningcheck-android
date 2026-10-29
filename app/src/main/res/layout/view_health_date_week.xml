@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="一" />
+        android:text="@string/ui_dialog_record_date_design_label_text_3" />
 
     <TextView
         style="@style/McHealthDateWeek"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="二" />
+        android:text="@string/ui_dialog_record_date_design_label_text_4" />
 
     <TextView
         style="@style/McHealthDateWeek"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="三" />
+        android:text="@string/ui_dialog_record_date_design_label_text_5" />
 
     <TextView
         style="@style/McHealthDateWeek"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="四" />
+        android:text="@string/ui_dialog_record_date_design_label_text_6" />
 
     <TextView
         style="@style/McHealthDateWeek"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="五" />
+        android:text="@string/ui_dialog_record_date_design_label_text_7" />
 
     <TextView
         style="@style/McHealthDateWeek"
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="六" />
+        android:text="@string/ui_dialog_record_date_design_label_text_8" />
 
     <TextView
         style="@style/McHealthDateWeek"
@@ -58,5 +58,5 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="日" />
+        android:text="@string/ui_dialog_record_date_design_label_text_9" />
 </LinearLayout>

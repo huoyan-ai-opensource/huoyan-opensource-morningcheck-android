@@ -10,7 +10,7 @@
         style="@style/McHealthDateTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="健康证有效期" />
+        android:text="@string/ui_view_health_date_summary_label_text" />
 
     <TextView
         android:id="@+id/health_date_selected"
@@ -26,5 +26,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_4"
-        android:text="星期六" />
+        android:text="@string/ui_view_health_date_summary_health_date_weekday_text" />
 </LinearLayout>

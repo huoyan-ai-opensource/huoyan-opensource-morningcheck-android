@@ -220,7 +220,7 @@ public final class DepartmentEditorDialog extends DialogFragment {
         if (panel == null || !isAdded()) return;
         if (editor.completed) {
             if (loading != null) loading.dismiss();
-            if (isResumed()) ToastEx.showSuccessToast(requireContext(), "部门已保存");
+            if (isResumed()) ToastEx.showSuccessToast(requireContext(), getString(R.string.i18n_a_department_saved));
             if (isResumed() && !getParentFragmentManager().isStateSaved()) dismiss();
             return;
         }
@@ -253,10 +253,10 @@ public final class DepartmentEditorDialog extends DialogFragment {
                 : getString(R.string.department_counts, editor.memberCount, editor.childCount));
         if (loading == null) loading = new LoadingDialog(requireActivity());
         if (isResumed() && editor.busy())
-            loading.show(editor.saving ? "正在保存部门" : "正在读取部门");
+            loading.show(editor.saving ? getString(R.string.i18n_a_saving_department) : getString(R.string.i18n_a_loading_departments));
         else loading.dismiss();
         if (isResumed() && !editor.message.isEmpty() && !editor.message.equals(shownMessage)) {
-            ToastEx.showFailureToast(requireContext(), editor.message);
+            ToastEx.showFailureToast(requireContext(), UiMessages.text(requireContext(), editor.message));
             shownMessage = editor.message;
         }
         if (editor.message.isEmpty()) shownMessage = "";

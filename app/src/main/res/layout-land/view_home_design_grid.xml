@@ -41,7 +41,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="员工管理"
+                android:text="@string/ui_view_home_design_grid_label_text"
                 android:textStyle="bold" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="资料、部门与人脸"
+                android:text="@string/ui_view_home_design_grid_label_text_2"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>
@@ -88,7 +88,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="晨检记录"
+                android:text="@string/ui_view_home_design_grid_label_text_3"
                 android:textStyle="bold" />
 
             <TextView
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="检查结果与照片"
+                android:text="@string/ui_view_home_design_grid_label_text_4"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>
@@ -135,7 +135,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SDK 连接"
+                android:text="@string/ui_view_home_design_grid_label_text_5"
                 android:textStyle="bold" />
 
             <TextView
@@ -143,7 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="本机与局域网"
+                android:text="@string/ui_view_home_design_grid_label_text_6"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>
@@ -182,7 +182,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="补光设置"
+                android:text="@string/ui_view_camera_design_settings_camera_lighting_text"
                 android:textStyle="bold" />
 
             <TextView
@@ -190,7 +190,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="串口与 GPIO 补光"
+                android:text="@string/ui_view_home_design_grid_label_text_7"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>
@@ -229,7 +229,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="授权与密钥"
+                android:text="@string/ui_view_home_design_grid_label_text_8"
                 android:textStyle="bold" />
 
             <TextView
@@ -237,7 +237,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="授权状态与激活"
+                android:text="@string/ui_view_home_design_grid_label_text_9"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>
@@ -276,7 +276,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="相机设置"
+                android:text="@string/ui_view_home_design_grid_label_text_10"
                 android:textStyle="bold" />
 
             <TextView
@@ -284,7 +284,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="头部与手部预览"
+                android:text="@string/ui_view_home_design_grid_label_text_11"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>
@@ -322,7 +322,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="晨检规则"
+                android:text="@string/ui_view_home_design_grid_label_text_12"
                 android:textStyle="bold" />
 
             <TextView
@@ -330,7 +330,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="着装与体温阈值"
+                android:text="@string/ui_view_home_design_grid_label_text_13"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>
@@ -368,7 +368,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="测温设备"
+                android:text="@string/ui_view_check_current_info_label_text_2"
                 android:textStyle="bold" />
 
             <TextView
@@ -376,7 +376,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="串口配置与测试"
+                android:text="@string/ui_view_home_design_grid_label_text_14"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>
@@ -414,7 +414,7 @@
                 style="@style/PenText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="系统设置"
+                android:text="@string/ui_view_home_design_grid_label_text_15"
                 android:textStyle="bold" />
 
             <TextView
@@ -422,7 +422,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="语音、字号与安全"
+                android:text="@string/ui_view_home_design_grid_label_text_16"
                 android:textSize="@dimen/sp_7" />
         </LinearLayout>
     </LinearLayout>

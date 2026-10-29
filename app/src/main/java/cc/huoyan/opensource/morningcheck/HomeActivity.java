@@ -87,7 +87,7 @@ public final class HomeActivity extends BaseMorningActivity {
             icon.getLayoutParams().width = size;
             icon.getLayoutParams().height = size;
         }
-        ((TextView) findViewById(R.id.home_settings)).setText("关于设备");
+        ((TextView) findViewById(R.id.home_settings)).setText(getString(R.string.i18n_a_about_device));
         android.widget.LinearLayout.LayoutParams trailing =
                 (android.widget.LinearLayout.LayoutParams) findViewById(R.id.header_trailing).getLayoutParams();
         trailing.width = 0;
@@ -109,9 +109,10 @@ public final class HomeActivity extends BaseMorningActivity {
         view.findViewById(R.id.home_connection).setOnClickListener(v -> navigate("settings", 0));
         view.findViewById(R.id.home_start).setOnLongClickListener(v -> {
             ImmersiveUi.show(new ProjectDialog.Builder(this)
-                    .setTitle("今日晨检统计").setMessage("未检：" + Math.max(0, staffCount - checkedTodayCount)
-                            + "\n已检：" + checkedTodayCount + "\n正常：" + normalTodayCount
-                            + "\n异常：" + abnormalTodayCount).setPositiveButton("关闭", null).create());
+                    .setTitle(getString(R.string.i18n_a_today_s_checks))
+                    .setMessage(getString(R.string.i18n_a_home_stats, Math.max(0, staffCount - checkedTodayCount),
+                            checkedTodayCount, normalTodayCount, abnormalTodayCount))
+                    .setPositiveButton(getString(R.string.i18n_a_close), null).create());
             return true;
         });
         view.findViewById(R.id.home_temperature).setOnClickListener(v -> navigate("settings", 6));
@@ -133,7 +134,7 @@ public final class HomeActivity extends BaseMorningActivity {
         if (shop == null) return;
         String name = currentShopName();
         shop.setVisibility(View.VISIBLE);
-        shop.setText(name.isEmpty() ? "未设置场所" : name);
+        shop.setText(name.isEmpty() ? getString(R.string.i18n_a_no_workplace_set) : name);
     }
 
     @Override
@@ -191,7 +192,7 @@ public final class HomeActivity extends BaseMorningActivity {
                 });
             } catch (Exception error) {
                 main.post(() -> {
-                    if (request == summaryRequest) notice("首页统计读取失败：" + failure(error));
+                    if (request == summaryRequest) notice(getString(R.string.i18n_a_home_stats_failed, failure(error)));
                 });
             }
         });
@@ -325,10 +326,10 @@ public final class HomeActivity extends BaseMorningActivity {
     private void showHomeStatus(MorningSdkState state, boolean missing) {
         if (content == null) return;
         boolean ready = state.ready && !missing;
-        String title = missing ? getString(R.string.sdk_install_missing_title) : state.title;
-        String detail = missing ? "SDK 未安装，安装后即可晨检"
-                : state.needsActivation ? "设备未激活，激活后开始使用"
-                  : ready ? "身份识别 · 体温 · 头部 · 手部" : state.detail;
+        String title = missing ? getString(R.string.sdk_install_missing_title) : UiMessages.text(this, state.title);
+        String detail = missing ? getString(R.string.i18n_a_install_the_sdk_to_start_checking)
+                : state.needsActivation ? getString(R.string.i18n_a_activate_this_device_to_start)
+                  : ready ? getString(R.string.i18n_a_identity_temperature_head_hands) : UiMessages.text(this, state.detail);
         int background = Color.parseColor(missing ? "#C93535" : state.needsActivation ? "#F5C842"
                                                                 : ready ? "#3F3EED" : "#64748B");
         content.findViewById(R.id.home_hero_panel).setBackgroundTintList(
@@ -336,8 +337,7 @@ public final class HomeActivity extends BaseMorningActivity {
         ((TextView) content.findViewById(R.id.home_hero_detail)).setText(detail);
         TextView badge = content.findViewById(R.id.home_status_badge);
         String sdkVersion = sdkSession.certificate().optString("sdk_version", "");
-        badge.setText("客户端 v" + BuildConfig.VERSION_NAME + "\nSDK "
-                + (sdkVersion.isEmpty() ? title.replace("SDK ", "") : sdkVersion));
+        badge.setText(getString(R.string.i18n_a_app_sdk_version, BuildConfig.VERSION_NAME, (sdkVersion.isEmpty() ? title.replace("SDK ", "") : sdkVersion)));
         badge.setOnLongClickListener(v -> {
             notice(title + "\n" + detail);
             return true;
@@ -345,13 +345,14 @@ public final class HomeActivity extends BaseMorningActivity {
         badge.setTextColor(ContextCompat.getColor(this, R.color.mc_muted));
         badge.setBackgroundTintList(null);
         ((TextView) content.findViewById(R.id.home_status_message)).setText(
-                "SN " + DeviceIdentity.hardwareSerial(this) + "\nSDK 连接方式  "
-                        + (MorningSdkSettings.transportIndex(prefs) == 2 ? "局域网" : "本机"));
+                getString(R.string.i18n_a_device_connection, UiMessages.text(this, DeviceIdentity.hardwareSerial(this)),
+                        MorningSdkSettings.transportIndex(prefs) == 2 ? getString(R.string.i18n_a_lan)
+                                : getString(R.string.i18n_a_local)));
         TextView start = content.findViewById(R.id.home_start);
         boolean blocked = !ready && !missing && !state.needsActivation;
         start.setEnabled(!blocked);
-        start.setText(missing ? "→  立即安装" : state.needsActivation ? "→  立即激活"
-                                                : blocked ? "→  SDK 加载中…" : "→  进入晨检");
+        start.setText(missing ? getString(R.string.i18n_a_install_now) : state.needsActivation ? getString(R.string.i18n_a_activate_now)
+                                                : blocked ? getString(R.string.i18n_a_loading_sdk) : getString(R.string.i18n_a_start_check));
         start.setTextColor(ready ? Ui.BLUE : Color.WHITE);
         start.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
                 Color.parseColor(missing ? "#AA2626" : state.needsActivation ? "#AF7D13"

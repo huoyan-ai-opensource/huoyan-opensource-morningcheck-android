@@ -9,7 +9,7 @@
         style="@style/PenTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="相机预览" />
+        android:text="@string/ui_view_camera_design_preview_label_text" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:id="@+id/settings_camera_texture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="相机完整画面" />
+            android:contentDescription="@string/ui_view_camera_design_preview_settings_camera_texture_contentdescription" />
 
         <cc.huoyan.opensource.morningcheck.CameraCropView
             android:id="@+id/settings_camera_crop"
@@ -39,7 +39,7 @@
             android:focusable="true"
             android:gravity="center"
             android:padding="@dimen/dp_12"
-            android:text="正在连接相机"
+            android:text="@string/ui_view_camera_design_preview_settings_camera_preview_message_text"
             android:textColor="@color/mc_white" />
     </FrameLayout>
 

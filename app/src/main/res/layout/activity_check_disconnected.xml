@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
-                android:text="设备连接已断开" />
+                android:text="@string/ui_activity_check_disconnected_label_text" />
 
             <TextView
                 style="@style/PenCaption"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
                 android:gravity="center"
-                android:text="检查已暂停，请检查设备连接。&#10;恢复后可重新开始，已保存记录不受影响。" />
+                android:text="@string/ui_activity_check_disconnected_label_text_2" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -55,14 +55,14 @@
                     android:id="@+id/check_disconnected_home"
                     style="@style/PenButton"
                     android:layout_width="wrap_content"
-                    android:text="返回首页" />
+                    android:text="@string/department_back" />
 
                 <TextView
                     android:id="@+id/check_disconnected_settings"
                     style="@style/PenPrimary"
                     android:layout_width="wrap_content"
                     android:layout_marginStart="@dimen/dp_8"
-                    android:text="检查连接" />
+                    android:text="@string/ui_activity_check_disconnected_check_disconnected_settings_text" />
             </LinearLayout>
         </LinearLayout>
 

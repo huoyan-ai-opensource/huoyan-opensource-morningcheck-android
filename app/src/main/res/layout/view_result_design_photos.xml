@@ -11,7 +11,7 @@
         style="@style/PenTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="异常明细" />
+        android:text="@string/ui_view_result_design_photos_result_findings_title_text" />
 
     <ScrollView
         android:id="@+id/result_findings_scroll"
@@ -38,7 +38,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="采集照片" />
+            android:text="@string/ui_activity_record_design_record_detail_tab_photos_text" />
 
         <TextView
             android:id="@+id/result_evidence_caption"

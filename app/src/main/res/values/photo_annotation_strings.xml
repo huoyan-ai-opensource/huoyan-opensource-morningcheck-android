@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="photo_annotation_temperature">体温 %1$.1f°C</string>
+    <string name="photo_annotation_temperature_missing">体温 未测</string>
+</resources>

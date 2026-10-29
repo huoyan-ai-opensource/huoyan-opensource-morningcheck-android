@@ -46,7 +46,7 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
     protected HuoyanClient sdk;
     protected MorningSdkSession sdkSession;
     protected boolean foreground, destroyed, loaded, wide, compact, navigating;
-    protected String connection = "正在连接晨检 SDK";
+    protected String connection = "";
     protected LinearLayout content;
     protected JSONObject currentRecord;
     protected List<JSONObject> staff = new ArrayList<>(), records = new ArrayList<>();
@@ -78,6 +78,7 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+        connection = UiMessages.text(this, "正在连接晨检 SDK");
         ImmersiveUi.enable(getWindow());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         prefs = getSharedPreferences("device", MODE_PRIVATE);
@@ -191,34 +192,34 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
         pageTitle.setVisibility(home ? View.GONE : View.VISIBLE);
         switch (pageKey()) {
             case "result":
-                pageTitle.setText("检查结果");
+                pageTitle.setText(getString(R.string.i18n_a_check_result));
                 break;
             case "staff":
-                pageTitle.setText("员工管理");
+                pageTitle.setText(getString(R.string.i18n_a_staff));
                 break;
             case "staff_edit":
-                pageTitle.setText("编辑员工");
+                pageTitle.setText(getString(R.string.i18n_a_edit_staff));
                 break;
             case "departments":
-                pageTitle.setText("部门管理");
+                pageTitle.setText(getString(R.string.i18n_a_departments));
                 break;
             case "record_photo":
-                pageTitle.setText("采集照片");
+                pageTitle.setText(getString(R.string.i18n_a_captured_photos));
                 break;
             case "sdk_details":
-                pageTitle.setText("设备详情");
+                pageTitle.setText(getString(R.string.i18n_a_device_details));
                 break;
             case "enroll":
                 pageTitle.setText(R.string.face_enrollment_entry);
                 break;
             case "records":
-                pageTitle.setText("晨检记录");
+                pageTitle.setText(getString(R.string.i18n_a_check_records));
                 break;
             case "record_detail":
-                pageTitle.setText("记录详情");
+                pageTitle.setText(getString(R.string.i18n_a_record_details));
                 break;
             case "settings":
-                pageTitle.setText("设备与 SDK");
+                pageTitle.setText(getString(R.string.i18n_a_device_sdk));
                 break;
             case "lighting":
                 pageTitle.setText(R.string.mc_home_design_lighting);
@@ -334,17 +335,17 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
     }
 
     protected void toast(String value) {
-        if (!destroyed && foreground) ToastEx.showSuccessToast(this, value);
+        if (!destroyed && foreground) ToastEx.showSuccessToast(this, UiMessages.text(this, value));
     }
 
     protected void notice(String value) {
         if (!destroyed && foreground && !isFinishing())
-            ToastEx.showFailureToast(this, value);
+            ToastEx.showFailureToast(this, UiMessages.text(this, value));
     }
 
     @Override
     public void onConnection(boolean connected, String message) {
-        connection = message == null || message.isEmpty() ? "SDK 未连接" : message;
+        connection = message == null || message.isEmpty() ? getString(R.string.i18n_a_sdk_disconnected) : UiMessages.text(this, message);
         onSdkStateChanged();
     }
 
@@ -352,7 +353,7 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
     public void onStatus(JSONObject status) {
         if (destroyed) return;
         MorningSdkState current = sdkSession.viewState();
-        connection = "●  " + current.title + " · " + current.detail;
+        connection = "●  " + UiMessages.text(this, current.title) + " · " + UiMessages.text(this, current.detail);
         onSdkStateChanged();
     }
 
@@ -360,7 +361,7 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
     public void onSdkDetailsChanged() {
         if (destroyed || !foreground) return;
         MorningSdkState state = sdkSession.viewState();
-        connection = "●  " + state.title + " · " + state.detail;
+        connection = "●  " + UiMessages.text(this, state.title) + " · " + UiMessages.text(this, state.detail);
         onSdkStateChanged();
     }
 
@@ -393,7 +394,7 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
     }
 
     protected String failure(Throwable error) {
-        return error.getMessage() == null ? "操作失败，请重试" : error.getMessage();
+        return error.getMessage() == null ? getString(R.string.i18n_a_operation_failed_try_again) : UiMessages.text(this, error.getMessage());
     }
 
     protected String date(long millis) {

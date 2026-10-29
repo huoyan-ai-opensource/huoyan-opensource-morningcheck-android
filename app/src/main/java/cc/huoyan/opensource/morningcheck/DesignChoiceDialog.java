@@ -129,6 +129,6 @@ final class DesignChoiceDialog {
         radio.setText(selected ? "•" : "");
         radio.setTextColor(android.graphics.Color.WHITE);
         radio.setBackgroundResource(selected ? R.drawable.mc_radio_selected : R.drawable.mc_radio_unselected);
-        row.setContentDescription(label + (selected ? "，已选中" : ""));
+        row.setContentDescription(label + (selected ? row.getContext().getString(R.string.i18n_a_selected) : ""));
     }
 }

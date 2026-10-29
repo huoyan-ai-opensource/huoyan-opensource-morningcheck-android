@@ -25,5 +25,5 @@
         style="@style/PenButton"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/dp_12"
-        android:text="取消" />
+        android:text="@string/activation_code_cancel" />
 </LinearLayout>

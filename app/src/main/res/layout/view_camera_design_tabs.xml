@@ -13,12 +13,12 @@
         style="@style/PenSegment"
         android:layout_width="@dimen/dp_0"
         android:layout_weight="1"
-        android:text="头部相机" />
+        android:text="@string/ui_view_camera_design_tabs_settings_preview_face_text" />
 
     <RadioButton
         android:id="@+id/settings_preview_hand"
         style="@style/PenSegment"
         android:layout_width="@dimen/dp_0"
         android:layout_weight="1"
-        android:text="手部相机" />
+        android:text="@string/ui_view_camera_design_tabs_settings_preview_hand_text" />
 </RadioGroup>

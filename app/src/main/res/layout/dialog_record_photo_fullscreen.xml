@@ -9,7 +9,7 @@
         android:id="@+id/photo_fullscreen_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="检查照片大图" />
+        android:contentDescription="@string/ui_dialog_record_photo_fullscreen_photo_fullscreen_image_contentdescription" />
 
     <TextView
         android:id="@+id/photo_fullscreen_position"

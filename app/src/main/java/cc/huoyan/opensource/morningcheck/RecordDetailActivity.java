@@ -98,18 +98,19 @@ public final class RecordDetailActivity extends RecordSupportActivity {
     @Override
     protected void bindPage() {
         findViewById(R.id.header_home).setOnClickListener(v -> finish());
-        ((TextView) findViewById(R.id.header_back_label)).setText("返回记录");
-        findViewById(R.id.header_home).setContentDescription("返回晨检记录列表");
+        ((TextView) findViewById(R.id.header_back_label)).setText(getString(R.string.i18n_b_back_records));
+        findViewById(R.id.header_home).setContentDescription(getString(R.string.i18n_b_back_record_list));
         content.findViewById(R.id.record_detail_empty).setOnClickListener(v -> {
             if (!reading) reload(false, null);
         });
         content.findViewById(R.id.record_detail_summary).setOnLongClickListener(v -> {
             if (currentRecord == null) return false;
-            ImmersiveUi.show(new ProjectDialog.Builder(this).setTitle("记录补充信息")
-                    .setMessage("健康证：" + value(currentRecord, "health_expiry", "未登记")
-                            + "\n测温来源：" + value(currentRecord, "temperature_source", "未记录")
-                            + "\n场所：" + value(currentRecord, "capture_shop_name", "未记录"))
-                    .setPositiveButton("关闭", null).create());
+            ImmersiveUi.show(new ProjectDialog.Builder(this).setTitle(getString(R.string.i18n_b_record_extra))
+                    .setMessage(getString(R.string.i18n_b_health_prefix) + value(currentRecord, "health_expiry", getString(R.string.i18n_b_not_registered))
+                            + getString(R.string.i18n_b_temperature_source_prefix)
+                            + UiMessages.text(this, value(currentRecord, "temperature_source", getString(R.string.i18n_b_not_recorded)))
+                            + getString(R.string.i18n_b_place_prefix) + value(currentRecord, "capture_shop_name", getString(R.string.i18n_b_not_recorded)))
+                    .setPositiveButton(getString(R.string.i18n_b_close), null).create());
             return true;
         });
         bindRecord();
@@ -123,7 +124,7 @@ public final class RecordDetailActivity extends RecordSupportActivity {
         }
         if (destroyed || !foreground) return;
         if (readingDialog == null) readingDialog = new LoadingDialog(this);
-        readingDialog.show("正在读取晨检记录");
+        readingDialog.show(getString(R.string.i18n_b_reading_record));
         int version = ++readVersion;
         reading = true;
         readError = "";
@@ -147,7 +148,7 @@ public final class RecordDetailActivity extends RecordSupportActivity {
                     reading = false;
                     loaded = true;
                     readError = failure(error);
-                    notice("读取记录失败：" + readError);
+                    notice(getString(R.string.i18n_b_read_record_failed) + readError);
                     bindRecord();
                 });
             }
@@ -167,28 +168,28 @@ public final class RecordDetailActivity extends RecordSupportActivity {
         TextView empty = content.findViewById(R.id.record_detail_empty);
         content.findViewById(R.id.record_photo_hint).setVisibility(available ? View.VISIBLE : View.GONE);
         empty.setVisibility(!available && loaded && !reading ? View.VISIBLE : View.GONE);
-        empty.setText("暂无记录，点击重新读取");
+        empty.setText(getString(R.string.i18n_b_empty_retry));
         if (!available) {
             for (int id : new int[]{R.id.record_detail_fields, R.id.record_detail_photos})
                 content.findViewById(id).setVisibility(View.GONE);
             return;
         }
         JSONObject record = currentRecord;
-        bindSummaryValue(R.id.record_detail_name, record, "staff_name", "未记录姓名", R.color.mc_ink);
-        bindSummaryValue(R.id.record_detail_staff_no, record, "staff_no", "未记录", R.color.mc_ink);
+        bindSummaryValue(R.id.record_detail_name, record, "staff_name", getString(R.string.i18n_b_name_missing), R.color.mc_ink);
+        bindSummaryValue(R.id.record_detail_staff_no, record, "staff_no", getString(R.string.i18n_b_not_recorded), R.color.mc_ink);
         ((TextView) content.findViewById(R.id.record_detail_name)).setText(
-                value(record, "staff_name", "未记录姓名") + " · " + value(record, "staff_no", "未记录"));
+                value(record, "staff_name", getString(R.string.i18n_b_name_missing)) + " · " + value(record, "staff_no", getString(R.string.i18n_b_not_recorded)));
         ((View) content.findViewById(R.id.record_detail_staff_no).getParent()).setVisibility(View.GONE);
         ((View) content.findViewById(R.id.record_detail_shop).getParent()).setVisibility(View.GONE);
-        bindSummaryValue(R.id.record_detail_department, record, "department", "未记录", R.color.mc_blue);
-        bindSummaryValue(R.id.record_detail_shop, record, "capture_shop_name", "未记录", R.color.mc_ink);
+        bindSummaryValue(R.id.record_detail_department, record, "department", getString(R.string.i18n_b_not_recorded), R.color.mc_blue);
+        bindSummaryValue(R.id.record_detail_shop, record, "capture_shop_name", getString(R.string.i18n_b_not_recorded), R.color.mc_ink);
         TextView date = content.findViewById(R.id.record_detail_date);
         long createdAt = record.optLong("created_at");
         date.setText(timestamp(createdAt));
         date.setTextColor(ContextCompat.getColor(this, createdAt > 0 ? R.color.mc_ink : R.color.mc_muted));
         TextView outcome = content.findViewById(R.id.record_detail_outcome);
         int status = record.optInt("status", -1);
-        outcome.setText(status == 1 ? "正常" : status == 0 ? "异常" : "未记录");
+        outcome.setText(status == 1 ? getString(R.string.i18n_b_normal) : status == 0 ? getString(R.string.i18n_b_abnormal) : getString(R.string.i18n_b_not_recorded));
         outcome.setTextColor(ContextCompat.getColor(this, status == 1 ? R.color.mc_green
                 : status == 0 ? R.color.mc_orange : R.color.mc_muted));
         outcome.setBackgroundResource(status == 1 ? R.drawable.mc_badge_success
@@ -205,19 +206,20 @@ public final class RecordDetailActivity extends RecordSupportActivity {
     private List<Field> checkFields(JSONObject record) {
         List<Field> fields = new ArrayList<>();
         String temperature = value(record, "temperature", "未测");
-        fields.add(new Field("体温", temperature + ("未测".equals(temperature) ? "" : " °C"), flagColor(record, "abnormal_temperature")));
+        fields.add(new Field(getString(R.string.i18n_b_temperature), UiMessages.text(this, temperature)
+                + ("未测".equals(temperature) ? "" : " °C"), flagColor(record, "abnormal_temperature")));
         boolean headRecorded = record.has("head_enabled") && !record.isNull("head_enabled");
         boolean headEnabled = headRecorded && record.optBoolean("head_enabled");
-        fields.add(new Field("头部检查", !headRecorded ? flag(record, "abnormal_face")
-                : !headEnabled ? "本次未启用" : flag(record, "abnormal_face"),
+        fields.add(new Field(getString(R.string.i18n_b_head_check), !headRecorded ? flag(record, "abnormal_face")
+                : !headEnabled ? getString(R.string.i18n_b_not_enabled) : flag(record, "abnormal_face"),
                 headRecorded && !headEnabled ? R.color.mc_muted : flagColor(record, "abnormal_face")));
-        fields.add(new Field("手部检查", flag(record, "abnormal_hand"), flagColor(record, "abnormal_hand")));
+        fields.add(new Field(getString(R.string.i18n_b_hand_check), flag(record, "abnormal_hand"), flagColor(record, "abnormal_hand")));
         JSONArray findings = record.optJSONArray("findings");
         if (findings == null || findings.length() == 0) {
             boolean normal = record.optInt("status", -1) == 1;
-            fields.add(new Field("异常说明", normal ? "未发现异常" : "未记录异常明细", normal ? R.color.mc_green : R.color.mc_muted));
+            fields.add(new Field(getString(R.string.i18n_b_findings), normal ? getString(R.string.i18n_b_no_findings) : getString(R.string.i18n_b_findings_missing), normal ? R.color.mc_green : R.color.mc_muted));
         } else for (int i = 0; i < findings.length(); i++)
-            fields.add(new Field("异常 " + (i + 1), findings.optString(i), R.color.mc_orange));
+            fields.add(new Field(getString(R.string.i18n_b_finding_prefix) + (i + 1), UiMessages.text(this, findings.optString(i)), R.color.mc_orange));
         return fields;
     }
 
@@ -225,7 +227,7 @@ public final class RecordDetailActivity extends RecordSupportActivity {
         List<RecordPhotos.Photo> values = RecordPhotos.read(record);
         content.findViewById(R.id.record_photo_hint).setVisibility(values.isEmpty() ? View.GONE : View.VISIBLE);
         StringBuilder signature = new StringBuilder(record.optString("id"));
-        ((TextView) content.findViewById(R.id.record_photo_count)).setText("共 " + values.size() + " 张");
+        ((TextView) content.findViewById(R.id.record_photo_count)).setText(getString(R.string.i18n_b_photo_count, values.size()));
         for (RecordPhotos.Photo photo : values)
             signature.append('|').append(photo.file).append('|').append(photo.label);
         if (!foreground || signature.toString().equals(photoSignature)) return;
@@ -275,7 +277,7 @@ public final class RecordDetailActivity extends RecordSupportActivity {
     }
 
     private String timestamp(long time) {
-        return time <= 0 ? "时间未记录" : new SimpleDateFormat("MM-dd HH:mm", Locale.CHINA).format(new Date(time));
+        return time <= 0 ? getString(R.string.i18n_b_time_missing) : new SimpleDateFormat("MM-dd HH:mm", Locale.CHINA).format(new Date(time));
     }
 
     private static String value(JSONObject record, String key, String fallback) {
@@ -283,9 +285,9 @@ public final class RecordDetailActivity extends RecordSupportActivity {
         return value.isEmpty() ? fallback : value;
     }
 
-    private static String flag(JSONObject record, String key) {
+    private String flag(JSONObject record, String key) {
         int flag = record.optInt(key, -1);
-        return flag == 0 ? "正常" : flag == 1 ? "异常" : "结果未记录";
+        return flag == 0 ? getString(R.string.i18n_b_normal) : flag == 1 ? getString(R.string.i18n_b_abnormal) : getString(R.string.i18n_b_result_missing);
     }
 
     // 状态色只取采集时保存的标记；缺标记不能推断成正常，也不按当前配置重算历史结果。
@@ -386,8 +388,8 @@ public final class RecordDetailActivity extends RecordSupportActivity {
             if (holder.photo == photo) return;
             holder.clear();
             holder.photo = photo;
-            holder.label.setText(photo.label);
-            holder.image.setContentDescription(photo.label);
+            holder.label.setText(UiMessages.text(RecordDetailActivity.this, photo.label));
+            holder.image.setContentDescription(UiMessages.text(RecordDetailActivity.this, photo.label));
             holder.empty.setVisibility(View.VISIBLE);
             holder.empty.setText(photo.file.isEmpty() ? R.string.record_detail_photo_not_saved : R.string.record_detail_photo_loading);
             final PhotoHolder expected = holder;

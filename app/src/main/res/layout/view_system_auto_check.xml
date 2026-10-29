@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:paddingTop="@dimen/dp_4"
             android:paddingBottom="@dimen/dp_4"
-            android:text="已关闭" />
+            android:text="@string/rules_disabled" />
 
         <cc.huoyan.opensource.morningcheck.LandscapeSwitch
             android:id="@+id/settings_auto_check"

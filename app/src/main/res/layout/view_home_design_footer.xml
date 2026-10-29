@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="广州芯海智控科技有限公司"
+            android:text="@string/ui_view_home_design_footer_label_text"
             android:textSize="@dimen/sp_6" />
     </LinearLayout>
 </FrameLayout>

@@ -79,13 +79,13 @@ public final class LicenseSettingsActivity extends BaseDeviceSettingsActivity {
     }
 
     private void bindLicense(View form) {
-        ((TextView) findViewById(R.id.header_page_title)).setText("授权与密钥");
+        ((TextView) findViewById(R.id.header_page_title)).setText(getString(R.string.i18n_a_license_keys));
         ((TextView) form.findViewById(R.id.license_client_version)).setText(BuildConfig.VERSION_NAME);
         ((TextView) form.findViewById(R.id.license_device_model)).setText(android.os.Build.MODEL);
         ((TextView) form.findViewById(R.id.license_device_serial)).setText(DeviceIdentity.hardwareSerial(this));
         cloudService.bind();
         form.findViewById(R.id.settings_license_fields).setOnLongClickListener(v -> {
-            showDetails("授权详情", SdkDetailsFormatter.certificate(sdkSession.certificate()), "");
+            showDetails(getString(R.string.i18n_a_license_details), SdkDetailsFormatter.certificate(sdkSession.certificate()), "");
             return true;
         });
         View activate = form.findViewById(R.id.settings_activate);
@@ -163,7 +163,7 @@ public final class LicenseSettingsActivity extends BaseDeviceSettingsActivity {
         if (formView == null || destroyed) return;
         if (cloudService != null) cloudService.refresh();
         ((TextView) formView.findViewById(R.id.license_sdk_version)).setText(
-                sdkSession.certificate().optString("sdk_version", "待确认"));
+                sdkSession.certificate().optString("sdk_version", getString(R.string.i18n_a_pending)));
         updateCertificate();
         showCurrentModel();
         View switchModel = formView.findViewById(R.id.settings_switch_model);
@@ -217,9 +217,10 @@ public final class LicenseSettingsActivity extends BaseDeviceSettingsActivity {
     private void updateCertificate() {
         ListView list = formView.findViewById(R.id.settings_license_fields);
         org.json.JSONObject certificate = sdkSession.certificate();
-        String text = "激活时间：" + SdkDetailsFormatter.seconds(certificate.opt("activated_at"))
-                + "\n过期时间：" + SdkDetailsFormatter.seconds(certificate.opt("expires_at"))
-                + "\n授权版本：" + certificate.optString("license_type", "待确认");
+        String text = getString(R.string.i18n_a_license_fields,
+                UiMessages.text(this, SdkDetailsFormatter.seconds(certificate.opt("activated_at"))),
+                UiMessages.text(this, SdkDetailsFormatter.seconds(certificate.opt("expires_at"))),
+                certificate.optString("license_type", getString(R.string.i18n_a_pending)));
         if (text.equals(rowsSignature) && list.getAdapter() != null) return;
         // 自动刷新只替换变化的详情，保留操作员正在查看的行；重排时也恢复列表位置。
         saveRowPosition();
@@ -241,6 +242,7 @@ public final class LicenseSettingsActivity extends BaseDeviceSettingsActivity {
                     ? getLayoutInflater().inflate(R.layout.item_license_design, parent, false) : reusable;
             String line = getItem(position);
             int divider = line.indexOf('：');
+            if (divider < 0) divider = line.indexOf(':');
             TextView label = row.findViewById(R.id.record_detail_field_label);
             label.setText(divider < 0 ? "" : line.substring(0, divider));
             label.setVisibility(divider < 0 ? View.GONE : View.VISIBLE);

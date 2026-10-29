@@ -1,0 +1,1451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ui_message_sources" translatable="false">
+        <item>"采集范围必须在画面内且宽高不少于 5%"</item>
+        <item>"RGB 画面数据与尺寸不一致"</item>
+        <item>"外接摄像头"</item>
+        <item>"前置摄像头"</item>
+        <item>"后置摄像头"</item>
+        <item>"缺少相机宿主或回调"</item>
+        <item>"请先允许相机权限"</item>
+        <item>"当前设备不支持系统相机"</item>
+        <item>"摄像头没有可用的画面配置"</item>
+        <item>"当前相机不支持已选分辨率，请重新选择"</item>
+        <item>"未发现系统摄像头，请确认设备连接及 Camera2 支持"</item>
+        <item>"摄像头已断开，请连接后重新进入晨检"</item>
+        <item>"摄像头被其他应用占用，请关闭占用后重试"</item>
+        <item>"系统已停用摄像头"</item>
+        <item>"当前摄像头不支持预览与识别同时采集，请更换摄像头"</item>
+        <item>"相机画面已中断，请重新连接"</item>
+        <item>"无法读取当前摄像头的画面格式"</item>
+        <item>"摄像头不支持预览与识别画面"</item>
+        <item>"摄像头预览与识别画面的比例不兼容"</item>
+        <item>"摄像头不支持 YUV 识别画面"</item>
+        <item>"摄像头不支持 TextureView 预览"</item>
+        <item>"体温 未测"</item>
+        <item>"证据标注需要有效的可写位图"</item>
+        <item>"手部证据缺少原始画面"</item>
+        <item>"指甲油"</item>
+        <item>"创可贴"</item>
+        <item>"戒指"</item>
+        <item>"伤口"</item>
+        <item>"USB 摄像头已拔出，请连接后重新进入"</item>
+        <item>"USB 摄像头权限已失效，请重新允许访问"</item>
+        <item>"USB 摄像头连接已中断，请重新进入"</item>
+        <item>"未允许访问 USB 摄像头，请重新进入并允许访问"</item>
+        <item>"摄像头没有可用的预览分辨率"</item>
+        <item>"USB 摄像头未返回画面，请确认未被其他应用占用后重试"</item>
+        <item>"USB 摄像头返回了不完整的 RGB 画面"</item>
+        <item>"USB 摄像头"</item>
+        <item>"同型号 USB 摄像头有多台，请在设备设置中重新选择具体镜头"</item>
+        <item>"选定 USB 摄像头未连接或连接位置已变化，请在设备设置中重新选择"</item>
+        <item>"相机画面尺寸或旋转角度不正确"</item>
+        <item>"员工 ID 必须大于零"</item>
+        <item>"员工分页参数无效"</item>
+        <item>"响应为空"</item>
+        <item>"缺少业务状态码"</item>
+        <item>"业务状态码不是整数"</item>
+        <item>"业务响应格式无效"</item>
+        <item>"业务请求被拒绝"</item>
+        <item>"请先配置业务登录令牌"</item>
+        <item>"服务地址不能包含账号、查询参数或片段"</item>
+        <item>"服务地址必须是有效的 HTTP 或 HTTPS 地址"</item>
+        <item>"本地员工数据损坏，请保留数据联系管理员"</item>
+        <item>"本地员工编号无效，无法保留人脸关联"</item>
+        <item>"员工启用状态筛选条件无效"</item>
+        <item>"上级部门编号无效"</item>
+        <item>"本地分页参数无效"</item>
+        <item>"请输入部门名称"</item>
+        <item>"部门编号无效"</item>
+        <item>"部门已删除，请返回列表刷新"</item>
+        <item>"部门名称已变更，请重新打开后修改"</item>
+        <item>"上级部门已变更，请重新打开后修改"</item>
+        <item>"上级部门不存在，请重新选择部门"</item>
+        <item>"上级部门不能选择自身或下级部门"</item>
+        <item>"该上级部门下的部门名称已存在"</item>
+        <item>"部门名称已变更，请重新打开后确认删除"</item>
+        <item>"上级部门已变更，请重新打开后确认删除"</item>
+        <item>"该部门还有下级部门，请先调整下级部门后再删除"</item>
+        <item>"该部门存在历史晨检记录，不能删除"</item>
+        <item>"选择的部门已删除，请重新选择部门"</item>
+        <item>"选择的部门已删除、改名或存在同名部门，请重新选择部门"</item>
+        <item>"部门筛选条件无效"</item>
+        <item>"已上传"</item>
+        <item>"结果待核实"</item>
+        <item>"晨检记录筛选条件无效"</item>
+        <item>"晨检结果筛选条件无效"</item>
+        <item>"晨检日期筛选条件无效"</item>
+        <item>"晨检统计时间范围无效"</item>
+        <item>"本地数据损坏，请保留数据联系管理员"</item>
+        <item>"SDK 人员标识对应多个员工，请联系管理员核对"</item>
+        <item>"本地员工数据无效"</item>
+        <item>"本地员工编号无效，不能保存"</item>
+        <item>"员工档案已删除，不能恢复或覆盖"</item>
+        <item>"员工人脸关联无效，请联系管理员核对"</item>
+        <item>"员工的 SDK 人员标识不可修改"</item>
+        <item>"请通过删除员工操作停用档案"</item>
+        <item>"SDK 人员标识生成失败"</item>
+        <item>"SDK 人员标识已达到上限"</item>
+        <item>"员工编号生成失败"</item>
+        <item>"员工编号已达到上限"</item>
+        <item>"该工号已被其他员工使用，请更换工号"</item>
+        <item>"该员工编号已存在"</item>
+        <item>"员工档案已删除，请刷新后操作"</item>
+        <item>"员工编辑快照无效"</item>
+        <item>"员工档案已删除，请返回列表刷新"</item>
+        <item>"员工资料已被更新，请重新打开详情后修改"</item>
+        <item>"晨检记录不存在"</item>
+        <item>"本地数据缺少 ID，不能保存"</item>
+        <item>"上传中"</item>
+        <item>"上次上传被中断，请先在云端核对是否已入账"</item>
+        <item>"照片缺少记录或阶段标识"</item>
+        <item>"待保存的照片无效"</item>
+        <item>"无法创建照片目录"</item>
+        <item>"照片编码失败"</item>
+        <item>"无效的照片路径"</item>
+        <item>"部门层级存在循环，请联系管理员"</item>
+        <item>"数据格式无效"</item>
+        <item>"本地数据已删除，不能由异步回调重新创建"</item>
+        <item>"不可修改本地数据标识或创建时间"</item>
+        <item>"人脸与头部"</item>
+        <item>"身份采集"</item>
+        <item>"头部检查"</item>
+        <item>"手背检查"</item>
+        <item>"手心检查"</item>
+        <item>"手背"</item>
+        <item>"手心"</item>
+        <item>"健康证过期或未登记"</item>
+        <item>"体温未测"</item>
+        <item>"工作帽"</item>
+        <item>"口罩"</item>
+        <item>"体温"</item>
+        <item>"未测"</item>
+        <item>"设备采集"</item>
+        <item>"未上传"</item>
+        <item>"请输入工号，工号不能为空"</item>
+        <item>"云端员工资料为空"</item>
+        <item>"云端员工编号缺失或与请求不一致，未覆盖本地档案"</item>
+        <item>"本机与云端员工编号不一致"</item>
+        <item>"云端员工资料缺少姓名，未覆盖本地档案"</item>
+        <item>"云端名册响应缺少 data.records，未导入"</item>
+        <item>"云端名册分页信息无效，未导入"</item>
+        <item>"云端名册页数和内容不一致，未导入"</item>
+        <item>"无"</item>
+        <item>"未分配"</item>
+        <item>"展示健康证状态需要当前日期"</item>
+        <item>"已过期"</item>
+        <item>"未过期"</item>
+        <item>"二维码未包含有效的激活信息，请使用激活二维码。"</item>
+        <item>"晨检流程和本轮规则不能为空"</item>
+        <item>"身份已确认，请保持正视摄像头"</item>
+        <item>"请正视摄像头"</item>
+        <item>"检测已完成，正在生成结果"</item>
+        <item>"请摘下手套"</item>
+        <item>"请将双手手背朝向摄像头"</item>
+        <item>"请将双手手心朝向摄像头"</item>
+        <item>"请将双手完整放入检测区域"</item>
+        <item>"未佩戴工作帽"</item>
+        <item>"未戴工作帽"</item>
+        <item>"未佩戴口罩"</item>
+        <item>"未戴口罩"</item>
+        <item>"不应佩戴工作帽"</item>
+        <item>"请摘下工作帽"</item>
+        <item>"不应佩戴口罩"</item>
+        <item>"请摘下口罩"</item>
+        <item>"连续采样次数必须大于零"</item>
+        <item>"体温异常阈值须满足 34 ≤ 下限 &lt; 上限 ≤ 43°C"</item>
+        <item>"晨检规则不能为空"</item>
+        <item>"体温读数无效，请重新测量（34 至 43°C）"</item>
+        <item>"身份已确认，请靠近测温设备等待有效体温读数"</item>
+        <item>"已读取体温，请保持面部在画面内完成身份核验"</item>
+        <item>"请正视镜头，等待识别员工身份"</item>
+        <item>"请正视镜头，同时靠近测温设备"</item>
+        <item>"请保持面部在画面内，等待着装检测"</item>
+        <item>"头部着装不符合要求，请调整后继续检测"</item>
+        <item>"正在检查工作帽和口罩，请保持姿势"</item>
+        <item>"请摘下手套，露出双手接受检测"</item>
+        <item>"请将双手手背朝向镜头"</item>
+        <item>"请将双手手心朝向镜头"</item>
+        <item>"正在采集双手手背，请保持姿势"</item>
+        <item>"正在采集双手手心，请保持姿势"</item>
+        <item>"请保持面部在画面内，检查工作帽和口罩"</item>
+        <item>"请翻转双手，将手心朝向镜头"</item>
+        <item>"晨检完成，已检项目正常；体温未测"</item>
+        <item>"晨检完成，各项检查正常"</item>
+        <item>"晨检完成，请查看异常项目"</item>
+        <item>"未知晨检阶段"</item>
+        <item>"请佩戴口罩、工作帽检测"</item>
+        <item>"请佩戴口罩检测"</item>
+        <item>"请佩戴工作帽检测"</item>
+        <item>"请进行头部检测"</item>
+        <item>"请伸出双手手背"</item>
+        <item>"请翻转双手手心"</item>
+        <item>"晨检正常"</item>
+        <item>"晨检异常，请查看结果"</item>
+        <item>"人脸检测回执缺少有效结果"</item>
+        <item>"人脸检测条目不完整"</item>
+        <item>"人脸检测框尺寸无效"</item>
+        <item>"人脸检测关键点不完整"</item>
+        <item>"人脸检测回执格式无效"</item>
+        <item>"人脸检测坐标或分数无效"</item>
+        <item>"SDK 尚未确认人脸明细"</item>
+        <item>"SDK 人脸明细缺少 uids，未更改本机登记状态"</item>
+        <item>"SDK 人脸编号无效，未更改本机登记状态"</item>
+        <item>"SDK 人脸编号重复，未更改本机登记状态"</item>
+        <item>"SDK 人脸 items 格式无效，未更改本机登记状态"</item>
+        <item>"SDK 人脸 items 编号无效或重复，未更改本机登记状态"</item>
+        <item>"SDK 人脸 items 图片字段无效，未更改本机登记状态"</item>
+        <item>"日期快捷筛选无效"</item>
+        <item>"日期时间范围无效"</item>
+        <item>"开始时间不能晚于结束时间"</item>
+        <item>"查询时间或时区无效"</item>
+        <item>"开启与关闭指令不能相同"</item>
+        <item>"请选择灯光控制方式"</item>
+        <item>"请填写有效的灯光串口路径与波特率"</item>
+        <item>"开灯、关灯电平必须分别为 0 和 1"</item>
+        <item>"请填写 GPIO 编号"</item>
+        <item>"GPIO 编号应为整数，多个编号以逗号分隔"</item>
+        <item>"最多配置 16 个 GPIO"</item>
+        <item>"灯光配置中的波特率或电平不是有效整数"</item>
+        <item>"请填写补光指令"</item>
+        <item>"字符指令须为 1–64 个可打印英文字符、数字或符号"</item>
+        <item>"十进制指令须为 1–64 个 0–255 的整数，以空格分隔"</item>
+        <item>"请按所选格式填写有效的字符、十进制或十六进制指令"</item>
+        <item>"请选择字符、十进制或十六进制"</item>
+        <item>"指令包含不可显示为字符的字节，请使用十进制或十六进制"</item>
+        <item>"缺少灯光配置"</item>
+        <item>"开灯命令已发送，请确认实际灯光"</item>
+        <item>"关灯命令已发送"</item>
+        <item>"所选路径不是串口设备"</item>
+        <item>"没有灯光串口读取权限"</item>
+        <item>"没有灯光串口写入权限"</item>
+        <item>"测温数据长度错误"</item>
+        <item>"缺少模式切换回调"</item>
+        <item>"请配置有效的测温串口与波特率"</item>
+        <item>"请选择有效的测温模式"</item>
+        <item>"正在连接测温设备"</item>
+        <item>"测温设备已连接，等待读数"</item>
+        <item>"测温设备已断开"</item>
+        <item>"10 秒内未收到 success，模式切换未确认，请重试"</item>
+        <item>"10 秒内未收到有效体温，请检查测温模块并重试"</item>
+        <item>"测温模块未返回 success，模式切换失败"</item>
+        <item>"已获取真实体温"</item>
+        <item>"测温设备正常"</item>
+        <item>"没有串口读取权限"</item>
+        <item>"没有串口写入权限"</item>
+        <item>"缺少测温回调"</item>
+        <item>"应用 Context 不能为空"</item>
+        <item>"读取 SDK 门店归属失败"</item>
+        <item>"未登录门店"</item>
+        <item>"SDK 连接已变更，请重新登录门店"</item>
+        <item>"请扫描门店二维码"</item>
+        <item>"门店登录必须在主线程调用"</item>
+        <item>"门店二维码不能为空"</item>
+        <item>"SDK 连接配置无效，请先检查设备设置"</item>
+        <item>"正在连接晨检 SDK"</item>
+        <item>"晨检 SDK 连接超时，尚未提交门店绑定"</item>
+        <item>"无法连接晨检 SDK，请检查连接配置和服务"</item>
+        <item>"正在绑定门店，请稍候"</item>
+        <item>"绑定结果未知，请核对门店归属后再操作"</item>
+        <item>"云端返回的门店归属不完整，请核对绑定结果"</item>
+        <item>"绑定成功，正在保存门店归属"</item>
+        <item>"门店登录成功"</item>
+        <item>"门店归属保存失败，云端可能已绑定，请核对"</item>
+        <item>"SDK 连接状态未知"</item>
+        <item>"SDK 连接已变更，激活结果未知；请核对当前设备状态后再操作"</item>
+        <item>"SDK 尚未连接"</item>
+        <item>"正在激活，请等待本次操作结束后再查询状态"</item>
+        <item>"激活流程已开始，旧查询结果已作废，请重新查询"</item>
+        <item>"激活流程已变更，旧查询结果已作废，请重新查询"</item>
+        <item>"SDK 尚未连接，本次请求未发送"</item>
+        <item>"激活码与模型编码不能为空"</item>
+        <item>"激活参数无效"</item>
+        <item>"激活授权"</item>
+        <item>"正在激活授权，请稍候"</item>
+        <item>"激活成功"</item>
+        <item>"激活"</item>
+        <item>"激活确认超时，结果未知；请核对 SDK 当前状态后再操作"</item>
+        <item>"未返回原因"</item>
+        <item>"SDK 快照无效"</item>
+        <item>"SDK 未连接"</item>
+        <item>"正在连接晨检服务，请检查 SDK 壳和连接设置。"</item>
+        <item>"SDK 已停止"</item>
+        <item>"请重新连接晨检服务并初始化。"</item>
+        <item>"设备已禁用"</item>
+        <item>"请联系管理员核对设备状态；查询与初始化复核仍可使用。"</item>
+        <item>"设备身份待审核"</item>
+        <item>"密钥轮换申请正在等待审核，晨检暂不可用；可刷新查看结果。"</item>
+        <item>"设备身份审核未通过"</item>
+        <item>"请联系管理员核对原因，处理后再初始化复核。"</item>
+        <item>"身份恢复请求过于频繁"</item>
+        <item>"请稍后再初始化复核；当前服务未提供准确等待时长。"</item>
+        <item>"正在恢复设备身份"</item>
+        <item>"审核已通过，正在恢复证书和模型；完成前请稍候。"</item>
+        <item>"设备身份需要恢复"</item>
+        <item>"设备私钥不可用，请初始化恢复身份；恢复完成前晨检暂不可用。"</item>
+        <item>"等待初始化"</item>
+        <item>"已连接晨检服务，等待初始化结果。"</item>
+        <item>"SDK 正在初始化"</item>
+        <item>"设备已注册"</item>
+        <item>"正在核对证书与模型，请等待初始化结果。"</item>
+        <item>"SDK 待激活"</item>
+        <item>"请在设备授权中输入激活码；门店登录与设备激活分别完成。"</item>
+        <item>"SDK 授权已到期"</item>
+        <item>"请重新激活；身份识别、头手检测和人员登记暂停，人员维护与其他功能仍可使用。"</item>
+        <item>"SDK 授权校验未通过"</item>
+        <item>"请核对设备授权，重新激活后再查看状态。"</item>
+        <item>"正在下载晨检模型"</item>
+        <item>"正在准备晨检模型"</item>
+        <item>"晨检模型未就绪"</item>
+        <item>"请检查网络和存储空间，再初始化重试；授权成功后仍需模型加载完成。"</item>
+        <item>"初始化所需网络不可用"</item>
+        <item>"请检查网络与 SDK 云地址，恢复后初始化重试。"</item>
+        <item>"SDK 初始化未完成"</item>
+        <item>"请查看设备授权及权限提示，处理后初始化重试。"</item>
+        <item>"正在确认 SDK 状态"</item>
+        <item>"尚未取得完整的设备状态，暂不可开始晨检；可刷新查看结果。"</item>
+        <item>"SDK 云地址尚未确认保存，请重新提交同一地址；完成前初始化、激活和门店绑定可能受限。"</item>
+        <item>"设备配置尚未确认保存，请在设备授权中核对本次操作结果，再按提示重试。"</item>
+        <item>"设备配置待保存"</item>
+        <item>"正在完成激活授权"</item>
+        <item>"正在确认 SDK 授权"</item>
+        <item>"授权校验未通过，暂不可开始晨检；请查看设备授权并刷新状态。"</item>
+        <item>"尚未取得有效的授权状态，暂不可开始晨检；请刷新设备状态。"</item>
+        <item>"模型尚未加载完成，请稍后刷新或初始化重试。"</item>
+        <item>"正在确认晨检模型"</item>
+        <item>"尚未取得模型就绪状态，暂不可开始晨检；请刷新设备状态。"</item>
+        <item>"SDK 正在处理任务"</item>
+        <item>"SDK 离线可用"</item>
+        <item>"授权与模型已就绪，可进行本地晨检；云端功能暂不可用，恢复后自动更新状态。"</item>
+        <item>"授权与模型已就绪，可进行本地晨检；云端当前未连接。"</item>
+        <item>"授权与模型已就绪，可以开始晨检。"</item>
+        <item>"SDK 已就绪"</item>
+        <item>"模型文件已下载，正在完成加载；设备就绪后即可开始晨检。"</item>
+        <item>"正在准备证书与模型，下载总量尚未确定，请稍候。"</item>
+        <item>"初始化"</item>
+        <item>"续期授权"</item>
+        <item>"绑定门店"</item>
+        <item>"更新云地址"</item>
+        <item>"登记人员"</item>
+        <item>"维护人员底库"</item>
+        <item>"核对人员身份"</item>
+        <item>"检查头部"</item>
+        <item>"检查手部"</item>
+        <item>"处理设备任务"</item>
+        <item>"尚未取得授权信息，等待 SDK 返回。"</item>
+        <item>"未记录"</item>
+        <item>"尚无续期记录"</item>
+        <item>"尚未安排"</item>
+        <item>"需要恢复"</item>
+        <item>"可用"</item>
+        <item>"待确认"</item>
+        <item>"下载进度尚未返回。"</item>
+        <item>"下载进度尚未确认，请刷新后查看。"</item>
+        <item>"文件下载完成后仍需等待模型加载及 SDK 就绪。"</item>
+        <item>"请保持网络连接，模型加载完成后即可开始晨检。"</item>
+        <item>"尚未取得 SDK 能力，请连接后刷新。"</item>
+        <item>"能力支持情况与当前授权、模型是否就绪分别判断。"</item>
+        <item>"请输入不含账户密码的有效 http:// 或 https:// 地址"</item>
+        <item>"支持"</item>
+        <item>"不支持"</item>
+        <item>"地址应以 ws:// 或 wss:// 开头"</item>
+        <item>"连接已切换，原请求结果未知"</item>
+        <item>"连接晨检 SDK 超时"</item>
+        <item>"SDK 已连接，正在初始化"</item>
+        <item>"晨检 SDK 尚未连接"</item>
+        <item>"上一帧尚未返回，本帧未发送"</item>
+        <item>"请求过多，本次请求未发送"</item>
+        <item>"发送失败，请求未进入 SDK"</item>
+        <item>"SDK 发送队列已关闭"</item>
+        <item>"图片发送中断，请求结果未知"</item>
+        <item>"等待 SDK 回执超时，操作可能仍在执行；请核对结果后重试"</item>
+        <item>"请求发送异常，结果未知"</item>
+        <item>"请求编码失败"</item>
+        <item>"SDK 回执缺少有效错误码，结果未知"</item>
+        <item>"成功"</item>
+        <item>"SDK 请求失败"</item>
+        <item>"SDK 回执无法解析，结果未知"</item>
+        <item>"已停止等待；SDK 操作可能继续执行，结果需核对"</item>
+        <item>"SDK 连接中断，已发送请求结果未知；写操作请核对后重试"</item>
+        <item>"连接已关闭，已发送请求结果未知"</item>
+        <item>"SDK 连接已关闭"</item>
+        <item>"客户端已销毁"</item>
+        <item>"客户端已经销毁"</item>
+        <item>"无法移除图像临时路径"</item>
+        <item>"无法保护图片共享内存"</item>
+        <item>"交付回执前连接已切换，结果需核对"</item>
+        <item>"queryDeviceModels 不接受参数"</item>
+        <item>"enabled 必须为布尔值"</item>
+        <item>"max_faces 必须为正整数"</item>
+        <item>"goods 必须为数组"</item>
+        <item>"SDK 未返回回执，结果未知"</item>
+        <item>"AIDL 需要 Android 8.1 及以上，请使用 WS"</item>
+        <item>"正在绑定晨检 SDK"</item>
+        <item>"未找到可绑定的晨检 SDK"</item>
+        <item>"绑定晨检 SDK 超时"</item>
+        <item>"SDK 返回空 Binder"</item>
+        <item>"晨检 SDK 进程已断开"</item>
+        <item>"晨检 SDK 绑定已失效"</item>
+        <item>"晨检 SDK 拒绝本次绑定，请检查版本和准入配置"</item>
+        <item>"晨检 SDK 尚未连接，请求未发送"</item>
+        <item>"已有请求尚未完成，本次请求未发送"</item>
+        <item>"调用队列已满，本次请求未发送"</item>
+        <item>"SDK Binder 已断开，已发送请求结果未知"</item>
+        <item>"SDK 调用未取得完整回执，结果未知"</item>
+        <item>"SDK 回执超时，结果未知；写操作请核对后重试"</item>
+        <item>"请求排队超时，未发送到 SDK"</item>
+        <item>"已取消排队请求"</item>
+        <item>"已停止等待；已发送操作可能继续执行，请核对结果"</item>
+        <item>"SDK 地址须为有效的 ws:// 或 wss:// 地址"</item>
+        <item>"SDK 地址格式无效"</item>
+        <item>"本机 AIDL 通道需要 Android 8.1 及以上，请选择自动或 WebSocket"</item>
+        <item>"请求标识长度非法"</item>
+        <item>"图片必须非空且不超过 32 MiB"</item>
+        <item>"命令不能为空"</item>
+        <item>"该命令不接受图片"</item>
+        <item>"图片上传需要 JPEG 或 PNG 格式"</item>
+        <item>"RGB888 字节数必须等于 width × height × 3"</item>
+        <item>"识别、检测和登记只接受 RGB888"</item>
+        <item>"检测框上限须为 1 至 64"</item>
+        <item>"max_faces 必须为正 int 整数"</item>
+        <item>"JSON 对象无法序列化"</item>
+        <item>"下载已取消"</item>
+        <item>"SDK 安装包未完整下载"</item>
+        <item>"Context 不能为空"</item>
+        <item>"AIDL 需要 Android 8.1 及以上"</item>
+        <item>"连接配置不能为空"</item>
+        <item>"连接已切换，旧请求结果需核对"</item>
+        <item>"SDK 连接中断，门店绑定尚未发送"</item>
+        <item>"请求参数无法编码"</item>
+        <item>"图像参数无法编码"</item>
+        <item>"等待请求过多，门店绑定尚未发送"</item>
+        <item>"等待 SDK 初始化超时，门店绑定尚未发送"</item>
+        <item>"已取消等待，门店绑定尚未发送"</item>
+        <item>"连接已关闭，已提交请求结果需核对"</item>
+        <item>"连接已变更，旧请求结果需核对"</item>
+        <item>"未读取到有效的激活码，请重新扫码。"</item>
+        <item>"连接配置已改变，请先重新连接，再执行激活。"</item>
+        <item>"SDK 连接配置无效，请核对后重新连接。"</item>
+        <item>"正在读取模型列表…"</item>
+        <item>"正在切换模型…"</item>
+        <item>"正在激活…"</item>
+        <item>"模型切换成功"</item>
+        <item>"切换模型"</item>
+        <item>"选择模型"</item>
+        <item>"选择其他模型后开始切换"</item>
+        <item>"请选择本次使用的晨检模型"</item>
+        <item>"操作失败，请重试"</item>
+        <item>"知道了"</item>
+        <item>"地址无效"</item>
+        <item>"请输入正整数"</item>
+        <item>"范围为 36.1 至 43°C"</item>
+        <item>"串口路径应在 /dev/ 下"</item>
+        <item>"设置已保存"</item>
+        <item>"取消"</item>
+        <item>"保存"</item>
+        <item>"检查结果"</item>
+        <item>"员工管理"</item>
+        <item>"编辑员工"</item>
+        <item>"部门管理"</item>
+        <item>"采集照片"</item>
+        <item>"设备详情"</item>
+        <item>"晨检记录"</item>
+        <item>"记录详情"</item>
+        <item>"设备与 SDK"</item>
+        <item>"请输入 http:// 或 https:// 地址"</item>
+        <item>"配置已保存"</item>
+        <item>"业务云地址"</item>
+        <item>"拖动四角调整采集范围"</item>
+        <item>"未授予相机权限，请在系统应用设置中允许使用相机"</item>
+        <item>"相机设置"</item>
+        <item>"自动  ›"</item>
+        <item>"选择分辨率"</item>
+        <item>"选择后立即生效并保存"</item>
+        <item>"选择相机"</item>
+        <item>"正在读取员工资料"</item>
+        <item>"正在保存晨检记录"</item>
+        <item>"先在员工档案中添加员工并登记人脸，再开始晨检。"</item>
+        <item>"晨检 SDK 尚未就绪。请在设备设置中连接、激活并初始化 SDK。"</item>
+        <item>"未设置场所"</item>
+        <item>"等待准备"</item>
+        <item>"请先添加员工并录入人脸"</item>
+        <item>"请连接设备后开始晨检"</item>
+        <item>"继续采集"</item>
+        <item>"暂停采集"</item>
+        <item>"员工档案读取失败\n请稍后重试"</item>
+        <item>"头部采样已过期，请保持在画面内"</item>
+        <item>"身份采样已过期\n请保持正视摄像头"</item>
+        <item>"没有对应员工档案\n请先完善员工资料"</item>
+        <item>"员工已停用\n请联系管理员"</item>
+        <item>"检测忙，请稍候。"</item>
+        <item>"检测失败，正在恢复。"</item>
+        <item>"等待上一位员工离开画面"</item>
+        <item>"测温检查已关闭"</item>
+        <item>"人脸识别"</item>
+        <item>"头部着装检查"</item>
+        <item>"检查双手手背"</item>
+        <item>"检查双手手心"</item>
+        <item>"晨检完成"</item>
+        <item>"等待识别员工"</item>
+        <item>"体温 · --°C"</item>
+        <item>"检查已暂停"</item>
+        <item>"设备已就绪"</item>
+        <item>"等待设备"</item>
+        <item>"准备晨检"</item>
+        <item>"检测到多人入镜"</item>
+        <item>"请入镜摄像头"</item>
+        <item>"未匹配员工"</item>
+        <item>"采集已暂停\n点击继续采集恢复"</item>
+        <item>"本次晨检已完成\n请离开画面后再检查"</item>
+        <item>"检测到多人入镜\n请仅保留一人继续检测"</item>
+        <item>"未检测到人脸\n请进入摄像头画面"</item>
+        <item>"未匹配员工\n请确认已录入人脸"</item>
+        <item>"晨检记录未保存"</item>
+        <item>"重新检查"</item>
+        <item>"重试保存"</item>
+        <item>"请选择"</item>
+        <item>"点选后关闭"</item>
+        <item>"云端服务"</item>
+        <item>"已开启"</item>
+        <item>"已关闭"</item>
+        <item>"状态未知"</item>
+        <item>"点击查询"</item>
+        <item>"未连接"</item>
+        <item>"开启云端服务"</item>
+        <item>"关闭云端服务"</item>
+        <item>"将开启当前 SDK 的云端托管服务。"</item>
+        <item>"将关闭当前 SDK 的云端托管服务。"</item>
+        <item>"云端服务设置已提交"</item>
+        <item>"部门已保存"</item>
+        <item>"正在保存部门"</item>
+        <item>"正在读取部门"</item>
+        <item>"选择部门"</item>
+        <item>"点击重新读取"</item>
+        <item>"删除部门？"</item>
+        <item>"确认删除"</item>
+        <item>"正在删除部门"</item>
+        <item>"部门已删除"</item>
+        <item>"查看员工"</item>
+        <item>"查看晨检记录"</item>
+        <item>"新增下级部门"</item>
+        <item>"，已选中"</item>
+        <item>"已选择"</item>
+        <item>"选择"</item>
+        <item>"连接设置已保存"</item>
+        <item>"正在探测局域网设备…"</item>
+        <item>"正在测试连接…"</item>
+        <item>"未发现晨检 SDK，请检查设备与网络"</item>
+        <item>"连接测试成功"</item>
+        <item>"未收到晨检 SDK 回执，请检查 IP 与网络"</item>
+        <item>"已连接"</item>
+        <item>"晨检 SDK 已安装，但当前没有可从外部打开的页面。请通过连接方式接入 SDK 服务。"</item>
+        <item>"晨检 SDK 已安装，以后台服务运行。请点击连接或重新连接，查看连接与授权状态。"</item>
+        <item>"返回首页"</item>
+        <item>"未填写"</item>
+        <item>"未分配部门"</item>
+        <item>" · 已录入人脸"</item>
+        <item>" · 尚未录入人脸"</item>
+        <item>"页面已暂停，人脸学习尚未发送，请重新采集"</item>
+        <item>"已显示全部员工"</item>
+        <item>"上拉加载更多员工"</item>
+        <item>"已录人脸"</item>
+        <item>"待录人脸"</item>
+        <item>"正在核对当前设备的人脸样本"</item>
+        <item>"暂时无法核对样本，请稍后刷新"</item>
+        <item>"人脸图片已刷新"</item>
+        <item>"样本核对未能保存，请刷新重试"</item>
+        <item>"员工或设备状态已变化，请刷新核对"</item>
+        <item>"已录入图片"</item>
+        <item>"请先选择员工"</item>
+        <item>"该员工暂无人脸样本"</item>
+        <item>"连接当前设备后刷新核对样本"</item>
+        <item>"正在删除样本"</item>
+        <item>"正在清空样本"</item>
+        <item>"页面或连接已变化，删除尚未发送，请重新核对"</item>
+        <item>"连接已变化，删除结果未知，请先核对原设备样本"</item>
+        <item>"删除结果未知，请刷新核对样本后再操作"</item>
+        <item>"员工或设备已变化，请刷新核对删除结果"</item>
+        <item>"人脸样本已删除"</item>
+        <item>"该员工的人脸样本已清空"</item>
+        <item>"摄像头已中断，人脸学习尚未发送，请重新采集"</item>
+        <item>"页面或摄像头已变化，人脸学习尚未发送，请重新采集"</item>
+        <item>"页面或连接已变化，人脸学习尚未发送，请重新采集"</item>
+        <item>"人脸检测画面已过期，请正视镜头后重试"</item>
+        <item>"人脸检测结果无效，请重新采集"</item>
+        <item>"未选择员工"</item>
+        <item>"关闭选择"</item>
+        <item>"切换人员"</item>
+        <item>"请先从员工列表选择员工"</item>
+        <item>"等待摄像头画面"</item>
+        <item>"正在读取人脸样本"</item>
+        <item>"正在读取员工列表"</item>
+        <item>"正在确认人脸"</item>
+        <item>"采集画面已过期，人脸学习尚未发送，请重新采集"</item>
+        <item>"正在学习"</item>
+        <item>"人脸检测结果无效，人脸学习尚未发送，请重新采集"</item>
+        <item>"学习结果未知，请先核对 SDK 人脸状态，避免重复学习"</item>
+        <item>"连接已改变，请先核对原 SDK 的人脸学习结果"</item>
+        <item>"员工状态已变化，请重新核对 SDK 人脸状态"</item>
+        <item>"人脸学习已保存"</item>
+        <item>"未检测到可学习的人脸，请正视镜头后重新采集"</item>
+        <item>"关于设备"</item>
+        <item>"今日晨检统计"</item>
+        <item>"关闭"</item>
+        <item>"SDK 未安装，安装后即可晨检"</item>
+        <item>"设备未激活，激活后开始使用"</item>
+        <item>"身份识别 · 体温 · 头部 · 手部"</item>
+        <item>"局域网"</item>
+        <item>"本机"</item>
+        <item>"→  立即安装"</item>
+        <item>"→  立即激活"</item>
+        <item>"→  SDK 加载中…"</item>
+        <item>"→  进入晨检"</item>
+        <item>"授权与密钥"</item>
+        <item>"授权详情"</item>
+        <item>"补光设置"</item>
+        <item>"部门"</item>
+        <item>"字体大小档位无效"</item>
+        <item>"请输入有效激活码"</item>
+        <item>"模型列表信息不完整，请重试"</item>
+        <item>"暂无可选模型"</item>
+        <item>"读取模型列表失败，请重试"</item>
+        <item>"激活信息不完整，请重试"</item>
+        <item>"读取激活信息失败，请重试"</item>
+        <item>"设备激活成功"</item>
+        <item>"当前无法激活，请确认连接并等待正在处理的操作结束"</item>
+        <item>"操作结果未知，请查看当前模型后再操作"</item>
+        <item>"连接已变更，操作结果未知，请查看当前模型后再操作"</item>
+        <item>"连接已变更，请重新选择模型"</item>
+        <item>"系统未提供"</item>
+        <item>"列表数据无法生成快照"</item>
+        <item>"采集照片不完整，不能生成完成记录"</item>
+        <item>"员工档案已删除或身份已变化，请刷新后操作"</item>
+        <item>"员工资料或上次操作状态已变化，请先核对"</item>
+        <item>"存在待核对的人脸学习，请先核对 SDK 人脸状态"</item>
+        <item>"波特率和电平必须是有效整数"</item>
+        <item>"列表弹窗需要 Activity"</item>
+        <item>"没有可用的系统安装或授权页面"</item>
+        <item>"安全密码初始化失败，请重试"</item>
+        <item>"安全密码需为 6–32 位数字"</item>
+        <item>"安全密码保存失败，请重试"</item>
+        <item>"安全密码校验不可用，请重试"</item>
+    </string-array>
+    <string-array name="ui_message_template_sources" translatable="false">
+        <item>"SDK 连接配置无效：%1$s"</item>
+        <item>"上次%1$s请求已处理"</item>
+        <item>"读取模型列表失败（%1$s）"</item>
+        <item>"读取激活信息失败（%1$s）"</item>
+        <item>"操作失败（%1$s），请查看当前模型后再操作"</item>
+        <item>"前置摄像头 · %1$s"</item>
+        <item>"后置摄像头 · %1$s"</item>
+        <item>"外接摄像头 · %1$s"</item>
+        <item>"USB 摄像头 · %1$s"</item>
+        <item>"选定摄像头不可用：%1$s"</item>
+        <item>"选定摄像头 %1$s 当前不可用，请在采集设备中重新选择摄像头"</item>
+        <item>"选定摄像头 %1$s 未连接，请在设备设置中重新选择"</item>
+        <item>"无法打开摄像头：%1$s"</item>
+        <item>"无法配置相机预览：%1$s"</item>
+        <item>"摄像头错误（%1$s），请重新连接"</item>
+        <item>"无法启动相机采集：%1$s"</item>
+        <item>"无法申请 USB 摄像头权限：%1$s"</item>
+        <item>"无法连接 USB 摄像头：%1$s"</item>
+        <item>"设备被占用或不支持 UVC（%1$s）"</item>
+        <item>"无法打开 USB 摄像头：%1$s"</item>
+        <item>"业务请求失败：HTTP %1$s"</item>
+        <item>"该部门还有 %1$s 名员工，请先在员工编辑弹窗中调整部门后再删除"</item>
+        <item>"员工编辑字段无效：%1$s"</item>
+        <item>"保存本地数据失败：%1$s"</item>
+        <item>"采集照片 %1$s"</item>
+        <item>"体温偏低：%1$s°C"</item>
+        <item>"体温偏高：%1$s°C"</item>
+        <item>"体温 %1$s°C"</item>
+        <item>"手背：%1$s"</item>
+        <item>"手心：%1$s"</item>
+        <item>"手背检查 · %1$s"</item>
+        <item>"手心检查 · %1$s"</item>
+        <item>"%1$s等%2$s项"</item>
+        <item>"开灯失败：%1$s"</item>
+        <item>"关灯失败：%1$s"</item>
+        <item>"%1$s；关灯失败：%2$s"</item>
+        <item>"灯光串口不存在：%1$s"</item>
+        <item>"GPIO 初始化失败：%1$s"</item>
+        <item>"GPIO %1$s 写入失败"</item>
+        <item>"GPIO 节点不存在：%1$s"</item>
+        <item>"没有 GPIO 写入权限：%1$s，请联系设备供应商配置"</item>
+        <item>"测温设备无法打开：%1$s；请检查设备配置"</item>
+        <item>"测温采集中断：%1$s"</item>
+        <item>"设备不存在：%1$s"</item>
+        <item>"已登录门店 · %1$s"</item>
+        <item>"门店绑定失败：%1$s"</item>
+        <item>"正在%1$s，请等待本次操作结束"</item>
+        <item>"正在%1$s，请稍候"</item>
+        <item>"%1$s结果未知，请核对 SDK 当前状态后再操作"</item>
+        <item>"%1$s请求已处理，正在确认 SDK 状态"</item>
+        <item>"%1$s失败：%2$s（%3$s）"</item>
+        <item>"授权与模型已就绪，当前正在%1$s；请稍候。"</item>
+        <item>"晨检模型已下载 %1$s% ，请保持网络连接并等待加载完成。"</item>
+        <item>"激活码：%1$s"</item>
+        <item>"授权类型：%1$s"</item>
+        <item>"模型：%1$s"</item>
+        <item>"激活时间：%1$s"</item>
+        <item>"签发时间：%1$s"</item>
+        <item>"最近续期：%1$s"</item>
+        <item>"下次续期：%1$s"</item>
+        <item>"到期时间：%1$s"</item>
+        <item>"SDK 版本：%1$s"</item>
+        <item>"已接收 %1$s，下载总量尚未确定。"</item>
+        <item>"已下载 %1$s%（%2$s / %3$s）"</item>
+        <item>"接口版本：%1$s"</item>
+        <item>"身份识别：%1$s"</item>
+        <item>"头部 / 手部检查：%1$s"</item>
+        <item>"人员登记：%1$s"</item>
+        <item>"人员遗忘：%1$s"</item>
+        <item>"底库查询：%1$s"</item>
+        <item>"连接地址无效：%1$s"</item>
+        <item>"SDK 连接关闭：%1$s"</item>
+        <item>"无法连接晨检 SDK：%1$s"</item>
+        <item>"连接失败：%1$s"</item>
+        <item>"绑定晨检 SDK 失败：%1$s"</item>
+        <item>"请求未发送：%1$s"</item>
+        <item>"%1$s，稍后自动重连"</item>
+        <item>"%1$s；已发送请求结果未知"</item>
+        <item>"%1$s；请求未发送"</item>
+        <item>"%1$s；门店绑定尚未发送"</item>
+        <item>"%1$s，%2$s 秒后重连"</item>
+        <item>"请求参数无效：%1$s"</item>
+        <item>"晨检 SDK 不支持命令：%1$s"</item>
+        <item>"晨检 AIDL 不支持命令：%1$s"</item>
+        <item>"不支持的 Binder 回执：%1$s"</item>
+        <item>"%1$s 必须为非空字符串"</item>
+        <item>"%1$s 必须为字符串"</item>
+        <item>"%1$s 必须为数值"</item>
+        <item>"%1$s 必须为有限数值"</item>
+        <item>"%1$s 必须为整数"</item>
+        <item>"%1$s 必须为正整数"</item>
+        <item>"下载失败（HTTP %1$s）"</item>
+    </string-array>
+    <string-array name="ui_message_values">
+        <item>"采集范围必须在画面内且宽高不少于 5%"</item>
+        <item>"RGB 画面数据与尺寸不一致"</item>
+        <item>"外接摄像头"</item>
+        <item>"前置摄像头"</item>
+        <item>"后置摄像头"</item>
+        <item>"缺少相机宿主或回调"</item>
+        <item>"请先允许相机权限"</item>
+        <item>"当前设备不支持系统相机"</item>
+        <item>"摄像头没有可用的画面配置"</item>
+        <item>"当前相机不支持已选分辨率，请重新选择"</item>
+        <item>"未发现系统摄像头，请确认设备连接及 Camera2 支持"</item>
+        <item>"摄像头已断开，请连接后重新进入晨检"</item>
+        <item>"摄像头被其他应用占用，请关闭占用后重试"</item>
+        <item>"系统已停用摄像头"</item>
+        <item>"当前摄像头不支持预览与识别同时采集，请更换摄像头"</item>
+        <item>"相机画面已中断，请重新连接"</item>
+        <item>"无法读取当前摄像头的画面格式"</item>
+        <item>"摄像头不支持预览与识别画面"</item>
+        <item>"摄像头预览与识别画面的比例不兼容"</item>
+        <item>"摄像头不支持 YUV 识别画面"</item>
+        <item>"摄像头不支持 TextureView 预览"</item>
+        <item>"体温 未测"</item>
+        <item>"证据标注需要有效的可写位图"</item>
+        <item>"手部证据缺少原始画面"</item>
+        <item>"指甲油"</item>
+        <item>"创可贴"</item>
+        <item>"戒指"</item>
+        <item>"伤口"</item>
+        <item>"USB 摄像头已拔出，请连接后重新进入"</item>
+        <item>"USB 摄像头权限已失效，请重新允许访问"</item>
+        <item>"USB 摄像头连接已中断，请重新进入"</item>
+        <item>"未允许访问 USB 摄像头，请重新进入并允许访问"</item>
+        <item>"摄像头没有可用的预览分辨率"</item>
+        <item>"USB 摄像头未返回画面，请确认未被其他应用占用后重试"</item>
+        <item>"USB 摄像头返回了不完整的 RGB 画面"</item>
+        <item>"USB 摄像头"</item>
+        <item>"同型号 USB 摄像头有多台，请在设备设置中重新选择具体镜头"</item>
+        <item>"选定 USB 摄像头未连接或连接位置已变化，请在设备设置中重新选择"</item>
+        <item>"相机画面尺寸或旋转角度不正确"</item>
+        <item>"员工 ID 必须大于零"</item>
+        <item>"员工分页参数无效"</item>
+        <item>"响应为空"</item>
+        <item>"缺少业务状态码"</item>
+        <item>"业务状态码不是整数"</item>
+        <item>"业务响应格式无效"</item>
+        <item>"业务请求被拒绝"</item>
+        <item>"请先配置业务登录令牌"</item>
+        <item>"服务地址不能包含账号、查询参数或片段"</item>
+        <item>"服务地址必须是有效的 HTTP 或 HTTPS 地址"</item>
+        <item>"本地员工数据损坏，请保留数据联系管理员"</item>
+        <item>"本地员工编号无效，无法保留人脸关联"</item>
+        <item>"员工启用状态筛选条件无效"</item>
+        <item>"上级部门编号无效"</item>
+        <item>"本地分页参数无效"</item>
+        <item>"请输入部门名称"</item>
+        <item>"部门编号无效"</item>
+        <item>"部门已删除，请返回列表刷新"</item>
+        <item>"部门名称已变更，请重新打开后修改"</item>
+        <item>"上级部门已变更，请重新打开后修改"</item>
+        <item>"上级部门不存在，请重新选择部门"</item>
+        <item>"上级部门不能选择自身或下级部门"</item>
+        <item>"该上级部门下的部门名称已存在"</item>
+        <item>"部门名称已变更，请重新打开后确认删除"</item>
+        <item>"上级部门已变更，请重新打开后确认删除"</item>
+        <item>"该部门还有下级部门，请先调整下级部门后再删除"</item>
+        <item>"该部门存在历史晨检记录，不能删除"</item>
+        <item>"选择的部门已删除，请重新选择部门"</item>
+        <item>"选择的部门已删除、改名或存在同名部门，请重新选择部门"</item>
+        <item>"部门筛选条件无效"</item>
+        <item>"已上传"</item>
+        <item>"结果待核实"</item>
+        <item>"晨检记录筛选条件无效"</item>
+        <item>"晨检结果筛选条件无效"</item>
+        <item>"晨检日期筛选条件无效"</item>
+        <item>"晨检统计时间范围无效"</item>
+        <item>"本地数据损坏，请保留数据联系管理员"</item>
+        <item>"SDK 人员标识对应多个员工，请联系管理员核对"</item>
+        <item>"本地员工数据无效"</item>
+        <item>"本地员工编号无效，不能保存"</item>
+        <item>"员工档案已删除，不能恢复或覆盖"</item>
+        <item>"员工人脸关联无效，请联系管理员核对"</item>
+        <item>"员工的 SDK 人员标识不可修改"</item>
+        <item>"请通过删除员工操作停用档案"</item>
+        <item>"SDK 人员标识生成失败"</item>
+        <item>"SDK 人员标识已达到上限"</item>
+        <item>"员工编号生成失败"</item>
+        <item>"员工编号已达到上限"</item>
+        <item>"该工号已被其他员工使用，请更换工号"</item>
+        <item>"该员工编号已存在"</item>
+        <item>"员工档案已删除，请刷新后操作"</item>
+        <item>"员工编辑快照无效"</item>
+        <item>"员工档案已删除，请返回列表刷新"</item>
+        <item>"员工资料已被更新，请重新打开详情后修改"</item>
+        <item>"晨检记录不存在"</item>
+        <item>"本地数据缺少 ID，不能保存"</item>
+        <item>"上传中"</item>
+        <item>"上次上传被中断，请先在云端核对是否已入账"</item>
+        <item>"照片缺少记录或阶段标识"</item>
+        <item>"待保存的照片无效"</item>
+        <item>"无法创建照片目录"</item>
+        <item>"照片编码失败"</item>
+        <item>"无效的照片路径"</item>
+        <item>"部门层级存在循环，请联系管理员"</item>
+        <item>"数据格式无效"</item>
+        <item>"本地数据已删除，不能由异步回调重新创建"</item>
+        <item>"不可修改本地数据标识或创建时间"</item>
+        <item>"人脸与头部"</item>
+        <item>"身份采集"</item>
+        <item>"头部检查"</item>
+        <item>"手背检查"</item>
+        <item>"手心检查"</item>
+        <item>"手背"</item>
+        <item>"手心"</item>
+        <item>"健康证过期或未登记"</item>
+        <item>"体温未测"</item>
+        <item>"工作帽"</item>
+        <item>"口罩"</item>
+        <item>"体温"</item>
+        <item>"未测"</item>
+        <item>"设备采集"</item>
+        <item>"未上传"</item>
+        <item>"请输入工号，工号不能为空"</item>
+        <item>"云端员工资料为空"</item>
+        <item>"云端员工编号缺失或与请求不一致，未覆盖本地档案"</item>
+        <item>"本机与云端员工编号不一致"</item>
+        <item>"云端员工资料缺少姓名，未覆盖本地档案"</item>
+        <item>"云端名册响应缺少 data.records，未导入"</item>
+        <item>"云端名册分页信息无效，未导入"</item>
+        <item>"云端名册页数和内容不一致，未导入"</item>
+        <item>"无"</item>
+        <item>"未分配"</item>
+        <item>"展示健康证状态需要当前日期"</item>
+        <item>"已过期"</item>
+        <item>"未过期"</item>
+        <item>"二维码未包含有效的激活信息，请使用激活二维码。"</item>
+        <item>"晨检流程和本轮规则不能为空"</item>
+        <item>"身份已确认，请保持正视摄像头"</item>
+        <item>"请正视摄像头"</item>
+        <item>"检测已完成，正在生成结果"</item>
+        <item>"请摘下手套"</item>
+        <item>"请将双手手背朝向摄像头"</item>
+        <item>"请将双手手心朝向摄像头"</item>
+        <item>"请将双手完整放入检测区域"</item>
+        <item>"未佩戴工作帽"</item>
+        <item>"未戴工作帽"</item>
+        <item>"未佩戴口罩"</item>
+        <item>"未戴口罩"</item>
+        <item>"不应佩戴工作帽"</item>
+        <item>"请摘下工作帽"</item>
+        <item>"不应佩戴口罩"</item>
+        <item>"请摘下口罩"</item>
+        <item>"连续采样次数必须大于零"</item>
+        <item>"体温异常阈值须满足 34 ≤ 下限 &lt; 上限 ≤ 43°C"</item>
+        <item>"晨检规则不能为空"</item>
+        <item>"体温读数无效，请重新测量（34 至 43°C）"</item>
+        <item>"身份已确认，请靠近测温设备等待有效体温读数"</item>
+        <item>"已读取体温，请保持面部在画面内完成身份核验"</item>
+        <item>"请正视镜头，等待识别员工身份"</item>
+        <item>"请正视镜头，同时靠近测温设备"</item>
+        <item>"请保持面部在画面内，等待着装检测"</item>
+        <item>"头部着装不符合要求，请调整后继续检测"</item>
+        <item>"正在检查工作帽和口罩，请保持姿势"</item>
+        <item>"请摘下手套，露出双手接受检测"</item>
+        <item>"请将双手手背朝向镜头"</item>
+        <item>"请将双手手心朝向镜头"</item>
+        <item>"正在采集双手手背，请保持姿势"</item>
+        <item>"正在采集双手手心，请保持姿势"</item>
+        <item>"请保持面部在画面内，检查工作帽和口罩"</item>
+        <item>"请翻转双手，将手心朝向镜头"</item>
+        <item>"晨检完成，已检项目正常；体温未测"</item>
+        <item>"晨检完成，各项检查正常"</item>
+        <item>"晨检完成，请查看异常项目"</item>
+        <item>"未知晨检阶段"</item>
+        <item>"请佩戴口罩、工作帽检测"</item>
+        <item>"请佩戴口罩检测"</item>
+        <item>"请佩戴工作帽检测"</item>
+        <item>"请进行头部检测"</item>
+        <item>"请伸出双手手背"</item>
+        <item>"请翻转双手手心"</item>
+        <item>"晨检正常"</item>
+        <item>"晨检异常，请查看结果"</item>
+        <item>"人脸检测回执缺少有效结果"</item>
+        <item>"人脸检测条目不完整"</item>
+        <item>"人脸检测框尺寸无效"</item>
+        <item>"人脸检测关键点不完整"</item>
+        <item>"人脸检测回执格式无效"</item>
+        <item>"人脸检测坐标或分数无效"</item>
+        <item>"SDK 尚未确认人脸明细"</item>
+        <item>"SDK 人脸明细缺少 uids，未更改本机登记状态"</item>
+        <item>"SDK 人脸编号无效，未更改本机登记状态"</item>
+        <item>"SDK 人脸编号重复，未更改本机登记状态"</item>
+        <item>"SDK 人脸 items 格式无效，未更改本机登记状态"</item>
+        <item>"SDK 人脸 items 编号无效或重复，未更改本机登记状态"</item>
+        <item>"SDK 人脸 items 图片字段无效，未更改本机登记状态"</item>
+        <item>"日期快捷筛选无效"</item>
+        <item>"日期时间范围无效"</item>
+        <item>"开始时间不能晚于结束时间"</item>
+        <item>"查询时间或时区无效"</item>
+        <item>"开启与关闭指令不能相同"</item>
+        <item>"请选择灯光控制方式"</item>
+        <item>"请填写有效的灯光串口路径与波特率"</item>
+        <item>"开灯、关灯电平必须分别为 0 和 1"</item>
+        <item>"请填写 GPIO 编号"</item>
+        <item>"GPIO 编号应为整数，多个编号以逗号分隔"</item>
+        <item>"最多配置 16 个 GPIO"</item>
+        <item>"灯光配置中的波特率或电平不是有效整数"</item>
+        <item>"请填写补光指令"</item>
+        <item>"字符指令须为 1–64 个可打印英文字符、数字或符号"</item>
+        <item>"十进制指令须为 1–64 个 0–255 的整数，以空格分隔"</item>
+        <item>"请按所选格式填写有效的字符、十进制或十六进制指令"</item>
+        <item>"请选择字符、十进制或十六进制"</item>
+        <item>"指令包含不可显示为字符的字节，请使用十进制或十六进制"</item>
+        <item>"缺少灯光配置"</item>
+        <item>"开灯命令已发送，请确认实际灯光"</item>
+        <item>"关灯命令已发送"</item>
+        <item>"所选路径不是串口设备"</item>
+        <item>"没有灯光串口读取权限"</item>
+        <item>"没有灯光串口写入权限"</item>
+        <item>"测温数据长度错误"</item>
+        <item>"缺少模式切换回调"</item>
+        <item>"请配置有效的测温串口与波特率"</item>
+        <item>"请选择有效的测温模式"</item>
+        <item>"正在连接测温设备"</item>
+        <item>"测温设备已连接，等待读数"</item>
+        <item>"测温设备已断开"</item>
+        <item>"10 秒内未收到 success，模式切换未确认，请重试"</item>
+        <item>"10 秒内未收到有效体温，请检查测温模块并重试"</item>
+        <item>"测温模块未返回 success，模式切换失败"</item>
+        <item>"已获取真实体温"</item>
+        <item>"测温设备正常"</item>
+        <item>"没有串口读取权限"</item>
+        <item>"没有串口写入权限"</item>
+        <item>"缺少测温回调"</item>
+        <item>"应用 Context 不能为空"</item>
+        <item>"读取 SDK 门店归属失败"</item>
+        <item>"未登录门店"</item>
+        <item>"SDK 连接已变更，请重新登录门店"</item>
+        <item>"请扫描门店二维码"</item>
+        <item>"门店登录必须在主线程调用"</item>
+        <item>"门店二维码不能为空"</item>
+        <item>"SDK 连接配置无效，请先检查设备设置"</item>
+        <item>"正在连接晨检 SDK"</item>
+        <item>"晨检 SDK 连接超时，尚未提交门店绑定"</item>
+        <item>"无法连接晨检 SDK，请检查连接配置和服务"</item>
+        <item>"正在绑定门店，请稍候"</item>
+        <item>"绑定结果未知，请核对门店归属后再操作"</item>
+        <item>"云端返回的门店归属不完整，请核对绑定结果"</item>
+        <item>"绑定成功，正在保存门店归属"</item>
+        <item>"门店登录成功"</item>
+        <item>"门店归属保存失败，云端可能已绑定，请核对"</item>
+        <item>"SDK 连接状态未知"</item>
+        <item>"SDK 连接已变更，激活结果未知；请核对当前设备状态后再操作"</item>
+        <item>"SDK 尚未连接"</item>
+        <item>"正在激活，请等待本次操作结束后再查询状态"</item>
+        <item>"激活流程已开始，旧查询结果已作废，请重新查询"</item>
+        <item>"激活流程已变更，旧查询结果已作废，请重新查询"</item>
+        <item>"SDK 尚未连接，本次请求未发送"</item>
+        <item>"激活码与模型编码不能为空"</item>
+        <item>"激活参数无效"</item>
+        <item>"激活授权"</item>
+        <item>"正在激活授权，请稍候"</item>
+        <item>"激活成功"</item>
+        <item>"激活"</item>
+        <item>"激活确认超时，结果未知；请核对 SDK 当前状态后再操作"</item>
+        <item>"未返回原因"</item>
+        <item>"SDK 快照无效"</item>
+        <item>"SDK 未连接"</item>
+        <item>"正在连接晨检服务，请检查 SDK 壳和连接设置。"</item>
+        <item>"SDK 已停止"</item>
+        <item>"请重新连接晨检服务并初始化。"</item>
+        <item>"设备已禁用"</item>
+        <item>"请联系管理员核对设备状态；查询与初始化复核仍可使用。"</item>
+        <item>"设备身份待审核"</item>
+        <item>"密钥轮换申请正在等待审核，晨检暂不可用；可刷新查看结果。"</item>
+        <item>"设备身份审核未通过"</item>
+        <item>"请联系管理员核对原因，处理后再初始化复核。"</item>
+        <item>"身份恢复请求过于频繁"</item>
+        <item>"请稍后再初始化复核；当前服务未提供准确等待时长。"</item>
+        <item>"正在恢复设备身份"</item>
+        <item>"审核已通过，正在恢复证书和模型；完成前请稍候。"</item>
+        <item>"设备身份需要恢复"</item>
+        <item>"设备私钥不可用，请初始化恢复身份；恢复完成前晨检暂不可用。"</item>
+        <item>"等待初始化"</item>
+        <item>"已连接晨检服务，等待初始化结果。"</item>
+        <item>"SDK 正在初始化"</item>
+        <item>"设备已注册"</item>
+        <item>"正在核对证书与模型，请等待初始化结果。"</item>
+        <item>"SDK 待激活"</item>
+        <item>"请在设备授权中输入激活码；门店登录与设备激活分别完成。"</item>
+        <item>"SDK 授权已到期"</item>
+        <item>"请重新激活；身份识别、头手检测和人员登记暂停，人员维护与其他功能仍可使用。"</item>
+        <item>"SDK 授权校验未通过"</item>
+        <item>"请核对设备授权，重新激活后再查看状态。"</item>
+        <item>"正在下载晨检模型"</item>
+        <item>"正在准备晨检模型"</item>
+        <item>"晨检模型未就绪"</item>
+        <item>"请检查网络和存储空间，再初始化重试；授权成功后仍需模型加载完成。"</item>
+        <item>"初始化所需网络不可用"</item>
+        <item>"请检查网络与 SDK 云地址，恢复后初始化重试。"</item>
+        <item>"SDK 初始化未完成"</item>
+        <item>"请查看设备授权及权限提示，处理后初始化重试。"</item>
+        <item>"正在确认 SDK 状态"</item>
+        <item>"尚未取得完整的设备状态，暂不可开始晨检；可刷新查看结果。"</item>
+        <item>"SDK 云地址尚未确认保存，请重新提交同一地址；完成前初始化、激活和门店绑定可能受限。"</item>
+        <item>"设备配置尚未确认保存，请在设备授权中核对本次操作结果，再按提示重试。"</item>
+        <item>"设备配置待保存"</item>
+        <item>"正在完成激活授权"</item>
+        <item>"正在确认 SDK 授权"</item>
+        <item>"授权校验未通过，暂不可开始晨检；请查看设备授权并刷新状态。"</item>
+        <item>"尚未取得有效的授权状态，暂不可开始晨检；请刷新设备状态。"</item>
+        <item>"模型尚未加载完成，请稍后刷新或初始化重试。"</item>
+        <item>"正在确认晨检模型"</item>
+        <item>"尚未取得模型就绪状态，暂不可开始晨检；请刷新设备状态。"</item>
+        <item>"SDK 正在处理任务"</item>
+        <item>"SDK 离线可用"</item>
+        <item>"授权与模型已就绪，可进行本地晨检；云端功能暂不可用，恢复后自动更新状态。"</item>
+        <item>"授权与模型已就绪，可进行本地晨检；云端当前未连接。"</item>
+        <item>"授权与模型已就绪，可以开始晨检。"</item>
+        <item>"SDK 已就绪"</item>
+        <item>"模型文件已下载，正在完成加载；设备就绪后即可开始晨检。"</item>
+        <item>"正在准备证书与模型，下载总量尚未确定，请稍候。"</item>
+        <item>"初始化"</item>
+        <item>"续期授权"</item>
+        <item>"绑定门店"</item>
+        <item>"更新云地址"</item>
+        <item>"登记人员"</item>
+        <item>"维护人员底库"</item>
+        <item>"核对人员身份"</item>
+        <item>"检查头部"</item>
+        <item>"检查手部"</item>
+        <item>"处理设备任务"</item>
+        <item>"尚未取得授权信息，等待 SDK 返回。"</item>
+        <item>"未记录"</item>
+        <item>"尚无续期记录"</item>
+        <item>"尚未安排"</item>
+        <item>"需要恢复"</item>
+        <item>"可用"</item>
+        <item>"待确认"</item>
+        <item>"下载进度尚未返回。"</item>
+        <item>"下载进度尚未确认，请刷新后查看。"</item>
+        <item>"文件下载完成后仍需等待模型加载及 SDK 就绪。"</item>
+        <item>"请保持网络连接，模型加载完成后即可开始晨检。"</item>
+        <item>"尚未取得 SDK 能力，请连接后刷新。"</item>
+        <item>"能力支持情况与当前授权、模型是否就绪分别判断。"</item>
+        <item>"请输入不含账户密码的有效 http:// 或 https:// 地址"</item>
+        <item>"支持"</item>
+        <item>"不支持"</item>
+        <item>"地址应以 ws:// 或 wss:// 开头"</item>
+        <item>"连接已切换，原请求结果未知"</item>
+        <item>"连接晨检 SDK 超时"</item>
+        <item>"SDK 已连接，正在初始化"</item>
+        <item>"晨检 SDK 尚未连接"</item>
+        <item>"上一帧尚未返回，本帧未发送"</item>
+        <item>"请求过多，本次请求未发送"</item>
+        <item>"发送失败，请求未进入 SDK"</item>
+        <item>"SDK 发送队列已关闭"</item>
+        <item>"图片发送中断，请求结果未知"</item>
+        <item>"等待 SDK 回执超时，操作可能仍在执行；请核对结果后重试"</item>
+        <item>"请求发送异常，结果未知"</item>
+        <item>"请求编码失败"</item>
+        <item>"SDK 回执缺少有效错误码，结果未知"</item>
+        <item>"成功"</item>
+        <item>"SDK 请求失败"</item>
+        <item>"SDK 回执无法解析，结果未知"</item>
+        <item>"已停止等待；SDK 操作可能继续执行，结果需核对"</item>
+        <item>"SDK 连接中断，已发送请求结果未知；写操作请核对后重试"</item>
+        <item>"连接已关闭，已发送请求结果未知"</item>
+        <item>"SDK 连接已关闭"</item>
+        <item>"客户端已销毁"</item>
+        <item>"客户端已经销毁"</item>
+        <item>"无法移除图像临时路径"</item>
+        <item>"无法保护图片共享内存"</item>
+        <item>"交付回执前连接已切换，结果需核对"</item>
+        <item>"queryDeviceModels 不接受参数"</item>
+        <item>"enabled 必须为布尔值"</item>
+        <item>"max_faces 必须为正整数"</item>
+        <item>"goods 必须为数组"</item>
+        <item>"SDK 未返回回执，结果未知"</item>
+        <item>"AIDL 需要 Android 8.1 及以上，请使用 WS"</item>
+        <item>"正在绑定晨检 SDK"</item>
+        <item>"未找到可绑定的晨检 SDK"</item>
+        <item>"绑定晨检 SDK 超时"</item>
+        <item>"SDK 返回空 Binder"</item>
+        <item>"晨检 SDK 进程已断开"</item>
+        <item>"晨检 SDK 绑定已失效"</item>
+        <item>"晨检 SDK 拒绝本次绑定，请检查版本和准入配置"</item>
+        <item>"晨检 SDK 尚未连接，请求未发送"</item>
+        <item>"已有请求尚未完成，本次请求未发送"</item>
+        <item>"调用队列已满，本次请求未发送"</item>
+        <item>"SDK Binder 已断开，已发送请求结果未知"</item>
+        <item>"SDK 调用未取得完整回执，结果未知"</item>
+        <item>"SDK 回执超时，结果未知；写操作请核对后重试"</item>
+        <item>"请求排队超时，未发送到 SDK"</item>
+        <item>"已取消排队请求"</item>
+        <item>"已停止等待；已发送操作可能继续执行，请核对结果"</item>
+        <item>"SDK 地址须为有效的 ws:// 或 wss:// 地址"</item>
+        <item>"SDK 地址格式无效"</item>
+        <item>"本机 AIDL 通道需要 Android 8.1 及以上，请选择自动或 WebSocket"</item>
+        <item>"请求标识长度非法"</item>
+        <item>"图片必须非空且不超过 32 MiB"</item>
+        <item>"命令不能为空"</item>
+        <item>"该命令不接受图片"</item>
+        <item>"图片上传需要 JPEG 或 PNG 格式"</item>
+        <item>"RGB888 字节数必须等于 width × height × 3"</item>
+        <item>"识别、检测和登记只接受 RGB888"</item>
+        <item>"检测框上限须为 1 至 64"</item>
+        <item>"max_faces 必须为正 int 整数"</item>
+        <item>"JSON 对象无法序列化"</item>
+        <item>"下载已取消"</item>
+        <item>"SDK 安装包未完整下载"</item>
+        <item>"Context 不能为空"</item>
+        <item>"AIDL 需要 Android 8.1 及以上"</item>
+        <item>"连接配置不能为空"</item>
+        <item>"连接已切换，旧请求结果需核对"</item>
+        <item>"SDK 连接中断，门店绑定尚未发送"</item>
+        <item>"请求参数无法编码"</item>
+        <item>"图像参数无法编码"</item>
+        <item>"等待请求过多，门店绑定尚未发送"</item>
+        <item>"等待 SDK 初始化超时，门店绑定尚未发送"</item>
+        <item>"已取消等待，门店绑定尚未发送"</item>
+        <item>"连接已关闭，已提交请求结果需核对"</item>
+        <item>"连接已变更，旧请求结果需核对"</item>
+        <item>"未读取到有效的激活码，请重新扫码。"</item>
+        <item>"连接配置已改变，请先重新连接，再执行激活。"</item>
+        <item>"SDK 连接配置无效，请核对后重新连接。"</item>
+        <item>"正在读取模型列表…"</item>
+        <item>"正在切换模型…"</item>
+        <item>"正在激活…"</item>
+        <item>"模型切换成功"</item>
+        <item>"切换模型"</item>
+        <item>"选择模型"</item>
+        <item>"选择其他模型后开始切换"</item>
+        <item>"请选择本次使用的晨检模型"</item>
+        <item>"操作失败，请重试"</item>
+        <item>"知道了"</item>
+        <item>"地址无效"</item>
+        <item>"请输入正整数"</item>
+        <item>"范围为 36.1 至 43°C"</item>
+        <item>"串口路径应在 /dev/ 下"</item>
+        <item>"设置已保存"</item>
+        <item>"取消"</item>
+        <item>"保存"</item>
+        <item>"检查结果"</item>
+        <item>"员工管理"</item>
+        <item>"编辑员工"</item>
+        <item>"部门管理"</item>
+        <item>"采集照片"</item>
+        <item>"设备详情"</item>
+        <item>"晨检记录"</item>
+        <item>"记录详情"</item>
+        <item>"设备与 SDK"</item>
+        <item>"请输入 http:// 或 https:// 地址"</item>
+        <item>"配置已保存"</item>
+        <item>"业务云地址"</item>
+        <item>"拖动四角调整采集范围"</item>
+        <item>"未授予相机权限，请在系统应用设置中允许使用相机"</item>
+        <item>"相机设置"</item>
+        <item>"自动  ›"</item>
+        <item>"选择分辨率"</item>
+        <item>"选择后立即生效并保存"</item>
+        <item>"选择相机"</item>
+        <item>"正在读取员工资料"</item>
+        <item>"正在保存晨检记录"</item>
+        <item>"先在员工档案中添加员工并登记人脸，再开始晨检。"</item>
+        <item>"晨检 SDK 尚未就绪。请在设备设置中连接、激活并初始化 SDK。"</item>
+        <item>"未设置场所"</item>
+        <item>"等待准备"</item>
+        <item>"请先添加员工并录入人脸"</item>
+        <item>"请连接设备后开始晨检"</item>
+        <item>"继续采集"</item>
+        <item>"暂停采集"</item>
+        <item>"员工档案读取失败\n请稍后重试"</item>
+        <item>"头部采样已过期，请保持在画面内"</item>
+        <item>"身份采样已过期\n请保持正视摄像头"</item>
+        <item>"没有对应员工档案\n请先完善员工资料"</item>
+        <item>"员工已停用\n请联系管理员"</item>
+        <item>"检测忙，请稍候。"</item>
+        <item>"检测失败，正在恢复。"</item>
+        <item>"等待上一位员工离开画面"</item>
+        <item>"测温检查已关闭"</item>
+        <item>"人脸识别"</item>
+        <item>"头部着装检查"</item>
+        <item>"检查双手手背"</item>
+        <item>"检查双手手心"</item>
+        <item>"晨检完成"</item>
+        <item>"等待识别员工"</item>
+        <item>"体温 · --°C"</item>
+        <item>"检查已暂停"</item>
+        <item>"设备已就绪"</item>
+        <item>"等待设备"</item>
+        <item>"准备晨检"</item>
+        <item>"检测到多人入镜"</item>
+        <item>"请入镜摄像头"</item>
+        <item>"未匹配员工"</item>
+        <item>"采集已暂停\n点击继续采集恢复"</item>
+        <item>"本次晨检已完成\n请离开画面后再检查"</item>
+        <item>"检测到多人入镜\n请仅保留一人继续检测"</item>
+        <item>"未检测到人脸\n请进入摄像头画面"</item>
+        <item>"未匹配员工\n请确认已录入人脸"</item>
+        <item>"晨检记录未保存"</item>
+        <item>"重新检查"</item>
+        <item>"重试保存"</item>
+        <item>"请选择"</item>
+        <item>"点选后关闭"</item>
+        <item>"云端服务"</item>
+        <item>"已开启"</item>
+        <item>"已关闭"</item>
+        <item>"状态未知"</item>
+        <item>"点击查询"</item>
+        <item>"未连接"</item>
+        <item>"开启云端服务"</item>
+        <item>"关闭云端服务"</item>
+        <item>"将开启当前 SDK 的云端托管服务。"</item>
+        <item>"将关闭当前 SDK 的云端托管服务。"</item>
+        <item>"云端服务设置已提交"</item>
+        <item>"部门已保存"</item>
+        <item>"正在保存部门"</item>
+        <item>"正在读取部门"</item>
+        <item>"选择部门"</item>
+        <item>"点击重新读取"</item>
+        <item>"删除部门？"</item>
+        <item>"确认删除"</item>
+        <item>"正在删除部门"</item>
+        <item>"部门已删除"</item>
+        <item>"查看员工"</item>
+        <item>"查看晨检记录"</item>
+        <item>"新增下级部门"</item>
+        <item>"，已选中"</item>
+        <item>"已选择"</item>
+        <item>"选择"</item>
+        <item>"连接设置已保存"</item>
+        <item>"正在探测局域网设备…"</item>
+        <item>"正在测试连接…"</item>
+        <item>"未发现晨检 SDK，请检查设备与网络"</item>
+        <item>"连接测试成功"</item>
+        <item>"未收到晨检 SDK 回执，请检查 IP 与网络"</item>
+        <item>"已连接"</item>
+        <item>"晨检 SDK 已安装，但当前没有可从外部打开的页面。请通过连接方式接入 SDK 服务。"</item>
+        <item>"晨检 SDK 已安装，以后台服务运行。请点击连接或重新连接，查看连接与授权状态。"</item>
+        <item>"返回首页"</item>
+        <item>"未填写"</item>
+        <item>"未分配部门"</item>
+        <item>" · 已录入人脸"</item>
+        <item>" · 尚未录入人脸"</item>
+        <item>"页面已暂停，人脸学习尚未发送，请重新采集"</item>
+        <item>"已显示全部员工"</item>
+        <item>"上拉加载更多员工"</item>
+        <item>"已录人脸"</item>
+        <item>"待录人脸"</item>
+        <item>"正在核对当前设备的人脸样本"</item>
+        <item>"暂时无法核对样本，请稍后刷新"</item>
+        <item>"人脸图片已刷新"</item>
+        <item>"样本核对未能保存，请刷新重试"</item>
+        <item>"员工或设备状态已变化，请刷新核对"</item>
+        <item>"已录入图片"</item>
+        <item>"请先选择员工"</item>
+        <item>"该员工暂无人脸样本"</item>
+        <item>"连接当前设备后刷新核对样本"</item>
+        <item>"正在删除样本"</item>
+        <item>"正在清空样本"</item>
+        <item>"页面或连接已变化，删除尚未发送，请重新核对"</item>
+        <item>"连接已变化，删除结果未知，请先核对原设备样本"</item>
+        <item>"删除结果未知，请刷新核对样本后再操作"</item>
+        <item>"员工或设备已变化，请刷新核对删除结果"</item>
+        <item>"人脸样本已删除"</item>
+        <item>"该员工的人脸样本已清空"</item>
+        <item>"摄像头已中断，人脸学习尚未发送，请重新采集"</item>
+        <item>"页面或摄像头已变化，人脸学习尚未发送，请重新采集"</item>
+        <item>"页面或连接已变化，人脸学习尚未发送，请重新采集"</item>
+        <item>"人脸检测画面已过期，请正视镜头后重试"</item>
+        <item>"人脸检测结果无效，请重新采集"</item>
+        <item>"未选择员工"</item>
+        <item>"关闭选择"</item>
+        <item>"切换人员"</item>
+        <item>"请先从员工列表选择员工"</item>
+        <item>"等待摄像头画面"</item>
+        <item>"正在读取人脸样本"</item>
+        <item>"正在读取员工列表"</item>
+        <item>"正在确认人脸"</item>
+        <item>"采集画面已过期，人脸学习尚未发送，请重新采集"</item>
+        <item>"正在学习"</item>
+        <item>"人脸检测结果无效，人脸学习尚未发送，请重新采集"</item>
+        <item>"学习结果未知，请先核对 SDK 人脸状态，避免重复学习"</item>
+        <item>"连接已改变，请先核对原 SDK 的人脸学习结果"</item>
+        <item>"员工状态已变化，请重新核对 SDK 人脸状态"</item>
+        <item>"人脸学习已保存"</item>
+        <item>"未检测到可学习的人脸，请正视镜头后重新采集"</item>
+        <item>"关于设备"</item>
+        <item>"今日晨检统计"</item>
+        <item>"关闭"</item>
+        <item>"SDK 未安装，安装后即可晨检"</item>
+        <item>"设备未激活，激活后开始使用"</item>
+        <item>"身份识别 · 体温 · 头部 · 手部"</item>
+        <item>"局域网"</item>
+        <item>"本机"</item>
+        <item>"→  立即安装"</item>
+        <item>"→  立即激活"</item>
+        <item>"→  SDK 加载中…"</item>
+        <item>"→  进入晨检"</item>
+        <item>"授权与密钥"</item>
+        <item>"授权详情"</item>
+        <item>"补光设置"</item>
+        <item>"部门"</item>
+        <item>"字体大小档位无效"</item>
+        <item>"请输入有效激活码"</item>
+        <item>"模型列表信息不完整，请重试"</item>
+        <item>"暂无可选模型"</item>
+        <item>"读取模型列表失败，请重试"</item>
+        <item>"激活信息不完整，请重试"</item>
+        <item>"读取激活信息失败，请重试"</item>
+        <item>"设备激活成功"</item>
+        <item>"当前无法激活，请确认连接并等待正在处理的操作结束"</item>
+        <item>"操作结果未知，请查看当前模型后再操作"</item>
+        <item>"连接已变更，操作结果未知，请查看当前模型后再操作"</item>
+        <item>"连接已变更，请重新选择模型"</item>
+        <item>"系统未提供"</item>
+        <item>"列表数据无法生成快照"</item>
+        <item>"采集照片不完整，不能生成完成记录"</item>
+        <item>"员工档案已删除或身份已变化，请刷新后操作"</item>
+        <item>"员工资料或上次操作状态已变化，请先核对"</item>
+        <item>"存在待核对的人脸学习，请先核对 SDK 人脸状态"</item>
+        <item>"波特率和电平必须是有效整数"</item>
+        <item>"列表弹窗需要 Activity"</item>
+        <item>"没有可用的系统安装或授权页面"</item>
+        <item>"安全密码初始化失败，请重试"</item>
+        <item>"安全密码需为 6–32 位数字"</item>
+        <item>"安全密码保存失败，请重试"</item>
+        <item>"安全密码校验不可用，请重试"</item>
+    </string-array>
+    <string-array name="ui_message_template_values">
+        <item>"SDK 连接配置无效：%1$s"</item>
+        <item>"上次%1$s请求已处理"</item>
+        <item>"读取模型列表失败（%1$s）"</item>
+        <item>"读取激活信息失败（%1$s）"</item>
+        <item>"操作失败（%1$s），请查看当前模型后再操作"</item>
+        <item>"前置摄像头 · %1$s"</item>
+        <item>"后置摄像头 · %1$s"</item>
+        <item>"外接摄像头 · %1$s"</item>
+        <item>"USB 摄像头 · %1$s"</item>
+        <item>"选定摄像头不可用：%1$s"</item>
+        <item>"选定摄像头 %1$s 当前不可用，请在采集设备中重新选择摄像头"</item>
+        <item>"选定摄像头 %1$s 未连接，请在设备设置中重新选择"</item>
+        <item>"无法打开摄像头：%1$s"</item>
+        <item>"无法配置相机预览：%1$s"</item>
+        <item>"摄像头错误（%1$s），请重新连接"</item>
+        <item>"无法启动相机采集：%1$s"</item>
+        <item>"无法申请 USB 摄像头权限：%1$s"</item>
+        <item>"无法连接 USB 摄像头：%1$s"</item>
+        <item>"设备被占用或不支持 UVC（%1$s）"</item>
+        <item>"无法打开 USB 摄像头：%1$s"</item>
+        <item>"业务请求失败：HTTP %1$s"</item>
+        <item>"该部门还有 %1$s 名员工，请先在员工编辑弹窗中调整部门后再删除"</item>
+        <item>"员工编辑字段无效：%1$s"</item>
+        <item>"保存本地数据失败：%1$s"</item>
+        <item>"采集照片 %1$s"</item>
+        <item>"体温偏低：%1$s°C"</item>
+        <item>"体温偏高：%1$s°C"</item>
+        <item>"体温 %1$s°C"</item>
+        <item>"手背：%1$s"</item>
+        <item>"手心：%1$s"</item>
+        <item>"手背检查 · %1$s"</item>
+        <item>"手心检查 · %1$s"</item>
+        <item>"%1$s等%2$s项"</item>
+        <item>"开灯失败：%1$s"</item>
+        <item>"关灯失败：%1$s"</item>
+        <item>"%1$s；关灯失败：%2$s"</item>
+        <item>"灯光串口不存在：%1$s"</item>
+        <item>"GPIO 初始化失败：%1$s"</item>
+        <item>"GPIO %1$s 写入失败"</item>
+        <item>"GPIO 节点不存在：%1$s"</item>
+        <item>"没有 GPIO 写入权限：%1$s，请联系设备供应商配置"</item>
+        <item>"测温设备无法打开：%1$s；请检查设备配置"</item>
+        <item>"测温采集中断：%1$s"</item>
+        <item>"设备不存在：%1$s"</item>
+        <item>"已登录门店 · %1$s"</item>
+        <item>"门店绑定失败：%1$s"</item>
+        <item>"正在%1$s，请等待本次操作结束"</item>
+        <item>"正在%1$s，请稍候"</item>
+        <item>"%1$s结果未知，请核对 SDK 当前状态后再操作"</item>
+        <item>"%1$s请求已处理，正在确认 SDK 状态"</item>
+        <item>"%1$s失败：%2$s（%3$s）"</item>
+        <item>"授权与模型已就绪，当前正在%1$s；请稍候。"</item>
+        <item>"晨检模型已下载 %1$s% ，请保持网络连接并等待加载完成。"</item>
+        <item>"激活码：%1$s"</item>
+        <item>"授权类型：%1$s"</item>
+        <item>"模型：%1$s"</item>
+        <item>"激活时间：%1$s"</item>
+        <item>"签发时间：%1$s"</item>
+        <item>"最近续期：%1$s"</item>
+        <item>"下次续期：%1$s"</item>
+        <item>"到期时间：%1$s"</item>
+        <item>"SDK 版本：%1$s"</item>
+        <item>"已接收 %1$s，下载总量尚未确定。"</item>
+        <item>"已下载 %1$s%（%2$s / %3$s）"</item>
+        <item>"接口版本：%1$s"</item>
+        <item>"身份识别：%1$s"</item>
+        <item>"头部 / 手部检查：%1$s"</item>
+        <item>"人员登记：%1$s"</item>
+        <item>"人员遗忘：%1$s"</item>
+        <item>"底库查询：%1$s"</item>
+        <item>"连接地址无效：%1$s"</item>
+        <item>"SDK 连接关闭：%1$s"</item>
+        <item>"无法连接晨检 SDK：%1$s"</item>
+        <item>"连接失败：%1$s"</item>
+        <item>"绑定晨检 SDK 失败：%1$s"</item>
+        <item>"请求未发送：%1$s"</item>
+        <item>"%1$s，稍后自动重连"</item>
+        <item>"%1$s；已发送请求结果未知"</item>
+        <item>"%1$s；请求未发送"</item>
+        <item>"%1$s；门店绑定尚未发送"</item>
+        <item>"%1$s，%2$s 秒后重连"</item>
+        <item>"请求参数无效：%1$s"</item>
+        <item>"晨检 SDK 不支持命令：%1$s"</item>
+        <item>"晨检 AIDL 不支持命令：%1$s"</item>
+        <item>"不支持的 Binder 回执：%1$s"</item>
+        <item>"%1$s 必须为非空字符串"</item>
+        <item>"%1$s 必须为字符串"</item>
+        <item>"%1$s 必须为数值"</item>
+        <item>"%1$s 必须为有限数值"</item>
+        <item>"%1$s 必须为整数"</item>
+        <item>"%1$s 必须为正整数"</item>
+        <item>"下载失败（HTTP %1$s）"</item>
+    </string-array>
+</resources>

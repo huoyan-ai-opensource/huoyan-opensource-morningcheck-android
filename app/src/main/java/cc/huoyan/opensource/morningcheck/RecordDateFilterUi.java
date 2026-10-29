@@ -42,13 +42,13 @@ final class RecordDateFilterUi {
     void refreshLabel() {
         int label = presetLabel(range.preset());
         if (label != 0) {
-            setLabel(range.preset() == RecordDateRange.Preset.ALL ? "日期范围" : activity.getString(label));
+            setLabel(range.preset() == RecordDateRange.Preset.ALL ? activity.getString(R.string.i18n_b_date_range) : activity.getString(label));
             trigger.setContentDescription(activity.getString(R.string.record_date_filter_label) + "，" + activity.getString(label));
             return;
         }
         String start = formatted(range.customStart());
         String end = range.followsNow() ? activity.getString(R.string.record_date_now) : formatted(range.customEnd());
-        setLabel("自定义日期");
+        setLabel(activity.getString(R.string.i18n_b_custom_date));
         trigger.setContentDescription(activity.getString(R.string.record_date_full_range,
                 activity.getString(R.string.record_date_filter_label), start, end));
     }

@@ -31,7 +31,7 @@
             style="@style/PenButton"
             android:layout_width="@dimen/dp_26"
             android:layout_marginStart="@dimen/dp_4"
-            android:contentDescription="清空搜索"
+            android:contentDescription="@string/ui_view_face_staff_selection_enrollment_search_clear_contentdescription"
             android:paddingStart="@dimen/dp_0"
             android:paddingEnd="@dimen/dp_0"
             android:text="×" />
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_2"
         android:layout_marginTop="@dimen/dp_4"
-        android:text="首字母或数字模糊搜索 · 点人员即可切换" />
+        android:text="@string/ui_view_face_staff_selection_label_text" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -106,6 +106,6 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:text="上拉加载更多员工" />
+            android:text="@string/ui_view_face_staff_selection_enrollment_next_text" />
     </LinearLayout>
 </LinearLayout>

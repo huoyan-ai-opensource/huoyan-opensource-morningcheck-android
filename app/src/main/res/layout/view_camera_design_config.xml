@@ -9,7 +9,7 @@
         style="@style/PenTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="画面配置" />
+        android:text="@string/ui_view_camera_design_config_label_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             style="@style/PenText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="选择相机" />
+            android:text="@string/ui_view_camera_design_config_label_text_2" />
 
         <TextView
             android:id="@+id/settings_choose_active_camera"
@@ -32,7 +32,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="end|center_vertical"
-            android:text="选择相机  ›" />
+            android:text="@string/ui_view_camera_design_config_settings_choose_active_camera_text" />
     </LinearLayout>
 
     <LinearLayout
@@ -44,7 +44,7 @@
             style="@style/PenText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="分辨率" />
+            android:text="@string/ui_view_camera_design_config_label_text_3" />
 
         <TextView
             android:id="@+id/settings_camera_resolution"
@@ -55,7 +55,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="end|center_vertical"
-            android:text="待获取  ›" />
+            android:text="@string/ui_view_camera_design_config_settings_camera_resolution_text" />
     </LinearLayout>
 
     <LinearLayout
@@ -68,13 +68,13 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="镜像反转" />
+            android:text="@string/ui_view_camera_design_config_label_text_4" />
 
         <cc.huoyan.opensource.morningcheck.LandscapeSwitch
             android:id="@+id/settings_camera_mirror"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:contentDescription="镜像反转"
+            android:contentDescription="@string/ui_view_camera_design_config_label_text_4"
             android:showText="false"
             android:splitTrack="false"
             android:switchMinWidth="@dimen/dp_52"

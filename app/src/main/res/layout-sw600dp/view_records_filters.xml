@@ -10,7 +10,7 @@
         android:layout_width="@dimen/dp_0"
         android:layout_weight="3"
         android:drawableEnd="@drawable/mc_list_search_icon"
-        android:hint="搜索姓名 / 工号"
+        android:hint="@string/ui_view_records_filters_records_search_hint"
         android:inputType="text" />
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_weight="1.2"
         android:paddingStart="@dimen/dp_4"
         android:paddingEnd="@dimen/dp_4"
-        android:text="日期范围" />
+        android:text="@string/ui_view_records_filters_records_date_filter_text" />
 
     <cc.huoyan.opensource.morningcheck.ChoiceSpinner
         android:id="@+id/records_filter"

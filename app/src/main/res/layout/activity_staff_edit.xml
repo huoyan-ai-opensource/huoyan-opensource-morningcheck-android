@@ -58,7 +58,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:maxLines="2"
-                    android:text="重新读取资料并清空草稿"
+                    android:text="@string/ui_activity_staff_edit_staff_edit_reload_text"
                     android:textColor="@color/mc_blue"
                     android:visibility="gone" />
             </LinearLayout>
@@ -75,7 +75,7 @@
                     style="@style/McStaffFormButton"
                     android:layout_width="@dimen/dp_0"
                     android:layout_weight="1"
-                    android:text="取消" />
+                    android:text="@string/activation_code_cancel" />
 
                 <TextView
                     android:id="@+id/staff_edit_save"
@@ -83,7 +83,7 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_marginStart="@dimen/dp_4"
                     android:layout_weight="1"
-                    android:text="保存员工" />
+                    android:text="@string/ui_activity_staff_edit_staff_edit_save_text" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

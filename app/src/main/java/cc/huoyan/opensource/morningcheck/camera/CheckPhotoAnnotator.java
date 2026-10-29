@@ -1,5 +1,6 @@
 package cc.huoyan.opensource.morningcheck.camera;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import cc.huoyan.opensource.morningcheck.R;
+import cc.huoyan.opensource.morningcheck.UiMessages;
 
 /**
  * 在原 RGB 位图上写入证据标注，JPEG 保存后详情和上传均能看到同样的内容。
@@ -26,6 +30,10 @@ public final class CheckPhotoAnnotator {
      * 调用者持有位图并在后台绘制、保存，方法不创建或回收位图。
      */
     public static void annotateHand(Bitmap bitmap, List<HandEvidenceCapture.Abnormality> abnormalities) {
+        annotateHand(null, bitmap, abnormalities);
+    }
+
+    public static void annotateHand(Context context, Bitmap bitmap, List<HandEvidenceCapture.Abnormality> abnormalities) {
         if (abnormalities == null || abnormalities.isEmpty()) return;
         Canvas canvas = canvas(bitmap);
         float edge = Math.min(bitmap.getWidth(), bitmap.getHeight());
@@ -48,17 +56,27 @@ public final class CheckPhotoAnnotator {
             box.bottom = Math.min(bitmap.getHeight() - inset, box.bottom);
             if (box.isEmpty()) continue;
             canvas.drawRect(box, stroke);
-            drawLabel(canvas, abnormality.label, box.left, box.top, text, background,
+            String label = context == null ? abnormality.label : UiMessages.text(context, abnormality.label);
+            drawLabel(canvas, label, box.left, box.top, text, background,
                     bitmap.getWidth(), bitmap.getHeight(), false);
         }
     }
 
     public static void annotateFace(Bitmap bitmap, long captureTimeMillis, double temperature) {
+        annotateFace(null, bitmap, captureTimeMillis, temperature);
+    }
+
+    public static void annotateFace(Context context, Bitmap bitmap, long captureTimeMillis, double temperature) {
         Canvas canvas = canvas(bitmap);
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+        boolean english = context != null && UiMessages.isEnglish(context);
+        Locale locale = english ? Locale.US : Locale.CHINA;
+        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale)
                 .format(new Date(captureTimeMillis));
-        String bodyTemperature = Double.isFinite(temperature)
-                ? String.format(Locale.CHINA, "体温 %.1f°C", temperature) : "体温 未测";
+        // 已保存的证据图片不随系统语言重绘，新采集的标注使用采集页面的语言。
+        String bodyTemperature = context == null
+                ? Double.isFinite(temperature) ? String.format(Locale.CHINA, "体温 %.1f°C", temperature) : "体温 未测"
+                : Double.isFinite(temperature) ? context.getString(R.string.photo_annotation_temperature, temperature)
+                : context.getString(R.string.photo_annotation_temperature_missing);
         float edge = Math.min(bitmap.getWidth(), bitmap.getHeight());
         float margin = Math.max(1, edge / 70f);
         Paint text = textPaint(edge / 27f);

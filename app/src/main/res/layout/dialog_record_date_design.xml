@@ -17,15 +17,15 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="选择日期范围，长按展开更多筛选"
-            android:text="选择日期范围" />
+            android:contentDescription="@string/ui_dialog_record_date_design_record_date_title_contentdescription"
+            android:text="@string/ui_dialog_record_date_design_record_date_title_text" />
 
         <TextView
             android:id="@+id/record_date_cancel"
             style="@style/PenButton"
             android:layout_width="@dimen/dp_26"
             android:background="@drawable/mc_text_action"
-            android:contentDescription="关闭"
+            android:contentDescription="@string/ui_activity_staff_editor_dialog_staff_edit_cancel_text"
             android:text="×" />
     </LinearLayout>
 
@@ -40,7 +40,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_weight="1"
-            android:text="今天" />
+            android:text="@string/ui_dialog_record_date_design_record_date_today_text" />
 
         <TextView
             android:id="@+id/record_date_yesterday"
@@ -48,7 +48,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_weight="1"
-            android:text="昨天" />
+            android:text="@string/ui_dialog_record_date_design_record_date_yesterday_text" />
 
         <TextView
             android:id="@+id/record_date_7_days"
@@ -56,7 +56,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_weight="1"
-            android:text="近7天" />
+            android:text="@string/record_date_7_days" />
 
         <TextView
             android:id="@+id/record_date_this_month"
@@ -64,7 +64,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_weight="1"
-            android:text="本月" />
+            android:text="@string/ui_dialog_record_date_design_record_date_this_month_text" />
     </LinearLayout>
 
     <LinearLayout
@@ -109,7 +109,7 @@
                 style="@style/PenCaption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="开始日期" />
+                android:text="@string/ui_dialog_record_date_design_label_text" />
 
             <TextView
                 android:id="@+id/record_date_start_date"
@@ -142,7 +142,7 @@
                 style="@style/PenCaption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="结束日期" />
+                android:text="@string/ui_dialog_record_date_design_label_text_2" />
 
             <TextView
                 android:id="@+id/record_date_end_date"
@@ -187,7 +187,7 @@
                     style="@style/PenButton"
                     android:layout_width="@dimen/dp_26"
                     android:background="@drawable/mc_text_action"
-                    android:contentDescription="上个月"
+                    android:contentDescription="@string/ui_dialog_record_date_design_record_date_previous_contentdescription"
                     android:text="‹" />
 
                 <TextView
@@ -204,7 +204,7 @@
                     style="@style/PenButton"
                     android:layout_width="@dimen/dp_26"
                     android:background="@drawable/mc_text_action"
-                    android:contentDescription="下个月"
+                    android:contentDescription="@string/ui_dialog_record_date_design_record_date_next_contentdescription"
                     android:text="›" />
             </LinearLayout>
 
@@ -237,7 +237,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="一" />
+                    android:text="@string/ui_dialog_record_date_design_label_text_3" />
 
                 <TextView
                     style="@style/PenCaption"
@@ -245,7 +245,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="二" />
+                    android:text="@string/ui_dialog_record_date_design_label_text_4" />
 
                 <TextView
                     style="@style/PenCaption"
@@ -253,7 +253,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="三" />
+                    android:text="@string/ui_dialog_record_date_design_label_text_5" />
 
                 <TextView
                     style="@style/PenCaption"
@@ -261,7 +261,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="四" />
+                    android:text="@string/ui_dialog_record_date_design_label_text_6" />
 
                 <TextView
                     style="@style/PenCaption"
@@ -269,7 +269,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="五" />
+                    android:text="@string/ui_dialog_record_date_design_label_text_7" />
 
                 <TextView
                     style="@style/PenCaption"
@@ -277,7 +277,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="六" />
+                    android:text="@string/ui_dialog_record_date_design_label_text_8" />
 
                 <TextView
                     style="@style/PenCaption"
@@ -285,7 +285,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="日" />
+                    android:text="@string/ui_dialog_record_date_design_label_text_9" />
             </LinearLayout>
 
             <GridView
@@ -336,7 +336,7 @@
                 android:id="@+id/record_date_back_to_calendar"
                 style="@style/PenButton"
                 android:layout_width="match_parent"
-                android:text="返回日历" />
+                android:text="@string/ui_dialog_record_date_design_record_date_back_to_calendar_text" />
         </LinearLayout>
     </FrameLayout>
 
@@ -360,7 +360,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_weight="1"
-            android:text="重置" />
+            android:text="@string/ui_dialog_record_date_design_record_date_reset_text" />
 
         <TextView
             android:id="@+id/record_date_confirm"
@@ -368,6 +368,6 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_weight="1"
-            android:text="应用筛选" />
+            android:text="@string/ui_dialog_record_date_design_record_date_confirm_text" />
     </LinearLayout>
 </LinearLayout>

@@ -11,7 +11,7 @@
         style="@style/McHealthDateAction"
         android:layout_width="@dimen/dp_0"
         android:layout_weight="1"
-        android:text="清空" />
+        android:text="@string/activation_code_clear" />
 
     <TextView
         android:id="@+id/health_date_cancel"
@@ -19,7 +19,7 @@
         android:layout_width="@dimen/dp_0"
         android:layout_marginStart="@dimen/dp_4"
         android:layout_weight="1"
-        android:text="取消" />
+        android:text="@string/activation_code_cancel" />
 
     <TextView
         android:id="@+id/health_date_confirm"
@@ -27,5 +27,5 @@
         android:layout_width="@dimen/dp_0"
         android:layout_marginStart="@dimen/dp_4"
         android:layout_weight="1"
-        android:text="确定" />
+        android:text="@string/ui_activity_staff_editor_dialog_staff_edit_save_text" />
 </LinearLayout>

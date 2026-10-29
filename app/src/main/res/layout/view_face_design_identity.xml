@@ -16,7 +16,7 @@
         android:gravity="center"
         android:minHeight="@dimen/dp_14"
         android:paddingVertical="@dimen/dp_4"
-        android:text="当前人员："
+        android:text="@string/ui_view_face_design_identity_label_text"
         android:textColor="@color/BLACK"
         android:textSize="@dimen/sp_8" />
 
@@ -40,6 +40,6 @@
         android:minHeight="@dimen/dp_0"
         android:paddingHorizontal="@dimen/dp_8"
         android:paddingVertical="@dimen/dp_5"
-        android:text="切换人员"
+        android:text="@string/ui_view_face_design_identity_enrollment_choose_staff_text"
         android:textSize="@dimen/sp_8" />
 </LinearLayout>

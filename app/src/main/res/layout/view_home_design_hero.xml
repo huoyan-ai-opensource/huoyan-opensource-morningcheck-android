@@ -34,7 +34,7 @@
                 style="@style/PenTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="开始晨检"
+                android:text="@string/ui_view_home_design_hero_label_text"
                 android:textColor="@color/mc_white"
                 android:textSize="@dimen/sp_16" />
 
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="身份识别 · 体温 · 头部 · 手部"
+                android:text="@string/ui_view_home_design_hero_home_hero_detail_text"
                 android:textColor="@color/mc_white" />
         </LinearLayout>
     </LinearLayout>
@@ -58,5 +58,5 @@
         android:id="@+id/home_start"
         style="@style/PenButton"
         android:layout_width="match_parent"
-        android:text="进入晨检" />
+        android:text="@string/ui_view_home_design_hero_home_start_text" />
 </LinearLayout>

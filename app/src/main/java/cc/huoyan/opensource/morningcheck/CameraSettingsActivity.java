@@ -119,7 +119,7 @@ public final class CameraSettingsActivity extends BaseDeviceSettingsActivity {
         settingsAction(form, R.id.settings_camera_resolution, this::chooseResolution);
         updateImageControls();
         refreshCameraChoices();
-        ((TextView) findViewById(R.id.header_page_title)).setText("相机设置");
+        ((TextView) findViewById(R.id.header_page_title)).setText(getString(R.string.i18n_a_camera_settings));
         settingsAction(form, R.id.settings_choose_active_camera, () -> chooseCamera(previewHand));
         settingsAction(form, R.id.settings_camera_lighting,
                 () -> startActivity(new Intent(this, LightingSettingsActivity.class)));
@@ -198,7 +198,7 @@ public final class CameraSettingsActivity extends BaseDeviceSettingsActivity {
         if (resolution.isEmpty() && cameraPreviewSource != null)
             resolution = cameraPreviewSource.activeResolution();
         ((TextView) formView.findViewById(R.id.settings_camera_resolution)).setText(
-                resolution.isEmpty() ? "自动  ›" : resolution.replace("x", " × ") + "  ›");
+                resolution.isEmpty() ? getString(R.string.i18n_a_auto) : resolution.replace("x", " × ") + "  ›");
     }
 
     private void chooseResolution() {
@@ -210,8 +210,8 @@ public final class CameraSettingsActivity extends BaseDeviceSettingsActivity {
         if (selected.isEmpty()) selected = cameraPreviewSource.activeResolution();
         final String current = selected;
         dismissFormDialog();
-        formDialog = ImmersiveUi.show(DesignChoiceDialog.create(this, "选择分辨率",
-                "选择后立即生效并保存", labels, sizes.indexOf(selected), which -> {
+        formDialog = ImmersiveUi.show(DesignChoiceDialog.create(this, getString(R.string.i18n_a_select_resolution),
+                getString(R.string.i18n_a_changes_are_applied_and_saved_immediately), labels, sizes.indexOf(selected), which -> {
                     if (!uiReady()) return;
                     CameraImageOptions old = activeOptions();
                     String resolution = sizes.get(which);
@@ -228,7 +228,7 @@ public final class CameraSettingsActivity extends BaseDeviceSettingsActivity {
         cameraLabels.add(getString(R.string.settings_camera_auto));
         for (CameraSource.CameraInfo info : CameraSource.listCameraInfo(this)) {
             cameraIds.add(info.id);
-            cameraLabels.add(info.label);
+            cameraLabels.add(UiMessages.text(this, info.label));
         }
         keepSavedCameraChoices(cameraLabels, cameraIds);
     }
@@ -334,7 +334,7 @@ public final class CameraSettingsActivity extends BaseDeviceSettingsActivity {
         for (String saved : new String[]{faceCamera, handCamera}) {
             if (!saved.isEmpty() && !ids.contains(saved)) {
                 ids.add(saved);
-                labels.add("已保存摄像头 · " + saved);
+                labels.add(getString(R.string.i18n_a_saved_camera, saved));
             }
         }
     }
@@ -343,8 +343,8 @@ public final class CameraSettingsActivity extends BaseDeviceSettingsActivity {
         dismissFormDialog();
         refreshCameraChoices();
         java.util.List<String> ids = new java.util.ArrayList<>(cameraIds);
-        formDialog = ImmersiveUi.show(DesignChoiceDialog.create(this, "选择相机",
-                "选择后立即生效并保存", cameraLabels,
+        formDialog = ImmersiveUi.show(DesignChoiceDialog.create(this, getString(R.string.i18n_a_select_camera),
+                getString(R.string.i18n_a_changes_are_applied_and_saved_immediately), cameraLabels,
                 ids.indexOf(hand ? handCamera : faceCamera), which -> {
                     if (!uiReady()) return;
                     selectCamera(hand, ids.get(which));

@@ -15,7 +15,7 @@
         style="@style/PenHeaderCell"
         android:gravity="start|center_vertical"
         android:paddingEnd="@dimen/dp_4"
-        android:text="员工" />
+        android:text="@string/ui_view_record_table_header_record_row_name_title_text" />
 
     <TextView
         android:id="@+id/record_row_date_title"
@@ -23,19 +23,19 @@
         android:layout_weight="1.5"
         android:gravity="start|center_vertical"
         android:paddingEnd="@dimen/dp_4"
-        android:text="检查时间" />
+        android:text="@string/ui_view_record_design_summary_label_text" />
 
     <TextView
         android:id="@+id/record_row_result_title"
         style="@style/PenHeaderCell"
         android:gravity="start|center_vertical"
         android:paddingEnd="@dimen/dp_4"
-        android:text="结果" />
+        android:text="@string/ui_view_record_table_header_record_row_result_title_text" />
 
     <TextView
         android:id="@+id/record_row_actions_title"
         style="@style/PenHeaderCell"
         android:layout_width="@dimen/dp_36"
         android:layout_weight="0"
-        android:text="操作" />
+        android:text="@string/department_table_actions" />
 </LinearLayout>

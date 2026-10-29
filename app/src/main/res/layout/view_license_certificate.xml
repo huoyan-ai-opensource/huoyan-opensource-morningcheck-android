@@ -9,7 +9,7 @@
         style="@style/PenTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="授权状态" />
+        android:text="@string/ui_view_license_certificate_label_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="激活状态" />
+            android:text="@string/ui_view_license_certificate_label_text_2" />
 
         <TextView
             android:id="@+id/settings_license_state"
@@ -58,7 +58,7 @@
             style="@style/PenButton"
             android:layout_width="@dimen/dp_0"
             android:layout_weight="1"
-            android:text="切换模型"
+            android:text="@string/ui_view_license_certificate_settings_switch_model_text"
             android:visibility="gone" />
 
         <TextView
@@ -66,6 +66,6 @@
             style="@style/PenPrimary"
             android:layout_width="@dimen/dp_0"
             android:layout_weight="1"
-            android:text="激活设备" />
+            android:text="@string/ui_view_license_certificate_settings_activate_text" />
     </LinearLayout>
 </LinearLayout>

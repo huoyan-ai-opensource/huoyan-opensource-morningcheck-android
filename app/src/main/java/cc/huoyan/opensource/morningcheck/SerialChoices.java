@@ -22,7 +22,7 @@ final class SerialChoices {
     }
 
     static void bind(BaseMorningActivity host, TextView field, boolean path, Runnable changed) {
-        bind(host, field, path, "点选后关闭，保存配置后生效", changed);
+        bind(host, field, path, host.getString(R.string.i18n_b_serial_select_saved), changed);
     }
 
     static void bind(BaseMorningActivity host, TextView field, boolean path, String hint, Runnable changed) {
@@ -79,13 +79,13 @@ final class SerialChoices {
             BooleanSupplier current = () -> !detached[0] && generation[0] == expectedGeneration
                     && host.foreground && !host.destroyed && !host.isFinishing() && field.isAttachedToWindow();
             if (!path) {
-                selector[0] = show(host, field, "波特率", hint, BAUD_RATES, current, changed);
+                selector[0] = show(host, field, host.getString(R.string.i18n_b_baud_rate), hint, BAUD_RATES, current, changed);
                 return;
             }
             reading[0] = true;
             LoadingDialog expectedLoading = new LoadingDialog(host);
             loading[0] = expectedLoading;
-            expectedLoading.show("正在读取串口列表");
+            expectedLoading.show(host.getString(R.string.i18n_b_reading_serials));
             host.runIo(() -> {
                 try {
                     List<String> devices = new ArrayList<>(new TreeSet<>(Arrays.asList(
@@ -95,7 +95,7 @@ final class SerialChoices {
                         if (!current.getAsBoolean()) return;
                         loading[0] = null;
                         reading[0] = false;
-                        selector[0] = show(host, field, "串口路径", hint, devices, current, changed);
+                        selector[0] = show(host, field, host.getString(R.string.i18n_b_serial_path), hint, devices, current, changed);
                     });
                 } catch (RuntimeException error) {
                     host.main.post(() -> {

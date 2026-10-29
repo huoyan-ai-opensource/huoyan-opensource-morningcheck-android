@@ -34,9 +34,9 @@ public final class PlaceSettingsActivity extends BaseMorningActivity {
 
     @Override
     protected void bindPage() {
-        ((TextView) findViewById(R.id.header_page_title)).setText("场所");
-        ((TextView) findViewById(R.id.header_back_label)).setText("返回设置");
-        findViewById(R.id.header_home).setContentDescription("返回系统设置");
+        ((TextView) findViewById(R.id.header_page_title)).setText(getString(R.string.i18n_b_place));
+        ((TextView) findViewById(R.id.header_back_label)).setText(getString(R.string.i18n_b_back_settings));
+        findViewById(R.id.header_home).setContentDescription(getString(R.string.i18n_b_back_system_settings));
         findViewById(R.id.header_home).setOnClickListener(view -> finish());
         ((EditText) content.findViewById(R.id.place_name)).setText(nameDraft);
         ((EditText) content.findViewById(R.id.place_phone)).setText(phoneDraft);
@@ -93,12 +93,12 @@ public final class PlaceSettingsActivity extends BaseMorningActivity {
         captureForm();
         String name = nameDraft.trim();
         if (name.isEmpty()) {
-            notice("场所名称不能为空");
+            notice(getString(R.string.i18n_b_place_required));
             return;
         }
         prefs.edit().putString("shop_name", name).putString("shop_phone", phoneDraft.trim())
                 .putString("shop_address", addressDraft.trim()).apply();
-        toast("场所资料已保存");
+        toast(getString(R.string.i18n_b_place_saved));
         finish();
     }
 

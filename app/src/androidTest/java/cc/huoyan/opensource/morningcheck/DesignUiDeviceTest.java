@@ -950,6 +950,62 @@ public final class DesignUiDeviceTest {
         });
     }
 
+    @Test public void readmeScreensFollowSystemLanguage() throws Exception {
+        boolean english = "en".equals(app.getResources().getConfiguration().locale.getLanguage());
+        AtomicReference<Throwable> serverFailure = prepareCheckReadySdk();
+        assertTrue(preferences.edit().putInt(AppFontSettings.KEY, AppFontSettings.DEFAULT_INDEX)
+                .putBoolean(SecuritySettings.AUTO_CHECK_KEY, false).putBoolean("voice", false)
+                .putBoolean("temperature", false)
+                .putString("shop_name", english ? "Sample Workplace" : "示例餐饮公司").commit());
+        int recordCount = app.io.submit(() -> fixture.records().size()).get(10, TimeUnit.SECONDS);
+        HomeActivity home = launch(HomeActivity.class);
+        await(() -> home.loaded && home.sdkSession.viewState().ready
+                && home.<TextView>findViewById(R.id.home_start).getText().toString()
+                .equals(home.getString(R.string.i18n_a_start_check)));
+        main(() -> {
+            assertEquals(english ? "About device" : "关于设备",
+                    home.<TextView>findViewById(R.id.home_settings).getText().toString());
+            assertEquals(english ? "Sample Workplace" : "示例餐饮公司",
+                    home.<TextView>findViewById(R.id.header_shop).getText().toString());
+            visible(home, home.findViewById(R.id.home_start));
+            visible(home, home.findViewById(R.id.home_settings));
+            textFailures.clear();
+            assertTextFits(home.getWindow().getDecorView());
+            assertTrue(textFailures.toString(), textFailures.isEmpty());
+            if (ToastEx.toast != null) ToastEx.toast.cancel();
+            return null;
+        });
+        SystemClock.sleep(1000);
+        screenshot("home-readme");
+
+        CheckActivity check = launch(CheckActivity.class);
+        awaitCheckCaptureReady(check);
+        main(() -> {
+            // 不存在的 USB 与串口仅供页面预览；不模拟人脸、测温或识别成功。
+            check.cameraError = "";
+            java.lang.reflect.Method update = CheckActivity.class.getDeclaredMethod("updateCheck");
+            update.setAccessible(true);
+            update.invoke(check);
+            assertEquals(english ? "Face recognition" : "人脸识别",
+                    check.<TextView>findViewById(R.id.check_camera_stage).getText().toString());
+            assertEquals(english ? "Waiting to identify staff" : "等待识别员工",
+                    check.<TextView>findViewById(R.id.check_person).getText().toString());
+            assertEquals(CheckPipeline.Stage.IDENTITY, ((CheckPipeline) field(check, "pipeline")).getStage());
+            assertNull(check.currentRecord);
+            visible(check, check.findViewById(R.id.check_exit));
+            textFailures.clear();
+            assertTextFits(check.getWindow().getDecorView());
+            assertTrue(textFailures.toString(), textFailures.isEmpty());
+            if (ToastEx.toast != null) ToastEx.toast.cancel();
+            return null;
+        });
+        SystemClock.sleep(1000);
+        screenshot("check-readme");
+        assertNull("界面预览不得提交识别或业务请求", serverFailure.get());
+        assertEquals("界面预览不得新增晨检记录", recordCount,
+                (int) app.io.submit(() -> fixture.records().size()).get(10, TimeUnit.SECONDS));
+    }
+
     @Test public void checkAnimationPlaysInCardAndReleasesImagesOnRedraw() throws Exception {
         AtomicReference<Throwable> serverFailure = prepareCheckReadySdk();
         assertTrue(preferences.edit().putInt(AppFontSettings.KEY, 3).putBoolean("temperature", true)

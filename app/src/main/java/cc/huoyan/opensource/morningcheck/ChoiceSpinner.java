@@ -39,7 +39,7 @@ public class ChoiceSpinner extends AppCompatSpinner {
             labels.add(String.valueOf(getAdapter().getItem(i)));
         CharSequence title = getPrompt();
         choiceDialog = DesignChoiceDialog.create(DepartmentFilterDialog.activityOf(getContext()),
-                title == null ? "请选择" : title.toString(), "点选后关闭", labels, getSelectedItemPosition(),
+                title == null ? getContext().getString(R.string.i18n_a_please_select) : title.toString(), getContext().getString(R.string.i18n_a_tap_an_option_to_select), labels, getSelectedItemPosition(),
                 position -> setSelection(position));
         ImmersiveUi.show(choiceDialog);
         return true;

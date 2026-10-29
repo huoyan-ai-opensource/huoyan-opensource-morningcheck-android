@@ -78,7 +78,7 @@ final class ListFilterUi {
                 position = 0;
             }
             spinner.setOnItemSelectedListener(null);
-            spinner.setAdapter(Ui.filterAdapter(spinner.getContext(), names, "部门"));
+            spinner.setAdapter(Ui.filterAdapter(spinner.getContext(), names, spinner.getContext().getString(R.string.i18n_a_department)));
             spinner.setSelection(position, false);
             spinner.setDepartmentChooser(this::openChooser, this::dismiss);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

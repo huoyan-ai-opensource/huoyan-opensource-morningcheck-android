@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:background="@drawable/mc_field"
         android:padding="@dimen/dp_8"
-        android:text="等待测温" />
+        android:text="@string/ui_view_temperature_design_reading_settings_temperature_reading_text" />
 
     <TextView
         style="@style/PenCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_12"
-        android:text="实时采集温度" />
+        android:text="@string/ui_view_temperature_design_reading_label_text" />
 
     <LinearLayout
         android:layout_width="match_parent"

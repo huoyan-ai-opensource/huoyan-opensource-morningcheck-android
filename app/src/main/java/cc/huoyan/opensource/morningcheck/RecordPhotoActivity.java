@@ -71,8 +71,8 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
     @Override
     protected void bindPage() {
         findViewById(R.id.header_home).setOnClickListener(v -> finish());
-        ((TextView) findViewById(R.id.header_back_label)).setText("返回详情");
-        ((TextView) findViewById(R.id.header_page_title)).setText("检查照片");
+        ((TextView) findViewById(R.id.header_back_label)).setText(getString(R.string.i18n_b_back_details));
+        ((TextView) findViewById(R.id.header_page_title)).setText(getString(R.string.i18n_b_check_photos));
         pager = content.findViewById(R.id.photo_pager);
         pager.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         pager.setItemAnimator(null);
@@ -108,7 +108,7 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
         int request = ++readVersion;
         reading = true;
         if (readingDialog == null) readingDialog = new LoadingDialog(this);
-        readingDialog.show("正在读取照片");
+        readingDialog.show(getString(R.string.i18n_b_reading_photos));
         int maxPixels = Math.min(2048, Math.max(getResources().getDisplayMetrics().widthPixels,
                 getResources().getDisplayMetrics().heightPixels));
         runIo(() -> {
@@ -139,12 +139,12 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
 
     private PhotoBatch readBatch(int maxPixels, int request) throws Exception {
         JSONObject record = store.record(recordId);
-        if (record == null) throw new IllegalStateException("这条晨检记录不存在或已移除");
+        if (record == null) throw new IllegalStateException(getString(R.string.i18n_b_record_removed));
         List<RecordPhotos.Photo> photos = RecordPhotos.read(record);
-        if (photos.isEmpty()) throw new IllegalStateException("这条记录没有采集照片");
+        if (photos.isEmpty()) throw new IllegalStateException(getString(R.string.i18n_b_no_record_photos));
         long createdAt = record.optLong("created_at");
-        String recordInfo = record.optString("staff_name", "未记录姓名") + " · " + (createdAt > 0
-                ? new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(createdAt)) : "时间未记录");
+        String recordInfo = record.optString("staff_name", getString(R.string.i18n_b_name_missing)) + " · " + (createdAt > 0
+                ? new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(createdAt)) : getString(R.string.i18n_b_time_missing));
         PhotoBatch result = new PhotoBatch(photos, recordInfo);
         // 全部照片共享采样预算，照片较多时也不能按原图大小成批占满堆内存。
         long pixelBudget = Math.min(32L * 1024 * 1024, Runtime.getRuntime().maxMemory() / 8) / 4;
@@ -156,13 +156,14 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
                 Bitmap decoded = null;
                 String error = "";
                 try {
-                    if (photo.file.isEmpty()) throw new IllegalStateException("本次未保存" + photo.label);
+                    if (photo.file.isEmpty()) throw new IllegalStateException(getString(R.string.i18n_b_photo_not_saved_prefix)
+                            + UiMessages.text(this, photo.label));
                     String path = store.photo(photo.file).getAbsolutePath();
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inJustDecodeBounds = true;
                     BitmapFactory.decodeFile(path, options);
                     if (options.outWidth <= 0 || options.outHeight <= 0)
-                        throw new IllegalStateException(photo.label + "照片文件已缺失或无法读取");
+                        throw new IllegalStateException(UiMessages.text(this, photo.label) + getString(R.string.i18n_b_photo_missing_suffix));
                     options.inSampleSize = 1;
                     while (Math.max(options.outWidth, options.outHeight) / options.inSampleSize > maxPixels
                             || (long) Math.ceil(options.outWidth / (double) options.inSampleSize)
@@ -171,11 +172,12 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
                     options.inJustDecodeBounds = false;
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                     decoded = BitmapFactory.decodeFile(path, options);
-                    if (decoded == null) throw new IllegalStateException(photo.label + "照片无法读取");
+                    if (decoded == null) throw new IllegalStateException(UiMessages.text(this, photo.label)
+                            + getString(R.string.i18n_b_photo_unreadable_suffix));
                 } catch (Exception failure) {
                     error = failure(failure);
                 } catch (OutOfMemoryError exhausted) {
-                    error = photo.label + "照片读取失败，内存不足";
+                    error = UiMessages.text(this, photo.label) + getString(R.string.i18n_b_photo_memory_suffix);
                 }
                 result.images.add(decoded);
                 result.errors.add(error);
@@ -199,7 +201,8 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
     private void updatePhoto() {
         if (content == null) return;
         int count = batch == null ? 0 : batch.photos.size();
-        String label = count == 0 ? "采集照片" : batch.photos.get(selected).label;
+        String label = count == 0 ? getString(R.string.i18n_b_captured_photos)
+                : UiMessages.text(this, batch.photos.get(selected).label);
         ((TextView) content.findViewById(R.id.photo_caption)).setText(label);
         ((TextView) content.findViewById(R.id.photo_record_info)).setText(batch == null ? "" : batch.recordInfo);
         ((TextView) content.findViewById(R.id.photo_position)).setText(
@@ -332,7 +335,7 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
             Bitmap bitmap = batch.images.get(position);
             if (bitmap == null) holder.image.setImageDrawable(null);
             else holder.image.setImageBitmap(bitmap);
-            holder.image.setContentDescription(batch.photos.get(position).label);
+            holder.image.setContentDescription(UiMessages.text(RecordPhotoActivity.this, batch.photos.get(position).label));
         }
 
         @Override

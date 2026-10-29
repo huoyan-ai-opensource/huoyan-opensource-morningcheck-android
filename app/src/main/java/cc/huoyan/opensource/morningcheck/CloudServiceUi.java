@@ -55,9 +55,11 @@ final class CloudServiceUi {
         boolean enabled = known && Boolean.TRUE.equals(value);
         TextView badge = activity.findViewById(R.id.home_cloud_pending);
         if (badge != null) {
-            badge.setText((enabled ? "● " : "○ ") + "云端服务");
+            badge.setText((enabled ? "● " : "○ ") + activity.getString(R.string.i18n_a_cloud_service));
             badge.setTextColor(enabled ? Ui.GREEN : Ui.MUTED);
-            badge.setContentDescription("云端服务：" + (known ? enabled ? "已开启" : "已关闭" : "状态未知"));
+            badge.setContentDescription(activity.getString(R.string.i18n_a_cloud_description,
+                    known ? enabled ? activity.getString(R.string.i18n_a_on) : activity.getString(R.string.i18n_a_off)
+                            : activity.getString(R.string.i18n_a_unknown)));
         }
         Switch toggle = activity.findViewById(R.id.license_cloud_enabled);
         if (toggle != null) {
@@ -67,8 +69,8 @@ final class CloudServiceUi {
             toggle.setEnabled(known && !operation.running);
         }
         TextView state = activity.findViewById(R.id.license_cloud_state);
-        if (state != null) state.setText(known ? enabled ? "已开启" : "已关闭"
-                : connected ? "点击查询" : "未连接");
+        if (state != null) state.setText(known ? enabled ? activity.getString(R.string.i18n_a_on) : activity.getString(R.string.i18n_a_off)
+                : connected ? activity.getString(R.string.i18n_a_tap_to_check) : activity.getString(R.string.i18n_a_disconnected));
         if (writing && toggle != null) showProgress(operation.label);
         else dismissProgress();
         if (connected && !writing && queriedGeneration != session.generation()) {
@@ -82,9 +84,9 @@ final class CloudServiceUi {
         if (!(current instanceof Boolean) || enabled == (Boolean) current || session.operation().running)
             return;
         if (confirmation != null) confirmation.dismiss();
-        String action = enabled ? "开启云端服务" : "关闭云端服务";
-        confirmation = DesignConfirmationDialog.create(activity, action + "？",
-                enabled ? "将开启当前 SDK 的云端托管服务。" : "将关闭当前 SDK 的云端托管服务。", action,
+        String action = enabled ? activity.getString(R.string.i18n_a_enable_cloud_service) : activity.getString(R.string.i18n_a_disable_cloud_service);
+        confirmation = DesignConfirmationDialog.create(activity, activity.getString(R.string.i18n_a_question, action),
+                enabled ? activity.getString(R.string.i18n_a_enable_the_cloud_service_for_this_sdk) : activity.getString(R.string.i18n_a_disable_the_cloud_service_for_this_sdk), action,
                 (dialog, which) -> submit(enabled));
         ImmersiveUi.show(confirmation);
     }
@@ -93,12 +95,12 @@ final class CloudServiceUi {
         if (!active(activity)) return;
         long expected = session.generation();
         WeakReference<BaseMorningActivity> host = new WeakReference<>(activity);
-        session.execute("setCloudStatus", obj("enabled", enabled), enabled ? "开启云端服务" : "关闭云端服务",
+        session.execute("setCloudStatus", obj("enabled", enabled), enabled ? activity.getString(R.string.i18n_a_enable_cloud_service) : activity.getString(R.string.i18n_a_disable_cloud_service),
                 (code, message, data) -> {
                     BaseMorningActivity page = host.get();
                     if (page == null || !active(page) || page.sdkSession.generation() != expected)
                         return;
-                    if (code == 0) page.toast("云端服务设置已提交");
+                    if (code == 0) page.toast(activity.getString(R.string.i18n_a_cloud_service_setting_submitted));
                     else page.notice(message);
                 });
         refresh();
@@ -107,7 +109,7 @@ final class CloudServiceUi {
     private void showProgress(String label) {
         if (progress != null) return;
         View body = activity.getLayoutInflater().inflate(R.layout.dialog_design_loading, null);
-        ((TextView) body.findViewById(R.id.loading_message)).setText("正在" + label + "…");
+        ((TextView) body.findViewById(R.id.loading_message)).setText(activity.getString(R.string.i18n_a_operation_progress, UiMessages.text(activity, label)));
         body.findViewById(R.id.loading_cancel).setVisibility(View.GONE);
         progress = new AlertDialog.Builder(activity).create();
         progress.setView(body, 0, 0, 0, 0);

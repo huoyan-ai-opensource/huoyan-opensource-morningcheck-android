@@ -16,28 +16,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="测试补光" />
+        android:text="@string/ui_view_lighting_test_label_text" />
 
     <TextView
         style="@style/PenText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_6"
-        android:text="确认设备连接后，点亮补光灯检查实际照明。" />
+        android:text="@string/ui_view_lighting_test_label_text_2" />
 
     <TextView
         android:id="@+id/lighting_test_on"
         style="@style/PenPrimary"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/dp_12"
-        android:text="打开补光" />
+        android:text="@string/ui_view_lighting_test_lighting_test_on_text" />
 
     <TextView
         android:id="@+id/lighting_test_off"
         style="@style/PenButton"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/dp_6"
-        android:text="关闭补光" />
+        android:text="@string/ui_view_lighting_test_lighting_test_off_text" />
 
     <Space
         android:layout_width="@dimen/dp_0"

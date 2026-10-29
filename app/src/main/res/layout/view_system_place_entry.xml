@@ -8,7 +8,7 @@
         style="@style/PenCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="场所" />
+        android:text="@string/ui_view_record_design_summary_label_text_3" />
 
     <TextView
         android:id="@+id/settings_shop_name"

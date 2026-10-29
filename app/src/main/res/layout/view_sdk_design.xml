@@ -19,13 +19,13 @@
             android:id="@+id/settings_sdk_local"
             style="@style/PenSegment"
             android:layout_width="@dimen/dp_80"
-            android:text="本机" />
+            android:text="@string/ui_view_sdk_design_settings_sdk_local_text" />
 
         <TextView
             android:id="@+id/settings_sdk_lan"
             style="@style/PenSegment"
             android:layout_width="@dimen/dp_80"
-            android:text="局域网" />
+            android:text="@string/ui_view_sdk_design_settings_sdk_lan_text" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +42,7 @@
             style="@style/PenText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="本机 SDK" />
+            android:text="@string/ui_view_sdk_design_settings_sdk_transport_text" />
 
         <TextView
             android:id="@+id/settings_connection"
@@ -55,14 +55,14 @@
             style="@style/PenCaption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="使用此设备上的 SDK 服务，无需填写 IP 地址。" />
+            android:text="@string/ui_view_sdk_design_settings_sdk_mode_hint_text" />
 
         <TextView
             android:id="@+id/settings_open_sdk"
             style="@style/PenButton"
             android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
-            android:text="安装 SDK"
+            android:text="@string/ui_view_sdk_design_settings_open_sdk_text"
             android:visibility="gone" />
     </LinearLayout>
 

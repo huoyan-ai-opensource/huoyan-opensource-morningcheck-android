@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Huoyan Morning Check</string>
+    <string name="activation_code_title">Enter activation code</string>
+    <string name="model_switch_code_title">Activation code required</string>
+    <string name="model_switch_code_hint">Enter this device\'s activation code to switch models</string>
+    <string name="model_switch_code_scan">Scan code</string>
+    <string name="activation_code_scan">Scan to activate</string>
+    <string name="activation_code_rules">Uppercase letters and digits only; no 0, I or O</string>
+    <string name="activation_code_clear">Clear</string>
+    <string name="activation_code_cancel">Cancel</string>
+    <string name="activation_code_activate">Next</string>
+    <string name="activation_code_backspace">Delete</string>
+    <string name="activation_code_invalid">Use uppercase letters and digits 1–9</string>
+    <string name="activation_code_accessibility">16-character activation code</string>
+    <string name="business_staff_empty">Add staff, then enroll faces. Edit a profile to add a health certificate.</string>
+    <string name="business_staff_no_match">No staff match. Try another search.</string>
+    <string name="business_page_previous">Previous</string>
+    <string name="business_page_next">Next</string>
+    <string name="business_page_loading">Loading…</string>
+    <string name="business_page_failed">Could not load. Tap to retry.</string>
+    <string name="business_page_info">Page %1$d / %2$d · %3$d total</string>
+    <string name="business_records_empty">Completed morning checks appear here automatically.</string>
+    <string name="business_records_no_match">No matching records. Try different filters.</string>
+    <string name="business_photo_description">Morning check photo</string>
+    <string name="mc_check_prompt_label">Guidance</string>
+    <string name="mc_check_prompt_warning_label">Attention</string>
+    <string name="mc_check_temperature_value_placeholder">Temperature · --°C</string>
+    <string name="check_tutorial_guide">Face the camera for identification. Wear a mask and work cap as required, show the backs of both hands, then turn your palms toward the camera.</string>
+    <string name="choice_staff_status">Status</string>
+    <string name="choice_check_result">Result</string>
+    <string name="choice_temperature_mode">Reading mode</string>
+    <string name="department_dialog_close">Cancel</string>
+    <string name="department_dialog_invalid_id">Invalid department ID. Close and reopen this page.</string>
+    <string name="department_dialog_missing">This department was deleted. Close and refresh the list.</string>
+    <string name="department_dialog_parent_missing">The parent department was deleted or moved here. Close and select again. Your draft is saved.</string>
+    <string name="department_dialog_changed">Department details changed. Close and reopen this page. Your draft is saved.</string>
+    <string name="department_dialog_read_failed">Could not load department: %1$s. Tap to retry.</string>
+    <string name="department_dialog_error_fallback">Could not complete the action. Please retry.</string>
+    <string name="department_dialog_discard_title">Discard changes</string>
+    <string name="department_dialog_discard_message">Department details are not saved. Close anyway?</string>
+    <string name="department_dialog_keep_editing">Keep editing</string>
+    <string name="department_dialog_discard_confirm">Discard and close</string>
+    <string name="department_page_title">Departments</string>
+    <string name="department_create_title">Add department</string>
+    <string name="department_edit_title">Department details</string>
+    <string name="department_empty">No departments yet. Add one here, or import staff to include existing departments.</string>
+    <string name="department_no_match">No matching departments</string>
+    <string name="department_back">Back to home</string>
+    <string name="department_name_label">Department name</string>
+    <string name="department_name_hint">Enter department name</string>
+    <string name="department_local_hint">Manage departments on this device</string>
+    <string name="department_rename_hint">Staff and records include subdepartments. A department with staff, records or subdepartments cannot be deleted.</string>
+    <string name="department_root">All departments · Top level</string>
+    <string name="department_search_scope">Search all levels · Full department paths shown</string>
+    <string name="department_children_empty">No subdepartments. Add a department here.</string>
+    <string name="department_counts">%1$d direct staff · %2$d subdepartments</string>
+    <string name="department_parent_label">Parent department</string>
+    <string name="department_parent_root">None (top level)</string>
+    <string name="department_table_actions">Actions</string>
+    <string name="design_edit">Edit</string>
+    <string name="design_hand_palm_guide">Open both hands with palms facing the camera</string>
+    <string name="design_hand_back_guide">Open both hands with backs facing the camera</string>
+    <string name="face_enrollment_capture">Capture &amp; enroll</string>
+    <string name="face_enrollment_multiple">Multiple faces detected. Keep only one person in view.</string>
+    <string name="face_enrollment_no_face">No face detected. Face the camera.</string>
+    <string name="face_enrollment_status_select_employee">Select staff</string>
+    <string name="face_enrollment_status_waiting">Waiting for video</string>
+    <string name="face_enrollment_status_detecting">Detecting</string>
+    <string name="face_enrollment_status_ready">Ready to enroll</string>
+    <string name="face_enrollment_status_no_face">No face</string>
+    <string name="face_enrollment_status_multiple">Multiple faces</string>
+    <string name="face_enrollment_status_processing">Processing</string>
+    <string name="face_enrollment_status_unavailable">Unavailable</string>
+    <string name="face_enrollment_camera_settings">Camera settings</string>
+    <string name="face_enrollment_staff_search">Name / department / staff No.</string>
+    <string name="face_enrollment_staff_empty">No staff yet. Add staff before enrolling faces.</string>
+    <string name="face_enrollment_select_employee">Select a staff member first</string>
+    <string name="face_samples_photo">Enrolled face photo saved by the SDK</string>
+    <string name="face_samples_missing">Original unavailable</string>
+    <string name="face_samples_empty">Select staff to view enrolled faces</string>
+    <string name="face_samples_refresh">Refresh this staff member\'s face samples</string>
+    <string name="face_samples_refresh_short">Refresh</string>
+    <string name="face_samples_clear">Clear all face samples for this staff member</string>
+    <string name="face_samples_forget_short">Forget</string>
+    <string name="face_samples_delete">Delete</string>
+    <string name="face_samples_count">%1$d photos</string>
+    <string name="face_samples_verifying">Checking samples</string>
+    <string name="face_enrollment_entry">Face enrollment</string>
+    <string name="app_font_size_preview">Staff details and check results</string>
+    <string name="app_font_size_saved">Font size saved</string>
+    <string name="app_font_size_dialog_title">App font size</string>
+    <string name="app_font_size_preview_label">Preview · %1$s</string>
+    <string name="app_font_size_dialog_apply">Apply</string>
+    <string name="app_font_size_dialog_cancel">Cancel</string>
+    <string name="app_font_size_value">%1$s  ›</string>
+    <string name="app_font_size_small">Small</string>
+    <string name="app_font_size_default">Default</string>
+    <string name="app_font_size_large">Large</string>
+    <string name="app_font_size_largest">Largest</string>
+    <string-array name="app_font_size_labels">
+        <item>@string/app_font_size_small</item>
+        <item>@string/app_font_size_default</item>
+        <item>@string/app_font_size_large</item>
+        <item>@string/app_font_size_largest</item>
+    </string-array>
+    <string-array name="app_font_size_descriptions">
+        <item>Small, 85%</item>
+        <item>Default, 100%</item>
+        <item>Large, 115%</item>
+        <item>Largest, 130%</item>
+    </string-array>
+    <string-array name="app_font_size_percentages">
+        <item>85%</item>
+        <item>100%</item>
+        <item>115%</item>
+        <item>130%</item>
+    </string-array>
+    <string name="lighting_saved_short">Lighting settings saved</string>
+    <string name="lighting_turning_on">Sending light-on command…</string>
+    <string name="lighting_turning_off">Sending light-off command…</string>
+    <string name="lighting_command_format">Command format</string>
+    <string name="lighting_command_format_help">Commands are converted automatically; the bytes sent stay the same</string>
+    <string name="lighting_format_character">Text</string>
+    <string name="lighting_format_decimal">Decimal</string>
+    <string name="lighting_format_hexadecimal">Hex</string>
+    <string name="lighting_character_hint">Enter characters, e.g. A00101A0</string>
+    <string name="lighting_decimal_hint">Enter 0–255, separated by spaces</string>
+    <string name="lighting_hexadecimal_hint">Enter hex bytes, e.g. 41 30 30</string>
+    <string-array name="lighting_command_formats">
+        <item>@string/lighting_format_character</item>
+        <item>@string/lighting_format_decimal</item>
+        <item>@string/lighting_format_hexadecimal</item>
+    </string-array>
+    <string name="lighting_gpio_mapping">IO1=122 · IO2=148 · IO3=147 · IO4=101</string>
+    <string name="list_filter_department_all">All departments</string>
+    <string name="list_filter_department_none">Unassigned</string>
+    <string name="list_filter_department_loading">Loading departments…</string>
+    <string name="list_filter_back_department">Back to departments</string>
+    <string-array name="list_filter_staff_statuses">
+        <item>All</item>
+        <item>Enabled</item>
+        <item>Disabled</item>
+    </string-array>
+    <string-array name="list_filter_record_results">
+        <item>All</item>
+        <item>Normal</item>
+        <item>Abnormal</item>
+    </string-array>
+    <string name="login_scan_title">Scan workplace QR code</string>
+    <string name="login_scan_hint">Place the workplace QR code in view to sign in automatically.</string>
+    <string name="login_success">Signed in to workplace</string>
+    <string name="login_retry_scan">Scan again</string>
+    <string name="login_retry_camera">Reopen camera</string>
+    <string name="login_choose_camera">Select camera</string>
+    <string name="login_camera_starting">Opening camera…</string>
+    <string name="login_permission_denied">Camera access is required to scan. Grant permission or enable it in system settings.</string>
+    <string name="login_permission_settings">Permissions</string>
+    <string name="login_no_camera">No camera found. Check the connection and retry.</string>
+    <string name="mc_home_design_about">About device</string>
+    <string name="mc_home_design_cloud">Business cloud</string>
+    <string name="mc_home_design_lighting">Lighting</string>
+    <string name="mc_result_photo_absent">No photo saved</string>
+    <string name="mc_result_stay_here">Stay on result</string>
+    <string name="mc_result_auto_next">Next person automatically · Tap to stay</string>
+    <string name="mc_result_next_countdown">Next person in %1$d s · Tap to stay</string>
+    <string name="mc_result_next_after_voice">Next after announcement · Tap to stay</string>
+    <string name="mc_brand">Huoyan Morning Check · Open Source</string>
+    <string name="mc_logo">Huoyan</string>
+    <string name="mc_preview_hint">Live capture · Stand in front of the camera</string>
+    <string name="mc_no_findings">All checks passed. Follow your workplace procedures.</string>
+    <string name="pagination_first">First</string>
+    <string name="pagination_last">Last</string>
+    <string name="pagination_jump_hint">Go to</string>
+    <string name="pagination_jump_input_hint">Enter page number</string>
+    <string name="pagination_jump_invalid">Enter a valid page number</string>
+    <string name="pagination_jump_out_of_range">Enter a page from 1 to %1$d</string>
+    <string name="pagination_page_input_description">Page number, from 1 to %1$d</string>
+    <string name="record_date_filter_label">Check date</string>
+    <string name="record_date_filter_title">Select check date</string>
+    <string name="record_date_today">Today</string>
+    <string name="record_date_24_hours">Last 24 hours</string>
+    <string name="record_date_7_days">Last 7 days</string>
+    <string name="record_date_14_days">Last 14 days</string>
+    <string name="record_date_30_days">Last 30 days</string>
+    <string name="record_date_all">All</string>
+    <string name="record_date_quick_range">Quick range</string>
+    <string name="record_date_custom">Custom</string>
+    <string name="record_date_start">Start time</string>
+    <string name="record_date_end">End time</string>
+    <string name="record_date_follow_now">End at the current time</string>
+    <string name="record_date_edit_start">Edit start time</string>
+    <string name="record_date_edit_end">Edit end time</string>
+    <string name="record_date_range_error">End time cannot be earlier than start time</string>
+    <string name="record_date_now">Now</string>
+    <string name="record_date_a11y_selected">%1$s, selected</string>
+    <string name="record_date_year_value">%1$d</string>
+    <string name="record_date_month_value">Month %1$d</string>
+    <string name="record_date_full_range">%1$s, %2$s to %3$s</string>
+    <string name="record_detail_photo_not_saved">No photos saved for this check</string>
+    <string name="record_detail_photo_loading">Loading photos…</string>
+    <string name="record_detail_photo_unreadable">Photo missing or unreadable</string>
+    <string name="record_photo_position">%1$d / %2$d</string>
+    <string name="record_photo_open_hint">Tap photo to view details</string>
+    <string name="record_photo_fullscreen_description">%1$s. Drag with one finger, pinch to zoom, tap to close.</string>
+    <string name="record_row_result_normal">Normal</string>
+    <string name="record_row_result_abnormal">Abnormal</string>
+    <string name="record_row_missing">Not recorded</string>
+    <string name="rules_hat">Work cap</string>
+    <string name="rules_mask">Mask</string>
+    <string name="rules_wear">Must wear</string>
+    <string name="rules_do_not_wear">Must not wear</string>
+    <string name="rules_enabled">On</string>
+    <string name="rules_disabled">Off</string>
+    <string name="rules_saved">Saved. Applies to the next check.</string>
+    <string name="rules_invalid_temperature">Enter 36.1–43°C. Keeping %1$s°C.</string>
+    <string name="sdk_activation_scan_ready">Waiting for activation QR code</string>
+    <string name="sdk_activation_scan_hint">After scanning, return to authorization to continue.</string>
+    <string name="sdk_activation_scan_camera_starting">Opening camera…</string>
+    <string name="sdk_activation_scan_camera_unavailable">Camera unavailable</string>
+    <string name="sdk_activation_scan_camera_timeout">No camera frames received. Check the connection or choose another camera.</string>
+    <string name="sdk_activation_scan_permission_denied">Allow camera access. If denied, enable it in permission settings.</string>
+    <string name="sdk_activation_scan_no_camera">No camera available. Connect a camera and retry.</string>
+    <string name="sdk_activation_scan_choose_camera">Switch camera</string>
+    <string name="sdk_activation_scan_retry">Retry</string>
+    <string name="sdk_activation_scan_permission_settings">Permissions</string>
+    <string name="sdk_activation_scan_invalid_title">Use an activation QR code</string>
+    <string name="sdk_activation_scan_invalid_message">This QR code has no valid activation information. Try another code.</string>
+    <string name="sdk_flow_activation_empty">Enter an activation code</string>
+    <string name="sdk_flow_activation_busy">The device is busy. Try again shortly.</string>
+    <string name="sdk_install_missing_title">SDK not installed</string>
+    <string name="sdk_install_guide_title">Install Morning Check SDK</string>
+    <string name="sdk_install_guide_message">The SDK is not installed on this device. Download it and follow the installer. Or open connection settings to use another device.</string>
+    <string name="sdk_install_guide_settings">Connection settings</string>
+    <string name="sdk_install_guide_later">Later</string>
+    <string name="sdk_install_download">Download &amp; install</string>
+    <string name="sdk_install_continue">Continue install</string>
+    <string name="sdk_install_pending">SDK downloaded. Continue installation.</string>
+    <string name="sdk_install_downloading">Downloading Morning Check SDK…</string>
+    <string name="sdk_install_progress_value">Downloading SDK · %1$d%%</string>
+    <string name="sdk_install_cancel_download">Cancel download</string>
+    <string name="sdk_install_permission_required">Allow Huoyan to install apps, then return to continue.</string>
+    <string name="sdk_install_download_failed">SDK download failed. Check network and storage, then retry.</string>
+    <string name="sdk_install_invalid_apk">The downloaded file is not a valid Morning Check SDK. Download it again later.</string>
+    <string name="sdk_install_open_failed">Could not open the installer or permission settings. Check device settings and retry.</string>
+    <string name="security_settings_title">Security password</string>
+    <string name="security_settings_change">Change password  ›</string>
+    <string name="security_auto_check_title">Start checks on boot</string>
+    <string name="security_check_exit">Exit check</string>
+    <string name="security_password_change_title">Change security password</string>
+    <string name="security_password_verify_title">Verify security password</string>
+    <string name="security_password_change_description">Use the keypad to set a 6–32 digit password</string>
+    <string name="security_password_verify_description">Enter a 6–32 digit password to continue</string>
+    <string name="security_password_original">Old password</string>
+    <string name="security_password_current">Security password</string>
+    <string name="security_password_new">New password</string>
+    <string name="security_password_repeat">Confirm password</string>
+    <string name="security_password_input_hint">6–32 digits</string>
+    <string name="security_password_repeat_hint">Enter new password again</string>
+    <string name="security_password_clear">Clear</string>
+    <string name="security_password_delete">Delete</string>
+    <string name="security_password_cancel">Cancel</string>
+    <string name="security_password_save">Save</string>
+    <string name="security_password_verify">Verify</string>
+    <string name="security_password_invalid">Password must contain 6–32 digits</string>
+    <string name="security_password_mismatch">New passwords do not match</string>
+    <string name="security_password_wrong">Incorrect password. Try again.</string>
+    <string name="security_password_saving">Changing password</string>
+    <string name="security_password_verifying">Verifying password</string>
+    <string name="security_password_failed">Password operation failed. Try again.</string>
+    <string name="security_password_changed">Password changed</string>
+    <string name="security_password_verified">Verified</string>
+    <string name="settings_sdk_transport_value">Connection: %1$s</string>
+    <string-array name="settings_sdk_transports">
+        <item>Auto</item>
+        <item>Local AIDL</item>
+        <item>WebSocket</item>
+    </string-array>
+    <string name="settings_cloud_url_label">Business cloud URL</string>
+    <string name="settings_cloud_token_label">X-USER-TOKEN</string>
+    <string name="settings_cloud_tip">Enter your Morning Check platform URL and this device\'s business token</string>
+    <string name="settings_save_cloud_button">Save cloud settings</string>
+    <string name="settings_camera_auto">Auto select</string>
+    <string name="settings_camera_preview_face">Identity / head</string>
+    <string name="settings_camera_preview_hand">Hands</string>
+    <string name="settings_camera_preview_loading">Opening camera…</string>
+    <string name="settings_camera_preview_permission">Allow camera access</string>
+    <string name="settings_camera_preview_permission_denied">Camera permission not granted</string>
+    <string name="settings_camera_preview_retry">Tap to retry</string>
+    <string name="settings_camera_preview_label_value">%1$s · %2$s</string>
+    <string name="settings_temperature_label">Measure temperature</string>
+    <string name="settings_temperature_measurement_mode">Temperature mode</string>
+    <string name="settings_temperature_read_mode">Reading mode</string>
+    <string name="settings_temperature_mode_trigger">Dynamic trigger</string>
+    <string name="settings_temperature_measurement_help">Indoor: highest temperature. Outdoor: limited detection angle. Dynamic trigger: ignores fixed heat sources. Saved after success; reading mode is unchanged.</string>
+    <string name="settings_temperature_mode_switching">Switching temperature mode</string>
+    <string name="settings_temperature_mode_invalid_config">Select a valid serial port and baud rate</string>
+    <string name="settings_temperature_mode_switched">Switched to %1$s</string>
+    <string name="settings_temperature_mode_failed">Switch failed: %1$s</string>
+    <string-array name="settings_temperature_measurement_modes">
+        <item>Indoor</item>
+        <item>Outdoor</item>
+        <item>@string/settings_temperature_mode_trigger</item>
+    </string-array>
+    <string name="settings_read_temperature_button">Start reading</string>
+    <string name="settings_stop_temperature_button">Stop reading</string>
+    <string name="settings_temperature_reading">Connecting to thermometer</string>
+    <string name="settings_temperature_no_value">--.--</string>
+    <string name="settings_temperature_updated">Updated  %1$s</string>
+    <string name="settings_temperature_no_update">No reading yet</string>
+    <string name="settings_temperature_read_failed">Read failed: %1$s</string>
+    <string name="settings_temperature_invalid_config">Enter a valid /dev/ serial port and positive baud rate</string>
+    <string name="settings_temperature_invalid_mode">Select serial push or serial polling</string>
+    <string name="settings_temperature_unknown_error">Check the thermometer</string>
+    <string name="settings_version">Huoyan Morning Check · Open Source</string>
+    <string name="settings_edit_cloud_url_button">Cloud URL</string>
+    <string name="settings_edit_cloud_token_button">Cloud token</string>
+    <string name="settings_head_full_label">Headwear check</string>
+    <string name="settings_version_value">Huoyan Morning Check · Open Source  %1$s</string>
+    <string-array name="settings_sections">
+        <item>SDK connection</item>
+        <item>Business cloud</item>
+        <item>Workplace &amp; device</item>
+        <item>License &amp; keys</item>
+        <item>Cameras</item>
+        <item>Check rules</item>
+        <item>Thermometer</item>
+        <item>System settings</item>
+    </string-array>
+    <string-array name="settings_temperature_modes">
+        <item>Serial push</item>
+        <item>Serial polling</item>
+    </string-array>
+    <string name="staff_row_title_name">Name</string>
+    <string name="staff_row_title_number">Staff No.</string>
+    <string name="ui_activity_check_design_active_check_progress_text">Starts after staff identification</string>
+    <string name="ui_activity_check_design_active_check_pause_text">Pause</string>
+    <string name="ui_activity_check_design_ready_label_text">Face the camera to start your check</string>
+    <string name="ui_activity_check_disconnected_label_text">Device disconnected</string>
+    <string name="ui_activity_check_disconnected_label_text_2">Check paused. Check the device connection.\nRestart once restored. Saved records are unaffected.</string>
+    <string name="ui_activity_check_disconnected_check_disconnected_settings_text">Check connection</string>
+    <string name="ui_activity_face_design_label_text">Select staff</string>
+    <string name="ui_activity_login_login_back_contentdescription">Close scanner</string>
+    <string name="ui_activity_login_label_text">Hold the workplace QR code in front of the camera</string>
+    <string name="ui_activity_place_settings_label_text">Workplace name</string>
+    <string name="ui_activity_place_settings_place_name_hint">Enter workplace name</string>
+    <string name="ui_activity_place_settings_label_text_2">Phone number</string>
+    <string name="ui_activity_place_settings_place_phone_hint">Enter phone number</string>
+    <string name="ui_activity_place_settings_label_text_3">Workplace address</string>
+    <string name="ui_activity_place_settings_place_address_hint">Enter workplace address</string>
+    <string name="ui_activity_place_settings_place_login_text">Workplace sign-in</string>
+    <string name="ui_activity_record_design_record_detail_tab_photos_text">Captured photos</string>
+    <string name="ui_activity_record_photo_photo_previous_text">Previous</string>
+    <string name="ui_activity_record_photo_photo_next_text">Next</string>
+    <string name="ui_activity_records_records_load_more_text">Swipe up for more</string>
+    <string name="ui_activity_result_design_result_next_text">Next person</string>
+    <string name="ui_activity_sdk_activation_scan_label_text">Hold the activation code in front of the camera</string>
+    <string name="ui_activity_sdk_details_sdk_detail_refresh_text">Refresh status</string>
+    <string name="ui_activity_staff_edit_staff_edit_reload_text">Reload details and clear draft</string>
+    <string name="ui_activity_staff_edit_staff_edit_save_text">Save staff</string>
+    <string name="ui_activity_staff_editor_dialog_staff_edit_cancel_text">Close</string>
+    <string name="ui_activity_staff_editor_dialog_staff_edit_save_text">Confirm</string>
+    <string name="ui_dialog_business_cloud_design_label_text">Service URL</string>
+    <string name="ui_dialog_design_choice_choice_subtitle_text">Closes after selection</string>
+    <string name="ui_dialog_design_choice_department_filter_empty_text">No options available</string>
+    <string name="ui_dialog_record_date_design_record_date_title_contentdescription">Select dates; hold for more filters</string>
+    <string name="ui_dialog_record_date_design_record_date_title_text">Select date range</string>
+    <string name="ui_dialog_record_date_design_record_date_today_text">Today</string>
+    <string name="ui_dialog_record_date_design_record_date_yesterday_text">Yesterday</string>
+    <string name="ui_dialog_record_date_design_record_date_this_month_text">This month</string>
+    <string name="ui_dialog_record_date_design_label_text">Start date</string>
+    <string name="ui_dialog_record_date_design_label_text_2">End date</string>
+    <string name="ui_dialog_record_date_design_record_date_previous_contentdescription">Previous month</string>
+    <string name="ui_dialog_record_date_design_record_date_next_contentdescription">Next month</string>
+    <string name="ui_dialog_record_date_design_label_text_3">Mon</string>
+    <string name="ui_dialog_record_date_design_label_text_4">Tue</string>
+    <string name="ui_dialog_record_date_design_label_text_5">Wed</string>
+    <string name="ui_dialog_record_date_design_label_text_6">Thu</string>
+    <string name="ui_dialog_record_date_design_label_text_7">Fri</string>
+    <string name="ui_dialog_record_date_design_label_text_8">Sat</string>
+    <string name="ui_dialog_record_date_design_label_text_9">Sun</string>
+    <string name="ui_dialog_record_date_design_record_date_back_to_calendar_text">Back to calendar</string>
+    <string name="ui_dialog_record_date_design_record_date_reset_text">Reset</string>
+    <string name="ui_dialog_record_date_design_record_date_confirm_text">Apply filters</string>
+    <string name="ui_dialog_record_photo_fullscreen_photo_fullscreen_image_contentdescription">Full-size check photo</string>
+    <string name="ui_dialog_temperature_threshold_label_text">High temperature threshold (°C)</string>
+    <string name="ui_dialog_temperature_threshold_threshold_error_text">Enter a valid value from 36.1 to 43°C</string>
+    <string name="ui_item_record_photo_page_photo_image_contentdescription">Check photos</string>
+    <string name="ui_item_record_row_record_row_view_text">View</string>
+    <string name="ui_item_staff_row_staff_row_enroll_text">Enroll</string>
+    <string name="ui_view_app_header_header_workspace_text">\u0020· Workspace</string>
+    <string name="ui_view_camera_design_settings_camera_lighting_text">Lighting</string>
+    <string name="ui_view_camera_design_config_label_text">Image settings</string>
+    <string name="ui_view_camera_design_config_label_text_2">Select camera</string>
+    <string name="ui_view_camera_design_config_settings_choose_active_camera_text">Select camera  ›</string>
+    <string name="ui_view_camera_design_config_label_text_3">Resolution</string>
+    <string name="ui_view_camera_design_config_settings_camera_resolution_text">Not available  ›</string>
+    <string name="ui_view_camera_design_config_label_text_4">Mirror image</string>
+    <string name="ui_view_camera_design_preview_label_text">Camera preview</string>
+    <string name="ui_view_camera_design_preview_settings_camera_texture_contentdescription">Full camera frame</string>
+    <string name="ui_view_camera_design_preview_settings_camera_preview_message_text">Connecting to camera</string>
+    <string name="ui_view_camera_design_tabs_settings_preview_face_text">Head camera</string>
+    <string name="ui_view_camera_design_tabs_settings_preview_hand_text">Hand camera</string>
+    <string name="ui_view_check_camera_status_check_camera_status_text">Waiting for device</string>
+    <string name="ui_view_check_camera_status_check_camera_stage_text">Ready for check</string>
+    <string name="ui_view_check_current_info_label_text">Not checked</string>
+    <string name="ui_view_check_current_info_label_text_2">Thermometer</string>
+    <string name="ui_view_check_header_header_page_title_text">Morning check</string>
+    <string name="ui_view_departments_design_department_search_hint">Search department name</string>
+    <string name="ui_view_departments_design_department_clear_text">No department</string>
+    <string name="ui_view_departments_design_label_text">Staff</string>
+    <string name="ui_view_face_design_identity_label_text">Selected staff:</string>
+    <string name="ui_view_face_design_identity_enrollment_choose_staff_text">Select staff</string>
+    <string name="ui_view_face_samples_enrollment_faces_info_text">Enrolled faces</string>
+    <string name="ui_view_face_staff_selection_enrollment_search_clear_contentdescription">Clear search</string>
+    <string name="ui_view_face_staff_selection_label_text">Search by initials or number · Tap staff to select</string>
+    <string name="ui_view_face_staff_selection_enrollment_next_text">Swipe up for more staff</string>
+    <string name="ui_view_health_date_calendar_health_date_year_contentdescription">Select year</string>
+    <string name="ui_view_health_date_calendar_health_date_month_contentdescription">Select month</string>
+    <string name="ui_view_health_date_summary_label_text">Health certificate expiry</string>
+    <string name="ui_view_health_date_summary_health_date_weekday_text">Saturday</string>
+    <string name="ui_view_home_design_footer_label_text">Guangzhou Xinhai Intelligent Control Technology Co., Ltd.</string>
+    <string name="ui_view_home_design_grid_label_text">Staff</string>
+    <string name="ui_view_home_design_grid_label_text_2">Profiles, teams &amp; faces</string>
+    <string name="ui_view_home_design_grid_label_text_3">Check records</string>
+    <string name="ui_view_home_design_grid_label_text_4">Results &amp; photos</string>
+    <string name="ui_view_home_design_grid_label_text_5">SDK connection</string>
+    <string name="ui_view_home_design_grid_label_text_6">Local &amp; LAN</string>
+    <string name="ui_view_home_design_grid_label_text_7">Serial &amp; GPIO lights</string>
+    <string name="ui_view_home_design_grid_label_text_8">License &amp; keys</string>
+    <string name="ui_view_home_design_grid_label_text_9">Status &amp; activation</string>
+    <string name="ui_view_home_design_grid_label_text_10">Cameras</string>
+    <string name="ui_view_home_design_grid_label_text_11">Head &amp; hand preview</string>
+    <string name="ui_view_home_design_grid_label_text_12">Check rules</string>
+    <string name="ui_view_home_design_grid_label_text_13">Headwear &amp; temperature</string>
+    <string name="ui_view_home_design_grid_label_text_14">Serial setup &amp; testing</string>
+    <string name="ui_view_home_design_grid_label_text_15">System settings</string>
+    <string name="ui_view_home_design_grid_label_text_16">Voice, text &amp; security</string>
+    <string name="ui_view_home_design_header_label_contentdescription">Huoyan Check</string>
+    <string name="ui_view_home_design_header_home_cloud_pending_text">○ Cloud service</string>
+    <string name="ui_view_home_design_hero_label_text">Start check</string>
+    <string name="ui_view_home_design_hero_home_hero_detail_text">Identity · Temperature · Head · Hands</string>
+    <string name="ui_view_home_design_hero_home_start_text">Enter check</string>
+    <string name="ui_view_license_certificate_label_text">License status</string>
+    <string name="ui_view_license_certificate_label_text_2">Activation</string>
+    <string name="ui_view_license_certificate_settings_switch_model_text">Switch model</string>
+    <string name="ui_view_license_certificate_settings_activate_text">Activate device</string>
+    <string name="ui_view_license_device_label_text">Device information</string>
+    <string name="ui_view_license_device_label_text_2">App version</string>
+    <string name="ui_view_license_device_label_text_3">SDK version</string>
+    <string name="ui_view_license_device_label_text_4">Device model</string>
+    <string name="ui_view_license_device_label_text_5">Serial number</string>
+    <string name="ui_view_license_device_label_text_6">Cloud service</string>
+    <string name="ui_view_license_device_license_cloud_state_text">Not connected</string>
+    <string name="ui_view_license_model_label_text">Current model</string>
+    <string name="ui_view_license_model_label_text_2">Model version</string>
+    <string name="ui_view_lighting_actions_lighting_save_text">Save settings</string>
+    <string name="ui_view_lighting_configuration_label_text">Serial port</string>
+    <string name="ui_view_lighting_configuration_label_text_2">Baud rate</string>
+    <string name="ui_view_lighting_configuration_label_text_3">Light-on command</string>
+    <string name="ui_view_lighting_configuration_label_text_4">Light-off command</string>
+    <string name="ui_view_lighting_configuration_label_text_5">GPIO number</string>
+    <string name="ui_view_lighting_configuration_label_text_6">On level</string>
+    <string name="ui_view_lighting_configuration_label_text_7">Off level</string>
+    <string name="ui_view_lighting_tabs_lighting_serial_mode_text">Serial</string>
+    <string name="ui_view_lighting_test_label_text">Test lighting</string>
+    <string name="ui_view_lighting_test_label_text_2">Connect the light, then turn it on to check illumination.</string>
+    <string name="ui_view_lighting_test_lighting_test_on_text">Light on</string>
+    <string name="ui_view_lighting_test_lighting_test_off_text">Light off</string>
+    <string name="ui_view_record_design_summary_label_text">Check time</string>
+    <string name="ui_view_record_design_summary_label_text_2">Department</string>
+    <string name="ui_view_record_design_summary_label_text_3">Workplace</string>
+    <string name="ui_view_record_table_header_record_row_name_title_text">Staff</string>
+    <string name="ui_view_record_table_header_record_row_result_title_text">Result</string>
+    <string name="ui_view_records_filters_records_search_hint">Search name / staff No.</string>
+    <string name="ui_view_records_filters_records_date_filter_text">Date range</string>
+    <string name="ui_view_result_design_photos_result_findings_title_text">Findings</string>
+    <string name="ui_view_result_design_summary_result_test_identity_text">Identity not verified</string>
+    <string name="ui_view_result_design_summary_result_temperature_label_text">Temperature</string>
+    <string name="ui_view_result_design_summary_result_head_label_text">Head check</string>
+    <string name="ui_view_result_design_summary_result_hand_label_text">Hand check</string>
+    <string name="ui_view_rules_design_head_label_text">Work cap</string>
+    <string name="ui_view_rules_design_temperature_label_text">Temperature check</string>
+    <string name="ui_view_rules_design_temperature_label_text_2">High temperature threshold</string>
+    <string name="ui_view_sdk_actions_settings_sdk_test_text">Test connection</string>
+    <string name="ui_view_sdk_actions_settings_sdk_discover_text">Find LAN devices</string>
+    <string name="ui_view_sdk_actions_settings_connect_text">Save connection</string>
+    <string name="ui_view_sdk_design_settings_sdk_local_text">Local</string>
+    <string name="ui_view_sdk_design_settings_sdk_lan_text">LAN</string>
+    <string name="ui_view_sdk_design_settings_sdk_transport_text">Local SDK</string>
+    <string name="ui_view_sdk_design_settings_sdk_mode_hint_text">Use the SDK on this device. No IP address needed.</string>
+    <string name="ui_view_sdk_design_settings_open_sdk_text">Install SDK</string>
+    <string name="ui_view_sdk_lan_content_label_text">SDK device IP</string>
+    <string name="ui_view_sdk_lan_content_label_text_2">Enter an IP or select a device below.</string>
+    <string name="ui_view_sdk_lan_content_settings_sdk_discovery_title_text">Discovered devices (0)</string>
+    <string name="ui_view_sdk_lan_content_settings_sdk_discovery_empty_text">No devices yet. Tap Find LAN devices.</string>
+    <string name="ui_view_sdk_lan_content_label_text_3">Tap to select an IP · Scroll for more</string>
+    <string name="ui_view_staff_edit_design_form_staff_edit_previous_field_text">Previous</string>
+    <string name="ui_view_staff_edit_design_form_staff_edit_next_field_text">Next</string>
+    <string name="ui_view_staff_edit_design_form_staff_edit_number_hint">Enter staff number</string>
+    <string name="ui_view_staff_edit_design_form_label_text">Staff name</string>
+    <string name="ui_view_staff_edit_design_form_staff_edit_name_hint">Enter staff name</string>
+    <string name="ui_view_staff_edit_design_form_label_text_2">Department</string>
+    <string name="ui_view_staff_edit_design_form_staff_edit_department_value_text">Select department (optional)</string>
+    <string name="ui_view_staff_edit_design_form_staff_edit_health_contentdescription">Select health certificate expiry</string>
+    <string name="ui_view_staff_edit_design_form_staff_edit_health_text">Select expiry date (optional)</string>
+    <string name="ui_view_staff_edit_form_label_text">Name (required)</string>
+    <string name="ui_view_staff_edit_form_label_text_2">Staff No. (required, unique)</string>
+    <string name="ui_view_staff_edit_form_label_text_3">Department (optional)</string>
+    <string name="ui_view_staff_edit_form_label_text_4">Certificate expiry (optional)</string>
+    <string name="ui_view_staff_filters_staff_add_text">Add staff</string>
+    <string name="ui_view_staff_table_header_label_text">Face</string>
+    <string name="ui_view_staff_table_header_label_text_2">Status</string>
+    <string name="ui_view_system_cloud_entry_settings_business_cloud_value_text">Not configured</string>
+    <string name="ui_view_system_cloud_entry_settings_business_cloud_action_text">Set service URL  ›</string>
+    <string name="ui_view_system_sdk_version_label_text">SDK version</string>
+    <string name="ui_view_system_sdk_version_settings_system_sdk_details_text">View details  ›</string>
+    <string name="ui_view_system_sdk_version_settings_capabilities_text">Device capabilities  ›</string>
+    <string name="ui_view_system_voice_entry_label_text">Voice prompts</string>
+    <string name="ui_view_temperature_design_settings_read_temperature_text">Start temperature test</string>
+    <string name="ui_view_temperature_design_config_label_text">Temperature settings</string>
+    <string name="ui_view_temperature_design_reading_settings_temperature_reading_text">Waiting for reading</string>
+    <string name="ui_view_temperature_design_reading_label_text">Live temperature</string>
+</resources>

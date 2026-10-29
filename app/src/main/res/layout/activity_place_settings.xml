@@ -34,14 +34,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:labelFor="@id/place_name"
-                    android:text="场所名称" />
+                    android:text="@string/ui_activity_place_settings_label_text" />
 
                 <EditText
                     android:id="@+id/place_name"
                     style="@style/PenInput"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/dp_6"
-                    android:hint="请输入场所名称"
+                    android:hint="@string/ui_activity_place_settings_place_name_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text" />
 
@@ -51,14 +51,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
                     android:labelFor="@id/place_phone"
-                    android:text="联系电话" />
+                    android:text="@string/ui_activity_place_settings_label_text_2" />
 
                 <EditText
                     android:id="@+id/place_phone"
                     style="@style/PenInput"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/dp_6"
-                    android:hint="请输入联系电话"
+                    android:hint="@string/ui_activity_place_settings_place_phone_hint"
                     android:imeOptions="actionNext"
                     android:inputType="phone" />
 
@@ -68,14 +68,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
                     android:labelFor="@id/place_address"
-                    android:text="店铺地址" />
+                    android:text="@string/ui_activity_place_settings_label_text_3" />
 
                 <EditText
                     android:id="@+id/place_address"
                     style="@style/PenInput"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/dp_6"
-                    android:hint="请输入店铺地址"
+                    android:hint="@string/ui_activity_place_settings_place_address_hint"
                     android:imeOptions="actionDone"
                     android:inputType="textPostalAddress" />
             </LinearLayout>
@@ -94,7 +94,7 @@
                 style="@style/PenButton"
                 android:layout_width="wrap_content"
                 android:minWidth="@dimen/dp_72"
-                android:text="场所登录" />
+                android:text="@string/ui_activity_place_settings_place_login_text" />
 
             <TextView
                 android:id="@+id/place_save"
@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
                 android:minWidth="@dimen/dp_72"
-                android:text="保存" />
+                android:text="@string/security_password_save" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

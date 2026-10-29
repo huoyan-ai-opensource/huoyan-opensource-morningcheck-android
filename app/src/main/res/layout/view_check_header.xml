@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_8"
         android:layout_marginEnd="@dimen/dp_8"
-        android:text="现场晨检" />
+        android:text="@string/ui_view_check_header_header_page_title_text" />
 
     <Space
         android:layout_width="@dimen/dp_0"

@@ -1,6 +1,6 @@
 # Huoyan Open Source Morning Check Android App
 
-A native Android client for staff morning checks in **catering, canteens, and food production**. Run the complete App or integrate the client JAR into your own Android application.
+A native Android client for staff morning checks in **catering, canteens, and food production**. Run the complete App or integrate the client JAR into your own Android application. The App follows the Android system language and supports Chinese and English.
 
 [简体中文](README.md) · [Website and activation](https://www.huoyan.cc) · [Downloads](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) · [Quick start](QUICKSTART.md) · [Documentation](docs/README.md)
 
@@ -27,9 +27,9 @@ The complete App uses package `cc.huoyan.opensource.morningcheck`; the JAR's pub
 
 | Home | Morning check |
 | --- | --- |
-| ![Home screen in landscape](docs/images/home-landscape.png) | ![Morning check screen in landscape](docs/images/check-landscape.png) |
+| ![Home screen in landscape](docs/images/home-landscape.en.png) | ![Morning check screen in landscape](docs/images/check-landscape.en.png) |
 
-These Chinese landscape screens were captured on a YF023D on October 29, 2026. Company, workplace, and device serial identifiers have been replaced with fictional sample values. The check screen shows the waiting-for-device guide with no real-person photos. Both READMEs use the same two-column layout. The device had App 0.1.0 and SDK 2.0.0 installed; these screenshots do not establish complete hardware acceptance for App 2.0.0. See [image details](docs/images/README.md). Landscape and portrait layouts are maintained in the [shared design source](design/huoyan-morningcheck.pen).
+These landscape examples show the home and morning check screens in English. Company, workplace, and device serial identifiers use fictional sample values, and the displayed App version is 2.0.0. Each README shows its corresponding interface language in the same two-column layout. See [image details](docs/images/README.md). Landscape and portrait layouts are maintained in the [shared design source](design/huoyan-morningcheck.pen).
 
 ## Downloads and activation
 
@@ -59,7 +59,7 @@ bash gradlew :app:assembleDebug
 bash gradlew :app:testDebugUnitTest :huoyanClient:testDebugUnitTest
 ```
 
-The App consumes the committed `app/src/main/libs/huoyan-morningcheck-client-2.0.0.jar`; an App build does not update it automatically. After changing client source, run `:huoyanClient:updateAppSdkJar` before rebuilding the App. Generate the complete client ZIP with `:huoyanClient:clientDistribution`. App and JAR versions are independent; both use `2.0.0` for this release baseline.
+The App consumes the committed `app/src/main/libs/huoyan-morningcheck-client-2.0.0.jar`; an App build does not update it automatically. After changing client source, run `:huoyanClient:updateAppSdkJar` before rebuilding the App. Generate the complete client ZIP with `:huoyanClient:clientDistribution`. App and JAR versions are independent: App `2.0.1`, client JAR `2.0.0`.
 
 Debug uses the local debug signing key. Release defaults to the public [experimental key](signing/README.en.md), solely for noncommercial experiments and testing. Use your own key for production releases and configure it in the untracked `local.properties`. The experimental key's restrictions are separate from the use of Huoyan's own App source.
 

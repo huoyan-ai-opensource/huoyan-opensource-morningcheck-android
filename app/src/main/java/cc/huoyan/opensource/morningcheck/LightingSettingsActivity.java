@@ -81,7 +81,7 @@ public final class LightingSettingsActivity extends BaseMorningActivity {
 
     @Override
     protected void bindPage() {
-        ((TextView) findViewById(R.id.header_page_title)).setText("补光设置");
+        ((TextView) findViewById(R.id.header_page_title)).setText(getString(R.string.i18n_a_lighting));
         binding = true;
         TextView pathField = findViewById(R.id.lighting_path);
         pathField.setText(path);

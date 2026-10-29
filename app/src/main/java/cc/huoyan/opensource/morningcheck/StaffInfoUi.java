@@ -33,16 +33,21 @@ final class StaffInfoUi {
             return;
         }
         String staffNumber = StaffPresentation.number(person);
-        number.setText((inlineTitles ? "工号：" : "") + staffNumber);
-        number.setTextColor("无".equals(staffNumber) ? Ui.MUTED : Ui.INK);
+        boolean numberMissing = person.isNull("staff_no") || person.optString("staff_no").trim().isEmpty();
+        number.setText((inlineTitles ? number.getContext().getString(R.string.i18n_b_staff_number_prefix) : "")
+                + (numberMissing ? number.getContext().getString(R.string.i18n_b_none) : staffNumber));
+        number.setTextColor(numberMissing ? Ui.MUTED : Ui.INK);
         boolean active = StaffPresentation.enabled(person);
-        enabled.setText((inlineTitles ? "启用状态：" : "") + (active ? "启用中" : "已停用"));
+        enabled.setText((inlineTitles ? number.getContext().getString(R.string.i18n_b_staff_status_prefix) : "") + (active ? number.getContext().getString(R.string.i18n_b_active) : number.getContext().getString(R.string.i18n_b_inactive)));
         enabled.setTextColor(active ? Ui.GREEN : Ui.ORANGE);
         String group = StaffPresentation.department(person);
-        department.setText((inlineTitles ? "部门：" : "") + group);
-        department.setTextColor("未分配".equals(group) ? Ui.MUTED : Ui.BLUE);
+        boolean groupMissing = person.isNull("department") || person.optString("department").trim().isEmpty();
+        department.setText((inlineTitles ? number.getContext().getString(R.string.i18n_b_department_prefix) : "")
+                + (groupMissing ? UiMessages.text(number.getContext(), group) : group));
+        department.setTextColor(groupMissing ? Ui.MUTED : Ui.BLUE);
         StaffPresentation.Health certificate = StaffPresentation.health(person, LocalDate.now());
-        health.setText((inlineTitles ? "健康证：" : "") + certificate.state
+        health.setText((inlineTitles ? number.getContext().getString(R.string.i18n_b_health_prefix) : "")
+                + UiMessages.text(number.getContext(), certificate.state)
                 + (certificate.status == StaffPresentation.HealthStatus.UNASSIGNED ? "" : " · " + certificate.expiry));
         health.setTextColor(certificate.status == StaffPresentation.HealthStatus.VALID ? Ui.GREEN
                 : certificate.status == StaffPresentation.HealthStatus.EXPIRED ? Ui.ORANGE : Ui.MUTED);

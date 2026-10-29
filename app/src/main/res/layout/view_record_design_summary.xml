@@ -34,7 +34,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="工号" />
+            android:text="@string/staff_row_title_number" />
 
         <TextView
             android:id="@+id/record_detail_staff_no"
@@ -57,7 +57,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="检查时间" />
+            android:text="@string/ui_view_record_design_summary_label_text" />
 
         <TextView
             android:id="@+id/record_detail_date"
@@ -80,7 +80,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="部门" />
+            android:text="@string/ui_view_record_design_summary_label_text_2" />
 
         <TextView
             android:id="@+id/record_detail_department"
@@ -103,7 +103,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="场所" />
+            android:text="@string/ui_view_record_design_summary_label_text_3" />
 
         <TextView
             android:id="@+id/record_detail_shop"

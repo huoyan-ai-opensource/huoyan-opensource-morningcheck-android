@@ -167,7 +167,7 @@ public final class CheckActivity extends CameraMorningActivity {
 
     @Override
     protected void reload(boolean recover, Runnable done) {
-        showWorkLoading("正在读取员工资料");
+        showWorkLoading(getString(R.string.i18n_a_loading_staff));
         int request = ++staffLoadRequest;
         runIo(() -> {
             try {
@@ -184,7 +184,7 @@ public final class CheckActivity extends CameraMorningActivity {
                 main.post(() -> {
                     if (request == staffLoadRequest) {
                         if (workLoading != null) workLoading.dismiss();
-                        notice("员工资料读取失败：" + failure(error));
+                        notice(getString(R.string.i18n_a_staff_read_failed, failure(error)));
                         clearFacePresence();
                         speech.clearStatus();
                     }
@@ -253,7 +253,7 @@ public final class CheckActivity extends CameraMorningActivity {
         try {
             config = LightConfig.read(prefs);
         } catch (IllegalArgumentException invalid) {
-            lightState = "灯光配置无效：" + invalid.getMessage();
+            lightState = getString(R.string.i18n_a_light_invalid, UiMessages.text(this, invalid.getMessage()));
             if (requestedLightConfig != null) lighting.turnOff(requestedLightConfig);
             requestedLightConfig = null;
             requestedLightOn = null;
@@ -322,7 +322,7 @@ public final class CheckActivity extends CameraMorningActivity {
     private void requestExit() {
         if (!foreground || destroyed || isFinishing() || exitRequested) return;
         if (saving) {
-            showWorkLoading("正在保存晨检记录");
+            showWorkLoading(getString(R.string.i18n_a_saving_check_record));
             return;
         }
         exitRequested = true;
@@ -357,16 +357,16 @@ public final class CheckActivity extends CameraMorningActivity {
     private void startCheck(boolean userInitiated) {
         if (dialogCapturePaused) return;
         if (!loaded) {
-            showWorkLoading("正在读取员工资料");
+            showWorkLoading(getString(R.string.i18n_a_loading_staff));
             return;
         }
         if (!hasEmployeeForCheck()) {
-            notice("先在员工档案中添加员工并登记人脸，再开始晨检。");
+            notice(getString(R.string.i18n_a_add_staff_and_enroll_their_faces_before_starting_a_check));
             navigate("staff");
             return;
         }
         if (!sdkReady()) {
-            notice("晨检 SDK 尚未就绪。请在设备设置中连接、激活并初始化 SDK。");
+            notice(getString(R.string.i18n_a_the_morning_check_sdk_is_not_ready_connect_activate_and_initialize_it_in_de));
 
             navigate("settings");
             return;
@@ -479,7 +479,7 @@ public final class CheckActivity extends CameraMorningActivity {
         TextView shop = findViewById(R.id.header_shop);
         if (shop == null) return;
         String name = currentShopName();
-        shop.setText(name.isEmpty() ? "未设置场所" : name);
+        shop.setText(name.isEmpty() ? getString(R.string.i18n_a_no_workplace_set) : name);
     }
 
     @Override
@@ -494,9 +494,9 @@ public final class CheckActivity extends CameraMorningActivity {
                 updateVoice();
                 return;
             }
-            ((TextView) content.findViewById(R.id.check_person)).setText("等待准备");
+            ((TextView) content.findViewById(R.id.check_person)).setText(getString(R.string.i18n_a_not_ready));
             ((TextView) content.findViewById(R.id.check_hint)).setText(!hasEmployeeForCheck()
-                    ? "请先添加员工并录入人脸" : "请连接设备后开始晨检");
+                    ? getString(R.string.i18n_a_add_staff_and_enroll_their_faces_first) : getString(R.string.i18n_a_connect_the_device_to_start_a_check));
             content.findViewById(R.id.check_temperature).setVisibility(View.GONE);
             content.findViewById(R.id.check_prompt_label).setVisibility(View.GONE);
             // 自动检查尚未启动，不能把设计中的“已连接”示例当作真实硬件状态。
@@ -519,7 +519,7 @@ public final class CheckActivity extends CameraMorningActivity {
         checkProgress = view.findViewById(R.id.check_progress);
         checkTemperature = view.findViewById(R.id.check_temperature);
         pauseButton = view.findViewById(R.id.check_pause);
-        pauseButton.setText(paused ? "继续采集" : "暂停采集");
+        pauseButton.setText(paused ? getString(R.string.i18n_a_resume) : getString(R.string.i18n_a_pause));
         pauseButton.setOnClickListener(v -> {
             paused = !paused;
             session++;
@@ -528,7 +528,7 @@ public final class CheckActivity extends CameraMorningActivity {
             if (paused) thermometer.stop();
             else if (pipeline.getStage() == CheckPipeline.Stage.IDENTITY) startThermometer();
             updateCheck();
-            pauseButton.setText(paused ? "继续采集" : "暂停采集");
+            pauseButton.setText(paused ? getString(R.string.i18n_a_resume) : getString(R.string.i18n_a_pause));
         });
         updateCheck();
         ensureCamera(cameraForStage());
@@ -649,7 +649,7 @@ public final class CheckActivity extends CameraMorningActivity {
                                 frameBusy = false;
                                 interruptSamples();
                                 nextFrameAt = SystemClock.elapsedRealtime() + 2000;
-                                identityIssue = "员工档案读取失败\n请稍后重试";
+                                identityIssue = getString(R.string.i18n_a_could_not_load_staff_details_try_again_later);
                                 identityReadError = true;
                                 updateVoice();
                             });
@@ -712,7 +712,7 @@ public final class CheckActivity extends CameraMorningActivity {
         clearFacePresence();
         clearFaceOverlay(frame);
         pipeline.onHeadDetections(Collections.emptyList(), false);
-        inferenceIssue = "头部采样已过期，请保持在画面内";
+        inferenceIssue = getString(R.string.i18n_a_head_sample_expired_stay_in_view);
         updateCheck();
     }
 
@@ -730,7 +730,7 @@ public final class CheckActivity extends CameraMorningActivity {
         long frameAge = System.nanoTime() - frame.receivedAtNanos;
         if (frameAge < 0 || frameAge >= FacePresencePolicy.MAX_MATCH_FRAME_AGE_NANOS) {
             interruptSamples();
-            identityIssue = "身份采样已过期\n请保持正视摄像头";
+            identityIssue = getString(R.string.i18n_a_identity_sample_expired_keep_facing_the_camera);
             identityReadError = true;
             updateVoice();
             return;
@@ -747,8 +747,8 @@ public final class CheckActivity extends CameraMorningActivity {
         long previousCandidate = pipeline.getCandidateId();
         boolean validIdentity = matched && known != null && known.optBoolean("enabled", true);
         identityReadError = false;
-        identityIssue = matched && known == null ? "没有对应员工档案\n请先完善员工资料"
-                : matched && !known.optBoolean("enabled", true) ? "员工已停用\n请联系管理员" : "";
+        identityIssue = matched && known == null ? getString(R.string.i18n_a_no_staff_profile_found_add_the_staff_details_first)
+                : matched && !known.optBoolean("enabled", true) ? getString(R.string.i18n_a_staff_profile_disabled_contact_an_administrator) : "";
         if (matchAvailable)
             facePresence.match(frame.receivedAtNanos, validIdentity, System.nanoTime());
         else facePresence.matchingUnknown(frame.receivedAtNanos);
@@ -945,7 +945,7 @@ public final class CheckActivity extends CameraMorningActivity {
     private void inferenceFailure(int code) {
         interruptSamples();
         nextFrameAt = SystemClock.elapsedRealtime() + (code == 40010 ? 1000 : 2000);
-        inferenceIssue = code == 40010 ? "检测忙，请稍候。" : "检测失败，正在恢复。";
+        inferenceIssue = code == 40010 ? getString(R.string.i18n_a_check_busy_please_wait) : getString(R.string.i18n_a_check_failed_recovering);
         updateVoice();
         if (code != 40010) sdk.refreshStatus(null);
     }
@@ -980,12 +980,12 @@ public final class CheckActivity extends CameraMorningActivity {
         clearTemperatureSample();
         if (waitingDeparture) {
             thermometer.stop();
-            sensorState = "等待上一位员工离开画面";
+            sensorState = getString(R.string.i18n_a_waiting_for_the_previous_person_to_leave);
             updateCheck();
             return;
         }
         if (!rule("temperature", true)) {
-            sensorState = "测温检查已关闭";
+            sensorState = getString(R.string.i18n_a_temperature_check_disabled);
             updateCheck();
             return;
         }
@@ -1066,7 +1066,9 @@ public final class CheckActivity extends CameraMorningActivity {
         if (checkProgress == null || pipeline == null || !pageKey().equals("check") || currentRecord != null)
             return;
         CheckPipeline.Stage stage = pipeline.getStage();
-        String[] names = {"人脸识别", "头部着装检查", "检查双手手背", "检查双手手心", "晨检完成"};
+        String[] names = {getString(R.string.i18n_a_face_recognition), getString(R.string.i18n_a_headwear_check),
+                getString(R.string.i18n_a_backs_of_hands), getString(R.string.i18n_a_palms),
+                getString(R.string.i18n_a_check_complete)};
         View handGuide = content.findViewById(R.id.check_hand_guide);
         boolean palm = stage == CheckPipeline.Stage.HAND_PALM;
         boolean hand = palm || stage == CheckPipeline.Stage.HAND_BACK;
@@ -1079,23 +1081,22 @@ public final class CheckActivity extends CameraMorningActivity {
             ((TextView) content.findViewById(R.id.check_hand_guide_caption))
                     .setText(palm ? R.string.design_hand_palm_guide : R.string.design_hand_back_guide);
         }
-        checkPerson.setText(activeStaff == null ? "等待识别员工" : activeStaff.optString("name"));
+        checkPerson.setText(activeStaff == null ? getString(R.string.i18n_a_waiting_to_identify_staff) : activeStaff.optString("name"));
         checkPerson.setTextColor(ContextCompat.getColor(this, activeStaff == null ? R.color.mc_muted : R.color.mc_blue));
         if (checkPersonDetail != null) {
             String department = activeStaff == null ? "" : activeStaff.optString("department").trim();
             String jobNumber = activeStaff == null ? "" : activeStaff.optString("staff_no").trim();
             checkPersonDetail.setText(department + (!department.isEmpty() && !jobNumber.isEmpty() ? " · " : "")
-                    + (jobNumber.isEmpty() ? "" : "工号 " + jobNumber));
+                    + (jobNumber.isEmpty() ? "" : getString(R.string.i18n_a_staff_number, jobNumber)));
             checkPersonDetail.setVisibility(activeStaff == null || department.isEmpty() && jobNumber.isEmpty()
                     ? View.GONE : View.VISIBLE);
         }
-        checkProgress.setText(names[stage.ordinal()] + " · 步骤 " + (stage.ordinal() + 1)
-                + "/5 · 连续采样 " + pipeline.getProgress() + "/" + pipeline.getRequiredSamples());
+        checkProgress.setText(getString(R.string.i18n_a_check_progress, names[stage.ordinal()], (stage.ordinal() + 1), pipeline.getProgress(), pipeline.getRequiredSamples()));
         double temperature = stage == CheckPipeline.Stage.IDENTITY
                 ? liveTemperature : pipeline.getTemperature();
         checkTemperature.setVisibility(pipeline.isTemperatureSkipped() ? View.GONE : View.VISIBLE);
-        checkTemperature.setText(Double.isFinite(temperature) ? String.format(Locale.CHINA, "体温 · %.2f°C", temperature)
-                : "体温 · --°C");
+        checkTemperature.setText(Double.isFinite(temperature) ? getString(R.string.i18n_a_temperature, temperature)
+                : getString(R.string.i18n_a_temperature_c));
     }
 
     private void updatePreviewStatus() {
@@ -1106,11 +1107,13 @@ public final class CheckActivity extends CameraMorningActivity {
         boolean paused = pipeline != null && capturePaused();
         boolean ready = pipeline != null && !paused && sdkReady() && captureIsCurrent()
                 && cameraError.isEmpty() && latestFrame != null;
-        status.setText(paused ? "检查已暂停" : ready ? "设备已就绪" : "等待设备");
+        status.setText(paused ? getString(R.string.i18n_a_check_paused) : ready ? getString(R.string.i18n_a_device_ready) : getString(R.string.i18n_a_waiting_for_device));
         status.setTextColor(ContextCompat.getColor(this, ready ? R.color.mc_green : R.color.mc_muted));
         status.setBackgroundResource(ready ? R.drawable.mc_badge_success : R.drawable.mc_field);
-        String[] names = {"人脸识别", "头部着装检查", "检查双手手背", "检查双手手心", "晨检完成"};
-        stage.setText(pipeline == null ? "准备晨检" : names[pipeline.getStage().ordinal()]);
+        String[] names = {getString(R.string.i18n_a_face_recognition), getString(R.string.i18n_a_headwear_check),
+                getString(R.string.i18n_a_backs_of_hands), getString(R.string.i18n_a_palms),
+                getString(R.string.i18n_a_check_complete)};
+        stage.setText(pipeline == null ? getString(R.string.i18n_a_prepare_for_check) : names[pipeline.getStage().ordinal()]);
     }
 
     private void resetVoiceState() {
@@ -1145,15 +1148,15 @@ public final class CheckActivity extends CameraMorningActivity {
         renderCheckPrompt();
         if (speech == null) return;
         boolean identityEntry = stage == CheckPipeline.Stage.IDENTITY && foreground && resumed && !capturePaused();
-        speech.enterStage("stage:" + stage, canCapture || identityEntry ? CheckVoiceText.stage(stage,
-                checkRules == null || checkRules.requireMask, checkRules == null || checkRules.requireHat) : "");
+        speech.enterStage("stage:" + stage, canCapture || identityEntry ? UiMessages.text(this, CheckVoiceText.stage(stage,
+                checkRules == null || checkRules.requireMask, checkRules == null || checkRules.requireHat)) : "");
         if (!canCapture || stage == CheckPipeline.Stage.RESULT) {
             speech.clearStatus();
             return;
         }
         long nowNanos = System.nanoTime();
         if (stage == CheckPipeline.Stage.HEAD && facePresence.isMultiple(nowNanos)) {
-            speech.update("face_multiple:" + stage, "检测到多人入镜", 0, 5000);
+            speech.update("face_multiple:" + stage, getString(R.string.i18n_a_multiple_people_detected), 0, 5000);
             scheduleFacePresenceExpiry(nowNanos);
         } else if ((stage == CheckPipeline.Stage.IDENTITY || stage == CheckPipeline.Stage.HEAD)
                 && (facePresence.isAbsent(nowNanos)
@@ -1161,7 +1164,7 @@ public final class CheckActivity extends CameraMorningActivity {
             // 无人先等待五秒；明确未匹配无需连续凑满五秒，仍由语音出口等待同阶段上一句结束。
             boolean absent = facePresence.isAbsent(nowNanos);
             speech.update((absent ? "face_absent:" : "face_unmatched:") + stage,
-                    absent ? "请入镜摄像头" : "未匹配员工", absent ? 5000 : 0, 5000);
+                    absent ? getString(R.string.i18n_a_please_step_into_view) : getString(R.string.i18n_a_no_staff_match), absent ? 5000 : 0, 5000);
             scheduleFacePresenceExpiry(nowNanos);
         } else {
             main.removeCallbacks(facePresenceExpiry);
@@ -1181,19 +1184,20 @@ public final class CheckActivity extends CameraMorningActivity {
             checkPromptLabel.setVisibility(showGuidance ? View.VISIBLE : View.GONE);
         if (!showGuidance) return;
         CheckGuidance.Prompt prompt;
-        if (paused) prompt = new CheckGuidance.Prompt("采集已暂停\n点击继续采集恢复", false);
+        if (paused) prompt = new CheckGuidance.Prompt(getString(R.string.i18n_a_capture_paused_tap_resume_to_continue), false);
         else if (waitingDeparture)
-            prompt = new CheckGuidance.Prompt("本次晨检已完成\n请离开画面后再检查", false);
+            prompt = new CheckGuidance.Prompt(getString(R.string.i18n_a_check_complete_leave_the_camera_view_before_checking_again), false);
         else if (!identityIssue.isEmpty()) prompt = new CheckGuidance.Prompt(identityIssue, true);
         else if (pipeline.getStage() == CheckPipeline.Stage.HEAD && facePresence.isMultiple(System.nanoTime()))
-            prompt = new CheckGuidance.Prompt("检测到多人入镜\n请仅保留一人继续检测", true);
+            prompt = new CheckGuidance.Prompt(getString(R.string.i18n_a_multiple_people_detected_only_one_person_should_stay_in_view), true);
         else if (facePresence.isAbsent(System.nanoTime()))
-            prompt = new CheckGuidance.Prompt("未检测到人脸\n请进入摄像头画面", true);
+            prompt = new CheckGuidance.Prompt(getString(R.string.i18n_a_no_face_detected_please_step_into_camera_view), true);
         else if (pipeline.getStage() == CheckPipeline.Stage.IDENTITY && facePresence.isUnmatched(System.nanoTime()))
-            prompt = new CheckGuidance.Prompt("未匹配员工\n请确认已录入人脸", true);
+            prompt = new CheckGuidance.Prompt(getString(R.string.i18n_a_no_staff_match_make_sure_your_face_is_enrolled), true);
         else prompt = CheckGuidance.from(pipeline, checkRules);
         // 相同采样提示不反复触发布局和无障碍播报，也不逐帧重建背景。
-        if (!prompt.text.contentEquals(checkHint.getText())) checkHint.setText(prompt.text);
+        String localizedPrompt = UiMessages.text(this, prompt.text);
+        if (!localizedPrompt.contentEquals(checkHint.getText())) checkHint.setText(localizedPrompt);
         if (checkPromptWarning == null || checkPromptWarning != prompt.warning) {
             checkPromptWarning = prompt.warning;
             checkHint.setBackgroundResource(prompt.warning ? R.drawable.mc_check_prompt_warning : R.drawable.mc_check_prompt_normal);
@@ -1217,7 +1221,7 @@ public final class CheckActivity extends CameraMorningActivity {
     private void finishCheck() {
         if (saving || currentRecord != null) return;
         saving = true;
-        showWorkLoading("正在保存晨检记录");
+        showWorkLoading(getString(R.string.i18n_a_saving_check_record));
         storageError = false;
         updateVoice();
         updateLighting();
@@ -1287,8 +1291,8 @@ public final class CheckActivity extends CameraMorningActivity {
                     paused = true;
                     storageError = true;
                     updateVoice();
-                    ImmersiveUi.show(new ProjectDialog.Builder(this).setTitle("晨检记录未保存").setMessage(failure(e))
-                            .setNegativeButton("重新检查", (d, w) -> startCheck(true)).setPositiveButton("重试保存", (d, w) -> {
+                    ImmersiveUi.show(new ProjectDialog.Builder(this).setTitle(getString(R.string.i18n_a_check_record_not_saved)).setMessage(failure(e))
+                            .setNegativeButton(getString(R.string.i18n_a_check_again), (d, w) -> startCheck(true)).setPositiveButton(getString(R.string.i18n_a_retry_save), (d, w) -> {
                                 if (pipeline == completedPipeline) {
                                     paused = false;
                                     finishCheck();
@@ -1302,7 +1306,7 @@ public final class CheckActivity extends CameraMorningActivity {
     private String saveFaceFrame(String id, String stage, CameraSource.Frame frame, double temperature) throws Exception {
         Bitmap bitmap = frame.toBitmap();
         try {
-            CheckPhotoAnnotator.annotateFace(bitmap, frame.captureTimeMillis, temperature);
+            CheckPhotoAnnotator.annotateFace(this, bitmap, frame.captureTimeMillis, temperature);
             return store.savePhoto(id, stage, bitmap);
         } finally {
             bitmap.recycle();
@@ -1312,7 +1316,7 @@ public final class CheckActivity extends CameraMorningActivity {
     private String saveHandFrame(String id, String stage, HandEvidenceCapture.Photo photo) throws Exception {
         Bitmap bitmap = photo.frame.toBitmap();
         try {
-            CheckPhotoAnnotator.annotateHand(bitmap, photo.abnormalities);
+            CheckPhotoAnnotator.annotateHand(this, bitmap, photo.abnormalities);
             return store.savePhoto(id, stage, bitmap);
         } finally {
             bitmap.recycle();

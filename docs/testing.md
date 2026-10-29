@@ -47,6 +47,21 @@ bash gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerA
 
 真实相机、温度和灯光测试使用授权的隔离设备。先核对相机/串口是否被其他任务占用；复用可用模拟器，不为每次测试启动新实例，同尺寸最多一台。
 
+## 中英文界面检查
+
+2026-10-29 的 App `2.0.1` 本地验证使用客户端 JAR `2.0.0`。App 344 项及客户端 92 项 JVM 测试、账号工具 8 项测试通过；Debug、Release、测试 APK 和客户端交付 ZIP 构建成功。
+
+Android 35 模拟器以英文系统运行，以下 11 项设备测试通过：
+
+```bash
+adb -s <模拟器序列号> shell pm grant cc.huoyan.opensource.morningcheck android.permission.CAMERA
+adb -s <模拟器序列号> shell am instrument -w -r -e class 'cc.huoyan.opensource.morningcheck.LocalizationUiTest,cc.huoyan.opensource.morningcheck.LocalizationMessageTest,cc.huoyan.opensource.morningcheck.DesignUiDeviceTest#readmeScreensFollowSystemLanguage' cc.huoyan.opensource.morningcheck.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+需先安装对应 Debug 与测试 APK，解锁模拟器并关闭首次全屏操作引导。测试覆盖实际英文主页、晨检引导、测温选项保存；通过局部语言 Context 验证中英切换、多语言偏好回退、教程资源、检测提示和标识保留。关键操作还使用 1280 × 800、800 × 1280、360 × 800 的布局配置验证最大 130% 应用字体。
+
+测试使用隔离数据库及本机 SDK 状态夹具，不访问业务云、不产生真实晨检记录。语音引擎的实际发声、真实模型与外设仍需现场验收；README 截图说明见[界面示例](images/README.md)。
+
 ## 完整业务验收
 
 按[快速开始](../QUICKSTART.md)使用测试员工，记录实际 App/JAR/SDK/模型、Android、ABI、设备与外设型号，逐项确认：

@@ -90,13 +90,13 @@
                             android:layout_width="@dimen/dp_0"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="切换录入人员" />
+                            android:text="@string/ui_activity_face_design_label_text" />
 
                         <TextView
                             android:id="@+id/enrollment_selection_close"
                             style="@style/PenButton"
                             android:layout_width="wrap_content"
-                            android:text="取消" />
+                            android:text="@string/activation_code_cancel" />
                     </LinearLayout>
 
                     <include

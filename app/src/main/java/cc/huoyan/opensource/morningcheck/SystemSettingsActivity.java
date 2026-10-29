@@ -42,7 +42,7 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
             return true;
         });
         bindCloudAddress(form);
-        settingsAction(form, R.id.settings_system_sdk, () -> showDetails("SDK 状态", statusDetails(), "status"));
+        settingsAction(form, R.id.settings_system_sdk, () -> showDetails(getString(R.string.i18n_b_sdk_status), statusDetails(), "status"));
         TextView shopName = form.findViewById(R.id.settings_shop_name);
         shopName.setText(currentShopName());
         settingsAction(form, R.id.settings_shop_name, () -> {
@@ -56,9 +56,9 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
         settingsToggle(form, R.id.settings_voice, "voice", true);
         android.widget.Switch voice = form.findViewById(R.id.settings_voice);
         TextView voiceState = form.findViewById(R.id.settings_voice_state);
-        voiceState.setText(voice.isChecked() ? "已开启" : "已关闭");
+        voiceState.setText(voice.isChecked() ? getString(R.string.i18n_b_on) : getString(R.string.i18n_b_off));
         voice.setOnCheckedChangeListener((button, checked) -> {
-            voiceState.setText(checked ? "已开启" : "已关闭");
+            voiceState.setText(checked ? getString(R.string.i18n_b_on) : getString(R.string.i18n_b_off));
             if (uiReady()) prefs.edit().putBoolean("voice", checked).apply();
         });
         settingsAction(form, R.id.settings_capabilities, this::showCapabilities);
@@ -82,9 +82,9 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
         android.widget.Switch automatic = form.findViewById(R.id.settings_auto_check);
         TextView state = form.findViewById(R.id.settings_auto_check_state);
         automatic.setChecked(SecuritySettings.isAutoCheckEnabled(this));
-        state.setText(automatic.isChecked() ? "已开启" : "已关闭");
+        state.setText(automatic.isChecked() ? getString(R.string.i18n_b_on) : getString(R.string.i18n_b_off));
         automatic.setOnCheckedChangeListener((button, checked) -> {
-            state.setText(checked ? "已开启" : "已关闭");
+            state.setText(checked ? getString(R.string.i18n_b_on) : getString(R.string.i18n_b_off));
             if (uiReady()) SecuritySettings.setAutoCheckEnabled(this, checked);
         });
     }
@@ -115,7 +115,7 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
     }
 
     private void showCapabilities() {
-        showDetails("App " + BuildConfig.VERSION_NAME + " · SDK 能力",
+        showDetails("App " + BuildConfig.VERSION_NAME + getString(R.string.i18n_b_sdk_capabilities_suffix),
                 SdkDetailsFormatter.capabilities(sdk.getCapabilities()), "capabilities");
     }
 
@@ -124,7 +124,7 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
         super.refreshStatus();
         if (formView != null) {
             ((TextView) formView.findViewById(R.id.settings_system_sdk_version))
-                    .setText(sdkSession.certificate().optString("sdk_version", sdkSession.viewState().title));
+                    .setText(sdkSession.certificate().optString("sdk_version", UiMessages.text(this, sdkSession.viewState().title)));
             ((TextView) formView.findViewById(R.id.settings_shop_name)).setText(currentShopName());
         }
     }
@@ -132,7 +132,7 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
     private void bindCloudAddress(View form) {
         String address = setting("cloud_url", "");
         ((TextView) form.findViewById(R.id.settings_business_cloud_value)).setText(
-                address.isEmpty() ? "未配置" : address);
+                address.isEmpty() ? getString(R.string.i18n_b_not_configured) : address);
     }
 
     private void showCloudAddress() {
@@ -147,13 +147,13 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
         form.findViewById(R.id.settings_save_cloud).setOnClickListener(v -> {
             String value = address.getText().toString().trim();
             if (!validHttp(value)) {
-                notice("请输入 http:// 或 https:// 地址");
+                notice(getString(R.string.i18n_b_http_address_required));
                 return;
             }
             prefs.edit().putString("cloud_url", value).apply();
             if (formView != null) bindCloudAddress(formView);
             dialog.dismiss();
-            toast("配置已保存");
+            toast(getString(R.string.i18n_b_settings_saved));
         });
         ImmersiveUi.show(dialog);
         dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));

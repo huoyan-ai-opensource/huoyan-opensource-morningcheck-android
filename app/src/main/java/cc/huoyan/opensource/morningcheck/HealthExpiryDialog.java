@@ -74,13 +74,16 @@ final class HealthExpiryDialog extends Dialog {
         findViewById(R.id.health_date_panel).addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> fitActionRow());
         firstYear = Math.min(1900, selection.selected().getYear());
         int lastYear = Math.max(LocalDate.now().getYear() + 100, selection.selected().getYear());
-        for (int year = firstYear; year <= lastYear; year++) years.add(year + "年");
+        for (int year = firstYear; year <= lastYear; year++) years.add(getContext().getString(R.string.i18n_a_year, year));
         yearPicker = findViewById(R.id.health_date_year);
         monthPicker = findViewById(R.id.health_date_month);
         yearPicker.setPopupBackgroundResource(R.drawable.mc_panel);
         monthPicker.setPopupBackgroundResource(R.drawable.mc_panel);
         List<String> months = new ArrayList<>();
-        for (int month = 1; month <= 12; month++) months.add(month + "月");
+        java.util.Locale locale = UiMessages.isEnglish(getContext()) ? java.util.Locale.US : java.util.Locale.CHINA;
+        String[] shortMonths = new java.text.DateFormatSymbols(locale).getShortMonths();
+        for (int month = 1; month <= 12; month++) months.add(locale.getLanguage().equals("zh")
+                ? month + "月" : shortMonths[month - 1]);
         yearPicker.setAdapter(options(years));
         monthPicker.setAdapter(options(months));
         AdapterView.OnItemSelectedListener changed = new AdapterView.OnItemSelectedListener() {
@@ -149,7 +152,8 @@ final class HealthExpiryDialog extends Dialog {
 
     private void updateCalendar() {
         ((TextView) findViewById(R.id.health_date_selected)).setText(selection.selected().toString());
-        ((TextView) findViewById(R.id.health_date_weekday)).setText("星期" + new String[]{"一", "二", "三", "四", "五", "六", "日"}[selection.selected().getDayOfWeek().getValue() - 1]);
+        ((TextView) findViewById(R.id.health_date_weekday)).setText(selection.selected().format(java.time.format.DateTimeFormatter.ofPattern("EEEE",
+                UiMessages.isEnglish(getContext()) ? java.util.Locale.US : java.util.Locale.CHINA)));
         days.notifyDataSetChanged();
     }
 
@@ -308,7 +312,7 @@ final class HealthExpiryDialog extends Dialog {
             cell.setBackgroundResource(chosen ? R.drawable.mc_button_primary : android.R.color.transparent);
             cell.setTextColor(ContextCompat.getColor(getContext(), chosen ? R.color.mc_white : R.color.mc_ink));
             cell.setAlpha(day > 0 ? 1f : 0f);
-            cell.setContentDescription(day > 0 ? selection.month().atDay(day).toString() + (chosen ? "，已选中" : "") : "");
+            cell.setContentDescription(day > 0 ? selection.month().atDay(day).toString() + (chosen ? getContext().getString(R.string.i18n_a_selected) : "") : "");
             return cell;
         }
     }

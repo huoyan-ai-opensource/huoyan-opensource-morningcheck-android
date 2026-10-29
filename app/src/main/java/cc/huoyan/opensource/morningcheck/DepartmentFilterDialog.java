@@ -23,7 +23,7 @@ final class DepartmentFilterDialog {
     static DepartmentFilterDialog show(Context context, List<Long> ids, List<String> names,
                                        long selectedId, LongConsumer selected) {
         List<Long> snapshot = new ArrayList<>(ids);
-        AlertDialog dialog = DesignChoiceDialog.create(activityOf(context), "选择部门", "点选后关闭",
+        AlertDialog dialog = DesignChoiceDialog.create(activityOf(context), context.getString(R.string.i18n_a_select_department), context.getString(R.string.i18n_a_tap_an_option_to_select),
                 names, snapshot.indexOf(selectedId), index -> selected.accept(snapshot.get(index)));
         ImmersiveUi.show(dialog);
         return new DepartmentFilterDialog(dialog);

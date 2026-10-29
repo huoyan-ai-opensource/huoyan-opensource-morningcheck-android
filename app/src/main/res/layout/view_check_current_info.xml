@@ -58,13 +58,13 @@
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="头部相机" />
+                android:text="@string/ui_view_camera_design_tabs_settings_preview_face_text" />
 
             <TextView
                 style="@style/PenCaption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="待检测" />
+                android:text="@string/ui_view_check_current_info_label_text" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,13 +77,13 @@
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="手部相机" />
+                android:text="@string/ui_view_camera_design_tabs_settings_preview_hand_text" />
 
             <TextView
                 style="@style/PenCaption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="待检测" />
+                android:text="@string/ui_view_check_current_info_label_text" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,13 +96,13 @@
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="测温设备" />
+                android:text="@string/ui_view_check_current_info_label_text_2" />
 
             <TextView
                 style="@style/PenCaption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="待检测" />
+                android:text="@string/ui_view_check_current_info_label_text" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

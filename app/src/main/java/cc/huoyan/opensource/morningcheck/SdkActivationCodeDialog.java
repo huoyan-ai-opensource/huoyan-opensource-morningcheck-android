@@ -484,15 +484,15 @@ public final class SdkActivationCodeDialog extends DialogFragment {
         textSize(panel.findViewWithTag("activation-alphabet-hint"), spacious ? R.dimen.sp_14 : R.dimen.sp_10);
         scan.setBackgroundResource(R.drawable.mc_text_action);
         scan.setTextColor(ContextCompat.getColor(context, R.color.mc_blue));
-        scan.setText("扫码激活");
+        scan.setText(context.getString(R.string.i18n_b_scan_activate));
         scan.setMinimumHeight(0);
         clear.setMinimumHeight(0);
         textSize(panel.findViewById(R.id.activation_code_title), spacious ? R.dimen.sp_24
                 : expanded ? R.dimen.sp_20 : R.dimen.sp_16);
-        ((TextView) panel.findViewById(R.id.activation_code_title)).setText("输入激活码");
+        ((TextView) panel.findViewById(R.id.activation_code_title)).setText(context.getString(R.string.i18n_b_enter_activation));
         textSize(panel.findViewById(R.id.activation_code_rules), spacious ? R.dimen.sp_14
                 : expanded ? R.dimen.sp_12 : R.dimen.sp_11);
-        ((TextView) panel.findViewById(R.id.activation_code_rules)).setText("请输入 16 位激活码，每 4 位自动分组");
+        ((TextView) panel.findViewById(R.id.activation_code_rules)).setText(context.getString(R.string.i18n_b_activation_groups));
         textSize(error, linkTextSize);
     }
 

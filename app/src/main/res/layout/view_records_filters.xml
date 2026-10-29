@@ -9,7 +9,7 @@
         style="@style/PenInput"
         android:layout_width="match_parent"
         android:drawableEnd="@drawable/mc_list_search_icon"
-        android:hint="搜索姓名 / 工号"
+        android:hint="@string/ui_view_records_filters_records_search_hint"
         android:inputType="text" />
 
     <LinearLayout
@@ -23,7 +23,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginStart="@dimen/dp_6"
             android:layout_weight="1"
-            android:text="日期范围" />
+            android:text="@string/ui_view_records_filters_records_date_filter_text" />
 
         <cc.huoyan.opensource.morningcheck.ChoiceSpinner
             android:id="@+id/records_filter"

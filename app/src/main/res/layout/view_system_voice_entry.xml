@@ -8,7 +8,7 @@
         style="@style/PenCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="语音提示" />
+        android:text="@string/ui_view_system_voice_entry_label_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,14 +29,14 @@
             android:layout_weight="1"
             android:paddingTop="@dimen/dp_4"
             android:paddingBottom="@dimen/dp_4"
-            android:text="已开启" />
+            android:text="@string/rules_enabled" />
 
         <cc.huoyan.opensource.morningcheck.LandscapeSwitch
             android:id="@+id/settings_voice"
             android:layout_width="@dimen/mc_system_voice_switch_width"
             android:layout_height="@dimen/mc_system_voice_switch_height"
             android:background="@null"
-            android:contentDescription="语音提示"
+            android:contentDescription="@string/ui_view_system_voice_entry_label_text"
             android:minHeight="@dimen/dp_0"
             android:minWidth="@dimen/dp_0"
             android:padding="@dimen/dp_0"

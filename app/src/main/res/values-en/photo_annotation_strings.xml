@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="photo_annotation_temperature">Temp %1$.1f°C</string>
+    <string name="photo_annotation_temperature_missing">Temp not measured</string>
+</resources>

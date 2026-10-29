@@ -11,5 +11,5 @@
         android:id="@+id/lighting_save"
         style="@style/PenPrimary"
         android:layout_width="match_parent"
-        android:text="保存配置" />
+        android:text="@string/ui_view_lighting_actions_lighting_save_text" />
 </LinearLayout>

@@ -38,7 +38,7 @@
                 android:layout_height="@dimen/dp_24"
                 android:clickable="true"
                 android:gravity="center"
-                android:text="上拉加载更多" />
+                android:text="@string/ui_activity_records_records_load_more_text" />
 
             <include
                 layout="@layout/view_staff_pagination"

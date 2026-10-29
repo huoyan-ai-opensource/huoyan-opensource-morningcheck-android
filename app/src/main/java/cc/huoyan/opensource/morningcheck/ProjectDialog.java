@@ -216,7 +216,7 @@ final class ProjectDialog extends AlertDialog {
             if (items != null) {
                 final AlertDialog[] dialog = new AlertDialog[1];
                 dialog[0] = DesignChoiceDialog.create(DepartmentFilterDialog.activityOf(context),
-                        String.valueOf(title), "点选后关闭", Arrays.asList(items), selected,
+                        String.valueOf(title), context.getString(R.string.i18n_b_tap_close), Arrays.asList(items), selected,
                         position -> {
                             if (onItem != null) onItem.onClick(dialog[0], position);
                         });

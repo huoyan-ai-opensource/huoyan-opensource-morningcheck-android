@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="mc_check_tutorial" type="raw">@raw/mc_check_tutorial_zh</item>
+    <item name="mc_check_tutorial_preview" type="drawable">@drawable/mc_check_tutorial_preview_zh</item>
+</resources>

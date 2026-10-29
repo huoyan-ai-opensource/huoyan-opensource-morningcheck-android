@@ -8,12 +8,12 @@
 
 | 产物 | 当前版本 | 维护位置 |
 | --- | --- | --- |
-| App versionName | 2.0.0 | `app/build.gradle` 的 `appVersionName`；可用 `-PappVersionName` 覆盖 |
-| App versionCode | 2 | `app/build.gradle` 的 `defaultConfig.versionCode`；发布新安装包需递增 |
+| App versionName | 2.0.1 | `app/build.gradle` 的 `appVersionName`；可用 `-PappVersionName` 覆盖 |
+| App versionCode | 3 | `app/build.gradle` 的 `defaultConfig.versionCode`；发布新安装包需递增 |
 | 晨检客户端 JAR / ZIP | 2.0.0 | 根 `build.gradle` 的 `morningcheckClientVersion` |
 | 晨检 SDK 壳 | 按实际交付版本 | 与客户端、设备和模型一同验证，见兼容表 |
 
-App 与 JAR 版本独立管理，本次均为 `2.0.0`，后续不要求同步。App 构建只使用已经提交的 `app/src/main/libs/huoyan-morningcheck-client-<JAR版本>.jar`。修改客户端源码后，维护者显式执行 `:huoyanClient:updateAppSdkJar`，确认本次计划交付的账号配置和 JAR 适合公开发布，再运行 App 验证；普通 App 构建不会自动替换该文件。
+App 与 JAR 版本独立管理，App 为 `2.0.1`、JAR 保持 `2.0.0`，不要求同步。App 构建只使用已经提交的 `app/src/main/libs/huoyan-morningcheck-client-<JAR版本>.jar`。修改客户端源码后，维护者显式执行 `:huoyanClient:updateAppSdkJar`，确认本次计划交付的账号配置和 JAR 适合公开发布，再运行 App 验证；普通 App 构建不会自动替换该文件。
 
 APK 名称为 `huoyan-morningcheck-<App版本>-<versionCode>-<时间戳>-<构建类型>.apk`。发布说明记录实际构建提交，不仅记录 tag 名称。
 
@@ -35,7 +35,7 @@ Assets 直接显示完整文件名，不设置自定义 `label`，使用 `gh rel
 使用 JDK 17、Android SDK / Build Tools 35 和项目自带 Gradle 8.14.3 wrapper。在仓库根目录执行：
 
 ```bash
-bash gradlew --no-daemon --console=plain -PappVersionName=2.0.0 \
+bash gradlew --no-daemon --console=plain -PappVersionName=2.0.1 \
   :app:testDebugUnitTest :huoyanClient:testDebugUnitTest \
   :huoyanClient:compileExample :huoyanClient:clientDistribution \
   :app:assembleDebug :app:assembleRelease :app:assembleDebugAndroidTest

@@ -116,7 +116,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
             updateUi();
         }
     };
-    private String sendingLabel = "正在学习", sampleMessage = "";
+    private String sendingLabel = "", sampleMessage = "";
     private static final long MAX_SAMPLE_IMAGE_BYTES = 4L * 1024 * 1024;
     private static final int MAX_SAMPLE_BITMAP_BYTES = 16 * 1024 * 1024;
     private final OkHttpClient sampleHttp = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS)
@@ -213,18 +213,20 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
     @Override
     protected void bindPage() {
         findViewById(R.id.header_home).setOnClickListener(view -> onBackPressed());
-        ((TextView) findViewById(R.id.header_back_label)).setText("返回首页");
-        findViewById(R.id.header_back_label).setContentDescription("返回首页");
-        findViewById(R.id.header_home).setContentDescription("返回首页");
+        ((TextView) findViewById(R.id.header_back_label)).setText(getString(R.string.i18n_a_home));
+        findViewById(R.id.header_back_label).setContentDescription(getString(R.string.i18n_a_home));
+        findViewById(R.id.header_home).setContentDescription(getString(R.string.i18n_a_home));
         updateWorkspaceVisibility();
         content.findViewById(R.id.enrollment_selection_close).setOnClickListener(view -> setSelectionExpanded(false));
         bindSelection();
         staffName = content.findViewById(R.id.enrollment_staff_name);
         content.findViewById(R.id.enrollment_staff_summary).setOnLongClickListener(view -> {
             if (person != null)
-                notice(person.optString("name") + " · 工号 " + person.optString("staff_no", "未填写")
-                        + "\n" + person.optString("department", "未分配部门")
-                        + (person.optBoolean("face_registered") ? " · 已录入人脸" : " · 尚未录入人脸"));
+                notice(getString(R.string.i18n_a_staff_summary, person.optString("name"),
+                        person.optString("staff_no", getString(R.string.i18n_a_not_set)),
+                        person.optString("department", getString(R.string.i18n_a_unassigned)),
+                        person.optBoolean("face_registered") ? getString(R.string.i18n_a_face_enrolled)
+                                : getString(R.string.i18n_a_no_face_enrolled)));
             return true;
         });
         previewStatus = content.findViewById(R.id.enrollment_preview_status);
@@ -275,7 +277,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         closeLighting();
         session++;
         invalidateFaceDetection();
-        cancelPreflight("页面已暂停，人脸学习尚未发送，请重新采集");
+        cancelPreflight(getString(R.string.i18n_a_page_paused_face_enrollment_was_not_sent_capture_again));
         speech.pause();
         updateUi();
         super.onPause();
@@ -501,7 +503,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                         return;
                     person = null;
                     personLoading = false;
-                    personReadError = "员工档案读取失败：" + failure(error);
+                    personReadError = getString(R.string.i18n_a_profile_read_failed, failure(error));
                     session++;
                     stopCamera();
                     updateUi();
@@ -636,7 +638,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                     pageError = true;
                     failedStaffAppend = append;
                     showStaffPage();
-                    if (foreground) notice("员工读取失败：" + failure(error));
+                    if (foreground) notice(getString(R.string.i18n_a_employee_read_failed, failure(error)));
                 });
             }
         });
@@ -667,15 +669,15 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                 ? R.string.face_enrollment_staff_empty : R.string.business_staff_no_match);
         empty.setVisibility(!pageLoading && staffData != null && values.isEmpty() ? View.VISIBLE : View.GONE);
         TextView info = content.findViewById(R.id.enrollment_page_info);
-        info.setText(pageError ? "点击重新读取"
+        info.setText(pageError ? getString(R.string.i18n_a_tap_to_retry)
                 : pageLoading || staffData == null ? ""
                   : getString(R.string.business_page_info, staffData.page, staffData.totalPages, staffData.total));
         View previous = content.findViewById(R.id.enrollment_previous);
         previous.setEnabled(!pageLoading && !writeInProgress() && staffPage > 1);
         previous.setAlpha(previous.isEnabled() ? 1f : .45f);
         View next = content.findViewById(R.id.enrollment_next);
-        ((TextView) next).setText(pageError ? "点击重新读取" : pageLoading ? ""
-                                                               : staffData != null && staffPage >= staffData.totalPages ? "已显示全部员工" : "上拉加载更多员工");
+        ((TextView) next).setText(pageError ? getString(R.string.i18n_a_tap_to_retry) : pageLoading ? ""
+                                                               : staffData != null && staffPage >= staffData.totalPages ? getString(R.string.i18n_a_all_staff_shown) : getString(R.string.i18n_a_scroll_for_more_staff));
         next.setEnabled(!pageLoading && !writeInProgress()
                 && (pageError || staffData != null && staffPage < staffData.totalPages));
         next.setAlpha(next.isEnabled() ? 1f : .45f);
@@ -721,9 +723,9 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         public void onBindViewHolder(@NonNull EnrollmentHolder holder, int position) {
             JSONObject employee = item(position);
             holder.name.setText(employee.optString("name"));
-            holder.meta.setText("工号 " + employee.optString("staff_no", "未填写")
+            holder.meta.setText(getString(R.string.i18n_a_staff_number, employee.optString("staff_no", getString(R.string.i18n_a_not_set)))
                     + (employee.optString("department").isEmpty() ? "" : " · " + employee.optString("department")));
-            holder.state.setText(employee.optBoolean("face_registered") ? "已录人脸" : "待录人脸");
+            holder.state.setText(employee.optBoolean("face_registered") ? getString(R.string.i18n_a_enrolled) : getString(R.string.i18n_a_not_enrolled));
             bindSelection(holder.itemView, employee);
         }
 
@@ -905,7 +907,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         final String device = currentDevice(), attempt = person.optString("face_write_attempt");
         queryingFaces = true;
         needsSampleVerification = false;
-        sampleMessage = "正在核对当前设备的人脸样本";
+        sampleMessage = getString(R.string.i18n_a_checking_face_samples_on_this_device);
         updateUi();
         HuoyanClient.Callback callback = (code, message, data) -> {
             if (!sampleScope(employee, personId, selection, generation, device) || version != sampleReadVersion)
@@ -922,7 +924,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
             } catch (IllegalArgumentException invalid) {
                 queryingFaces = false;
                 verifiedGeneration = -1;
-                sampleMessage = "暂时无法核对样本，请稍后刷新";
+                sampleMessage = getString(R.string.i18n_a_cannot_check_samples_now_refresh_later);
                 updateUi();
                 if (manual) notice(code == 0 ? invalid.getMessage() : message);
                 return;
@@ -962,7 +964,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                         sampleMessage = "";
                         loadSampleImages();
                         updateUi();
-                        if (manual) toast("人脸图片已刷新");
+                        if (manual) toast(getString(R.string.i18n_a_face_images_refreshed));
                     });
                 } catch (Exception error) {
                     main.post(() -> {
@@ -970,7 +972,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                             return;
                         queryingFaces = false;
                         verifiedGeneration = -1;
-                        sampleMessage = "样本核对未能保存，请刷新重试";
+                        sampleMessage = getString(R.string.i18n_a_could_not_save_sample_status_refresh_and_retry);
                         updateUi();
                         if (manual) notice(failure(error));
                     });
@@ -983,7 +985,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
             queryingFaces = false;
             verifiedGeneration = -1;
             updateUi();
-            if (manual) notice("人脸图片读取失败：" + failure(error));
+            if (manual) notice(getString(R.string.i18n_a_face_images_read_failed, failure(error)));
         }
     }
 
@@ -1000,7 +1002,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         if (version != sampleReadVersion || destroyed) return;
         queryingFaces = false;
         verifiedGeneration = -1;
-        sampleMessage = "员工或设备状态已变化，请刷新核对";
+        sampleMessage = getString(R.string.i18n_a_staff_or_device_status_changed_refresh_to_verify);
         updateUi();
     }
 
@@ -1228,14 +1230,14 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         refresh.setEnabled(writable && person != null && !personLoading && sdk.isConnected());
         content.findViewById(R.id.enrollment_faces_clear).setEnabled(writable && samplesVerified() && sampleUids.length() > 0);
         TextView sampleTitle = content.findViewById(R.id.enrollment_faces_info);
-        sampleTitle.setText("已录入图片");
+        sampleTitle.setText(getString(R.string.i18n_a_enrolled_photos));
         sampleTitle.setContentDescription(queryingFaces ? getString(R.string.face_samples_verifying)
                 : getString(R.string.face_samples_count, sampleUids.length()));
         TextView empty = content.findViewById(R.id.enrollment_faces_empty);
         empty.setVisibility(faceImages.isEmpty() ? View.VISIBLE : View.GONE);
-        empty.setText(person == null ? "请先选择员工"
+        empty.setText(person == null ? getString(R.string.i18n_a_select_a_staff_member_first)
                 : sampleUids.length() == 0 && samplesVerified()
-                  ? "该员工暂无人脸样本" : "连接当前设备后刷新核对样本");
+                  ? getString(R.string.i18n_a_no_face_samples_for_this_staff_member) : getString(R.string.i18n_a_connect_to_this_device_then_refresh_samples));
         GridView grid = content.findViewById(R.id.enrollment_faces);
         if (grid != null && sampleRows != null) {
             // 状态和缩略图变化不改变 UID 列表；整表通知会用旧视口覆盖尚未布局的滚动位置。
@@ -1315,7 +1317,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
             TextView missing = tile.findViewById(R.id.face_sample_missing);
             missing.setVisibility(View.GONE);
             if (bitmap == null && !sample.unavailable) scheduleVisibleSampleImages();
-            ((TextView) tile.findViewById(R.id.face_sample_uid)).setText("人脸" + FaceSamplePresentation.ordinal(sampleUids, sample.uid));
+            ((TextView) tile.findViewById(R.id.face_sample_uid)).setText(getString(R.string.i18n_a_face_ordinal, FaceSamplePresentation.ordinal(sampleUids, sample.uid)));
             View delete = tile.findViewById(R.id.face_sample_delete);
             delete.setEnabled(samplesVerified() && !writeInProgress() && !queryingFaces);
             final long uid = sample.uid;
@@ -1344,7 +1346,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         boolean verified = samplesVerified();
         if (!application.faceOperations.beginWrite(employee)) return;
         sending = true;
-        sendingLabel = uid > 0 ? "正在删除样本" : "正在清空样本";
+        sendingLabel = uid > 0 ? getString(R.string.i18n_a_deleting_sample) : getString(R.string.i18n_a_clearing_samples);
         personReadVersion++;
         invalidateSampleVerification();
         updateUi();
@@ -1361,28 +1363,28 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                 main.post(() -> {
                     if (matchesSelection(write) && matchesDevice(write)) person = prepared;
                     if (!matchesSelection(write) || !matchesDevice(write) || !foreground || !sdk.isConnected()) {
-                        completeFailure(write, true, "页面或连接已变化，删除尚未发送，请重新核对");
+                        completeFailure(write, true, getString(R.string.i18n_a_page_or_connection_changed_deletion_was_not_sent_verify_again));
                         return;
                     }
                     HuoyanClient.Callback callback = (code, message, data) -> {
                         if (!matchesDevice(write)) {
-                            completeFailure(write, false, "连接已变化，删除结果未知，请先核对原设备样本");
+                            completeFailure(write, false, getString(R.string.i18n_a_connection_changed_deletion_result_is_unknown_check_samples_on_the_original));
                         } else if (FaceResultPolicy.isAbsentOrDeleted(code)) {
                             completeSampleDeletion(write, uid);
                         } else completeFailure(write, code != HuoyanClient.ERROR_RESULT_UNKNOWN
                                         && code != HuoyanClient.ERROR_CANCELLED,
                                 code == HuoyanClient.ERROR_RESULT_UNKNOWN || code == HuoyanClient.ERROR_CANCELLED
-                                        ? "删除结果未知，请刷新核对样本后再操作" : "样本未删除：" + message);
+                                        ? getString(R.string.i18n_a_deletion_result_unknown_refresh_samples_before_trying_again) : getString(R.string.i18n_a_sample_not_deleted, UiMessages.text(this, message)));
                     };
                     try {
                         if (uid > 0) sdk.forgetByUid(uid, callback);
                         else sdk.forget(write.personId, callback);
                     } catch (RuntimeException error) {
-                        completeFailure(write, false, "删除结果待核对：" + failure(error));
+                        completeFailure(write, false, getString(R.string.i18n_a_deletion_needs_check, failure(error)));
                     }
                 });
             } catch (Exception error) {
-                main.post(() -> completeFailure(write, true, "尚未发送删除：" + failure(error)));
+                main.post(() -> completeFailure(write, true, getString(R.string.i18n_a_deletion_not_sent, failure(error))));
             }
         });
     }
@@ -1393,7 +1395,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                 JSONObject current = store.staff(write.staffId);
                 if (current == null || current.optLong("person_id") != write.personId || !matchesDevice(write)
                         || !write.attempt.equals(current.optString("face_write_attempt"))) {
-                    main.post(() -> releaseWrite(write, null, "员工或设备已变化，请刷新核对删除结果", false));
+                    main.post(() -> releaseWrite(write, null, getString(R.string.i18n_a_staff_or_device_changed_refresh_to_verify_deletion), false));
                     return;
                 }
                 JSONArray retained = new JSONArray(), old = current.optJSONArray("face_uids");
@@ -1404,7 +1406,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                         "face_registered", retained.length() > 0,
                         "face_uid", retained.length() == 0 ? 0 : retained.optLong(retained.length() - 1),
                         "face_write_unknown", false, "face_write_attempt", "", "face_write_device", "", "face_write_person_id", 0));
-                String message = deletedUid > 0 ? "人脸样本已删除" : "该员工的人脸样本已清空";
+                String message = deletedUid > 0 ? getString(R.string.i18n_a_face_sample_deleted) : getString(R.string.i18n_a_all_face_samples_cleared_for_this_staff_member);
                 main.post(() -> {
                     if (matchesSelection(write) && matchesDevice(write)) {
                         sampleUids = retained;
@@ -1414,7 +1416,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                     releaseWrite(write, updated, message, true);
                 });
             } catch (Exception error) {
-                main.post(() -> releaseWrite(write, null, "删除回执未能保存，请刷新核对：" + failure(error), false));
+                main.post(() -> releaseWrite(write, null, getString(R.string.i18n_a_deletion_save_failed, failure(error)), false));
             }
         });
     }
@@ -1475,7 +1477,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         notice(cameraError);
         previewReceivedFrame = false;
         invalidateFaceDetection();
-        cancelPreflight("摄像头已中断，人脸学习尚未发送，请重新采集");
+        cancelPreflight(getString(R.string.i18n_a_camera_interrupted_face_enrollment_was_not_sent_capture_again));
         updateUi();
     }
 
@@ -1488,7 +1490,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
     @Override
     protected void stopCamera() {
         invalidateFaceDetection();
-        cancelPreflight("页面或摄像头已变化，人脸学习尚未发送，请重新采集");
+        cancelPreflight(getString(R.string.i18n_a_page_or_camera_changed_face_enrollment_was_not_sent_capture_again));
         previewReceivedFrame = false;
         super.stopCamera();
         closeLighting();
@@ -1508,7 +1510,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
             config = LightConfig.read(prefs);
         } catch (IllegalArgumentException invalid) {
             closeLighting();
-            String message = "灯光配置无效：" + invalid.getMessage();
+            String message = getString(R.string.i18n_a_light_invalid, UiMessages.text(this, invalid.getMessage()));
             if (!message.equals(lightingConfigError)) notice(message);
             lightingConfigError = message;
             return;
@@ -1535,7 +1537,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         if (scope.equals(observedDetectionScope)) return;
         observedDetectionScope = scope;
         invalidateFaceDetection();
-        cancelPreflight("页面或连接已变化，人脸学习尚未发送，请重新采集");
+        cancelPreflight(getString(R.string.i18n_a_page_or_connection_changed_face_enrollment_was_not_sent_capture_again));
     }
 
     private void clearFaceDetection() {
@@ -1577,18 +1579,18 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                 if (!resumed || !foreground || destroyed || expectedScope != detectionScope
                         || (writeInProgress() && pendingPreflightFrame == null) || !sdkReady()) {
                     if (pendingPreflightFrame != null)
-                        cancelPreflight("页面或连接已变化，人脸学习尚未发送，请重新采集");
+                        cancelPreflight(getString(R.string.i18n_a_page_or_connection_changed_face_enrollment_was_not_sent_capture_again));
                     return;
                 }
                 if (code != 0) {
-                    failFaceDetection("人脸检测未完成：" + message);
+                    failFaceDetection(getString(R.string.i18n_a_face_detection_incomplete, UiMessages.text(this, message)));
                     return;
                 }
                 try {
                     FaceDetectionResult result = FaceDetectionResult.parse(data);
                     long age = System.nanoTime() - frame.receivedAtNanos;
                     if (age < 0 || age > DETECTION_MAX_AGE_NANOS) {
-                        failFaceDetection("人脸检测画面已过期，请正视镜头后重试");
+                        failFaceDetection(getString(R.string.i18n_a_face_frame_expired_face_the_camera_and_try_again));
                         return;
                     }
                     if (pendingPreflightFrame != null) {
@@ -1609,18 +1611,18 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                     main.postDelayed(expireDetection, Math.max(1, (DETECTION_MAX_AGE_NANOS - age) / 1_000_000L + 1));
                     updateUi();
                 } catch (IllegalArgumentException error) {
-                    failFaceDetection("人脸检测结果无效，请重新采集");
+                    failFaceDetection(getString(R.string.i18n_a_invalid_face_detection_result_capture_again));
                 }
             });
         } catch (RuntimeException error) {
             detecting = false;
             if (expectedScope == detectionScope)
-                failFaceDetection("人脸检测未完成：" + failure(error));
+                failFaceDetection(getString(R.string.i18n_a_face_detection_incomplete, failure(error)));
         }
     }
 
     private void updateDetectionVoice(int count) {
-        if (count > 1) speech.update("enrollment-multiple", "检测到多人入镜", 0, 5000);
+        if (count > 1) speech.update("enrollment-multiple", getString(R.string.i18n_a_multiple_people_detected), 0, 5000);
         else speech.clearStatus();
     }
 
@@ -1641,7 +1643,8 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
     private void updateUi() {
         updateLighting();
         if (destroyed || !foreground || previewStatus == null) return;
-        staffName.setText(person == null ? "未选择员工" : person.optString("staff_no", "未填写") + "-" + person.optString("name"));
+        staffName.setText(person == null ? getString(R.string.i18n_a_no_staff_selected)
+                : person.optString("staff_no", getString(R.string.i18n_a_not_set)) + "-" + person.optString("name"));
         boolean writing = application.faceOperations.isWriting(staffId);
         boolean unknown = person != null && person.optBoolean("face_write_unknown");
         boolean enabled = resumed && !choosingEmployee() && !personLoading && person != null && staffId > 0 && currentPersonId() > 0 && !sending && !writing && !unknown
@@ -1655,7 +1658,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         if (chooseStaff != null) {
             chooseStaff.setEnabled(!sending && !writing);
             chooseStaff.setAlpha(chooseStaff.isEnabled() ? 1f : .45f);
-            chooseStaff.setText(selectionExpanded ? "关闭选择" : "切换人员");
+            chooseStaff.setText(selectionExpanded ? getString(R.string.i18n_a_close_selection) : getString(R.string.i18n_a_select_staff));
         }
         content.findViewById(R.id.enrollment_staff_list).setEnabled(!pageLoading
                 && committedStaff == visibleStaff && !sending && !writing);
@@ -1670,7 +1673,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         TextView placeholder = content.findViewById(R.id.enrollment_preview_placeholder);
         placeholder.setVisibility(person == null || !previewReceivedFrame ? View.VISIBLE : View.GONE);
         placeholder.setText(person == null
-                ? "请先从员工列表选择员工" : "等待摄像头画面");
+                ? getString(R.string.i18n_a_select_a_staff_member_from_the_list_first) : getString(R.string.i18n_a_waiting_for_camera));
         updateSampleControls();
         updatePreviewStatus(enabled, writing);
         updateOperationLoading();
@@ -1680,11 +1683,11 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         if (operationLoading == null) operationLoading = new LoadingDialog(this);
         boolean writing = staffId > 0 && application.faceOperations.isWriting(staffId);
         if (foreground && !destroyed && (sending || writing || personLoading || queryingFaces)) {
-            operationLoading.show(sending || writing ? sendingLabel : queryingFaces ? "正在读取人脸样本" : "正在读取员工资料");
+            operationLoading.show(sending || writing ? sendingLabel : queryingFaces ? getString(R.string.i18n_a_loading_face_samples) : getString(R.string.i18n_a_loading_staff));
             return;
         }
         if (foreground && !destroyed && pageLoading && choosingEmployee()) {
-            operationLoading.showReadOnly("正在读取员工列表");
+            operationLoading.showReadOnly(getString(R.string.i18n_a_loading_staff_list));
             return;
         }
         operationLoading.dismiss();
@@ -1741,7 +1744,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         }
         personReadVersion++;
         sending = true;
-        sendingLabel = "正在确认人脸";
+        sendingLabel = getString(R.string.i18n_a_verifying_face);
         final LearningWrite write = new LearningWrite(targetStaffId, currentPersonId(), selectionVersion, session,
                 sdkGeneration(), sdkSession.status().optString("device_id"), UUID.randomUUID().toString(), verified);
         pendingPreflight = write;
@@ -1758,11 +1761,11 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         if (write == null || frame == null || detecting) return;
         if (!resumed || !foreground || destroyed || !matchesSelection(write) || session != write.session
                 || !matchesDevice(write) || !sdkReady() || !cameraError.isEmpty()) {
-            cancelPreflight("页面或连接已变化，人脸学习尚未发送，请重新采集");
+            cancelPreflight(getString(R.string.i18n_a_page_or_connection_changed_face_enrollment_was_not_sent_capture_again));
             return;
         }
         if (!fresh(frame)) {
-            cancelPreflight("采集画面已过期，人脸学习尚未发送，请重新采集");
+            cancelPreflight(getString(R.string.i18n_a_capture_expired_face_enrollment_was_not_sent_capture_again));
             return;
         }
         pendingPreflightFrame = null;
@@ -1780,16 +1783,16 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                 if (pendingPreflight != write) return;
                 if (expectedScope != detectionScope || !matchesSelection(write) || !resumed || !foreground
                         || session != write.session || !matchesDevice(write) || !sdkReady()) {
-                    cancelPreflight("页面或连接已变化，人脸学习尚未发送，请重新采集");
+                    cancelPreflight(getString(R.string.i18n_a_page_or_connection_changed_face_enrollment_was_not_sent_capture_again));
                     return;
                 }
                 if (!fresh(frame)) {
-                    cancelPreflight("采集画面已过期，人脸学习尚未发送，请重新采集");
+                    cancelPreflight(getString(R.string.i18n_a_capture_expired_face_enrollment_was_not_sent_capture_again));
                     return;
                 }
                 if (code != 0) {
-                    cancelPreflight("人脸检测未完成：" + message);
-                    failFaceDetection("人脸检测未完成：" + message);
+                    cancelPreflight(getString(R.string.i18n_a_face_detection_incomplete, UiMessages.text(this, message)));
+                    failFaceDetection(getString(R.string.i18n_a_face_detection_incomplete, UiMessages.text(this, message)));
                     return;
                 }
                 try {
@@ -1807,19 +1810,19 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                         return;
                     }
                     pendingPreflight = null;
-                    sendingLabel = "正在学习";
+                    sendingLabel = getString(R.string.i18n_a_enrolling_face);
                     invalidateSampleVerification();
                     updateUi();
                     submitLearning(write, frame);
                 } catch (IllegalArgumentException error) {
-                    cancelPreflight("人脸检测结果无效，人脸学习尚未发送，请重新采集");
-                    failFaceDetection("人脸检测结果无效，请重新采集");
+                    cancelPreflight(getString(R.string.i18n_a_invalid_face_detection_enrollment_was_not_sent_capture_again));
+                    failFaceDetection(getString(R.string.i18n_a_invalid_face_detection_result_capture_again));
                 }
             });
         } catch (RuntimeException error) {
             detecting = false;
-            cancelPreflight("人脸检测未完成：" + failure(error));
-            failFaceDetection("人脸检测未完成：" + failure(error));
+            cancelPreflight(getString(R.string.i18n_a_face_detection_incomplete, failure(error)));
+            failFaceDetection(getString(R.string.i18n_a_face_detection_incomplete, failure(error)));
         }
     }
 
@@ -1853,11 +1856,11 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                     if (matchesSelection(write) && matchesDevice(write)) person = prepared;
                     if (!matchesSelection(write) || !resumed || !foreground || session != write.session
                             || !matchesDevice(write) || !sdkReady()) {
-                        completeFailure(write, true, "页面或连接已变化，人脸学习尚未发送，请重新采集");
+                        completeFailure(write, true, getString(R.string.i18n_a_page_or_connection_changed_face_enrollment_was_not_sent_capture_again));
                         return;
                     }
                     if (!fresh(frame)) {
-                        completeFailure(write, true, "采集画面已过期，人脸学习尚未发送，请重新采集");
+                        completeFailure(write, true, getString(R.string.i18n_a_capture_expired_face_enrollment_was_not_sent_capture_again));
                         return;
                     }
                     try {
@@ -1870,16 +1873,16 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                             else
                                 completeFailure(write, outcome == FaceResultPolicy.Registration.REJECTED,
                                         outcome == FaceResultPolicy.Registration.UNKNOWN
-                                                ? "学习结果未知，请先核对 SDK 人脸状态，避免重复学习"
-                                                : "学习未完成：" + message + "。可重新采集");
+                                                ? getString(R.string.i18n_a_enrollment_result_unknown_check_sdk_face_status_before_enrolling_again)
+                                                : getString(R.string.i18n_a_enrollment_incomplete, UiMessages.text(this, message)));
                         });
                     } catch (RuntimeException error) {
                         // 客户端同步异常无法证明底层尚未发送，保留标记等待 SDK 核对。
-                        completeFailure(write, false, "学习结果待核对：" + failure(error));
+                        completeFailure(write, false, getString(R.string.i18n_a_enrollment_needs_check, failure(error)));
                     }
                 });
             } catch (Exception error) {
-                main.post(() -> completeFailure(write, true, "未发送人脸学习：" + failure(error)));
+                main.post(() -> completeFailure(write, true, getString(R.string.i18n_a_enrollment_not_sent, failure(error))));
             }
         });
     }
@@ -1899,13 +1902,13 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                 JSONObject current = store.staff(write.staffId);
                 // 回执可能在存储队列中等待；保存时再次核对连接，不能把旧设备样本记入新设备。
                 if (!matchesDevice(write)) {
-                    main.post(() -> releaseWrite(write, null, "连接已改变，请先核对原 SDK 的人脸学习结果", false));
+                    main.post(() -> releaseWrite(write, null, getString(R.string.i18n_a_connection_changed_check_enrollment_on_the_original_sdk_first), false));
                     return;
                 }
                 // 晚到的回执只处理自己的批次，不能覆盖后来发起的人脸操作。
                 if (current == null || current.optLong("person_id") != write.personId
                         || !write.attempt.equals(current.optString("face_write_attempt"))) {
-                    main.post(() -> releaseWrite(write, null, "员工状态已变化，请重新核对 SDK 人脸状态", false));
+                    main.post(() -> releaseWrite(write, null, getString(R.string.i18n_a_staff_status_changed_check_sdk_face_status_again), false));
                     return;
                 }
                 JSONObject changes = obj("face_write_unknown", false, "face_write_attempt", "", "face_write_device", "", "face_write_person_id", 0);
@@ -1928,12 +1931,12 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                         sampleDevice = write.device;
                         sampleUrls.put(uid, imageUrl);
                     }
-                    releaseWrite(write, updated, uid > 0 ? "人脸学习已保存"
-                            : "未检测到可学习的人脸，请正视镜头后重新采集", uid > 0);
+                    releaseWrite(write, updated, uid > 0 ? getString(R.string.i18n_a_face_enrollment_saved)
+                            : getString(R.string.i18n_a_no_usable_face_detected_face_the_camera_and_capture_again), uid > 0);
                 });
             } catch (Exception error) {
                 main.post(() -> releaseWrite(write, null,
-                        "学习回执未能保存，请先核对 SDK 人脸状态：" + failure(error), false));
+                        getString(R.string.i18n_a_enrollment_response_save_failed, failure(error)), false));
             }
         });
     }
@@ -1949,7 +1952,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                 main.post(() -> releaseWrite(write, updated, message, false));
             } catch (Exception error) {
                 main.post(() -> releaseWrite(write, null,
-                        "学习状态未能保存，请先核对 SDK 人脸状态：" + failure(error), false));
+                        getString(R.string.i18n_a_enrollment_state_save_failed, failure(error)), false));
             }
         });
     }

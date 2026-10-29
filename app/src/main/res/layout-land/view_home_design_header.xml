@@ -27,7 +27,7 @@
                 <ImageView
                     android:layout_width="@dimen/dp_18"
                     android:layout_height="@dimen/dp_18"
-                    android:contentDescription="火眼晨检"
+                    android:contentDescription="@string/ui_view_home_design_header_label_contentdescription"
                     android:src="@mipmap/ic_launcher" />
 
                 <TextView
@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_11"
-                    android:text="火眼晨检" />
+                    android:text="@string/ui_view_home_design_header_label_contentdescription" />
 
                 <TextView
                     android:id="@+id/header_workspace"
@@ -111,7 +111,7 @@
             android:gravity="center"
             android:paddingStart="@dimen/dp_8"
             android:paddingEnd="@dimen/dp_8"
-            android:text="○ 云端服务"
+            android:text="@string/ui_view_home_design_header_home_cloud_pending_text"
             android:visibility="gone" />
 
         <TextView
@@ -119,7 +119,7 @@
             style="@style/PenButton"
             android:layout_width="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
-            android:text="关于设备"
+            android:text="@string/mc_home_design_about"
             android:textSize="@dimen/sp_8" />
     </LinearLayout>
 

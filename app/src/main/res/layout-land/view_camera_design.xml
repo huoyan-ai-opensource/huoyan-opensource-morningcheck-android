@@ -51,6 +51,6 @@
             android:id="@+id/settings_camera_lighting"
             style="@style/PenButton"
             android:layout_width="@dimen/dp_100"
-            android:text="补光设置" />
+            android:text="@string/ui_view_camera_design_settings_camera_lighting_text" />
     </LinearLayout>
 </LinearLayout>

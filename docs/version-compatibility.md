@@ -2,13 +2,13 @@
 
 App、客户端 JAR、晨检 SDK APK 和模型分别版本，不要求相同；不要用 App 版本推断 SDK 原生引擎、API 或模型版本。
 
-本次 App 与客户端 JAR 均为 `2.0.0`，只是本次发布基线一致，后续仍分别维护版本。
+当前 App 为 `2.0.1`，客户端 JAR 保持 `2.0.0`，分别维护版本。
 
 ## 当前源码基线
 
 | 部分 | 当前基线 | 位置 |
 | --- | --- | --- |
-| App | `2.0.0`，`versionCode=2`，包名 `cc.huoyan.opensource.morningcheck` | `app/build.gradle` |
+| App | `2.0.1`，`versionCode=3`，包名 `cc.huoyan.opensource.morningcheck` | `app/build.gradle` |
 | 客户端 JAR | `2.0.0`，Java 11，minSdk 21 | 根 `build.gradle` 的 `morningcheckClientVersion`，`app/src/main/libs/` |
 | 晨检 SDK | 配套 2.0 壳，包名 `cc.huoyan.morningcheck` | 交付 APK、SDK 状态与能力回执 |
 | 人脸/头部/手部模型 | 由设备芯片、授权和选择决定 | 设备授权、当前模型及 SDK 实际状态 |

@@ -26,7 +26,7 @@
         android:layout_marginTop="@dimen/mc_choice_subtitle_margin"
         android:fontFamily="sans-serif"
         android:includeFontPadding="false"
-        android:text="点选后关闭"
+        android:text="@string/ui_dialog_design_choice_choice_subtitle_text"
         android:textColor="#6E7C90"
         android:textSize="@dimen/mc_choice_subtitle_text_size" />
 
@@ -46,7 +46,7 @@
         android:layout_height="@dimen/mc_choice_empty_height"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="暂无可选项"
+        android:text="@string/ui_dialog_design_choice_department_filter_empty_text"
         android:textColor="#6E7C90"
         android:textSize="@dimen/mc_choice_option_text_size"
         android:visibility="gone" />
@@ -64,7 +64,7 @@
         android:minHeight="@dimen/mc_choice_action_min_height"
         android:paddingTop="@dimen/mc_choice_action_padding"
         android:paddingBottom="@dimen/mc_choice_action_padding"
-        android:text="取消"
+        android:text="@string/activation_code_cancel"
         android:textColor="#293A51"
         android:textSize="@dimen/mc_choice_option_text_size"
         android:textStyle="bold" />

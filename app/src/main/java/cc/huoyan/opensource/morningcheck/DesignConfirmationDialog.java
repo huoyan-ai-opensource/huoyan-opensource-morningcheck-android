@@ -15,6 +15,6 @@ final class DesignConfirmationDialog {
     static AlertDialog create(Activity activity, CharSequence title, CharSequence message,
                               CharSequence confirm, DialogInterface.OnClickListener action) {
         return new ProjectDialog.Builder(activity).setTitle(title).setMessage(message)
-                .setNegativeButton("取消", null).setPositiveButton(confirm, action).create();
+                .setNegativeButton(activity.getString(R.string.i18n_a_cancel), null).setPositiveButton(confirm, action).create();
     }
 }

@@ -8,7 +8,7 @@
         style="@style/PenCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SDK 版本" />
+        android:text="@string/ui_view_system_sdk_version_label_text" />
 
     <LinearLayout
         android:id="@+id/settings_system_sdk"
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_6"
-            android:text="查看详情  ›" />
+            android:text="@string/ui_view_system_sdk_version_settings_system_sdk_details_text" />
     </LinearLayout>
 
     <TextView
@@ -45,6 +45,6 @@
         android:layout_height="@dimen/dp_30"
         android:clickable="true"
         android:gravity="center_vertical"
-        android:text="设备能力详情  ›"
+        android:text="@string/ui_view_system_sdk_version_settings_capabilities_text"
         android:visibility="gone" />
 </LinearLayout>

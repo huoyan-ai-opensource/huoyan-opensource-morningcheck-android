@@ -2,6 +2,13 @@
 
 本文件记录源码的用户可见变化；实际安装包和构建记录以 [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) 与 [Actions](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/actions) 为准。App、客户端 JAR、SDK 壳和模型分别版本，配套要求见[兼容表](docs/version-compatibility.md)。
 
+## 2.0.1（2026-10-29）
+
+- App 升级为 `2.0.1`，`versionCode=3`；客户端 JAR 仍为 `2.0.0`，重新构建交付包，不改变公共接口。
+- 新增英文界面，按 Android 系统语言偏好选择中文或英文，未配置支持语言时默认中文。
+- 页面、弹窗、状态提示、晨检语音和引导动画补齐英文，保留原有数据库值、筛选条件和 SDK 协议。
+- 英文 README 使用英文版主页和晨检页截图，公司、场所及设备标识采用虚构示例值。
+
 ## 2.0.0（2026-10-29）
 
 - 首次公开发布基线：App `2.0.0`、`versionCode=2`；客户端 JAR 保持 `2.0.0`。两者独立维护，本次版本号一致不代表后续必须同步。

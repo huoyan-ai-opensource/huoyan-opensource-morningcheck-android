@@ -77,6 +77,6 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginStart="@dimen/dp_4"
             android:layout_weight="1"
-            android:text="确定" />
+            android:text="@string/ui_activity_staff_editor_dialog_staff_edit_save_text" />
     </LinearLayout>
 </LinearLayout>

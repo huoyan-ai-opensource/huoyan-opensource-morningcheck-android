@@ -63,7 +63,7 @@ final class PaginationUi {
         ready = !loading && !error && data != null && data.total > 0;
         page = data == null ? 1 : Math.max(1, data.page);
         totalPages = data == null ? 1 : Math.max(1, data.totalPages);
-        info.setText(error ? "点击重新读取"
+        info.setText(error ? host.getString(R.string.i18n_b_retry_read)
                 : loading || data == null ? ""
                   : host.getString(R.string.business_page_info, page, totalPages, data.total));
         info.setEnabled(failed);

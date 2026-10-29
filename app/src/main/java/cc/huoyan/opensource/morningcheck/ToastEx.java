@@ -56,7 +56,7 @@ public class ToastEx {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.view_toast, null);
         TextView t = view.findViewById(R.id.toast_text);
-        t.setText(msg);
+        t.setText(UiMessages.text(context, msg));
         toast.setView(view);
         toast.show();
     }
@@ -76,7 +76,7 @@ public class ToastEx {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.view_toast, null);
         TextView t = view.findViewById(R.id.toast_text);
-        t.setText(msg);
+        t.setText(UiMessages.text(context, msg));
         ImageView icon = view.findViewById(R.id.toast_image);
         icon.setImageResource(drawableId);
         toast.setView(view);
@@ -98,7 +98,7 @@ public class ToastEx {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.view_toast, null);
         TextView t = view.findViewById(R.id.toast_text);
-        t.setText(msg);
+        t.setText(UiMessages.text(context, msg));
         toast.setView(view);
         toast.show();
     }

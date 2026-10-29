@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:contentDescription="关闭扫码"
+        android:contentDescription="@string/ui_activity_login_login_back_contentdescription"
         android:focusable="true" />
 
     <ScrollView
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="请将激活码置于摄像头前扫描"
+                android:text="@string/ui_activity_sdk_activation_scan_label_text"
                 android:textStyle="bold" />
 
             <FrameLayout

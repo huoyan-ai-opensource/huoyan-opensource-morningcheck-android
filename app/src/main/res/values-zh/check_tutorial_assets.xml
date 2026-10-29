@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 中文优先的多语言配置显式选择中文教程，避免使用次选英文资源。 -->
+    <item name="mc_check_tutorial" type="raw">@raw/mc_check_tutorial_zh</item>
+    <item name="mc_check_tutorial_preview" type="drawable">@drawable/mc_check_tutorial_preview_zh</item>
+</resources>

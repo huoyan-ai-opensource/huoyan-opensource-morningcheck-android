@@ -60,7 +60,7 @@
             android:layout_width="@dimen/dp_100"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/dp_12"
-            android:text="刷新状态"
+            android:text="@string/ui_activity_sdk_details_sdk_detail_refresh_text"
             android:visibility="gone" />
 
         <TextView

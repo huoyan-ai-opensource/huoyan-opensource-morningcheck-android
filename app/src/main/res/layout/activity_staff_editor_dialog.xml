@@ -84,7 +84,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:maxLines="2"
-                        android:text="重新读取资料并清空草稿"
+                        android:text="@string/ui_activity_staff_edit_staff_edit_reload_text"
                         android:textColor="@color/mc_blue"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -101,7 +101,7 @@
                         style="@style/PenButton"
                         android:layout_width="@dimen/dp_0"
                         android:layout_weight="1"
-                        android:text="关闭" />
+                        android:text="@string/ui_activity_staff_editor_dialog_staff_edit_cancel_text" />
 
                     <TextView
                         android:id="@+id/staff_edit_save"
@@ -109,7 +109,7 @@
                         android:layout_width="@dimen/dp_0"
                         android:layout_marginStart="@dimen/dp_4"
                         android:layout_weight="1"
-                        android:text="确定" />
+                        android:text="@string/ui_activity_staff_editor_dialog_staff_edit_save_text" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

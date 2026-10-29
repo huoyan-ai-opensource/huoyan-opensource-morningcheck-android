@@ -16,7 +16,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="当前模型" />
+            android:text="@string/ui_view_license_model_label_text" />
 
         <TextView
             android:id="@+id/settings_current_model"
@@ -43,7 +43,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="模型版本" />
+            android:text="@string/ui_view_license_model_label_text_2" />
 
         <TextView
             android:id="@+id/settings_model_version"

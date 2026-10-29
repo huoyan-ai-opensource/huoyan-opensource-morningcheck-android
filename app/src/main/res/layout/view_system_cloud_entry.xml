@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="未配置" />
+            android:text="@string/ui_view_system_cloud_entry_settings_business_cloud_value_text" />
 
         <TextView
             android:id="@+id/settings_business_cloud_action"
@@ -37,6 +37,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_6"
-            android:text="配置服务地址  ›" />
+            android:text="@string/ui_view_system_cloud_entry_settings_business_cloud_action_text" />
     </LinearLayout>
 </LinearLayout>

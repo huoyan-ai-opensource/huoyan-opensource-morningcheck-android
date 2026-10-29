@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="业务云连接" />
+        android:text="@string/mc_home_design_cloud" />
 
     <TextView
         style="@style/PenCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="服务地址" />
+        android:text="@string/ui_dialog_business_cloud_design_label_text" />
 
     <EditText
         android:id="@+id/settings_cloud_url"
@@ -38,7 +38,7 @@
             style="@style/PenButton"
             android:layout_width="@dimen/dp_0"
             android:layout_weight="1"
-            android:text="关闭" />
+            android:text="@string/ui_activity_staff_editor_dialog_staff_edit_cancel_text" />
 
         <TextView
             android:id="@+id/settings_save_cloud"
@@ -46,6 +46,6 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginStart="@dimen/dp_6"
             android:layout_weight="1"
-            android:text="确定" />
+            android:text="@string/ui_activity_staff_editor_dialog_staff_edit_save_text" />
     </LinearLayout>
 </LinearLayout>

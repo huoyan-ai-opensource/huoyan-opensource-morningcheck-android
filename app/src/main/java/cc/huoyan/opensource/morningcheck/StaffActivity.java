@@ -142,7 +142,7 @@ public final class StaffActivity extends BaseMorningActivity {
         BusinessListUi.bind(staffList);
         staffList.setAdapter(rowsAdapter);
         Spinner enabled = body.findViewById(R.id.staff_enabled_filter);
-        enabled.setAdapter(Ui.filterAdapter(this, java.util.Arrays.asList(getResources().getStringArray(R.array.list_filter_staff_statuses)), "启用状态"));
+        enabled.setAdapter(Ui.filterAdapter(this, java.util.Arrays.asList(getResources().getStringArray(R.array.list_filter_staff_statuses)), getString(R.string.i18n_b_staff_status)));
         enabled.setSelection(enabledFilter, false);
         enabled.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -258,7 +258,7 @@ public final class StaffActivity extends BaseMorningActivity {
                     pageError = true;
                     appendError = append;
                     showStaffPage();
-                    notice("员工读取失败：" + failure(error));
+                    notice(getString(R.string.i18n_b_staff_read_failed) + failure(error));
                 });
             }
         });
@@ -300,7 +300,7 @@ public final class StaffActivity extends BaseMorningActivity {
             } catch (Exception error) {
                 main.post(() -> {
                     if (!destroyed && foreground && version == departmentReadVersion)
-                        notice("部门筛选读取失败：" + failure(error));
+                        notice(getString(R.string.i18n_b_department_filter_failed) + failure(error));
                 });
             }
         });
@@ -323,7 +323,7 @@ public final class StaffActivity extends BaseMorningActivity {
 
     private void showStaffPage() {
         if (listLoading == null) listLoading = new LoadingDialog(this);
-        if (pageLoading && foreground) listLoading.showReadOnly("正在读取列表");
+        if (pageLoading && foreground) listLoading.showReadOnly(getString(R.string.i18n_b_reading_list));
         else listLoading.dismiss();
         if (content == null) return;
         List<JSONObject> values = staff;
@@ -339,8 +339,8 @@ public final class StaffActivity extends BaseMorningActivity {
         }
         staffList.setEnabled(!values.isEmpty() || !pageLoading);
         TextView more = content.findViewById(R.id.staff_load_more);
-        more.setText(pageLoading ? "" : pageError ? "点击重新读取"
-                                        : staffData == null || staffData.page >= staffData.totalPages ? "没有更多了" : "上拉加载更多");
+        more.setText(pageLoading ? "" : pageError ? getString(R.string.i18n_b_retry_read)
+                                        : staffData == null || staffData.page >= staffData.totalPages ? getString(R.string.i18n_b_end_list) : getString(R.string.i18n_b_load_more));
         TextView empty = content.findViewById(R.id.staff_empty);
         empty.setText(staffData == null || staffData.totalRows == 0
                 ? R.string.business_staff_empty : R.string.business_staff_no_match);
@@ -401,16 +401,16 @@ public final class StaffActivity extends BaseMorningActivity {
         public void onBindViewHolder(StaffRow holder, int position) {
             JSONObject item = item(position);
             String name = item.isNull("name") ? "" : item.optString("name").trim();
-            holder.name.setText(name.isEmpty() ? "无" : name);
+            holder.name.setText(name.isEmpty() ? getString(R.string.i18n_b_none) : name);
             holder.face.setTextColor(Ui.BLUE);
             StaffInfoUi.bindValues(item, holder.number, holder.enabled, holder.department, holder.health);
-            holder.enabled.setText(item.optBoolean("enabled", true) ? "启用" : "停用");
+            holder.enabled.setText(item.optBoolean("enabled", true) ? getString(R.string.i18n_b_enabled) : getString(R.string.i18n_b_disabled));
             holder.department.setTextColor(Ui.INK);
-            holder.face.setText(item.optBoolean("face_registered") ? "已录入" : "未录入");
+            holder.face.setText(item.optBoolean("face_registered") ? getString(R.string.i18n_b_face_enrolled) : getString(R.string.i18n_b_face_not_enrolled));
             long staffId = item.optLong("id");
-            holder.enroll.setContentDescription("录入人脸：" + name);
-            holder.edit.setContentDescription("编辑员工：" + name);
-            holder.delete.setContentDescription("删除员工：" + name);
+            holder.enroll.setContentDescription(getString(R.string.i18n_b_enroll_face_prefix) + name);
+            holder.edit.setContentDescription(getString(R.string.i18n_b_edit_staff_prefix) + name);
+            holder.delete.setContentDescription(getString(R.string.i18n_b_delete_staff_prefix) + name);
             holder.enroll.setOnClickListener(v -> {
                 if (!pageLoading) openStaffPage(new Intent(StaffActivity.this,
                         FaceEnrollmentActivity.class).putExtra(FaceEnrollmentActivity.EXTRA_STAFF_ID, staffId));
@@ -453,27 +453,27 @@ public final class StaffActivity extends BaseMorningActivity {
         if (deletingStaff || !foreground || deleteConfirmation != null && deleteConfirmation.isShowing())
             return;
         long staffId = person.optLong("id");
-        deleteConfirmation = ImmersiveUi.show(DesignConfirmationDialog.create(this, "删除员工？",
-                "将清除“" + person.optString("name") + "”的 SDK 人脸，并从员工名单移除。历史晨检记录保留，云端员工资料不受影响。",
-                "确认删除", (dialog, which) -> {
+        deleteConfirmation = ImmersiveUi.show(DesignConfirmationDialog.create(this, getString(R.string.i18n_b_delete_staff_title),
+                getString(R.string.i18n_b_delete_staff_message, person.optString("name")),
+                getString(R.string.i18n_b_confirm_delete), (dialog, which) -> {
                     if (deletingStaff) return;
                     if (!sdk.isConnected()) {
-                        notice("请先连接 SDK，确认人脸删除后才能删除员工档案");
+                        notice(getString(R.string.i18n_b_delete_connect_sdk));
                         return;
                     }
                     if (!application.faceOperations.beginWrite(staffId)) {
-                        notice("该员工的人脸操作仍在执行，请稍候重试");
+                        notice(getString(R.string.i18n_b_face_operation_busy));
                         return;
                     }
                     long generation = sdkGeneration();
                     deletingStaff = true;
                     deletingDialog = new LoadingDialog(this);
-                    deletingDialog.show("正在删除员工");
+                    deletingDialog.show(getString(R.string.i18n_b_deleting_staff));
                     runIo(() -> {
                         try {
                             JSONObject current = store.staff(staffId);
                             if (current == null || current.optLong("person_id") <= 0)
-                                throw new IllegalStateException("员工档案已变化，请刷新后操作");
+                                throw new IllegalStateException(getString(R.string.i18n_b_staff_changed));
                             long personId = current.optLong("person_id");
                             main.post(() -> deleteStaffFaces(staffId, personId, generation));
                         } catch (Exception error) {
@@ -489,27 +489,27 @@ public final class StaffActivity extends BaseMorningActivity {
     private void deleteStaffFaces(long staffId, long personId, long generation) {
         if (sdkGeneration() != generation || !sdk.isConnected()) {
             finishStaffDelete(staffId);
-            notice("连接已改变，员工档案已保留，请重新操作");
+            notice(getString(R.string.i18n_b_connection_changed));
             return;
         }
         try {
             sdk.forget(personId, (code, message, data) -> {
                 if (sdkGeneration() != generation || !FaceResultPolicy.isAbsentOrDeleted(code)) {
                     finishStaffDelete(staffId);
-                    notice(sdkGeneration() != generation ? "连接已改变，删除结果待确认，员工档案已保留" : message);
+                    notice(sdkGeneration() != generation ? getString(R.string.i18n_b_delete_pending) : message);
                     return;
                 }
                 runIo(() -> {
                     try {
                         JSONObject current = store.staff(staffId);
                         if (current != null && current.optLong("person_id") != personId)
-                            throw new IllegalStateException("员工身份已变化，档案已保留，请刷新后操作");
+                            throw new IllegalStateException(getString(R.string.i18n_b_identity_changed));
                         // SDK 人脸确认清除后，仅软删除本地档案，永久保留 person_id 占用。
                         store.removeStaff(staffId);
                         main.post(() -> {
                             finishStaffDelete(staffId);
                             application.notifyStaffChanged();
-                            toast("员工已删除");
+                            toast(getString(R.string.i18n_b_staff_deleted));
                         });
                     } catch (Exception error) {
                         main.post(() -> {
@@ -521,7 +521,7 @@ public final class StaffActivity extends BaseMorningActivity {
             });
         } catch (RuntimeException error) {
             finishStaffDelete(staffId);
-            notice("删除结果待确认，员工档案已保留：" + failure(error));
+            notice(getString(R.string.i18n_b_delete_unconfirmed_prefix) + failure(error));
         }
     }
 
@@ -542,12 +542,12 @@ public final class StaffActivity extends BaseMorningActivity {
     private void importStaff(TextView button) {
         final String base = setting("cloud_url", ""), token = setting("cloud_token", "");
         if (base.isEmpty() || token.isEmpty()) {
-            notice("请先在设备设置中填写晨检业务云地址和令牌。");
+            notice(getString(R.string.i18n_b_cloud_config_needed));
             return;
         }
         button.setEnabled(false);
-        button.setText("导入中");
-        toast("正在导入员工名册，人脸需要在新 SDK 中登记");
+        button.setText(getString(R.string.i18n_b_importing));
+        toast(getString(R.string.i18n_b_importing_roster));
         application.networkIo.execute(() -> {
             try {
                 Map<Long, JSONObject> imported = new LinkedHashMap<>();
@@ -558,7 +558,7 @@ public final class StaffActivity extends BaseMorningActivity {
                     pages = cc.huoyan.opensource.morningcheck.data.StaffPolicy.pageCount(response);
                     JSONObject data = response.optJSONObject("data");
                     if (data.has("current") && data.optInt("current") != number)
-                        throw new IllegalStateException("云端返回了不匹配的员工页码，未导入");
+                        throw new IllegalStateException(getString(R.string.i18n_b_roster_page_mismatch));
                     for (int i = 0; i < rows.length(); i++) {
                         JSONObject remote = rows.optJSONObject(i);
                         long id = remote == null ? 0 : remote.optLong("id");
@@ -574,22 +574,21 @@ public final class StaffActivity extends BaseMorningActivity {
                             merged.add(cc.huoyan.opensource.morningcheck.data.StaffPolicy.fromCloud(
                                     store.staff(entry.getKey()), entry.getValue(), entry.getKey(), System.currentTimeMillis()));
                         store.saveStaffBatch(merged);
-                        staffWriteSucceeded(() -> toast("已导入 " + merged.size()
-                                + " 位员工。新员工尚未登记人脸，请在员工列表点击录入。"));
+                        staffWriteSucceeded(() -> toast(getString(R.string.i18n_b_staff_imported, merged.size())));
                     } catch (Exception error) {
-                        main.post(() -> notice("名册未导入：" + failure(error)));
+                        main.post(() -> notice(getString(R.string.i18n_b_roster_not_imported_prefix) + failure(error)));
                     } finally {
                         main.post(() -> {
                             button.setEnabled(true);
-                            button.setText("云端导入");
+                            button.setText(getString(R.string.i18n_b_cloud_import));
                         });
                     }
                 });
             } catch (Exception error) {
                 main.post(() -> {
-                    notice("名册未导入：" + failure(error));
+                    notice(getString(R.string.i18n_b_roster_not_imported_prefix) + failure(error));
                     button.setEnabled(true);
-                    button.setText("云端导入");
+                    button.setText(getString(R.string.i18n_b_cloud_import));
                 });
             }
         });

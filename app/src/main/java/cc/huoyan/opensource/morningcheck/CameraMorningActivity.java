@@ -116,7 +116,7 @@ public abstract class CameraMorningActivity extends BaseMorningActivity {
             if (grants.length > 0 && grants[0] == PackageManager.PERMISSION_GRANTED)
                 ensureCamera(cameraForStage());
             else {
-                cameraError = "未授予相机权限，请在系统应用设置中允许使用相机";
+                cameraError = getString(R.string.i18n_a_camera_permission_is_denied_allow_it_in_system_app_settings);
                 onCameraError();
                 notice(cameraError);
             }

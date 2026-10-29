@@ -48,7 +48,7 @@ final class MorningVoice implements AutoCloseable {
             ready = language != TextToSpeech.LANG_MISSING_DATA
                     && language != TextToSpeech.LANG_NOT_SUPPORTED;
         }
-        if (!ready) Log.w("MorningVoice", "中文语音不可用，请检查系统语音引擎及中文语音包");
+        if (!ready) Log.w("MorningVoice", "当前语言的语音不可用，请检查系统语音引擎及对应语音包");
         reconcile();
     }
 
@@ -200,11 +200,13 @@ final class MorningVoice implements AutoCloseable {
     }
 
     private static final class AndroidSpeaker implements Speaker {
+        private final Context context;
         private final TextToSpeech speech;
         private final VoiceUtteranceTracker utterance = new VoiceUtteranceTracker();
         private long utteranceSequence;
 
         AndroidSpeaker(Context context, ReadyListener listener) {
+            this.context = context;
             speech = new TextToSpeech(context, listener::ready);
             speech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                 @Override
@@ -240,14 +242,14 @@ final class MorningVoice implements AutoCloseable {
 
         @Override
         public int setLanguage() {
-            return speech.setLanguage(Locale.CHINA);
+            return speech.setLanguage(UiMessages.isEnglish(context) ? Locale.US : Locale.CHINA);
         }
 
         @Override
         public int speak(String text) {
             String id = "晨检提示-" + (++utteranceSequence);
             utterance.start(id, SystemClock.elapsedRealtime());
-            int result = speech.speak(text, TextToSpeech.QUEUE_ADD, null, id);
+            int result = speech.speak(UiMessages.text(context, text), TextToSpeech.QUEUE_ADD, null, id);
             if (result == TextToSpeech.ERROR) utterance.finish(id);
             return result;
         }

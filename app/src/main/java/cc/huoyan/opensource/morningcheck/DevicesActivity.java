@@ -114,7 +114,7 @@ public final class DevicesActivity extends BaseDeviceSettingsActivity {
                 row.setBackgroundResource(selected ? R.drawable.mc_face_staff_selected : R.drawable.mc_field);
                 ((TextView) row.findViewById(R.id.discovery_address)).setTextColor(selected ? Ui.BLUE : Ui.INK);
                 TextView state = row.findViewById(R.id.discovery_selected);
-                state.setText(selected ? "已选择" : "选择");
+                state.setText(selected ? getString(R.string.i18n_a_selected_2) : getString(R.string.i18n_a_select));
                 state.setTextColor(selected ? Ui.BLUE : Ui.MUTED);
                 return row;
             }
@@ -158,7 +158,7 @@ public final class DevicesActivity extends BaseDeviceSettingsActivity {
                     .putString(MorningSdkSettings.ENDPOINT_KEY, endpoint).apply();
             formState.remove("sdk.transportDraft");
             sdkSession.reconnect(SdkConfig.webSocket(endpoint));
-            toast("连接设置已保存");
+            toast(getString(R.string.i18n_a_connection_settings_saved));
         } catch (IllegalArgumentException invalid) {
             notice(invalid.getMessage());
         }
@@ -177,7 +177,7 @@ public final class DevicesActivity extends BaseDeviceSettingsActivity {
         }
         int expected = ++queryGeneration;
         View body = getLayoutInflater().inflate(R.layout.dialog_design_loading, null);
-        ((TextView) body.findViewById(R.id.loading_message)).setText(scan ? "正在探测局域网设备…" : "正在测试连接…");
+        ((TextView) body.findViewById(R.id.loading_message)).setText(scan ? getString(R.string.i18n_a_finding_lan_devices) : getString(R.string.i18n_a_testing_connection));
         loading = new AlertDialog.Builder(this).create();
         loading.setView(body, 0, 0, 0, 0);
         loading.setOnCancelListener(dialog -> cancelDiscovery());
@@ -200,18 +200,18 @@ public final class DevicesActivity extends BaseDeviceSettingsActivity {
                         discovered.addAll(matches);
                         discoveryAdapter.notifyDataSetChanged();
                         refreshStatus();
-                        if (matches.isEmpty()) notice("未发现晨检 SDK，请检查设备与网络");
-                        else toast("发现 " + matches.size() + " 台设备");
+                        if (matches.isEmpty()) notice(getString(R.string.i18n_a_no_morning_check_sdk_found_check_the_device_and_network));
+                        else toast(getString(R.string.i18n_a_devices_found, matches.size()));
                     } else {
-                        if (connected) toast("连接测试成功");
-                        else notice("未收到晨检 SDK 回执，请检查 IP 与网络");
+                        if (connected) toast(getString(R.string.i18n_a_connection_test_passed));
+                        else notice(getString(R.string.i18n_a_no_sdk_response_check_the_ip_address_and_network));
                     }
                 });
             } catch (Exception error) {
                 main.post(() -> {
                     if (expected != queryGeneration || !uiReady()) return;
                     finishDiscovery();
-                    notice("探测失败：" + failure(error));
+                    notice(getString(R.string.i18n_a_device_scan_failed, failure(error)));
                 });
             }
         });
@@ -240,8 +240,8 @@ public final class DevicesActivity extends BaseDeviceSettingsActivity {
         formView.findViewById(R.id.settings_sdk_lan).setSelected(lan);
         formView.findViewById(R.id.settings_sdk_local_panel).setVisibility(lan ? View.GONE : View.VISIBLE);
         formView.findViewById(R.id.settings_sdk_lan_panel).setVisibility(lan ? View.VISIBLE : View.GONE);
-        ((TextView) formView.findViewById(R.id.settings_sdk_discovery_title)).setText("发现的设备（" + discovered.size() + "）");
-        ((TextView) formView.findViewById(R.id.settings_connection)).setText(sdk.isConnected() ? "已连接" : "未连接");
+        ((TextView) formView.findViewById(R.id.settings_sdk_discovery_title)).setText(getString(R.string.i18n_a_devices_found_title, discovered.size()));
+        ((TextView) formView.findViewById(R.id.settings_connection)).setText(sdk.isConnected() ? getString(R.string.i18n_a_connected) : getString(R.string.i18n_a_disconnected));
         boolean missing;
         try {
             getPackageManager().getApplicationInfo("cc.huoyan.morningcheck", 0);
@@ -258,14 +258,14 @@ public final class DevicesActivity extends BaseDeviceSettingsActivity {
             try {
                 startActivity(intent);
             } catch (android.content.ActivityNotFoundException | SecurityException unavailable) {
-                notice("晨检 SDK 已安装，但当前没有可从外部打开的页面。请通过连接方式接入 SDK 服务。");
+                notice(getString(R.string.i18n_a_the_sdk_is_installed_without_a_launchable_screen_connect_to_its_service_ins));
             }
             return;
         }
         try {
             getPackageManager().getApplicationInfo("cc.huoyan.morningcheck", 0);
             // 当前壳没有桌面入口，内部 MainActivity 也未导出，不能把它误报为未安装。
-            notice("晨检 SDK 已安装，以后台服务运行。请点击连接或重新连接，查看连接与授权状态。");
+            notice(getString(R.string.i18n_a_the_sdk_runs_as_a_background_service_connect_or_reconnect_to_view_its_conne));
         } catch (android.content.pm.PackageManager.NameNotFoundException missing) {
             sdkInstall.downloadAndInstall();
         }

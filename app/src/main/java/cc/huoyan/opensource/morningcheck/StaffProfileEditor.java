@@ -64,7 +64,7 @@ final class StaffProfileEditor {
         if (!active || host.destroyed || !host.foreground || pendingSavedId <= 0) return;
         long value = pendingSavedId;
         pendingSavedId = 0;
-        host.toast("员工资料已保存");
+        host.toast(host.getString(R.string.i18n_b_staff_saved));
         saved.accept(value);
     }
 
@@ -88,7 +88,7 @@ final class StaffProfileEditor {
     void requestCancel() {
         if (!active || host.destroyed || !host.foreground) return;
         if (saving || recoveringSave) {
-            loading.show("正在保存员工资料");
+            loading.show(host.getString(R.string.i18n_b_saving_staff));
             return;
         }
         captureDraft();
@@ -104,9 +104,9 @@ final class StaffProfileEditor {
             return;
         }
         ImmersiveUi.show(new ProjectDialog.Builder(host)
-                .setTitle("放弃本次修改？").setMessage("未保存的员工资料将丢弃。")
-                .setNegativeButton("继续编辑", null)
-                .setPositiveButton("放弃修改", (dialog, which) -> cancelled.run()).create());
+                .setTitle(host.getString(R.string.i18n_b_discard_title)).setMessage(host.getString(R.string.i18n_b_discard_message))
+                .setNegativeButton(host.getString(R.string.i18n_b_continue_editing), null)
+                .setPositiveButton(host.getString(R.string.i18n_b_discard), (dialog, which) -> cancelled.run()).create());
     }
 
     void setInitialProfile(JSONObject current) {
@@ -134,7 +134,8 @@ final class StaffProfileEditor {
     private boolean dateOpen;
     private int selectedField;
     private int restoredFocus = -1, restoredSelection;
-    private static final String[] FIELD_NAMES = {"姓名", "工号", "部门", "健康证"};
+    private static final int[] FIELD_NAMES = {R.string.i18n_b_staff_name, R.string.i18n_b_staff_number,
+            R.string.i18n_b_department, R.string.i18n_b_health_certificate};
     private static final int[] FIELD_GROUPS = {R.id.staff_edit_group_name,
             R.id.staff_edit_group_number, R.id.staff_edit_group_department, R.id.staff_edit_group_health};
 
@@ -229,12 +230,12 @@ final class StaffProfileEditor {
     void bind(View root) {
         content = root;
         {
-            ((TextView) host.findViewById(R.id.header_page_title)).setText(staffId > 0 ? "编辑员工" : "新增员工");
+            ((TextView) host.findViewById(R.id.header_page_title)).setText(staffId > 0 ? host.getString(R.string.i18n_b_edit_staff) : host.getString(R.string.i18n_b_add_staff));
             TextView dialogTitle = host.findViewById(R.id.staff_edit_dialog_title);
-            if (dialogTitle != null) dialogTitle.setText(staffId > 0 ? "编辑员工" : "新增员工");
+            if (dialogTitle != null) dialogTitle.setText(staffId > 0 ? host.getString(R.string.i18n_b_edit_staff) : host.getString(R.string.i18n_b_add_staff));
             host.findViewById(R.id.header_home).setOnClickListener(view -> requestCancel());
-            ((TextView) host.findViewById(R.id.header_back_label)).setText("返回员工");
-            host.findViewById(R.id.header_home).setContentDescription("返回员工");
+            ((TextView) host.findViewById(R.id.header_back_label)).setText(host.getString(R.string.i18n_b_back_staff));
+            host.findViewById(R.id.header_home).setContentDescription(host.getString(R.string.i18n_b_back_staff));
         }
         nameInput = content.findViewById(R.id.staff_edit_name);
         numberInput = content.findViewById(R.id.staff_edit_number);
@@ -246,7 +247,7 @@ final class StaffProfileEditor {
             if (!host.foreground || host.navigating || host.isFinishing() || saving || formLoading || missingEmployee)
                 return;
             captureDraft();
-            loading.show("正在读取部门");
+            loading.show(host.getString(R.string.i18n_b_reading_departments));
             host.runIo(() -> {
                 try {
                     java.util.List<JSONObject> options = host.store.departmentOptions(0);
@@ -256,7 +257,7 @@ final class StaffProfileEditor {
                         java.util.List<Long> ids = new java.util.ArrayList<>();
                         java.util.List<String> names = new java.util.ArrayList<>();
                         ids.add(0L);
-                        names.add("不分配部门");
+                        names.add(host.getString(R.string.i18n_b_no_department));
                         for (JSONObject option : options) {
                             ids.add(option.optLong("id"));
                             names.add(option.optString("path", option.optString("name")));
@@ -321,7 +322,8 @@ final class StaffProfileEditor {
         content.findViewById(R.id.staff_edit_field_navigation).setVisibility(phone ? View.VISIBLE : View.GONE);
         for (int i = 0; i < FIELD_GROUPS.length; i++)
             content.findViewById(FIELD_GROUPS[i]).setVisibility(!phone || selectedField == i ? View.VISIBLE : View.GONE);
-        ((TextView) content.findViewById(R.id.staff_edit_field_position)).setText((selectedField + 1) + "/4 · " + FIELD_NAMES[selectedField]);
+        ((TextView) content.findViewById(R.id.staff_edit_field_position)).setText((selectedField + 1)
+                + "/4 · " + host.getString(FIELD_NAMES[selectedField]));
     }
 
     private boolean steppedForm() {
@@ -348,7 +350,7 @@ final class StaffProfileEditor {
     }
 
     private void showHealthDate() {
-        healthInput.setText(healthDraft.isEmpty() ? "选择有效期（可留空）" : healthDraft);
+        healthInput.setText(healthDraft.isEmpty() ? host.getString(R.string.i18n_b_choose_expiry_optional) : healthDraft);
     }
 
     private void openDatePicker() {
@@ -370,7 +372,7 @@ final class StaffProfileEditor {
     }
 
     private void showDepartment() {
-        departmentInput.setText(departmentDraft.isEmpty() ? "选择部门（可不分配）" : departmentDraft);
+        departmentInput.setText(departmentDraft.isEmpty() ? host.getString(R.string.i18n_b_choose_department_optional) : departmentDraft);
     }
 
 
@@ -419,10 +421,10 @@ final class StaffProfileEditor {
                             deliverSaved();
                             return;
                         }
-                        notice("上次保存未完成，草稿已保留，请检查后重试。");
+                        notice(host.getString(R.string.i18n_b_save_incomplete));
                     }
                     missingEmployee = current == null;
-                    if (missingEmployee) notice("员工档案已删除，请返回员工管理。");
+                    if (missingEmployee) notice(host.getString(R.string.i18n_b_staff_removed));
                     else if (!draftReady) {
                         expectedProfile = obj("name", current.optString("name"), "department", current.optString("department"),
                                 "department_id", current.optLong("department_id", 0),
@@ -446,7 +448,7 @@ final class StaffProfileEditor {
                         return;
                     formLoading = false;
                     missingEmployee = true;
-                    notice("员工读取失败：" + host.failure(error));
+                    notice(host.getString(R.string.i18n_b_staff_read_failed) + host.failure(error));
                 });
             }
         });
@@ -458,7 +460,7 @@ final class StaffProfileEditor {
             return;
         }
         if (!active || host.destroyed || !host.foreground) return;
-        feedback = value == null ? "保存失败，请重试" : value;
+        feedback = value == null ? host.getString(R.string.i18n_b_save_failed) : value;
         ToastEx.showFailureToast(host, feedback);
         updateUi();
     }
@@ -479,11 +481,11 @@ final class StaffProfileEditor {
         View save = content.findViewById(R.id.staff_edit_save);
         save.setEnabled(enabled);
         save.setAlpha(enabled ? 1f : 0.45f);
-        ((TextView) save).setText(designDialog ? "确定" : "保存员工");
+        ((TextView) save).setText(designDialog ? host.getString(R.string.i18n_b_confirm) : host.getString(R.string.i18n_b_save_staff));
         content.findViewById(R.id.staff_edit_feedback).setVisibility(View.GONE);
         content.findViewById(R.id.staff_edit_reload).setVisibility(View.GONE);
         if (host.foreground && (formLoading || saving || recoveringSave))
-            loading.show(formLoading ? "正在读取员工资料" : "正在保存员工资料");
+            loading.show(formLoading ? host.getString(R.string.i18n_b_reading_staff) : host.getString(R.string.i18n_b_saving_staff));
         else loading.dismiss();
     }
 
@@ -503,7 +505,7 @@ final class StaffProfileEditor {
             return;
         captureDraft();
         if (nameDraft.trim().isEmpty()) {
-            invalidField(0, nameInput, "请输入姓名");
+            invalidField(0, nameInput, host.getString(R.string.i18n_b_name_required));
             return;
         }
         final String staffNumber;
@@ -518,7 +520,7 @@ final class StaffProfileEditor {
             try {
                 expiry = LocalDate.parse(expiry).toString();
             } catch (Exception invalid) {
-                notice("健康证日期无效，请重新选择日期");
+                notice(host.getString(R.string.i18n_b_health_date_invalid));
                 return;
             }
         }
@@ -541,7 +543,7 @@ final class StaffProfileEditor {
                     savedId = host.store.createStaffProfile(value);
                 } else {
                     if (expected == null)
-                        throw new IllegalStateException("请重新读取员工资料后保存");
+                        throw new IllegalStateException(host.getString(R.string.i18n_b_reload_before_save));
                     // 仅比较并修改本页资料字段；人脸回执及启停按钮不会被旧表单覆盖。
                     host.store.patchStaffProfile(staffId, expected, changes);
                     savedId = staffId;
@@ -562,7 +564,9 @@ final class StaffProfileEditor {
                     String message = host.failure(error);
                     feedback = message;
                     if (!host.foreground) return;
-                    if (message.contains("工号")) invalidField(1, numberInput, message);
+                    // 字段定位依据原始错误，不能依赖翻译后的提示文案。
+                    String rawMessage = error.getMessage();
+                    if (rawMessage != null && rawMessage.contains("工号")) invalidField(1, numberInput, message);
                     else notice(message);
                     updateUi();
                 });

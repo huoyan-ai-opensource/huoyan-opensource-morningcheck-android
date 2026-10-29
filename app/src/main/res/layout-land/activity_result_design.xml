@@ -54,14 +54,14 @@
                 android:id="@+id/result_stay"
                 style="@style/PenButton"
                 android:layout_width="wrap_content"
-                android:text="停留查看" />
+                android:text="@string/mc_result_stay_here" />
 
             <TextView
                 android:id="@+id/result_next"
                 style="@style/PenPrimary"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="下一位" />
+                android:text="@string/ui_activity_result_design_result_next_text" />
 
             <TextView
                 android:id="@+id/result_exit"

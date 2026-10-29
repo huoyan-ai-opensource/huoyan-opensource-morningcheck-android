@@ -12,7 +12,7 @@
         style="@style/PenSegment"
         android:layout_width="@dimen/dp_0"
         android:layout_weight="1"
-        android:text="串口" />
+        android:text="@string/ui_view_lighting_tabs_lighting_serial_mode_text" />
 
     <TextView
         android:id="@+id/lighting_gpio_mode"

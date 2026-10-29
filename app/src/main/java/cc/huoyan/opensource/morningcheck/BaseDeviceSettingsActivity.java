@@ -172,7 +172,7 @@ public abstract class BaseDeviceSettingsActivity extends BaseMorningActivity {
         View form = formView;
         if (destroyed || form == null) return;
         TextView connectionText = form.findViewById(R.id.settings_connection);
-        if (connectionText != null) connectionText.setText(connection);
+        if (connectionText != null) connectionText.setText(UiMessages.text(this, connection));
         TextView transport = form.findViewById(R.id.settings_sdk_transport);
         if (transport != null) transport.setText(getString(R.string.settings_sdk_transport_value,
                 getResources().getStringArray(R.array.settings_sdk_transports)[MorningSdkSettings.transportIndex(prefs)]));
@@ -223,8 +223,8 @@ public abstract class BaseDeviceSettingsActivity extends BaseMorningActivity {
     protected String statusDetails() {
         MorningSdkState state = sdkSession.viewState();
         MorningSdkSession.Operation operation = sdkSession.operation();
-        return state.title + "\n" + state.detail
-                + (operationSummary(operation).isEmpty() ? "" : "\n\n" + operationSummary(operation));
+        return UiMessages.text(this, state.title) + "\n" + UiMessages.text(this, state.detail)
+                + (operationSummary(operation).isEmpty() ? "" : "\n\n" + UiMessages.text(this, operationSummary(operation)));
     }
 
     protected static String operationSummary(MorningSdkSession.Operation operation) {
@@ -243,9 +243,9 @@ public abstract class BaseDeviceSettingsActivity extends BaseMorningActivity {
             return;
         }
         View body = getLayoutInflater().inflate(R.layout.dialog_sdk_details, null);
-        ((TextView) body.findViewById(R.id.sdk_details_text)).setText(message);
+        ((TextView) body.findViewById(R.id.sdk_details_text)).setText(UiMessages.text(this, message));
         formDialog = ImmersiveUi.show(new ProjectDialog.Builder(this).setTitle(title).setView(body)
-                .setPositiveButton("知道了", null).create());
+                .setPositiveButton(getString(R.string.i18n_a_ok), null).create());
         AlertDialog shown = formDialog;
         formDialog.setOnDismissListener(dialog -> {
             if (formDialog == shown) formDialog = null;
@@ -264,20 +264,20 @@ public abstract class BaseDeviceSettingsActivity extends BaseMorningActivity {
             try {
                 if (key.equals("sdk_url") && !allowConnectionChange()) return;
                 if (key.equals("cloud_url") && !validHttp(value))
-                    throw new IllegalArgumentException("地址无效");
+                    throw new IllegalArgumentException(getString(R.string.i18n_a_invalid_address));
                 if (key.equals("sdk_url")) SdkConfig.webSocket(value);
                 if ((key.equals("shop_id") || key.equals("device_id") || key.equals("baud")) && Long.parseLong(value) <= 0)
-                    throw new IllegalArgumentException("请输入正整数");
+                    throw new IllegalArgumentException(getString(R.string.i18n_a_enter_a_positive_whole_number));
                 if (key.equals("temperature_limit")) {
                     double n = Double.parseDouble(value);
                     if (!Double.isFinite(n) || n < 36.1 || n > 43)
-                        throw new IllegalArgumentException("范围为 36.1 至 43°C");
+                        throw new IllegalArgumentException(getString(R.string.i18n_a_valid_range_36_1_43_c));
                 }
                 if (key.equals("serial_path") && !value.startsWith("/dev/"))
-                    throw new IllegalArgumentException("串口路径应在 /dev/ 下");
+                    throw new IllegalArgumentException(getString(R.string.i18n_a_serial_port_path_must_start_with_dev));
                 prefs.edit().putString(key, value).apply();
                 updateSavedValue(key, value);
-                toast("设置已保存");
+                toast(getString(R.string.i18n_a_settings_saved));
                 refreshStatus();
             } catch (Exception error) {
                 notice(failure(error));
@@ -335,7 +335,7 @@ public abstract class BaseDeviceSettingsActivity extends BaseMorningActivity {
         if (!uiReady()) return false;
         MorningSdkSession.Operation operation = sdkSession.operation();
         if (!operation.running) return true;
-        notice("正在" + operation.label + "，请等待本次操作结束后修改连接配置或重连。");
+        notice(getString(R.string.i18n_a_operation_wait, UiMessages.text(this, operation.label)));
         return false;
     }
 
@@ -351,7 +351,7 @@ public abstract class BaseDeviceSettingsActivity extends BaseMorningActivity {
             input.setSaveEnabled(false);
         input.setText(value);
         formDialog = ImmersiveUi.show(new ProjectDialog.Builder(this).setTitle(title).setView(body)
-                .setNegativeButton("取消", null).setPositiveButton("保存", (dialog, which) -> {
+                .setNegativeButton(getString(R.string.i18n_a_cancel), null).setPositiveButton(getString(R.string.i18n_a_save), (dialog, which) -> {
                     if (uiReady()) {
                         action.accept(input.getText().toString().trim());
                     }

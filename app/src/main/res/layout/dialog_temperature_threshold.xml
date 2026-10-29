@@ -9,7 +9,7 @@
         style="@style/PenTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="异常体温阈值 (°C)" />
+        android:text="@string/ui_dialog_temperature_threshold_label_text" />
 
     <EditText
         android:id="@+id/threshold_draft"
@@ -176,7 +176,7 @@
             android:layout_weight="1"
             android:background="@drawable/mc_field_action"
             android:tag="threshold:删除"
-            android:text="删除"
+            android:text="@string/face_samples_delete"
             android:textColor="@color/mc_ink" />
     </LinearLayout>
 
@@ -186,7 +186,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:accessibilityLiveRegion="polite"
-        android:text="请输入 36.1–43°C 范围内的有效数值"
+        android:text="@string/ui_dialog_temperature_threshold_threshold_error_text"
         android:textColor="@color/mc_orange"
         android:visibility="gone" />
 
@@ -201,7 +201,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_weight="1"
             android:background="@drawable/mc_field_action"
-            android:text="取消"
+            android:text="@string/activation_code_cancel"
             android:textColor="@color/mc_ink" />
 
         <TextView
@@ -210,6 +210,6 @@
             android:layout_width="@dimen/dp_0"
             android:layout_marginStart="@dimen/dp_4"
             android:layout_weight="1"
-            android:text="确定" />
+            android:text="@string/ui_activity_staff_editor_dialog_staff_edit_save_text" />
     </LinearLayout>
 </LinearLayout>

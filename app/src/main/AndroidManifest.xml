@@ -53,7 +53,7 @@
         android:name=".MorningApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="火眼晨检-开源版"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">

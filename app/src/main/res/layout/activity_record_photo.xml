@@ -65,14 +65,14 @@
                 android:id="@+id/photo_previous"
                 style="@style/PenButton"
                 android:layout_width="wrap_content"
-                android:text="上一张" />
+                android:text="@string/ui_activity_record_photo_photo_previous_text" />
 
             <TextView
                 android:id="@+id/photo_next"
                 style="@style/PenPrimary"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="下一张" />
+                android:text="@string/ui_activity_record_photo_photo_next_text" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

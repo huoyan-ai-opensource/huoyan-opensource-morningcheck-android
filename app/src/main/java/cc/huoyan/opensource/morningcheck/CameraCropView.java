@@ -26,7 +26,7 @@ public final class CameraCropView extends View {
 
     public CameraCropView(Context context, AttributeSet attributes) {
         super(context, attributes);
-        setContentDescription("拖动四角调整采集范围");
+        setContentDescription(getContext().getString(R.string.i18n_a_drag_the_corners_to_adjust_the_capture_area));
     }
 
     void configure(CameraImageOptions options, Listener listener) {

@@ -1,0 +1,727 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ui_message_values">
+        <item>"Capture area must stay within the frame and be at least 5% wide and high"</item>
+        <item>"RGB frame data does not match its dimensions"</item>
+        <item>"External camera"</item>
+        <item>"Front camera"</item>
+        <item>"Rear camera"</item>
+        <item>"Camera host or callback is missing"</item>
+        <item>"Allow camera access first"</item>
+        <item>"This device does not support the system camera"</item>
+        <item>"No usable camera stream configuration"</item>
+        <item>"This camera does not support the selected resolution. Select another."</item>
+        <item>"No system camera found. Check the connection and Camera2 support."</item>
+        <item>"Camera disconnected. Reconnect and reopen morning check."</item>
+        <item>"Another app is using the camera. Close it and try again."</item>
+        <item>"The system has disabled the camera"</item>
+        <item>"This camera cannot capture preview and recognition frames together. Use another camera."</item>
+        <item>"Camera stream interrupted. Reconnect."</item>
+        <item>"Could not read this camera\'s frame format"</item>
+        <item>"Camera does not support preview and recognition frames"</item>
+        <item>"Preview and recognition aspect ratios are incompatible"</item>
+        <item>"Camera does not support YUV recognition frames"</item>
+        <item>"Camera does not support TextureView preview"</item>
+        <item>"Temperature not measured"</item>
+        <item>"A valid writable bitmap is required for annotation"</item>
+        <item>"The original hand image is missing"</item>
+        <item>"Nail polish"</item>
+        <item>"Bandage"</item>
+        <item>"Ring"</item>
+        <item>"Wound"</item>
+        <item>"USB camera unplugged. Reconnect and reopen this page."</item>
+        <item>"USB camera permission expired. Allow access again."</item>
+        <item>"USB camera connection interrupted. Reopen this page."</item>
+        <item>"USB camera access denied. Reopen this page and allow access."</item>
+        <item>"No usable camera preview resolution"</item>
+        <item>"No frames received from the USB camera. Check that no other app is using it, then retry."</item>
+        <item>"USB camera returned an incomplete RGB frame"</item>
+        <item>"USB camera"</item>
+        <item>"Multiple USB cameras share this model. Select a specific camera in device settings."</item>
+        <item>"The selected USB camera is disconnected or moved. Select it again in device settings."</item>
+        <item>"Invalid camera frame dimensions or rotation"</item>
+        <item>"Staff ID must be greater than zero"</item>
+        <item>"Invalid staff pagination parameters"</item>
+        <item>"Empty response"</item>
+        <item>"Response status code is missing"</item>
+        <item>"Response status code is not an integer"</item>
+        <item>"Invalid business response format"</item>
+        <item>"Business request rejected"</item>
+        <item>"Configure the business login token first"</item>
+        <item>"Server URL cannot contain credentials, a query or a fragment"</item>
+        <item>"Server URL must be a valid HTTP or HTTPS address"</item>
+        <item>"Local staff data is damaged. Keep the data and contact an administrator."</item>
+        <item>"Invalid local staff ID. Cannot preserve the face association."</item>
+        <item>"Invalid staff status filter"</item>
+        <item>"Invalid parent department ID"</item>
+        <item>"Invalid local pagination parameters"</item>
+        <item>"Enter a department name"</item>
+        <item>"Invalid department ID"</item>
+        <item>"Department deleted. Return to the list and refresh."</item>
+        <item>"Department name changed. Reopen it before editing."</item>
+        <item>"Parent department changed. Reopen it before editing."</item>
+        <item>"Parent department no longer exists. Select another."</item>
+        <item>"A department cannot be its own parent or a descendant"</item>
+        <item>"A department with this name already exists under the selected parent"</item>
+        <item>"Department name changed. Reopen it before deleting."</item>
+        <item>"Parent department changed. Reopen it before deleting."</item>
+        <item>"Move or remove this department\'s subdepartments before deleting it"</item>
+        <item>"This department has check records and cannot be deleted"</item>
+        <item>"The selected department was deleted. Select another."</item>
+        <item>"The selected department was deleted, renamed or has a duplicate name. Select it again."</item>
+        <item>"Invalid department filter"</item>
+        <item>"Uploaded"</item>
+        <item>"Needs verification"</item>
+        <item>"Invalid check record filter"</item>
+        <item>"Invalid check result filter"</item>
+        <item>"Invalid check date filter"</item>
+        <item>"Invalid check statistics time range"</item>
+        <item>"Local data is damaged. Keep the data and contact an administrator."</item>
+        <item>"One SDK person ID belongs to multiple staff. Contact an administrator."</item>
+        <item>"Invalid local staff data"</item>
+        <item>"Invalid local staff ID. Cannot save."</item>
+        <item>"Staff profile was deleted and cannot be restored or overwritten"</item>
+        <item>"Invalid staff face association. Contact an administrator."</item>
+        <item>"A staff member\'s SDK person ID cannot be changed"</item>
+        <item>"Use Delete staff to disable this profile"</item>
+        <item>"Could not generate SDK person ID"</item>
+        <item>"SDK person ID limit reached"</item>
+        <item>"Could not generate staff ID"</item>
+        <item>"Staff ID limit reached"</item>
+        <item>"This staff number is already in use. Enter another."</item>
+        <item>"This staff ID already exists"</item>
+        <item>"Staff profile deleted. Refresh before continuing."</item>
+        <item>"Invalid staff edit snapshot"</item>
+        <item>"Staff profile deleted. Return to the list and refresh."</item>
+        <item>"Staff details were updated. Reopen the details before editing."</item>
+        <item>"Check record not found"</item>
+        <item>"Local data has no ID and cannot be saved"</item>
+        <item>"Uploading"</item>
+        <item>"The last upload was interrupted. Check the cloud record before retrying."</item>
+        <item>"Photo record or stage ID is missing"</item>
+        <item>"Invalid photo to save"</item>
+        <item>"Could not create the photo directory"</item>
+        <item>"Photo encoding failed"</item>
+        <item>"Invalid photo path"</item>
+        <item>"A cycle exists in the department hierarchy. Contact an administrator."</item>
+        <item>"Invalid data format"</item>
+        <item>"Local data was deleted and cannot be recreated by a late response"</item>
+        <item>"Local data ID and creation time cannot be changed"</item>
+        <item>"Face &amp; head"</item>
+        <item>"Identity capture"</item>
+        <item>"Head check"</item>
+        <item>"Back-of-hand check"</item>
+        <item>"Palm check"</item>
+        <item>"Backs of hands"</item>
+        <item>"Palms"</item>
+        <item>"Health certificate expired or not set"</item>
+        <item>"Temperature not measured"</item>
+        <item>"Work cap"</item>
+        <item>"Mask"</item>
+        <item>"Temperature"</item>
+        <item>"Not measured"</item>
+        <item>"Device capture"</item>
+        <item>"Not uploaded"</item>
+        <item>"Enter a staff number. It cannot be empty."</item>
+        <item>"Cloud staff profile is empty"</item>
+        <item>"Cloud staff ID is missing or does not match. Local profile was not overwritten."</item>
+        <item>"Local and cloud staff IDs do not match"</item>
+        <item>"Cloud staff name is missing. Local profile was not overwritten."</item>
+        <item>"Roster response has no data.records. Nothing was imported."</item>
+        <item>"Invalid cloud roster pagination. Nothing was imported."</item>
+        <item>"Cloud roster page count and content disagree. Nothing was imported."</item>
+        <item>"None"</item>
+        <item>"Unassigned"</item>
+        <item>"The current date is required to show certificate status"</item>
+        <item>"Expired"</item>
+        <item>"Valid"</item>
+        <item>"No valid activation details in this QR code. Use an activation QR code."</item>
+        <item>"The check pipeline and rules are required"</item>
+        <item>"Identity confirmed. Keep facing the camera."</item>
+        <item>"Please face the camera"</item>
+        <item>"Check complete. Preparing results…"</item>
+        <item>"Please remove your gloves"</item>
+        <item>"Face the backs of both hands toward the camera"</item>
+        <item>"Face both palms toward the camera"</item>
+        <item>"Place both hands fully in the check area"</item>
+        <item>"No work cap"</item>
+        <item>"No work cap"</item>
+        <item>"No mask"</item>
+        <item>"No mask"</item>
+        <item>"Work cap not permitted"</item>
+        <item>"Please remove your work cap"</item>
+        <item>"Mask not permitted"</item>
+        <item>"Please remove your mask"</item>
+        <item>"Required sample count must be greater than zero"</item>
+        <item>"Temperature thresholds must satisfy 34 ≤ lower &lt; upper ≤ 43°C"</item>
+        <item>"Check rules are required"</item>
+        <item>"Invalid temperature reading. Measure again (34–43°C)."</item>
+        <item>"Identity confirmed. Move closer to the thermometer for a valid reading."</item>
+        <item>"Temperature captured. Keep your face in view to confirm identity."</item>
+        <item>"Face the camera for identification"</item>
+        <item>"Face the camera and move closer to the thermometer"</item>
+        <item>"Keep your face in view for the headwear check"</item>
+        <item>"Headwear does not meet the rules. Adjust it to continue."</item>
+        <item>"Checking cap and mask. Hold still."</item>
+        <item>"Remove your gloves and show both hands"</item>
+        <item>"Show the backs of both hands to the camera"</item>
+        <item>"Show both palms to the camera"</item>
+        <item>"Capturing backs of hands. Hold still."</item>
+        <item>"Capturing palms. Hold still."</item>
+        <item>"Keep your face in view to check cap and mask"</item>
+        <item>"Turn both hands over, palms toward the camera"</item>
+        <item>"Check complete. Checked items normal; temperature not measured."</item>
+        <item>"Check complete. All items normal."</item>
+        <item>"Check complete. Review abnormal items."</item>
+        <item>"Unknown check stage"</item>
+        <item>"Please wear your mask and work cap"</item>
+        <item>"Please wear your mask"</item>
+        <item>"Please wear your work cap"</item>
+        <item>"Please face the camera for the head check"</item>
+        <item>"Show the backs of both hands"</item>
+        <item>"Turn both palms toward the camera"</item>
+        <item>"Check normal"</item>
+        <item>"Check abnormal. View the results."</item>
+        <item>"Face detection response has no valid result"</item>
+        <item>"Incomplete face detection item"</item>
+        <item>"Invalid face bounding box"</item>
+        <item>"Incomplete face landmarks"</item>
+        <item>"Invalid face detection response format"</item>
+        <item>"Invalid face coordinates or score"</item>
+        <item>"SDK has not confirmed face details"</item>
+        <item>"SDK face details have no uids. Local enrollment status was not changed."</item>
+        <item>"Invalid SDK face ID. Local enrollment status was not changed."</item>
+        <item>"Duplicate SDK face IDs. Local enrollment status was not changed."</item>
+        <item>"Invalid SDK face items. Local enrollment status was not changed."</item>
+        <item>"Invalid or duplicate SDK face item IDs. Local enrollment status was not changed."</item>
+        <item>"Invalid SDK face image field. Local enrollment status was not changed."</item>
+        <item>"Invalid date shortcut filter"</item>
+        <item>"Invalid date and time range"</item>
+        <item>"Start time cannot be after end time"</item>
+        <item>"Invalid query time or time zone"</item>
+        <item>"On and off commands must differ"</item>
+        <item>"Select a lighting control mode"</item>
+        <item>"Enter a valid lighting serial port and baud rate"</item>
+        <item>"On and off levels must be 0 and 1 respectively"</item>
+        <item>"Enter GPIO numbers"</item>
+        <item>"GPIO numbers must be integers separated by commas"</item>
+        <item>"Configure at most 16 GPIOs"</item>
+        <item>"Lighting baud rate or level is not a valid whole number"</item>
+        <item>"Enter a lighting command"</item>
+        <item>"Use 1–64 printable ASCII letters, digits or symbols"</item>
+        <item>"Use 1–64 integers from 0 to 255, separated by spaces"</item>
+        <item>"Enter a valid character, decimal or hexadecimal command for the selected format"</item>
+        <item>"Select character, decimal or hexadecimal format"</item>
+        <item>"The command contains nonprintable bytes. Use decimal or hexadecimal."</item>
+        <item>"Lighting configuration is missing"</item>
+        <item>"Light-on command sent. Check the physical light."</item>
+        <item>"Light-off command sent"</item>
+        <item>"The selected path is not a serial device"</item>
+        <item>"No read permission for the lighting serial port"</item>
+        <item>"No write permission for the lighting serial port"</item>
+        <item>"Invalid temperature data length"</item>
+        <item>"Mode change callback is missing"</item>
+        <item>"Configure a valid thermometer serial port and baud rate"</item>
+        <item>"Select a valid temperature mode"</item>
+        <item>"Connecting to thermometer…"</item>
+        <item>"Thermometer connected. Waiting for a reading."</item>
+        <item>"Thermometer disconnected"</item>
+        <item>"No success response within 10 seconds. Mode change unconfirmed. Try again."</item>
+        <item>"No valid temperature within 10 seconds. Check the thermometer and retry."</item>
+        <item>"Thermometer did not return success. Mode change failed."</item>
+        <item>"Temperature received"</item>
+        <item>"Thermometer working"</item>
+        <item>"No read permission for the serial port"</item>
+        <item>"No write permission for the serial port"</item>
+        <item>"Temperature callback is missing"</item>
+        <item>"Application Context is required"</item>
+        <item>"Could not read the SDK workplace binding"</item>
+        <item>"No workplace signed in"</item>
+        <item>"SDK connection changed. Sign in to the workplace again."</item>
+        <item>"Scan the workplace QR code"</item>
+        <item>"Workplace login must run on the main thread"</item>
+        <item>"Workplace QR code cannot be empty"</item>
+        <item>"Invalid SDK connection settings. Check device settings first."</item>
+        <item>"Connecting to morning check SDK…"</item>
+        <item>"SDK connection timed out. Workplace binding was not sent."</item>
+        <item>"Cannot connect to SDK. Check the settings and service."</item>
+        <item>"Binding workplace. Please wait…"</item>
+        <item>"Binding result unknown. Check the workplace binding before continuing."</item>
+        <item>"Incomplete cloud workplace details. Verify the binding result."</item>
+        <item>"Bound successfully. Saving workplace details…"</item>
+        <item>"Workplace signed in"</item>
+        <item>"Could not save workplace details. Cloud binding may have succeeded. Verify first."</item>
+        <item>"SDK connection status unknown"</item>
+        <item>"SDK connection changed; activation result unknown. Check device status before continuing."</item>
+        <item>"SDK not connected"</item>
+        <item>"Activation is in progress. Wait before checking status."</item>
+        <item>"Activation started. Previous query results are invalid. Query again."</item>
+        <item>"Activation changed. Previous query results are invalid. Query again."</item>
+        <item>"SDK not connected. Request was not sent."</item>
+        <item>"Activation code and model code are required"</item>
+        <item>"Invalid activation parameters"</item>
+        <item>"Activation"</item>
+        <item>"Activating. Please wait…"</item>
+        <item>"Activation successful"</item>
+        <item>"Activation"</item>
+        <item>"Activation confirmation timed out. Check SDK status before continuing."</item>
+        <item>"No reason provided"</item>
+        <item>"Invalid SDK snapshot"</item>
+        <item>"SDK disconnected"</item>
+        <item>"Connecting to morning check service. Check the SDK app and connection settings."</item>
+        <item>"SDK stopped"</item>
+        <item>"Reconnect to the morning check service and initialize it."</item>
+        <item>"Device disabled"</item>
+        <item>"Contact an administrator about device status. Queries and initialization checks remain available."</item>
+        <item>"Device identity awaiting review"</item>
+        <item>"Key rotation is awaiting review. Checks are unavailable until approved. Refresh for the result."</item>
+        <item>"Device identity review rejected"</item>
+        <item>"Contact an administrator, then initialize again after the issue is resolved."</item>
+        <item>"Identity recovery requested too often"</item>
+        <item>"Wait before initializing again. The service does not provide an exact retry time."</item>
+        <item>"Restoring device identity…"</item>
+        <item>"Review approved. Restoring certificate and models. Please wait."</item>
+        <item>"Device identity needs recovery"</item>
+        <item>"Device private key unavailable. Initialize to recover identity before checking."</item>
+        <item>"Waiting for initialization"</item>
+        <item>"Connected to morning check service. Waiting for initialization."</item>
+        <item>"SDK initializing"</item>
+        <item>"Device registered"</item>
+        <item>"Verifying certificate and models. Wait for initialization."</item>
+        <item>"SDK activation required"</item>
+        <item>"Enter an activation code in device licensing. Workplace login and activation are separate."</item>
+        <item>"SDK license expired"</item>
+        <item>"Reactivate to use identification, head/hand checks and enrollment. Staff management and other functions remain available."</item>
+        <item>"SDK license verification failed"</item>
+        <item>"Check device licensing, reactivate and check status again."</item>
+        <item>"Downloading check models…"</item>
+        <item>"Preparing check models…"</item>
+        <item>"Check models not ready"</item>
+        <item>"Check the network and storage, then initialize again. Models must finish loading after activation."</item>
+        <item>"Network unavailable for initialization"</item>
+        <item>"Check the network and SDK cloud URL. Initialize again after recovery."</item>
+        <item>"SDK initialization incomplete"</item>
+        <item>"Check licensing and permission prompts, resolve the issue and initialize again."</item>
+        <item>"Checking SDK status…"</item>
+        <item>"Complete device status is not available. Refresh before starting a check."</item>
+        <item>"The SDK cloud URL save is unconfirmed. Submit the same URL again. Initialization, activation and binding may be limited until then."</item>
+        <item>"Device settings save is unconfirmed. Check the operation result in licensing and follow the retry instructions."</item>
+        <item>"Device settings need saving"</item>
+        <item>"Completing activation…"</item>
+        <item>"Checking SDK license…"</item>
+        <item>"License verification failed. Check device licensing and refresh before checking."</item>
+        <item>"Valid license status is unavailable. Refresh device status before checking."</item>
+        <item>"Models are still loading. Refresh later or initialize again."</item>
+        <item>"Checking models…"</item>
+        <item>"Model readiness is unknown. Refresh device status before checking."</item>
+        <item>"SDK busy"</item>
+        <item>"SDK available offline"</item>
+        <item>"License and models are ready for local checks. Cloud features are unavailable; status updates automatically after recovery."</item>
+        <item>"License and models are ready for local checks. Cloud is disconnected."</item>
+        <item>"License and models are ready. You can start a check."</item>
+        <item>"SDK ready"</item>
+        <item>"Models downloaded and loading. Start checking when the device is ready."</item>
+        <item>"Preparing certificate and models. Total download size is not yet known. Please wait."</item>
+        <item>"Initialization"</item>
+        <item>"License renewal"</item>
+        <item>"Workplace binding"</item>
+        <item>"Cloud URL update"</item>
+        <item>"Staff enrollment"</item>
+        <item>"Face library maintenance"</item>
+        <item>"Staff identification"</item>
+        <item>"Head check"</item>
+        <item>"Hand check"</item>
+        <item>"Device task"</item>
+        <item>"Waiting for SDK license information"</item>
+        <item>"Not recorded"</item>
+        <item>"No renewal recorded"</item>
+        <item>"Not scheduled"</item>
+        <item>"Recovery required"</item>
+        <item>"Available"</item>
+        <item>"Pending"</item>
+        <item>"Download progress not yet available"</item>
+        <item>"Download progress is unconfirmed. Refresh to check."</item>
+        <item>"After downloading, wait for model loading and SDK readiness."</item>
+        <item>"Stay connected. Start checking after models finish loading."</item>
+        <item>"SDK capabilities unavailable. Connect and refresh."</item>
+        <item>"Capability support is separate from licensing and model readiness."</item>
+        <item>"Enter a valid http:// or https:// URL without credentials"</item>
+        <item>"Supported"</item>
+        <item>"Not supported"</item>
+        <item>"Address must start with ws:// or wss://"</item>
+        <item>"Connection changed. Previous request result is unknown."</item>
+        <item>"Timed out connecting to Morning Check SDK"</item>
+        <item>"SDK connected. Initializing…"</item>
+        <item>"Morning Check SDK is not connected"</item>
+        <item>"Previous frame is still pending. This frame was not sent."</item>
+        <item>"Too many pending requests. This request was not sent."</item>
+        <item>"Send failed. The SDK did not receive this request."</item>
+        <item>"SDK send queue is closed"</item>
+        <item>"Image transfer interrupted. Request result is unknown."</item>
+        <item>"SDK response timed out. The operation may still be running. Check the result before retrying."</item>
+        <item>"Request send failed. Result is unknown."</item>
+        <item>"Could not encode request"</item>
+        <item>"SDK response has no valid error code. Result is unknown."</item>
+        <item>"Success"</item>
+        <item>"SDK request failed"</item>
+        <item>"Could not parse SDK response. Result is unknown."</item>
+        <item>"Stopped waiting. The SDK operation may continue. Check the result."</item>
+        <item>"SDK disconnected. Sent request results are unknown. Check write results before retrying."</item>
+        <item>"Connection closed. Sent request results are unknown."</item>
+        <item>"SDK connection closed"</item>
+        <item>"Client destroyed"</item>
+        <item>"Client has been destroyed"</item>
+        <item>"Could not remove temporary image path"</item>
+        <item>"Could not protect shared image memory"</item>
+        <item>"Connection changed before response delivery. Check the result."</item>
+        <item>"queryDeviceModels does not accept parameters"</item>
+        <item>"enabled must be a boolean"</item>
+        <item>"max_faces must be a positive integer"</item>
+        <item>"goods must be an array"</item>
+        <item>"No SDK response. Result is unknown."</item>
+        <item>"AIDL requires Android 8.1 or later. Use WebSocket."</item>
+        <item>"Binding to Morning Check SDK…"</item>
+        <item>"No bindable Morning Check SDK found"</item>
+        <item>"Timed out binding to Morning Check SDK"</item>
+        <item>"SDK returned a null Binder"</item>
+        <item>"Morning Check SDK process disconnected"</item>
+        <item>"Morning Check SDK binding is no longer valid"</item>
+        <item>"Morning Check SDK rejected the binding. Check its version and access settings."</item>
+        <item>"Morning Check SDK is not connected. Request was not sent."</item>
+        <item>"Another request is still pending. This request was not sent."</item>
+        <item>"Call queue is full. This request was not sent."</item>
+        <item>"SDK Binder disconnected. Sent request results are unknown."</item>
+        <item>"Incomplete SDK response. Result is unknown."</item>
+        <item>"SDK response timed out. Result is unknown. Check write results before retrying."</item>
+        <item>"Request queue timed out. Request was not sent to the SDK."</item>
+        <item>"Queued request cancelled"</item>
+        <item>"Stopped waiting. Sent operations may continue. Check the result."</item>
+        <item>"SDK address must be a valid ws:// or wss:// address"</item>
+        <item>"Invalid SDK address format"</item>
+        <item>"Local AIDL requires Android 8.1 or later. Select Auto or WebSocket."</item>
+        <item>"Invalid request ID length"</item>
+        <item>"Image must not be empty or larger than 32 MiB"</item>
+        <item>"Command must not be empty"</item>
+        <item>"This command does not accept images"</item>
+        <item>"Image upload requires JPEG or PNG"</item>
+        <item>"RGB888 byte count must equal width × height × 3"</item>
+        <item>"Identification, detection, and enrollment require RGB888"</item>
+        <item>"Detection limit must be from 1 to 64"</item>
+        <item>"max_faces must be a positive int"</item>
+        <item>"Could not serialize JSON object"</item>
+        <item>"Download cancelled"</item>
+        <item>"SDK package download is incomplete"</item>
+        <item>"Context must not be null"</item>
+        <item>"AIDL requires Android 8.1 or later"</item>
+        <item>"Connection settings must not be null"</item>
+        <item>"Connection changed. Check previous request results."</item>
+        <item>"SDK disconnected. Workplace binding was not sent."</item>
+        <item>"Could not encode request parameters"</item>
+        <item>"Could not encode image parameters"</item>
+        <item>"Too many pending requests. Workplace binding was not sent."</item>
+        <item>"SDK initialization timed out. Workplace binding was not sent."</item>
+        <item>"Waiting cancelled. Workplace binding was not sent."</item>
+        <item>"Connection closed. Check submitted request results."</item>
+        <item>"Connection changed. Check previous request results."</item>
+        <item>"No valid activation code found. Scan again."</item>
+        <item>"Connection settings changed. Reconnect before activating."</item>
+        <item>"Invalid SDK connection settings. Check and reconnect."</item>
+        <item>"Loading models…"</item>
+        <item>"Switching model…"</item>
+        <item>"Activating…"</item>
+        <item>"Model switched"</item>
+        <item>"Switch model"</item>
+        <item>"Select model"</item>
+        <item>"Select another model to switch"</item>
+        <item>"Select a morning check model"</item>
+        <item>"Operation failed. Try again."</item>
+        <item>"OK"</item>
+        <item>"Invalid address"</item>
+        <item>"Enter a positive whole number"</item>
+        <item>"Valid range: 36.1–43°C"</item>
+        <item>"Serial port path must start with /dev/"</item>
+        <item>"Settings saved"</item>
+        <item>"Cancel"</item>
+        <item>"Save"</item>
+        <item>"Check result"</item>
+        <item>"Staff"</item>
+        <item>"Edit staff"</item>
+        <item>"Departments"</item>
+        <item>"Captured photos"</item>
+        <item>"Device details"</item>
+        <item>"Check records"</item>
+        <item>"Record details"</item>
+        <item>"Device &amp; SDK"</item>
+        <item>"Enter an http:// or https:// address"</item>
+        <item>"Configuration saved"</item>
+        <item>"Business cloud URL"</item>
+        <item>"Drag the corners to adjust the capture area"</item>
+        <item>"Camera permission is denied. Allow it in system app settings."</item>
+        <item>"Camera settings"</item>
+        <item>"Auto  ›"</item>
+        <item>"Select resolution"</item>
+        <item>"Changes are applied and saved immediately"</item>
+        <item>"Select camera"</item>
+        <item>"Loading staff…"</item>
+        <item>"Saving check record…"</item>
+        <item>"Add staff and enroll their faces before starting a check."</item>
+        <item>"The morning check SDK is not ready. Connect, activate and initialize it in device settings."</item>
+        <item>"No workplace set"</item>
+        <item>"Not ready"</item>
+        <item>"Add staff and enroll their faces first"</item>
+        <item>"Connect the device to start a check"</item>
+        <item>"Resume"</item>
+        <item>"Pause"</item>
+        <item>"Could not load staff details\nTry again later"</item>
+        <item>"Head sample expired. Stay in view."</item>
+        <item>"Identity sample expired\nKeep facing the camera"</item>
+        <item>"No staff profile found\nAdd the staff details first"</item>
+        <item>"Staff profile disabled\nContact an administrator"</item>
+        <item>"Check busy. Please wait."</item>
+        <item>"Check failed. Recovering…"</item>
+        <item>"Waiting for the previous person to leave"</item>
+        <item>"Temperature check disabled"</item>
+        <item>"Face recognition"</item>
+        <item>"Headwear check"</item>
+        <item>"Backs of hands"</item>
+        <item>"Palms"</item>
+        <item>"Check complete"</item>
+        <item>"Waiting to identify staff"</item>
+        <item>"Temperature · --°C"</item>
+        <item>"Check paused"</item>
+        <item>"Device ready"</item>
+        <item>"Waiting for device"</item>
+        <item>"Prepare for check"</item>
+        <item>"Multiple people detected"</item>
+        <item>"Please step into view"</item>
+        <item>"No staff match"</item>
+        <item>"Capture paused\nTap Resume to continue"</item>
+        <item>"Check complete\nLeave the camera view before checking again"</item>
+        <item>"Multiple people detected\nOnly one person should stay in view"</item>
+        <item>"No face detected\nPlease step into camera view"</item>
+        <item>"No staff match\nMake sure your face is enrolled"</item>
+        <item>"Check record not saved"</item>
+        <item>"Check again"</item>
+        <item>"Retry save"</item>
+        <item>"Please select"</item>
+        <item>"Tap an option to select"</item>
+        <item>"Cloud service"</item>
+        <item>"On"</item>
+        <item>"Off"</item>
+        <item>"Unknown"</item>
+        <item>"Tap to check"</item>
+        <item>"Disconnected"</item>
+        <item>"Enable cloud service"</item>
+        <item>"Disable cloud service"</item>
+        <item>"Enable the cloud service for this SDK."</item>
+        <item>"Disable the cloud service for this SDK."</item>
+        <item>"Cloud service setting submitted"</item>
+        <item>"Department saved"</item>
+        <item>"Saving department…"</item>
+        <item>"Loading departments…"</item>
+        <item>"Select department"</item>
+        <item>"Tap to retry"</item>
+        <item>"Delete department?"</item>
+        <item>"Delete"</item>
+        <item>"Deleting department…"</item>
+        <item>"Department deleted"</item>
+        <item>"View staff"</item>
+        <item>"View check records"</item>
+        <item>"Add subdepartment"</item>
+        <item>", selected"</item>
+        <item>"Selected"</item>
+        <item>"Select"</item>
+        <item>"Connection settings saved"</item>
+        <item>"Finding LAN devices…"</item>
+        <item>"Testing connection…"</item>
+        <item>"No morning check SDK found. Check the device and network."</item>
+        <item>"Connection test passed"</item>
+        <item>"No SDK response. Check the IP address and network."</item>
+        <item>"Connected"</item>
+        <item>"The SDK is installed without a launchable screen. Connect to its service instead."</item>
+        <item>"The SDK runs as a background service. Connect or reconnect to view its connection and license status."</item>
+        <item>"Home"</item>
+        <item>"Not set"</item>
+        <item>"Unassigned"</item>
+        <item>" · Face enrolled"</item>
+        <item>" · No face enrolled"</item>
+        <item>"Page paused. Face enrollment was not sent. Capture again."</item>
+        <item>"All staff shown"</item>
+        <item>"Scroll for more staff"</item>
+        <item>"Enrolled"</item>
+        <item>"Not enrolled"</item>
+        <item>"Checking face samples on this device…"</item>
+        <item>"Cannot check samples now. Refresh later."</item>
+        <item>"Face images refreshed"</item>
+        <item>"Could not save sample status. Refresh and retry."</item>
+        <item>"Staff or device status changed. Refresh to verify."</item>
+        <item>"Enrolled photos"</item>
+        <item>"Select a staff member first"</item>
+        <item>"No face samples for this staff member"</item>
+        <item>"Connect to this device, then refresh samples"</item>
+        <item>"Deleting sample…"</item>
+        <item>"Clearing samples…"</item>
+        <item>"Page or connection changed. Deletion was not sent. Verify again."</item>
+        <item>"Connection changed. Deletion result is unknown. Check samples on the original device."</item>
+        <item>"Deletion result unknown. Refresh samples before trying again."</item>
+        <item>"Staff or device changed. Refresh to verify deletion."</item>
+        <item>"Face sample deleted"</item>
+        <item>"All face samples cleared for this staff member"</item>
+        <item>"Camera interrupted. Face enrollment was not sent. Capture again."</item>
+        <item>"Page or camera changed. Face enrollment was not sent. Capture again."</item>
+        <item>"Page or connection changed. Face enrollment was not sent. Capture again."</item>
+        <item>"Face frame expired. Face the camera and try again."</item>
+        <item>"Invalid face detection result. Capture again."</item>
+        <item>"No staff selected"</item>
+        <item>"Close selection"</item>
+        <item>"Select staff"</item>
+        <item>"Select a staff member from the list first"</item>
+        <item>"Waiting for camera…"</item>
+        <item>"Loading face samples…"</item>
+        <item>"Loading staff list…"</item>
+        <item>"Verifying face…"</item>
+        <item>"Capture expired. Face enrollment was not sent. Capture again."</item>
+        <item>"Enrolling face…"</item>
+        <item>"Invalid face detection. Enrollment was not sent. Capture again."</item>
+        <item>"Enrollment result unknown. Check SDK face status before enrolling again."</item>
+        <item>"Connection changed. Check enrollment on the original SDK first."</item>
+        <item>"Staff status changed. Check SDK face status again."</item>
+        <item>"Face enrollment saved"</item>
+        <item>"No usable face detected. Face the camera and capture again."</item>
+        <item>"About device"</item>
+        <item>"Today\'s checks"</item>
+        <item>"Close"</item>
+        <item>"Install the SDK to start checking"</item>
+        <item>"Activate this device to start"</item>
+        <item>"Identity · Temperature · Head · Hands"</item>
+        <item>"LAN"</item>
+        <item>"Local"</item>
+        <item>"→  Install now"</item>
+        <item>"→  Activate now"</item>
+        <item>"→  Loading SDK…"</item>
+        <item>"→  Start check"</item>
+        <item>"License &amp; keys"</item>
+        <item>"License details"</item>
+        <item>"Lighting"</item>
+        <item>"Department"</item>
+        <item>"Invalid font size option"</item>
+        <item>"Enter a valid activation code"</item>
+        <item>"Incomplete model list. Try again."</item>
+        <item>"No models available"</item>
+        <item>"Could not load models. Try again."</item>
+        <item>"Incomplete activation details. Try again."</item>
+        <item>"Could not load activation details. Try again."</item>
+        <item>"Device activated"</item>
+        <item>"Cannot activate now. Check the connection and wait for the current operation to finish."</item>
+        <item>"Result unknown. Check the current model before continuing."</item>
+        <item>"Connection changed. Result unknown. Check the current model before continuing."</item>
+        <item>"Connection changed. Select a model again."</item>
+        <item>"Not provided by system"</item>
+        <item>"Could not prepare list data"</item>
+        <item>"Captured photos are incomplete. Cannot finish the record."</item>
+        <item>"Staff profile was deleted or identity changed. Refresh first."</item>
+        <item>"Staff details or the last operation changed. Verify first."</item>
+        <item>"An enrollment result needs verification. Check SDK face status first."</item>
+        <item>"Baud rate and levels must be whole numbers"</item>
+        <item>"A list dialog requires an Activity"</item>
+        <item>"No system installer or permission screen is available"</item>
+        <item>"Could not initialize the security password. Try again."</item>
+        <item>"Use 6–32 digits for the security password"</item>
+        <item>"Could not save the security password. Try again."</item>
+        <item>"Password verification is unavailable. Try again."</item>
+    </string-array>
+    <string-array name="ui_message_template_values">
+        <item>"Invalid SDK connection settings: %1$s"</item>
+        <item>"Last %1$s request completed"</item>
+        <item>"Could not load models (%1$s)"</item>
+        <item>"Could not load activation details (%1$s)"</item>
+        <item>"Operation failed (%1$s). Check the current model before continuing."</item>
+        <item>"Front camera · %1$s"</item>
+        <item>"Rear camera · %1$s"</item>
+        <item>"External camera · %1$s"</item>
+        <item>"USB camera · %1$s"</item>
+        <item>"Selected camera unavailable: %1$s"</item>
+        <item>"Camera %1$s is unavailable. Select another in capture settings."</item>
+        <item>"Camera %1$s is disconnected. Select another in device settings."</item>
+        <item>"Could not open camera: %1$s"</item>
+        <item>"Could not configure camera preview: %1$s"</item>
+        <item>"Camera error (%1$s). Reconnect."</item>
+        <item>"Could not start camera capture: %1$s"</item>
+        <item>"Could not request USB camera access: %1$s"</item>
+        <item>"Could not connect USB camera: %1$s"</item>
+        <item>"Device in use or UVC unsupported (%1$s)"</item>
+        <item>"Could not open USB camera: %1$s"</item>
+        <item>"Business request failed: HTTP %1$s"</item>
+        <item>"This department still has %1$s staff. Move them before deleting it."</item>
+        <item>"Invalid staff edit field: %1$s"</item>
+        <item>"Could not save local data: %1$s"</item>
+        <item>"Captured photo %1$s"</item>
+        <item>"Low temperature: %1$s°C"</item>
+        <item>"High temperature: %1$s°C"</item>
+        <item>"Temperature %1$s°C"</item>
+        <item>"Backs of hands: %1$s"</item>
+        <item>"Palms: %1$s"</item>
+        <item>"Back-of-hand check · %1$s"</item>
+        <item>"Palm check · %1$s"</item>
+        <item>"%1$s (%2$s findings)"</item>
+        <item>"Could not turn light on: %1$s"</item>
+        <item>"Could not turn light off: %1$s"</item>
+        <item>"%1$s; could not turn light off: %2$s"</item>
+        <item>"Lighting serial port not found: %1$s"</item>
+        <item>"GPIO initialization failed: %1$s"</item>
+        <item>"GPIO %1$s write failed"</item>
+        <item>"GPIO node not found: %1$s"</item>
+        <item>"No GPIO write permission: %1$s. Contact the device supplier."</item>
+        <item>"Could not open thermometer: %1$s. Check device settings."</item>
+        <item>"Temperature capture interrupted: %1$s"</item>
+        <item>"Device not found: %1$s"</item>
+        <item>"Signed-in workplace · %1$s"</item>
+        <item>"Workplace binding failed: %1$s"</item>
+        <item>"%1$s is in progress. Wait for it to finish."</item>
+        <item>"%1$s is in progress. Please wait."</item>
+        <item>"%1$s result unknown. Check SDK status before continuing."</item>
+        <item>"%1$s request completed. Checking SDK status…"</item>
+        <item>"%1$s failed: %2$s (%3$s)"</item>
+        <item>"License and models are ready. %1$s is in progress. Please wait."</item>
+        <item>"Check models %1$s%% downloaded. Stay connected and wait for loading."</item>
+        <item>"Activation code: %1$s"</item>
+        <item>"License type: %1$s"</item>
+        <item>"Model: %1$s"</item>
+        <item>"Activated: %1$s"</item>
+        <item>"Issued: %1$s"</item>
+        <item>"Last renewal: %1$s"</item>
+        <item>"Next renewal: %1$s"</item>
+        <item>"Expires: %1$s"</item>
+        <item>"SDK version: %1$s"</item>
+        <item>"Received %1$s. Total download size is not yet known."</item>
+        <item>"Downloaded %1$s%% (%2$s / %3$s)"</item>
+        <item>"API version: %1$s"</item>
+        <item>"Identification: %1$s"</item>
+        <item>"Head / hand check: %1$s"</item>
+        <item>"Staff enrollment: %1$s"</item>
+        <item>"Forget staff: %1$s"</item>
+        <item>"Face library query: %1$s"</item>
+        <item>"Invalid connection address: %1$s"</item>
+        <item>"SDK connection closed: %1$s"</item>
+        <item>"Could not connect to Morning Check SDK: %1$s"</item>
+        <item>"Connection failed: %1$s"</item>
+        <item>"Could not bind to Morning Check SDK: %1$s"</item>
+        <item>"Request was not sent: %1$s"</item>
+        <item>"%1$s. Reconnecting shortly…"</item>
+        <item>"%1$s. Sent request results are unknown."</item>
+        <item>"%1$s. Request was not sent."</item>
+        <item>"%1$s. Workplace binding was not sent."</item>
+        <item>"%1$s. Reconnecting in %2$s seconds…"</item>
+        <item>"Invalid request parameters: %1$s"</item>
+        <item>"Morning Check SDK does not support command: %1$s"</item>
+        <item>"Morning Check AIDL does not support command: %1$s"</item>
+        <item>"Unsupported Binder response: %1$s"</item>
+        <item>"%1$s must be a non-empty string"</item>
+        <item>"%1$s must be a string"</item>
+        <item>"%1$s must be a number"</item>
+        <item>"%1$s must be a finite number"</item>
+        <item>"%1$s must be an integer"</item>
+        <item>"%1$s must be a positive integer"</item>
+        <item>"Download failed (HTTP %1$s)"</item>
+    </string-array>
+</resources>

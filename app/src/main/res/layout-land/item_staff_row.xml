@@ -58,7 +58,7 @@
             android:minHeight="@dimen/dp_24"
             android:paddingStart="@dimen/dp_0"
             android:paddingEnd="@dimen/dp_0"
-            android:text="录入" />
+            android:text="@string/ui_item_staff_row_staff_row_enroll_text" />
 
         <TextView
             android:id="@+id/staff_row_edit"
@@ -70,7 +70,7 @@
             android:minHeight="@dimen/dp_24"
             android:paddingStart="@dimen/dp_0"
             android:paddingEnd="@dimen/dp_0"
-            android:text="编辑" />
+            android:text="@string/design_edit" />
 
         <TextView
             android:id="@+id/staff_row_delete"
@@ -82,6 +82,6 @@
             android:minHeight="@dimen/dp_24"
             android:paddingStart="@dimen/dp_0"
             android:paddingEnd="@dimen/dp_0"
-            android:text="删除" />
+            android:text="@string/face_samples_delete" />
     </LinearLayout>
 </LinearLayout>

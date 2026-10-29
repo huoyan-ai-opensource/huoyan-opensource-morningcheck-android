@@ -9,7 +9,7 @@
         style="@style/PenTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="设备信息" />
+        android:text="@string/ui_view_license_device_label_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="客户端版本" />
+            android:text="@string/ui_view_license_device_label_text_2" />
 
         <TextView
             android:id="@+id/license_client_version"
@@ -44,7 +44,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="SDK 版本号" />
+            android:text="@string/ui_view_license_device_label_text_3" />
 
         <TextView
             android:id="@+id/license_sdk_version"
@@ -67,7 +67,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="设备型号" />
+            android:text="@string/ui_view_license_device_label_text_4" />
 
         <TextView
             android:id="@+id/license_device_model"
@@ -90,7 +90,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="硬件序列号" />
+            android:text="@string/ui_view_license_device_label_text_5" />
 
         <TextView
             android:id="@+id/license_device_serial"
@@ -122,7 +122,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="云端服务" />
+            android:text="@string/ui_view_license_device_label_text_6" />
 
         <TextView
             android:id="@+id/license_cloud_state"
@@ -131,14 +131,14 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:text="未连接" />
+            android:text="@string/ui_view_license_device_license_cloud_state_text" />
 
         <cc.huoyan.opensource.morningcheck.LandscapeSwitch
             android:id="@+id/license_cloud_enabled"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dp_8"
-            android:contentDescription="云端服务"
+            android:contentDescription="@string/ui_view_license_device_label_text_6"
             android:showText="false"
             android:splitTrack="false"
             android:switchMinWidth="@dimen/dp_52"

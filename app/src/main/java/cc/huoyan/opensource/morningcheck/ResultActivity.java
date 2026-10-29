@@ -122,7 +122,7 @@ public final class ResultActivity extends RecordSupportActivity {
             } catch (Exception error) {
                 main.post(() -> {
                     if (destroyed || version != recordReadVersion) return;
-                    notice("晨检记录读取失败：" + failure(error));
+                    notice(getString(R.string.i18n_b_check_record_failed) + failure(error));
                 });
             }
         });
@@ -132,7 +132,7 @@ public final class ResultActivity extends RecordSupportActivity {
     protected void onDataLoaded() {
         if (exitRequested) return;
         if (currentRecord == null) {
-            notice("晨检记录不存在，请从历史记录重新查看");
+            notice(getString(R.string.i18n_b_check_record_missing));
             render();
             return;
         }
@@ -206,7 +206,7 @@ public final class ResultActivity extends RecordSupportActivity {
         main.removeCallbacks(nextAfterSpeech);
         if (!foreground || !resumed || exitRequested || currentRecord == null || navigating || isFinishing()) return;
         if (!sdkReady()) {
-            notice("暂时无法继续晨检，请检查设备连接");
+            notice(getString(R.string.i18n_b_continue_unavailable));
             speech.clearStatus();
             return;
         }
@@ -284,12 +284,12 @@ public final class ResultActivity extends RecordSupportActivity {
         View view = content;
         int color = ContextCompat.getColor(this, ok ? R.color.mc_green : R.color.mc_orange);
         TextView heading = view.findViewById(R.id.result_title);
-        heading.setText(ok ? "晨检正常" : "晨检异常");
+        heading.setText(ok ? getString(R.string.i18n_b_check_normal) : getString(R.string.i18n_b_check_abnormal));
         heading.setTextColor(color);
         ((ImageView) view.findViewById(R.id.result_status_icon)).setImageResource(
                 ok ? R.drawable.mc_result_ok : R.drawable.mc_result_warning);
         ((TextView) view.findViewById(R.id.result_summary_hint)).setText(
-                ok ? "本次已检项目无异常" : "请查看标注照片与异常明细");
+                ok ? getString(R.string.i18n_b_check_clear) : getString(R.string.i18n_b_review_findings));
         String department = record.optString("department");
         ((TextView) view.findViewById(R.id.result_person)).setText(record.optString("staff_name")
                 + (record.optString("staff_no").isEmpty() ? "" : " · " + record.optString("staff_no"))
@@ -299,17 +299,20 @@ public final class ResultActivity extends RecordSupportActivity {
                 record.optBoolean("identity_skipped") ? View.VISIBLE : View.GONE);
         String temperature = record.optString("temperature");
         TextView temperatureView = view.findViewById(R.id.result_temperature);
-        temperatureView.setText(temperature.isEmpty() || "未测".equals(temperature) ? "未测" : temperature + " °C");
+        temperatureView.setText(temperature.isEmpty() || "未测".equals(temperature)
+                ? UiMessages.text(this, "未测") : temperature + " °C");
         temperatureView.setTextColor(ContextCompat.getColor(this,
                 record.optInt("abnormal_temperature") == 1 ? R.color.mc_orange : R.color.mc_ink));
-        temperatureView.setContentDescription("体温 " + temperatureView.getText() + "，" + record.optString("temperature_source"));
+        temperatureView.setContentDescription(getString(R.string.i18n_b_temperature_prefix) + temperatureView.getText()
+                + ", " + UiMessages.text(this, record.optString("temperature_source")));
         String healthExpiry = record.optString("health_expiry");
         TextView healthView = view.findViewById(R.id.result_health);
-        healthView.setText(healthExpiry.isEmpty() ? "未登记" : healthExpiry);
+        healthView.setText(healthExpiry.isEmpty() ? getString(R.string.i18n_b_not_registered) : healthExpiry);
         healthView.setTextColor(ContextCompat.getColor(this,
                 record.optInt("abnormal_health_cert_exp") == 1 ? R.color.mc_orange : R.color.mc_ink));
         view.findViewById(R.id.result_summary).setOnLongClickListener(v -> {
-            notice("健康证：" + healthView.getText() + "\n测温来源：" + record.optString("temperature_source", "未记录"));
+            notice(getString(R.string.i18n_b_health_prefix) + healthView.getText() + getString(R.string.i18n_b_temperature_source_prefix)
+                    + UiMessages.text(this, record.optString("temperature_source", getString(R.string.i18n_b_not_recorded))));
             return true;
         });
         bindResultFlag(view, R.id.result_head, record, "abnormal_face");
@@ -317,16 +320,16 @@ public final class ResultActivity extends RecordSupportActivity {
         boolean headHandKnown = record.has("abnormal_face") && record.has("abnormal_hand");
         boolean headHandOk = headHandKnown && record.optInt("abnormal_face") == 0 && record.optInt("abnormal_hand") == 0;
         TextView headHandView = view.findViewById(R.id.result_head_hand);
-        headHandView.setText(!headHandKnown ? "未记录" : headHandOk ? "正常" : "有异常");
+        headHandView.setText(!headHandKnown ? getString(R.string.i18n_b_not_recorded) : headHandOk ? getString(R.string.i18n_b_normal) : getString(R.string.i18n_b_has_findings));
         headHandView.setTextColor(ContextCompat.getColor(this, !headHandKnown ? R.color.mc_muted : headHandOk ? R.color.mc_green : R.color.mc_orange));
         TextView findingTitle = view.findViewById(R.id.result_findings_title);
-        if (findingTitle != null) findingTitle.setText(ok ? "检查说明" : "异常明细");
+        if (findingTitle != null) findingTitle.setText(ok ? getString(R.string.i18n_b_check_notes) : getString(R.string.i18n_b_finding_details));
         findingTitle.setVisibility(ok ? View.GONE : View.VISIBLE);
         view.findViewById(R.id.result_findings_scroll).setVisibility(ok ? View.GONE : View.VISIBLE);
         JSONArray issues = record.optJSONArray("findings");
         StringBuilder description = new StringBuilder();
         if (issues != null) for (int i = 0; i < issues.length(); i++)
-            description.append(i == 0 ? "" : "\n").append(issues.optString(i));
+            description.append(i == 0 ? "" : "\n").append(UiMessages.text(this, issues.optString(i)));
         TextView details = view.findViewById(R.id.result_findings);
         details.setText(description.length() == 0 ? getString(R.string.mc_no_findings) : description.toString());
         details.setTextColor(color);
@@ -335,7 +338,7 @@ public final class ResultActivity extends RecordSupportActivity {
             cancelAutomaticNext();
             main.removeCallbacks(nextAfterSpeech);
             updateFlowState();
-            toast("已暂停自动迎接下一位");
+            toast(getString(R.string.i18n_b_auto_next_paused));
         });
         view.findViewById(R.id.result_next).setOnClickListener(v -> nextEmployee());
         updateFlowState();
@@ -345,7 +348,7 @@ public final class ResultActivity extends RecordSupportActivity {
     private void bindResultFlag(View view, int id, JSONObject record, String key) {
         int flag = record.optInt(key, -1);
         TextView value = view.findViewById(id);
-        value.setText(flag == 0 ? "正常" : flag == 1 ? "异常" : "未记录");
+        value.setText(flag == 0 ? getString(R.string.i18n_b_normal) : flag == 1 ? getString(R.string.i18n_b_abnormal) : getString(R.string.i18n_b_not_recorded));
         value.setTextColor(ContextCompat.getColor(this,
                 flag == 0 ? R.color.mc_green : flag == 1 ? R.color.mc_orange : R.color.mc_muted));
     }
@@ -362,7 +365,7 @@ public final class ResultActivity extends RecordSupportActivity {
         long seconds = (Math.max(0, nextPersonAt - SystemClock.uptimeMillis()) + 999) / 1000;
         TextView state = content.findViewById(R.id.result_flow_state);
         if (state != null) {
-            if (paused) state.setText("已停留 · 点击下一位继续");
+            if (paused) state.setText(getString(R.string.i18n_b_paused_next));
             else if (!sdkReady()) state.setText("");
             else if (nextPersonAt != 0 && seconds > 0)
                 state.setText(getString(R.string.mc_result_next_countdown, seconds));
@@ -371,7 +374,7 @@ public final class ResultActivity extends RecordSupportActivity {
             else state.setText(R.string.mc_result_auto_next);
         }
         TextView stay = content.findViewById(R.id.result_stay);
-        if (stay != null) stay.setText(paused ? "已停留" : getString(R.string.mc_result_stay_here));
+        if (stay != null) stay.setText(paused ? getString(R.string.i18n_b_paused) : getString(R.string.mc_result_stay_here));
     }
 
     private void scheduleAutomaticNext() {
@@ -401,7 +404,7 @@ public final class ResultActivity extends RecordSupportActivity {
         int photoCount = 0;
         for (RecordPhotos.Photo photo : captured) if (!photo.file.isEmpty()) photoCount++;
         TextView caption = content.findViewById(R.id.result_evidence_caption);
-        caption.setText("共 " + photoCount + " 张");
+        caption.setText(getString(R.string.i18n_b_photo_count, photoCount));
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             grid.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false) {
                 @Override
@@ -482,8 +485,8 @@ public final class ResultActivity extends RecordSupportActivity {
             holder.clear();
             holder.position = position;
             RecordPhotos.Photo photo = values.get(position);
-            holder.label.setText(photo.label);
-            holder.image.setContentDescription(photo.label);
+            holder.label.setText(UiMessages.text(ResultActivity.this, photo.label));
+            holder.image.setContentDescription(UiMessages.text(ResultActivity.this, photo.label));
             holder.empty.setText(photo.file.isEmpty() ? R.string.mc_result_photo_absent : R.string.record_detail_photo_loading);
             holder.empty.setVisibility(View.VISIBLE);
             final EvidenceHolder expected = holder;

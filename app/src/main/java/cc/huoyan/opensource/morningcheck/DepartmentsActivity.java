@@ -198,7 +198,7 @@ public final class DepartmentsActivity extends BaseMorningActivity {
                     pageError = true;
                     pageLoading = false;
                     showPage();
-                    notice("部门读取失败：" + failure(error));
+                    notice(getString(R.string.i18n_a_department_read_failed, failure(error)));
                 });
             }
         });
@@ -217,9 +217,9 @@ public final class DepartmentsActivity extends BaseMorningActivity {
                 : parentId > 0 ? R.string.department_children_empty : R.string.department_empty);
         empty.setVisibility(!pageLoading && rowsLoaded && values.isEmpty() ? View.VISIBLE : View.GONE);
         if (readingDialog == null) readingDialog = new LoadingDialog(this);
-        if (pageLoading && foreground) readingDialog.showReadOnly("正在读取部门");
+        if (pageLoading && foreground) readingDialog.showReadOnly(getString(R.string.i18n_a_loading_departments));
         else readingDialog.dismiss();
-        endView.setText(pageError ? "点击重新读取" : "已显示全部 " + values.size() + " 个部门");
+        endView.setText(pageError ? getString(R.string.i18n_a_tap_to_retry) : getString(R.string.i18n_a_departments_end, values.size()));
         endView.setVisibility(!pageLoading && (pageError || !values.isEmpty()) ? View.VISIBLE : View.GONE);
         endView.setOnClickListener(v -> {
             if (pageError) reload(false, null);
@@ -353,19 +353,19 @@ public final class DepartmentsActivity extends BaseMorningActivity {
         long id = item.optLong("id");
         String name = item.optString("name");
         long parent = item.optLong("parent_id");
-        deleteConfirmation = ImmersiveUi.show(DesignConfirmationDialog.create(this, "删除部门？",
-                "确认删除“" + name + "”？含员工或下级部门时不能删除。此操作不可撤销。", "确认删除", (dialog, which) -> {
+        deleteConfirmation = ImmersiveUi.show(DesignConfirmationDialog.create(this, getString(R.string.i18n_a_delete_department),
+                getString(R.string.i18n_a_delete_department_message, name), getString(R.string.i18n_a_delete), (dialog, which) -> {
                     if (deletingDepartment) return;
                     deletingDepartment = true;
                     deletingDialog = new LoadingDialog(this);
-                    deletingDialog.show("正在删除部门");
+                    deletingDialog.show(getString(R.string.i18n_a_deleting_department));
                     runIo(() -> {
                         try {
                             store.removeDepartment(id, name, parent);
                             main.post(() -> {
                                 finishDepartmentDelete();
                                 application.notifyDepartmentsChanged();
-                                toast("部门已删除");
+                                toast(getString(R.string.i18n_a_department_deleted));
                             });
                         } catch (Exception error) {
                             main.post(() -> {
@@ -427,7 +427,7 @@ public final class DepartmentsActivity extends BaseMorningActivity {
                 long id = item.optLong("id");
                 ImmersiveUi.show(new ProjectDialog.Builder(DepartmentsActivity.this)
                         .setTitle(item.optString("name"))
-                        .setItems(new String[]{"查看员工", "查看晨检记录", "新增下级部门"}, (dialog, which) -> {
+                        .setItems(new String[]{getString(R.string.i18n_a_view_staff), getString(R.string.i18n_a_view_check_records), getString(R.string.i18n_a_add_subdepartment)}, (dialog, which) -> {
                             if (which < 2) viewMembers(id, which == 1);
                             else DepartmentEditorDialog.open(getSupportFragmentManager(), 0, id);
                         }).create());
@@ -450,7 +450,7 @@ public final class DepartmentsActivity extends BaseMorningActivity {
         void bind(JSONObject item) {
             name.setText(item.optString("name"));
             staff.setText(String.valueOf(item.optLong("member_count")));
-            delete.setContentDescription("删除部门：" + item.optString("name"));
+            delete.setContentDescription(getString(R.string.i18n_a_delete_department_description, item.optString("name")));
             boolean child = item.optLong("parent_id") > 0;
             name.setCompoundDrawablesRelativeWithIntrinsicBounds(child ? R.drawable.mc_department_branch : R.drawable.mc_folder, 0, 0, 0);
             int inset = getResources().getDimensionPixelSize(R.dimen.dp_8);

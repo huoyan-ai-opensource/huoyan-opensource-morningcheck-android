@@ -50,7 +50,7 @@ public final class ActivationFlowFragment extends Fragment {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     String code = result.getData().getStringExtra(SdkActivationScanActivity.EXTRA_CODE);
                     pendingScanCode = code == null ? "" : code;
-                    if (pendingScanCode.isEmpty()) notice("未读取到有效的激活码，请重新扫码。");
+                    if (pendingScanCode.isEmpty()) notice(getString(R.string.i18n_a_no_valid_activation_code_found_scan_again));
                 }
                 postRender();
             });
@@ -142,7 +142,7 @@ public final class ActivationFlowFragment extends Fragment {
     private boolean canSubmit() {
         try {
             if (!sdk.matchesConfiguration(MorningSdkSettings.read(prefs()))) {
-                notice("连接配置已改变，请先重新连接，再执行激活。");
+                notice(getString(R.string.i18n_a_connection_settings_changed_reconnect_before_activating));
                 return false;
             }
             if (sdk.operation().running) {
@@ -151,7 +151,7 @@ public final class ActivationFlowFragment extends Fragment {
             }
             return true;
         } catch (IllegalArgumentException invalid) {
-            notice("SDK 连接配置无效，请核对后重新连接。");
+            notice(getString(R.string.i18n_a_invalid_sdk_connection_settings_check_and_reconnect));
             return false;
         }
     }
@@ -187,8 +187,8 @@ public final class ActivationFlowFragment extends Fragment {
         if (stage != ModelSelectionSession.Stage.CHOOSING) dismissModels();
         if (stage == ModelSelectionSession.Stage.QUERYING || stage == ModelSelectionSession.Stage.ACTIVATING) {
             if (input != null && input.getDialog() != null) input.getDialog().hide();
-            activationLoading.show(stage == ModelSelectionSession.Stage.QUERYING ? "正在读取模型列表…"
-                    : session.switching ? "正在切换模型…" : "正在激活…");
+            activationLoading.show(stage == ModelSelectionSession.Stage.QUERYING ? getString(R.string.i18n_a_loading_models)
+                    : session.switching ? getString(R.string.i18n_a_switching_model) : getString(R.string.i18n_a_activating));
             return;
         }
         activationLoading.dismiss();
@@ -209,7 +209,7 @@ public final class ActivationFlowFragment extends Fragment {
                 input.dismiss();
             if (stage == ModelSelectionSession.Stage.FINISHED) {
                 if (session.resultCode == 0)
-                    ToastEx.showSuccessToast(requireContext(), session.switching ? "模型切换成功" : "激活成功");
+                    ToastEx.showSuccessToast(requireContext(), session.switching ? getString(R.string.i18n_a_model_switched) : getString(R.string.i18n_a_activation_successful));
                 else notice(session.resultMessage);
                 if (session.submitted)
                     getParentFragmentManager().setFragmentResult(RESULT, new Bundle());
@@ -227,8 +227,8 @@ public final class ActivationFlowFragment extends Fragment {
             labels.add(model.name);
             if (session.switching && model.current) selected = i;
         }
-        modelDialog = DesignChoiceDialog.create(requireActivity(), session.switching ? "切换模型" : "选择模型",
-                session.switching ? "选择其他模型后开始切换" : "请选择本次使用的晨检模型",
+        modelDialog = DesignChoiceDialog.create(requireActivity(), session.switching ? getString(R.string.i18n_a_switch_model) : getString(R.string.i18n_a_select_model),
+                session.switching ? getString(R.string.i18n_a_select_another_model_to_switch) : getString(R.string.i18n_a_select_a_morning_check_model),
                 labels, selected, true, position -> {
                     if (!isResumed()) return;
                     if (canSubmit()) session.select(position);
@@ -251,6 +251,6 @@ public final class ActivationFlowFragment extends Fragment {
 
     private void notice(String message) {
         if (isAdded()) ToastEx.createToast(requireContext(), message == null || message.trim().isEmpty()
-                ? "操作失败，请重试" : message);
+                ? getString(R.string.i18n_a_operation_failed_try_again) : UiMessages.text(requireContext(), message));
     }
 }

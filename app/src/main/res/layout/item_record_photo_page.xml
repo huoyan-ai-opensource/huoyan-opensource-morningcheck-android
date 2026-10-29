@@ -7,7 +7,7 @@
         android:id="@+id/photo_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="检查照片" />
+        android:contentDescription="@string/ui_item_record_photo_page_photo_image_contentdescription" />
 
     <TextView
         android:id="@+id/photo_empty"

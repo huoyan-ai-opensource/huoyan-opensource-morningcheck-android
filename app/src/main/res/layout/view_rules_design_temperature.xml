@@ -9,7 +9,7 @@
         style="@style/PenTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="体温检查" />
+        android:text="@string/ui_view_rules_design_temperature_label_text" />
 
     <LinearLayout
         android:id="@+id/rules_temperature_row"
@@ -22,7 +22,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="体温检查" />
+            android:text="@string/ui_view_rules_design_temperature_label_text" />
 
         <TextView
             android:id="@+id/rules_temperature_state"
@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="异常体温阈值" />
+        android:text="@string/ui_view_rules_design_temperature_label_text_2" />
 
     <LinearLayout
         android:layout_width="match_parent"

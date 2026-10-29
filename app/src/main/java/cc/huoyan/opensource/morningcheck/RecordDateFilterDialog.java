@@ -392,7 +392,7 @@ final class RecordDateFilterDialog extends Dialog {
                 && start.toLocalDate().equals(today.withDayOfMonth(1))
                 && end.toLocalDate().equals(YearMonth.from(today).atEndOfMonth()));
         ((TextView) findViewById(R.id.record_date_month_title)).setText(
-                month.getYear() + " 年 " + month.getMonthValue() + " 月");
+                getContext().getString(R.string.i18n_b_calendar_month, month.getYear(), month.getMonthValue()));
         syncing = true;
         if (presetPicker != null) presetPicker.setSelection(preset == RecordDateRange.Preset.CUSTOM
                 ? PRESETS.length : preset.ordinal());

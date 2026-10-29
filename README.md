@@ -1,6 +1,6 @@
 # 火眼晨检开源 App
 
-面向 **食堂、餐饮、食品生产** 场景的 Android 员工晨检客户端。可直接运行完整 App，也可把客户端 JAR 接入自己的 Android 应用。
+面向 **食堂、餐饮、食品生产** 场景的 Android 员工晨检客户端。可直接运行完整 App，也可把客户端 JAR 接入自己的 Android 应用。App 支持中文和英文，跟随 Android 系统语言。
 
 [English](README.en.md) · [官网与激活联系](https://www.huoyan.cc) · [下载](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) · [第一次运行](QUICKSTART.md) · [文档导航](docs/README.md)
 
@@ -29,7 +29,7 @@
 | --- | --- |
 | ![火眼晨检 App 主页](docs/images/home-landscape.png) | ![火眼晨检 App 现场晨检](docs/images/check-landscape.png) |
 
-以上为 2026-10-29 在 YF023D 上采集的中文横屏界面，公司、场所和设备序列号已替换为虚构示例值；晨检页展示等待设备的引导画面，不含真人照片。中英文 README 使用相同的双列排列，截图时安装的 App 为 0.1.0、SDK 为 2.0.0，来源见[截图说明](docs/images/README.md)。横竖屏设计维护在[设计源文件](design/huoyan-morningcheck.pen)中。
+以上为主页和现场晨检的横屏界面示例，公司、场所和设备序列号均使用虚构值，客户端版本展示统一为 2.0.0。中英文 README 分别展示对应语言的界面，来源见[截图说明](docs/images/README.md)。横竖屏设计维护在[设计源文件](design/huoyan-morningcheck.pen)中。
 
 ## 下载与激活
 

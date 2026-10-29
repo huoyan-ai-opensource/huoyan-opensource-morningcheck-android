@@ -23,7 +23,7 @@
             android:layout_weight="2"
             android:gravity="start|center_vertical"
             android:paddingEnd="@dimen/dp_4"
-            android:text="已录入图片" />
+            android:text="@string/ui_view_face_samples_enrollment_faces_info_text" />
 
         <TextView
             android:id="@+id/enrollment_faces_refresh"

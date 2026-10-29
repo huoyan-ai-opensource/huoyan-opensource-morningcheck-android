@@ -16,7 +16,7 @@
         style="@style/PenButton"
         android:layout_width="@dimen/dp_0"
         android:layout_weight="1"
-        android:text="测试连接" />
+        android:text="@string/ui_view_sdk_actions_settings_sdk_test_text" />
 
     <TextView
         android:id="@+id/settings_sdk_discover"
@@ -24,7 +24,7 @@
         android:layout_width="@dimen/dp_0"
         android:layout_marginStart="@dimen/dp_8"
         android:layout_weight="1"
-        android:text="局域网探测" />
+        android:text="@string/ui_view_sdk_actions_settings_sdk_discover_text" />
 
     <Space
         android:layout_width="@dimen/dp_12"
@@ -35,5 +35,5 @@
         style="@style/PenPrimary"
         android:layout_width="@dimen/dp_0"
         android:layout_weight="1"
-        android:text="保存连接" />
+        android:text="@string/ui_view_sdk_actions_settings_connect_text" />
 </LinearLayout>

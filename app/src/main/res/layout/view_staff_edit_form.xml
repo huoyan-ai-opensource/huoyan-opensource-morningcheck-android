@@ -17,7 +17,7 @@
             style="@style/McStaffFormButton"
             android:layout_width="@dimen/dp_0"
             android:layout_weight="1"
-            android:text="上一项" />
+            android:text="@string/ui_view_staff_edit_design_form_staff_edit_previous_field_text" />
 
         <TextView
             android:id="@+id/staff_edit_field_position"
@@ -34,7 +34,7 @@
             style="@style/McStaffFormButton"
             android:layout_width="@dimen/dp_0"
             android:layout_weight="1"
-            android:text="下一项" />
+            android:text="@string/ui_view_staff_edit_design_form_staff_edit_next_field_text" />
     </LinearLayout>
 
     <LinearLayout
@@ -50,13 +50,13 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="姓名（必填）" />
+            android:text="@string/ui_view_staff_edit_form_label_text" />
 
         <EditText
             android:id="@+id/staff_edit_name"
             style="@style/McStaffFormInput"
             android:layout_width="match_parent"
-            android:hint="请输入员工姓名"
+            android:hint="@string/ui_view_staff_edit_design_form_staff_edit_name_hint"
             android:imeOptions="actionNext|flagNoExtractUi|flagNoFullscreen"
             android:inputType="textPersonName"
             android:singleLine="true" />
@@ -76,13 +76,13 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="工号（必填，不可重复）" />
+            android:text="@string/ui_view_staff_edit_form_label_text_2" />
 
         <EditText
             android:id="@+id/staff_edit_number"
             style="@style/McStaffFormInput"
             android:layout_width="match_parent"
-            android:hint="请输入工号"
+            android:hint="@string/ui_view_staff_edit_design_form_staff_edit_number_hint"
             android:imeOptions="actionNext|flagNoExtractUi|flagNoFullscreen"
             android:inputType="text"
             android:singleLine="true" />
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="所属部门（可不分配）" />
+            android:text="@string/ui_view_staff_edit_form_label_text_3" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,15 +121,15 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="选择部门（可不分配）" />
+                android:text="@string/ui_view_staff_edit_design_form_staff_edit_department_value_text" />
 
             <TextView
                 android:id="@+id/staff_edit_clear_department"
                 style="@style/McStaffFormButton"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/dp_4"
-                android:contentDescription="不分配部门"
-                android:text="清空" />
+                android:contentDescription="@string/ui_view_departments_design_department_clear_text"
+                android:text="@string/activation_code_clear" />
         </LinearLayout>
     </LinearLayout>
 
@@ -147,18 +147,18 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="健康证有效期（可留空）" />
+            android:text="@string/ui_view_staff_edit_form_label_text_4" />
 
         <TextView
             android:id="@+id/staff_edit_health"
             style="@style/McStaffFormInput"
             android:layout_width="match_parent"
             android:clickable="true"
-            android:contentDescription="选择健康证有效期"
+            android:contentDescription="@string/ui_view_staff_edit_design_form_staff_edit_health_contentdescription"
             android:ellipsize="end"
             android:focusable="true"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="选择有效期（可留空）" />
+            android:text="@string/ui_view_staff_edit_design_form_staff_edit_health_text" />
     </LinearLayout>
 </LinearLayout>

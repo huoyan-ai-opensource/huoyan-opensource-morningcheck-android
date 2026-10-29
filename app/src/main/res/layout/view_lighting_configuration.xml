@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_4"
-            android:text="串口路径" />
+            android:text="@string/ui_view_lighting_configuration_label_text" />
 
         <TextView
             android:id="@+id/lighting_path"
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp_4"
-                    android:text="波特率" />
+                    android:text="@string/ui_view_lighting_configuration_label_text_2" />
 
                 <TextView
                     android:id="@+id/lighting_baud"
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_4"
-            android:text="开灯命令" />
+            android:text="@string/ui_view_lighting_configuration_label_text_3" />
 
         <EditText
             android:id="@+id/lighting_on_command"
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginBottom="@dimen/dp_4"
-            android:text="关闭指令" />
+            android:text="@string/ui_view_lighting_configuration_label_text_4" />
 
         <EditText
             android:id="@+id/lighting_off_command"
@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_4"
-            android:text="GPIO 编号" />
+            android:text="@string/ui_view_lighting_configuration_label_text_5" />
 
         <EditText
             android:id="@+id/lighting_gpio"
@@ -142,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_4"
-            android:text="开灯电平" />
+            android:text="@string/ui_view_lighting_configuration_label_text_6" />
 
         <EditText
             android:id="@+id/lighting_on_level"
@@ -156,7 +156,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_4"
-            android:text="关灯电平" />
+            android:text="@string/ui_view_lighting_configuration_label_text_7" />
 
         <EditText
             android:id="@+id/lighting_off_level"

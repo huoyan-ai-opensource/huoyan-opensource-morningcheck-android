@@ -29,17 +29,17 @@ public final class BusinessCloudSettingsActivity extends BaseDeviceSettingsActiv
         settingsAction(form, R.id.settings_save_cloud, () -> {
             String value = url.getText().toString().trim();
             if (!validHttp(value)) {
-                notice("请输入 http:// 或 https:// 地址");
+                notice(getString(R.string.i18n_a_enter_an_http_or_https_address));
                 return;
             }
             prefs.edit().putString("cloud_url", value).putString("cloud_token", token.getText().toString().trim()).apply();
-            toast("配置已保存");
+            toast(getString(R.string.i18n_a_configuration_saved));
         });
     }
 
     @Override
     protected void bindCompact(View form) {
-        settingsAction(form, R.id.settings_edit_cloud_url, () -> editSetting("业务云地址", "cloud_url", "", false));
+        settingsAction(form, R.id.settings_edit_cloud_url, () -> editSetting(getString(R.string.i18n_a_business_cloud_url), "cloud_url", "", false));
         settingsAction(form, R.id.settings_edit_cloud_token, () -> editSetting("X-USER-TOKEN", "cloud_token", "", true));
     }
 

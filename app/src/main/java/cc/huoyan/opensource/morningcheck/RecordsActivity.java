@@ -177,7 +177,7 @@ public final class RecordsActivity extends RecordSupportActivity {
             main.postDelayed(searchChanged, 250);
         }));
         Spinner filter = body.findViewById(R.id.records_filter);
-        filter.setAdapter(Ui.filterAdapter(this, java.util.Arrays.asList(getResources().getStringArray(R.array.list_filter_record_results)), "结果"));
+        filter.setAdapter(Ui.filterAdapter(this, java.util.Arrays.asList(getResources().getStringArray(R.array.list_filter_record_results)), getString(R.string.i18n_b_result_filter)));
         filter.setSelection(recordFilter, false);
         filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onNothingSelected(AdapterView<?> a) {
@@ -298,7 +298,7 @@ public final class RecordsActivity extends RecordSupportActivity {
                     pageError = true;
                     appendError = adding;
                     showRecordPage();
-                    notice("记录读取失败：" + failure(error));
+                    notice(getString(R.string.i18n_b_records_failed) + failure(error));
                 });
             }
         });
@@ -340,7 +340,7 @@ public final class RecordsActivity extends RecordSupportActivity {
             } catch (Exception error) {
                 main.post(() -> {
                     if (!destroyed && foreground && version == departmentReadVersion)
-                        notice("部门筛选读取失败：" + failure(error));
+                        notice(getString(R.string.i18n_b_department_filter_failed) + failure(error));
                 });
             }
         });
@@ -363,7 +363,7 @@ public final class RecordsActivity extends RecordSupportActivity {
 
     private void showRecordPage() {
         if (listLoading == null) listLoading = new LoadingDialog(this);
-        if (pageLoading && foreground) listLoading.showReadOnly("正在读取列表");
+        if (pageLoading && foreground) listLoading.showReadOnly(getString(R.string.i18n_b_reading_list));
         else listLoading.dismiss();
         if (content == null) return;
         List<JSONObject> values = records;
@@ -379,8 +379,8 @@ public final class RecordsActivity extends RecordSupportActivity {
         }
         recordList.setEnabled(!values.isEmpty() || !pageLoading);
         ((TextView) content.findViewById(R.id.records_load_more)).setText(pageLoading ? ""
-                : pageError ? "点击重新读取" : recordData == null || recordData.page >= recordData.totalPages
-                                               ? "没有更多了" : "上拉加载更多");
+                : pageError ? getString(R.string.i18n_b_retry_read) : recordData == null || recordData.page >= recordData.totalPages
+                                               ? getString(R.string.i18n_b_end_list) : getString(R.string.i18n_b_load_more));
         TextView empty = content.findViewById(R.id.records_empty);
         empty.setText(recordData == null || recordData.totalRows == 0
                 ? R.string.business_records_empty : R.string.business_records_no_match);
@@ -454,7 +454,7 @@ public final class RecordsActivity extends RecordSupportActivity {
             long time = record.optLong("created_at");
             holder.date.setText(time > 0
                     ? dateFormat.format(new Date(time)) : getString(R.string.record_row_missing));
-            holder.details.setContentDescription("查看晨检记录：" + value(record, "staff_name"));
+            holder.details.setContentDescription(getString(R.string.i18n_b_view_record_prefix) + value(record, "staff_name"));
             holder.details.setOnClickListener(v -> {
                 if (!pageLoading) openRecord(record);
             });

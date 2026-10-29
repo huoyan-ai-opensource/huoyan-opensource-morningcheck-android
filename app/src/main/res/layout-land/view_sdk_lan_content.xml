@@ -15,7 +15,7 @@
             style="@style/PenText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SDK 设备 IP" />
+            android:text="@string/ui_view_sdk_lan_content_label_text" />
 
         <EditText
             android:id="@+id/settings_sdk_url"
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
-            android:text="输入 IP，或从列表选择设备。" />
+            android:text="@string/ui_view_sdk_lan_content_label_text_2" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,7 +47,7 @@
             style="@style/PenText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="发现的设备（0）" />
+            android:text="@string/ui_view_sdk_lan_content_settings_sdk_discovery_title_text" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="暂无设备，请点击局域网探测" />
+                android:text="@string/ui_view_sdk_lan_content_settings_sdk_discovery_empty_text" />
         </FrameLayout>
 
         <TextView
@@ -75,6 +75,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
-            android:text="点击选择 IP · 向下滚动查看更多" />
+            android:text="@string/ui_view_sdk_lan_content_label_text_3" />
     </LinearLayout>
 </LinearLayout>

@@ -59,8 +59,8 @@ public final class SdkDetailsActivity extends BaseMorningActivity {
     @Override
     protected void bindPage() {
         ((TextView) findViewById(R.id.header_page_title)).setText(title());
-        ((TextView) findViewById(R.id.header_back_label)).setText("返回设置");
-        findViewById(R.id.header_home).setContentDescription("返回上一页设置");
+        ((TextView) findViewById(R.id.header_back_label)).setText(getString(R.string.i18n_b_back_settings));
+        findViewById(R.id.header_home).setContentDescription(getString(R.string.i18n_b_back_previous_settings));
         findViewById(R.id.header_home).setOnClickListener(view -> finish());
         View refresh = content.findViewById(R.id.sdk_detail_refresh);
         boolean manualRefresh = !"status".equals(kind);
@@ -129,7 +129,7 @@ public final class SdkDetailsActivity extends BaseMorningActivity {
         if (destroyed || !foreground || isFinishing()) return;
         if (reading) return;
         if (readingDialog == null) readingDialog = new LoadingDialog(this);
-        readingDialog.show("正在读取详情");
+        readingDialog.show(getString(R.string.i18n_b_reading_details));
         int version = ++readVersion;
         long connection = sdkSession.generation();
         reading = true;
@@ -155,8 +155,8 @@ public final class SdkDetailsActivity extends BaseMorningActivity {
                 return;
             reading = false;
             readingDialog.dismiss();
-            if (code != 0) notice(message == null ? "详情读取失败" : message);
-            readError = code == 0 ? "" : (message == null ? "详情读取失败" : message) + "（" + code + "）";
+            if (code != 0) notice(message == null ? getString(R.string.i18n_b_details_failed) : message);
+            readError = code == 0 ? "" : (message == null ? getString(R.string.i18n_b_details_failed) : message) + "（" + code + "）";
             if (code == 0 && "capabilities".equals(kind))
                 capabilities = data == null ? new JSONObject() : data;
             updateDetails();
@@ -166,31 +166,32 @@ public final class SdkDetailsActivity extends BaseMorningActivity {
     private String title() {
         switch (kind) {
             case "certificate":
-                return "设备授权";
+                return getString(R.string.i18n_b_device_license);
             case "model":
-                return "模型准备进度";
+                return getString(R.string.i18n_b_model_progress);
             case "capabilities":
-                return "SDK 能力";
+                return getString(R.string.i18n_b_sdk_capabilities);
             default:
-                return "SDK 状态";
+                return getString(R.string.i18n_b_sdk_status);
         }
     }
 
     private void updateDetails() {
         if (content == null || destroyed) return;
         MorningSdkState current = sdkSession.viewState();
-        ((TextView) content.findViewById(R.id.sdk_detail_title)).setText(current.title);
-        ((TextView) content.findViewById(R.id.sdk_detail_subtitle)).setText(current.detail);
+        ((TextView) content.findViewById(R.id.sdk_detail_title)).setText(UiMessages.text(this, current.title));
+        ((TextView) content.findViewById(R.id.sdk_detail_subtitle)).setText(UiMessages.text(this, current.detail));
         String text;
         switch (kind) {
             case "certificate":
-                text = SdkDetailsFormatter.certificate(sdkSession.certificate());
+                text = UiMessages.text(this, SdkDetailsFormatter.certificate(sdkSession.certificate()));
                 break;
             case "model":
                 text = modelDetails();
                 break;
             case "capabilities":
-                text = "App 版本：" + BuildConfig.VERSION_NAME + "\n" + SdkDetailsFormatter.capabilities(capabilities);
+                text = getString(R.string.i18n_b_app_version_prefix) + BuildConfig.VERSION_NAME + "\n"
+                        + UiMessages.text(this, SdkDetailsFormatter.capabilities(capabilities));
                 break;
             default:
                 text = statusDetails();
@@ -214,24 +215,26 @@ public final class SdkDetailsActivity extends BaseMorningActivity {
     private String modelDetails() {
         MorningSdkState state = sdkSession.viewState();
         if (!state.ready)
-            return state.title + "\n" + state.detail + "\n" + SdkDetailsFormatter.download(sdkSession.download());
+            return UiMessages.text(this, state.title) + "\n" + UiMessages.text(this, state.detail) + "\n"
+                    + UiMessages.text(this, SdkDetailsFormatter.download(sdkSession.download()));
         Object version = sdkSession.status().opt("model_version");
-        return state.title + "\n" + state.detail + "\n当前模型已加载。\n模型版本："
-                + (version instanceof String && !((String) version).trim().isEmpty() ? version : "暂未返回");
+        return UiMessages.text(this, state.title) + "\n" + UiMessages.text(this, state.detail)
+                + getString(R.string.i18n_b_model_loaded_prefix)
+                + (version instanceof String && !((String) version).trim().isEmpty() ? version : getString(R.string.i18n_b_not_returned));
     }
 
     private String statusDetails() {
         MorningSdkState state = sdkSession.viewState();
 
         JSONObject status = sdkSession.status();
-        String channel = sdk.getActiveChannel() == null ? "未连接" : sdk.getActiveChannel().toString();
+        String channel = sdk.getActiveChannel() == null ? getString(R.string.i18n_b_disconnected) : sdk.getActiveChannel().toString();
         Object valid = status.opt("certificate_valid"), ready = status.opt("model_ready");
-        return "连接通道：" + channel
-                + "\n服务连接：" + (sdk.isConnected() ? "已连接" : "未连接")
-                + "\n授权状态：" + (Boolean.TRUE.equals(valid) ? "有效" : Boolean.FALSE.equals(valid) ? "无效" : "待确认")
-                + "\n模型状态：" + (Boolean.TRUE.equals(ready) ? "READY" : Boolean.FALSE.equals(ready) ? "未就绪" : "待确认")
-                + "\n人员数量：" + (status.has("user_count") && !status.isNull("user_count") ? status.optString("user_count") : "待确认")
-                + "\n客户端版本：v" + BuildConfig.VERSION_NAME;
+        return getString(R.string.i18n_b_channel_prefix) + channel
+                + getString(R.string.i18n_b_service_prefix) + (sdk.isConnected() ? getString(R.string.i18n_b_connected) : getString(R.string.i18n_b_disconnected))
+                + getString(R.string.i18n_b_license_prefix) + (Boolean.TRUE.equals(valid) ? getString(R.string.i18n_b_valid) : Boolean.FALSE.equals(valid) ? getString(R.string.i18n_b_invalid) : getString(R.string.i18n_b_pending))
+                + getString(R.string.i18n_b_model_prefix) + (Boolean.TRUE.equals(ready) ? "READY" : Boolean.FALSE.equals(ready) ? getString(R.string.i18n_b_not_ready) : getString(R.string.i18n_b_pending))
+                + getString(R.string.i18n_b_staff_count_prefix) + (status.has("user_count") && !status.isNull("user_count") ? status.optString("user_count") : getString(R.string.i18n_b_pending))
+                + getString(R.string.i18n_b_client_version_prefix) + BuildConfig.VERSION_NAME;
     }
 
 
@@ -242,6 +245,7 @@ public final class SdkDetailsActivity extends BaseMorningActivity {
             for (String line : text.split("\\n")) {
                 if (line.isEmpty()) continue;
                 int divider = line.indexOf('：');
+                if (divider < 0) divider = line.indexOf(": ");
                 rows.add(divider < 0 ? new String[]{"", line}
                         : new String[]{line.substring(0, divider), line.substring(divider + 1)});
             }

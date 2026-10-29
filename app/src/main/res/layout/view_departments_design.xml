@@ -32,7 +32,7 @@
                     style="@style/PenInput"
                     android:layout_width="@dimen/dp_0"
                     android:layout_weight="1"
-                    android:hint="搜索部门名称"
+                    android:hint="@string/ui_view_departments_design_department_search_hint"
                     android:inputType="text" />
 
                 <TextView
@@ -40,7 +40,7 @@
                     style="@style/PenButton"
                     android:layout_width="wrap_content"
                     android:layout_marginStart="@dimen/dp_6"
-                    android:text="不分配部门"
+                    android:text="@string/ui_view_departments_design_department_clear_text"
                     android:visibility="gone" />
 
                 <TextView
@@ -48,7 +48,7 @@
                     style="@style/PenPrimary"
                     android:layout_width="wrap_content"
                     android:layout_marginStart="@dimen/dp_6"
-                    android:text="新增部门" />
+                    android:text="@string/department_create_title" />
             </LinearLayout>
 
             <LinearLayout
@@ -76,7 +76,7 @@
                         android:gravity="start|center_vertical"
                         android:paddingStart="@dimen/dp_18"
                         android:paddingEnd="@dimen/dp_8"
-                        android:text="部门名称"
+                        android:text="@string/department_name_label"
                         android:textAlignment="gravity" />
 
                     <TextView
@@ -84,7 +84,7 @@
                         android:layout_width="@dimen/dp_40"
                         android:layout_weight="0"
                         android:gravity="center"
-                        android:text="人数" />
+                        android:text="@string/ui_view_departments_design_label_text" />
 
                     <TextView
                         android:id="@+id/department_title_actions"
@@ -92,7 +92,7 @@
                         android:layout_width="@dimen/dp_90"
                         android:layout_weight="0"
                         android:gravity="center"
-                        android:text="操作" />
+                        android:text="@string/department_table_actions" />
                 </LinearLayout>
 
                 <FrameLayout

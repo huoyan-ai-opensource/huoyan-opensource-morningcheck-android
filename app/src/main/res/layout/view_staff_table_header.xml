@@ -23,21 +23,21 @@
 
     <TextView
         style="@style/McStaffListHeaderCell"
-        android:text="部门" />
+        android:text="@string/ui_view_record_design_summary_label_text_2" />
 
     <TextView
         style="@style/McStaffListHeaderCell"
         android:layout_weight="1.2"
-        android:text="人脸" />
+        android:text="@string/ui_view_staff_table_header_label_text" />
 
     <TextView
         style="@style/McStaffListHeaderCell"
         android:layout_weight="0.9"
-        android:text="状态" />
+        android:text="@string/ui_view_staff_table_header_label_text_2" />
 
     <TextView
         style="@style/McStaffListHeaderCell"
         android:layout_width="@dimen/dp_100"
         android:layout_weight="0"
-        android:text="操作" />
+        android:text="@string/department_table_actions" />
 </LinearLayout>

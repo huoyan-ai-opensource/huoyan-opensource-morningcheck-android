@@ -13,7 +13,7 @@
         <TextView
             android:id="@+id/health_date_previous"
             style="@style/McHealthDateArrow"
-            android:contentDescription="上个月"
+            android:contentDescription="@string/ui_dialog_record_date_design_record_date_previous_contentdescription"
             android:text="‹" />
 
         <cc.huoyan.opensource.morningcheck.ChoiceSpinner
@@ -22,7 +22,7 @@
             android:layout_width="@dimen/dp_0"
             android:layout_weight="1.3"
             android:background="@drawable/mc_field"
-            android:contentDescription="选择年份"
+            android:contentDescription="@string/ui_view_health_date_calendar_health_date_year_contentdescription"
             android:popupBackground="@drawable/mc_panel"
             android:spinnerMode="dropdown" />
 
@@ -33,13 +33,13 @@
             android:layout_marginStart="@dimen/dp_4"
             android:layout_weight="1"
             android:background="@drawable/mc_field"
-            android:contentDescription="选择月份"
+            android:contentDescription="@string/ui_view_health_date_calendar_health_date_month_contentdescription"
             android:spinnerMode="dropdown" />
 
         <TextView
             android:id="@+id/health_date_next"
             style="@style/McHealthDateArrow"
-            android:contentDescription="下个月"
+            android:contentDescription="@string/ui_dialog_record_date_design_record_date_next_contentdescription"
             android:text="›" />
     </LinearLayout>
 

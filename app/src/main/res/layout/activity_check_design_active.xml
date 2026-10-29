@@ -54,14 +54,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="2"
-                android:text="识别到员工后自动开始" />
+                android:text="@string/ui_activity_check_design_active_check_progress_text" />
 
             <TextView
                 android:id="@+id/check_pause"
                 style="@style/PenButton"
                 android:layout_width="wrap_content"
                 android:layout_marginEnd="@dimen/dp_6"
-                android:text="暂停"
+                android:text="@string/ui_activity_check_design_active_check_pause_text"
                 android:visibility="gone" />
 
             <TextView

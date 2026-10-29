@@ -16,7 +16,7 @@
         android:paddingTop="@dimen/dp_3"
         android:paddingEnd="@dimen/dp_6"
         android:paddingBottom="@dimen/dp_3"
-        android:text="等待设备" />
+        android:text="@string/ui_view_check_camera_status_check_camera_status_text" />
 
     <TextView
         android:id="@+id/check_camera_stage"
@@ -26,5 +26,5 @@
         android:layout_marginStart="@dimen/dp_8"
         android:layout_weight="1"
         android:gravity="end"
-        android:text="准备晨检" />
+        android:text="@string/ui_view_check_camera_status_check_camera_stage_text" />
 </LinearLayout>
