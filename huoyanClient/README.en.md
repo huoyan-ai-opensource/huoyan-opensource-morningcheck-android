@@ -19,7 +19,7 @@ Use the [English integration guide](INTEGRATION_GUIDE.en.md) for the full API an
 | `consumer-rules.pro` | Rules for host shrinking configurations |
 | `PACKAGING.md`, `tools/set_account.py` | Customer account configuration instructions and tool |
 
-Both Word guides are maintained in `app/src/main/libs/` in the source project. Their complete filenames and content must remain identical in the project, ZIP, and any future Release Assets. See `docs/releasing.md` in the project root or distribution ZIP for the release requirements. The source repository is [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android); no GitHub Release has been published yet, and publication is manual only.
+Both Word guides are maintained in `app/src/main/libs/` in the source project. Their complete filenames and content must remain identical in the project, ZIP, and Release Assets. See `docs/releasing.md` in the project root or distribution ZIP for the release requirements. The source repository is [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android). Downloads and build records are available through the actual [Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) and [Actions](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/actions); publication is manual only.
 
 ## Add the JAR to a host
 

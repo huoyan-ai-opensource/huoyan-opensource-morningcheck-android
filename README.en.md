@@ -47,7 +47,7 @@ Department management with test departments and counts, captured on October 15, 
 3. Configure cameras and any thermometer or light, add a test staff member, and enroll their face.
 4. Start a morning check and verify the saved result and evidence. Follow the [quick start](QUICKSTART.md) for the full procedure.
 
-The project repository is [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android). No Release has been published and hosted CI has not run yet. Build from source until maintainers publish downloadable [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases). App, JAR, and SDK versions are independent; see [compatibility](docs/version-compatibility.md) and the [changelog](CHANGELOG.md).
+The project repository is [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android). Refer to the actual [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) and [Actions](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/actions) for downloads and build records, or build from source. App, JAR, and SDK versions are independent. The App and JAR both use `2.0.0` for this release baseline; future versions do not need to match. See [compatibility](docs/version-compatibility.md) and the [changelog](CHANGELOG.md).
 
 ## Build
 

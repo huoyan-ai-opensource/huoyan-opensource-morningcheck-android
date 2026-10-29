@@ -2,18 +2,18 @@
 
 [文档导航](README.md) · [构建](build.md) · [测试](testing.md) · [版本兼容](version-compatibility.md) · [更新记录](../CHANGELOG.md)
 
-项目仓库为 [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android)，已准备手动检查与发布配置；目前尚未运行线上工作流或发布 Release。先确认待发布提交，再由维护者手动执行。推送代码、PR 或 tag 均不会自动构建、发布或激活设备。下载及发布入口统一使用本仓库的 [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases)，不提供 CNB Release 下载入口。
+项目仓库为 [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android)，检查与发布均由维护者手动执行。下载和构建记录以实际 [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) 与 [Actions](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/actions) 为准，配置文件存在不代表构建或发布已经成功。推送代码、PR 或 tag 均不会自动构建、发布或激活设备，不提供 CNB Release 下载入口。
 
 ## 版本配置
 
 | 产物 | 当前版本 | 维护位置 |
 | --- | --- | --- |
-| App versionName | 0.1.0 | `app/build.gradle` 的 `appVersionName`；可用 `-PappVersionName` 覆盖 |
-| App versionCode | 1 | `app/build.gradle` 的 `defaultConfig.versionCode`；发布新安装包需递增 |
+| App versionName | 2.0.0 | `app/build.gradle` 的 `appVersionName`；可用 `-PappVersionName` 覆盖 |
+| App versionCode | 2 | `app/build.gradle` 的 `defaultConfig.versionCode`；发布新安装包需递增 |
 | 晨检客户端 JAR / ZIP | 2.0.0 | 根 `build.gradle` 的 `morningcheckClientVersion` |
 | 晨检 SDK 壳 | 按实际交付版本 | 与客户端、设备和模型一同验证，见兼容表 |
 
-App 与 JAR 版本独立管理。App 构建只使用已经提交的 `app/src/main/libs/huoyan-morningcheck-client-<JAR版本>.jar`。修改客户端源码后，维护者显式执行 `:huoyanClient:updateAppSdkJar`，确认本次计划交付的账号配置和 JAR 适合公开发布，再运行 App 验证；普通 App 构建不会自动替换该文件。
+App 与 JAR 版本独立管理，本次均为 `2.0.0`，后续不要求同步。App 构建只使用已经提交的 `app/src/main/libs/huoyan-morningcheck-client-<JAR版本>.jar`。修改客户端源码后，维护者显式执行 `:huoyanClient:updateAppSdkJar`，确认本次计划交付的账号配置和 JAR 适合公开发布，再运行 App 验证；普通 App 构建不会自动替换该文件。
 
 APK 名称为 `huoyan-morningcheck-<App版本>-<versionCode>-<时间戳>-<构建类型>.apk`。发布说明记录实际构建提交，不仅记录 tag 名称。
 
@@ -35,7 +35,7 @@ Assets 直接显示完整文件名，不设置自定义 `label`，使用 `gh rel
 使用 JDK 17、Android SDK / Build Tools 35 和项目自带 Gradle 8.14.3 wrapper。在仓库根目录执行：
 
 ```bash
-bash gradlew --no-daemon --console=plain -PappVersionName=0.1.0 \
+bash gradlew --no-daemon --console=plain -PappVersionName=2.0.0 \
   :app:testDebugUnitTest :huoyanClient:testDebugUnitTest \
   :huoyanClient:compileExample :huoyanClient:clientDistribution \
   :app:assembleDebug :app:assembleRelease :app:assembleDebugAndroidTest
@@ -59,11 +59,12 @@ Windows PowerShell 使用 `.\gradlew.bat`，并先设置 `$env:PYTHONDONTWRITEBY
 - `release.yml`：在 Actions 选择“Android 实验版本发布”，填写已经存在的 `vMAJOR.MINOR.PATCH` 或 `MAJOR.MINOR.PATCH` tag；构建任务检出该 tag，执行测试及 Release 打包，记录真实源码提交。只有后续发布任务具有 `contents: write`，使用 GitHub 内置令牌创建对应 Release。
 - 两份工作流均仅 `workflow_dispatch` 手动触发。第三方 Actions 固定到提交版本；升级时核对上游提交及变化，不直接改成浮动版本。
 
-确认版本、签名、目标提交和远端后，可由维护者创建并推送目标 tag，例如：
+确认版本、签名、目标提交和远端后，先推送发布版本代码，再为已推送的目标提交创建并推送 tag。例如确认当前 `HEAD` 为本次版本提交后执行：
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git push origin main
+git tag v2.0.0
+git push origin v2.0.0
 ```
 
 执行前用 `git remote -v` 确认 `origin` 指向 `https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android.git`。仅推 tag 不会发布，仍需手动运行发布工作流。不要重复创建已经公开的版本；Release 已存在时流程会失败，必须先检查现状，不能静默覆盖用户已经下载的文件。

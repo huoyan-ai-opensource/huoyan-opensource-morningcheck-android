@@ -17,4 +17,4 @@ App/JAR 源码对所有人开放使用；SDK 获取、激活、包名登记和�
 
 缺陷反馈使用仓库的问题模板，提供最小复现和脱敏日志；功能建议描述场景和期望结果。代码贡献见 [CONTRIBUTING.md](CONTRIBUTING.md)，安全或隐私问题见 [SECURITY.md](SECURITY.md)。已在其他平台讨论时附原链接，避免把不同版本的现象混在一起。
 
-源码仓库为 [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android)。工作流仅手动触发，目前尚无线上构建记录或 Release 附件；源码、构建记录与下载分别以仓库、Actions 和 Releases 的实际内容为准。
+源码仓库为 [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android)。工作流仅手动触发；构建记录与下载以 [Actions](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/actions) 和 [Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) 的实际内容为准。

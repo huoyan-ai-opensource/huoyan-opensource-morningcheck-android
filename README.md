@@ -47,7 +47,7 @@ App 采用 Java、XML layout 和独立 Activity，连接单独安装的火眼晨
 3. 配置相机及所需测温、补光设备，新增一名测试员工并录入人脸。
 4. 从首页开始晨检，依次完成检查并核对保存的结果与照片。完整步骤见[快速开始](QUICKSTART.md)。
 
-项目仓库为 [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android)。目前尚未发布 Release 或完成线上 CI；当前可从源码构建，下载以维护者实际发布的 [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) 为准。App、JAR 与 SDK 分别管理版本，见[版本兼容表](docs/version-compatibility.md)和[更新记录](CHANGELOG.md)。
+项目仓库为 [huoyan-ai-opensource/huoyan-opensource-morningcheck-android](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android)。下载与构建记录以实际 [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) 和 [Actions](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/actions) 为准，也可从源码构建。App、JAR 与 SDK 分别管理版本；本次 App 与 JAR 恰好均为 `2.0.0`，不代表后续版本需要同步，见[版本兼容表](docs/version-compatibility.md)和[更新记录](CHANGELOG.md)。
 
 ## 构建
 

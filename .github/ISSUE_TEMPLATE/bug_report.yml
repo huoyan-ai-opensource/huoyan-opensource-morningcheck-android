@@ -13,7 +13,7 @@ body:
     attributes:
       label: App / JAR / SDK 壳 / 模型版本
       description: 源码运行时附分支、提交号及来源平台；无法取得的版本标为未知。
-      placeholder: "App 0.1.0；JAR 2.0.0；SDK/模型版本；main@提交号"
+      placeholder: "App 2.0.0；JAR 2.0.0；SDK/模型版本；main@提交号"
     validations:
       required: true
   - type: input
