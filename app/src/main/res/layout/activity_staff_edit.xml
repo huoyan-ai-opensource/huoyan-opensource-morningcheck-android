@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mc_bg"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:theme="@style/AppPreviewTheme">
+
+    <include
+        android:id="@+id/staff_edit_header"
+        layout="@layout/view_app_header" />
+
+    <LinearLayout
+        android:id="@+id/page_content"
+        style="@style/McStaffFormPage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/staff_edit_panel"
+            style="@style/McStaffFormPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/staff_edit_editor"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <include
+                    layout="@layout/view_staff_edit_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_0"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/staff_edit_feedback"
+                    style="@style/McStaffFormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:textColor="@color/mc_orange"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/staff_edit_reload"
+                    style="@style/McStaffFormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:maxLines="2"
+                    android:text="重新读取资料并清空草稿"
+                    android:textColor="@color/mc_blue"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/staff_edit_actions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_4"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/staff_edit_cancel"
+                    style="@style/McStaffFormButton"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_weight="1"
+                    android:text="取消" />
+
+                <TextView
+                    android:id="@+id/staff_edit_save"
+                    style="@style/McStaffFormButtonPrimary"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_weight="1"
+                    android:text="保存员工" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

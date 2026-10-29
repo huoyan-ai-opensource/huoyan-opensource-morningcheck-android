@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_segment_background"
+    android:minHeight="@dimen/dp_24"
+    android:orientation="horizontal"
+    android:padding="@dimen/dp_2">
+
+    <TextView
+        android:id="@+id/lighting_serial_mode"
+        style="@style/PenSegment"
+        android:layout_width="@dimen/dp_0"
+        android:layout_weight="1"
+        android:text="串口" />
+
+    <TextView
+        android:id="@+id/lighting_gpio_mode"
+        style="@style/PenSegment"
+        android:layout_width="@dimen/dp_0"
+        android:layout_weight="1"
+        android:text="GPIO" />
+</LinearLayout>

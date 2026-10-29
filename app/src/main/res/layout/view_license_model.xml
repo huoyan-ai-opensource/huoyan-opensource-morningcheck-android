@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_30"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="当前模型" />
+
+        <TextView
+            android:id="@+id/settings_current_model"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="2"
+            android:text="—"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_30"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="模型版本" />
+
+        <TextView
+            android:id="@+id/settings_model_version"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="2"
+            android:text="—"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+</LinearLayout>

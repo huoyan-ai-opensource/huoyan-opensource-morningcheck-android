@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="画面配置" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_36">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择相机" />
+
+        <TextView
+            android:id="@+id/settings_choose_active_camera"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="end|center_vertical"
+            android:text="选择相机  ›" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分辨率" />
+
+        <TextView
+            android:id="@+id/settings_camera_resolution"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="end|center_vertical"
+            android:text="待获取  ›" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="镜像反转" />
+
+        <cc.huoyan.opensource.morningcheck.LandscapeSwitch
+            android:id="@+id/settings_camera_mirror"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="镜像反转"
+            android:showText="false"
+            android:splitTrack="false"
+            android:switchMinWidth="@dimen/dp_52"
+            android:thumb="@drawable/land_switch_thumb"
+            android:thumbTint="@null"
+            android:track="@drawable/land_switch_track"
+            android:trackTint="@null" />
+    </LinearLayout>
+</LinearLayout>

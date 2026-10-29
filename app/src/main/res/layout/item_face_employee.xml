@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_field"
+    android:minHeight="@dimen/dp_48"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_6"
+    tools:theme="@style/AppPreviewTheme">
+
+    <TextView
+        android:id="@+id/business_row_name"
+        style="@style/PenText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        tools:text="张晓明" />
+
+    <TextView
+        android:id="@+id/business_row_meta"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        tools:text="编号 10001 · 后厨" />
+
+    <TextView
+        android:id="@+id/business_row_state"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textColor="@color/mc_blue"
+        tools:text="待录人脸" />
+</LinearLayout>

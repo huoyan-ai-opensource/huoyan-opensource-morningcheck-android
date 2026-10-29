@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/enrollment_samples_workspace"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mc_panel"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_face_design_identity" />
+
+    <include
+        layout="@layout/view_face_samples"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1" />
+</LinearLayout>

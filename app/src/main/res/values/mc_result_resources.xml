@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mc_result_photo_absent">未保存照片</string>
+    <string name="mc_result_stay_here">停留查看</string>
+    <string name="mc_result_auto_next">自动下一位 · 可停留查看</string>
+    <string name="mc_result_next_countdown">%1$d秒后下一位 · 可停留查看</string>
+    <string name="mc_result_next_after_voice">播报结束后下一位 · 可停留查看</string>
+</resources>

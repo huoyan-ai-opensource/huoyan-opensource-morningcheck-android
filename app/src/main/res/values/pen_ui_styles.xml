@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PenText" parent="McText">
+        <item name="android:textSize">@dimen/sp_8</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:minHeight">@dimen/dp_0</item>
+    </style>
+
+    <style name="PenCaption" parent="PenText">
+        <item name="android:textSize">@dimen/sp_8</item>
+        <item name="android:textColor">@color/mc_muted</item>
+    </style>
+
+    <style name="PenDatePreset" parent="PenButton">
+        <item name="android:background">@drawable/mc_date_preset</item>
+        <item name="android:textColor">@color/mc_date_preset_text</item>
+    </style>
+
+    <style name="PenTitle" parent="PenText">
+        <item name="android:textSize">@dimen/sp_10</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="PenPage">
+        <item name="android:padding">@dimen/dp_12</item>
+    </style>
+
+    <style name="PenPanel">
+        <item name="android:paddingTop">@dimen/dp_8</item>
+        <item name="android:paddingBottom">@dimen/dp_8</item>
+        <item name="android:paddingLeft">@dimen/dp_8</item>
+        <item name="android:paddingRight">@dimen/dp_8</item>
+        <item name="android:background">@drawable/mc_panel</item>
+    </style>
+
+    <style name="PenButton" parent="PenText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/dp_26</item>
+        <item name="android:paddingStart">@dimen/dp_11</item>
+        <item name="android:paddingEnd">@dimen/dp_11</item>
+        <item name="android:paddingTop">@dimen/dp_4</item>
+        <item name="android:paddingBottom">@dimen/dp_4</item>
+        <item name="android:background">@drawable/mc_button</item>
+        <item name="android:textColor">@color/mc_blue</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="PenPrimary" parent="PenButton">
+        <item name="android:background">@drawable/mc_button_primary</item>
+        <item name="android:textColor">@color/mc_white</item>
+    </style>
+
+    <style name="PenDanger" parent="PenButton">
+        <item name="android:background">@drawable/mc_action_danger</item>
+        <item name="android:textColor">#CF4848</item>
+    </style>
+
+    <style name="PenInput" parent="PenText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/dp_26</item>
+        <item name="android:background">@drawable/mc_field</item>
+        <item name="android:paddingStart">@dimen/dp_8</item>
+        <item name="android:paddingEnd">@dimen/dp_8</item>
+        <item name="android:paddingTop">@dimen/dp_4</item>
+        <item name="android:paddingBottom">@dimen/dp_4</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColorHint">@color/mc_muted</item>
+    </style>
+
+    <style name="PenRowCell" parent="PenText">
+        <item name="android:layout_width">@dimen/dp_0</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingEnd">@dimen/dp_4</item>
+    </style>
+
+    <style name="PenHeaderCell" parent="PenRowCell">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:minHeight">@dimen/dp_24</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingEnd">@dimen/dp_0</item>
+        <item name="android:paddingTop">@dimen/dp_4</item>
+        <item name="android:paddingBottom">@dimen/dp_4</item>
+        <item name="android:textSize">@dimen/sp_8</item>
+        <item name="android:textColor">@color/mc_muted</item>
+    </style>
+
+    <style name="PenSegment" parent="PenButton">
+        <item name="android:background">@drawable/mc_segment_item</item>
+        <item name="android:textColor">@color/mc_segment_text</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/dp_20</item>
+    </style>
+
+    <style name="PenFooter">
+        <item name="android:background">@color/mc_white</item>
+        <item name="android:minHeight">@dimen/dp_42</item>
+        <item name="android:paddingStart">@dimen/dp_12</item>
+        <item name="android:paddingEnd">@dimen/dp_12</item>
+        <item name="android:paddingTop">@dimen/dp_8</item>
+        <item name="android:paddingBottom">@dimen/dp_8</item>
+    </style>
+</resources>

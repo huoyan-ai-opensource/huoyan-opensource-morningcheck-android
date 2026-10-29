@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mc_enrollment_status_idle">#883F4C60</color>
+    <color name="mc_enrollment_status_busy">#883F3EED</color>
+    <color name="mc_enrollment_status_ready">#88137C64</color>
+    <color name="mc_enrollment_status_warning">#88FC9A03</color>
+    <color name="mc_enrollment_status_danger">#88B42318</color>
+</resources>

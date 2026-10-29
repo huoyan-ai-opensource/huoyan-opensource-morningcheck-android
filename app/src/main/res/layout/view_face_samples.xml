@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/enrollment_samples_panel"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:theme="@style/AppPreviewTheme">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:minHeight="@dimen/dp_16"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/enrollment_faces_info"
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="start|center_vertical"
+            android:paddingEnd="@dimen/dp_4"
+            android:text="已录入图片" />
+
+        <TextView
+            android:id="@+id/enrollment_faces_refresh"
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="@string/face_samples_refresh"
+            android:text="@string/face_samples_refresh_short"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1">
+
+        <GridView
+            android:id="@+id/enrollment_faces"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:columnWidth="@dimen/dp_60"
+            android:numColumns="3"
+            android:stretchMode="spacingWidth"
+            android:verticalSpacing="@dimen/dp_4"
+            tools:listitem="@layout/item_face_sample" />
+
+        <TextView
+            android:id="@+id/enrollment_faces_empty"
+            style="@style/PenCaption"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:maxLines="5"
+            android:text="@string/face_samples_empty" />
+    </FrameLayout>
+</LinearLayout>

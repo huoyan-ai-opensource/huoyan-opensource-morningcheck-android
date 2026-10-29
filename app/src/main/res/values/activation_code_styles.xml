@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="McActivationCodePanel" parent="">
+        <item name="android:background">@drawable/activation_code_panel</item>
+        <item name="android:padding">@dimen/dp_12</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="McActivationCodeTitle" parent="McTitle">
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="McActivationCodeLink" parent="McText">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:textColor">@color/mc_blue</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:minHeight">@dimen/dp_34</item>
+    </style>
+
+    <style name="McActivationCodeSegment" parent="McText">
+        <item name="android:background">@drawable/activation_code_segment</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="fontFamily">monospace</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="McActivationCodeKey" parent="McText">
+        <item name="android:background">@drawable/activation_code_key</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="fontFamily">monospace</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_0</item>
+        <item name="android:minHeight">@dimen/dp_0</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="McActivationCodeAction" parent="McButton">
+        <item name="android:background">@drawable/activation_code_secondary</item>
+        <item name="android:textColor">@color/mc_ink</item>
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:minHeight">@dimen/dp_40</item>
+        <item name="android:padding">@dimen/dp_0</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="McActivationCodePrimary" parent="McActivationCodeAction">
+        <item name="android:background">@drawable/activation_code_primary</item>
+        <item name="android:textColor">@color/mc_white</item>
+    </style>
+</resources>

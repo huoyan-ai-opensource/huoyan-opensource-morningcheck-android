@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_list_table_row"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/dp_30"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_8">
+
+    <TextView
+        android:id="@+id/staff_row_name"
+        style="@style/McStaffListCell"
+        android:layout_weight="1"
+        android:gravity="start|center_vertical"
+        android:maxLines="1"
+        android:textSize="@dimen/sp_10"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/staff_row_number"
+        style="@style/McStaffListNumberCell"
+        android:layout_weight="1.5" />
+
+    <TextView
+        android:id="@+id/staff_row_department"
+        style="@style/McStaffListCell" />
+
+    <TextView
+        android:id="@+id/staff_row_face"
+        style="@style/McStaffListCell"
+        android:layout_weight="1.2"
+        android:textSize="@dimen/sp_8" />
+
+    <TextView
+        android:id="@+id/staff_row_enabled"
+        style="@style/McStaffListCell"
+        android:layout_weight="0.9" />
+
+    <TextView
+        android:id="@+id/staff_row_health"
+        style="@style/McStaffListCell"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/staff_row_enroll"
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_0"
+            android:layout_weight="1"
+            android:minHeight="@dimen/dp_24"
+            android:paddingStart="@dimen/dp_0"
+            android:paddingEnd="@dimen/dp_0"
+            android:text="录入" />
+
+        <TextView
+            android:id="@+id/staff_row_edit"
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_2"
+            android:layout_weight="1"
+            android:minHeight="@dimen/dp_24"
+            android:paddingStart="@dimen/dp_0"
+            android:paddingEnd="@dimen/dp_0"
+            android:text="编辑" />
+
+        <TextView
+            android:id="@+id/staff_row_delete"
+            style="@style/PenDanger"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_2"
+            android:layout_weight="1"
+            android:minHeight="@dimen/dp_24"
+            android:paddingStart="@dimen/dp_0"
+            android:paddingEnd="@dimen/dp_0"
+            android:text="删除" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activation_code_title">输入激活码</string>
+    <string name="model_switch_code_title">补充激活码</string>
+    <string name="model_switch_code_hint">切换模型需补充当前设备的激活码</string>
+    <string name="model_switch_code_scan">扫码输入</string>
+    <string name="activation_code_scan">扫码激活</string>
+    <string name="activation_code_rules">仅大写字母与数字，不含 0、I、O</string>
+    <string name="activation_code_clear">清空</string>
+    <string name="activation_code_cancel">取消</string>
+    <string name="activation_code_activate">下一步</string>
+    <string name="activation_code_backspace">退格</string>
+    <string name="activation_code_invalid">激活码格式有误，请使用大写字母和 1–9</string>
+    <string name="activation_code_accessibility">16 位激活码</string>
+</resources>

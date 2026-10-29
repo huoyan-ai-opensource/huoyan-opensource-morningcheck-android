@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settings_sdk_actions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mc_white"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/dp_42"
+    android:paddingStart="@dimen/dp_12"
+    android:paddingTop="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_12"
+    android:paddingBottom="@dimen/dp_8">
+
+    <TextView
+        android:id="@+id/settings_sdk_test"
+        style="@style/PenButton"
+        android:layout_width="@dimen/dp_0"
+        android:layout_weight="1"
+        android:text="测试连接" />
+
+    <TextView
+        android:id="@+id/settings_sdk_discover"
+        style="@style/PenButton"
+        android:layout_width="@dimen/dp_0"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_weight="1"
+        android:text="局域网探测" />
+
+    <Space
+        android:layout_width="@dimen/dp_12"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/settings_connect"
+        style="@style/PenPrimary"
+        android:layout_width="@dimen/dp_0"
+        android:layout_weight="1"
+        android:text="保存连接" />
+</LinearLayout>

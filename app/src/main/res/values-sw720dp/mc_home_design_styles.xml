@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+
+    <style name="HomeDesignAbout" parent="McButton">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:background">@drawable/mc_home_design_about</item>
+        <item name="android:drawableStart">@drawable/mc_home_info</item>
+        <item name="android:drawablePadding">@dimen/dp_4</item>
+        <item name="android:minWidth">@dimen/dp_0</item>
+        <item name="android:paddingStart">@dimen/dp_6</item>
+        <item name="android:paddingEnd">@dimen/dp_6</item>
+        <item name="android:paddingTop">@dimen/dp_0</item>
+        <item name="android:paddingBottom">@dimen/dp_0</item>
+        <item name="android:minHeight">@dimen/dp_0</item>
+        <item name="android:layout_height">@dimen/dp_24</item>
+        <item name="android:layout_marginStart">@dimen/dp_4</item>
+    </style>
+
+</resources>

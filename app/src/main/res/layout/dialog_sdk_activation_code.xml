@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activation_code_panel"
+    style="@style/McActivationCodePanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    tools:theme="@style/AppPreviewTheme">
+
+    <LinearLayout
+        android:id="@+id/activation_code_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/activation_code_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/activation_code_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/activation_code_title"
+                    style="@style/McActivationCodeTitle"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/activation_code_title" />
+
+                <TextView
+                    android:id="@+id/activation_code_clear"
+                    style="@style/McActivationCodeLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingStart="@dimen/dp_4"
+                    android:paddingEnd="@dimen/dp_4"
+                    android:text="@string/activation_code_clear" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/activation_code_input_row"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44"
+                android:layout_marginTop="@dimen/dp_4">
+
+                <TextView
+                    android:id="@+id/activation_code_segment_1"
+                    style="@style/McActivationCodeSegment"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="match_parent"
+                    tools:text="Z2FB" />
+
+                <TextView
+                    android:id="@+id/activation_code_segment_2"
+                    style="@style/McActivationCodeSegment"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_68"
+                    tools:text="W9L7" />
+
+                <TextView
+                    android:id="@+id/activation_code_segment_3"
+                    style="@style/McActivationCodeSegment"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_135"
+                    tools:text="M78R" />
+
+                <TextView
+                    android:id="@+id/activation_code_segment_4"
+                    style="@style/McActivationCodeSegment"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_200"
+                    tools:text="586H" />
+
+                <cc.huoyan.opensource.morningcheck.SdkActivationCodeEditText
+                    android:id="@+id/activation_code_editor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/activation_code_accessibility"
+                    android:inputType="textVisiblePassword|textNoSuggestions"
+                    android:padding="@dimen/dp_0"
+                    android:saveEnabled="false"
+                    android:singleLine="true" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/activation_code_metadata"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44"
+                android:layout_marginTop="@dimen/dp_4"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/activation_code_rules"
+                    style="@style/McLabel"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="2"
+                    android:text="@string/activation_code_rules" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/activation_code_error"
+                style="@style/McLabel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:accessibilityLiveRegion="polite"
+                android:maxLines="4"
+                android:textColor="@color/mc_orange"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <include
+            layout="@layout/panel_activation_code_keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_200"
+            android:layout_marginTop="@dimen/dp_8" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activation_code_actions"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_marginTop="@dimen/dp_8"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/activation_code_scan"
+            style="@style/McActivationCodeAction"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/activation_code_scan"
+            android:drawablePadding="@dimen/dp_4"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_4"
+            android:text="@string/activation_code_scan" />
+
+        <TextView
+            android:id="@+id/activation_code_cancel"
+            style="@style/McActivationCodeAction"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_weight="1"
+            android:text="@string/activation_code_cancel" />
+
+        <TextView
+            android:id="@+id/activation_code_activate"
+            style="@style/McActivationCodePrimary"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@string/activation_code_activate" />
+    </LinearLayout>
+</LinearLayout>

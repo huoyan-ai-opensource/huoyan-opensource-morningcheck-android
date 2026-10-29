@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <cc.huoyan.opensource.morningcheck.PhotoViewerImageView
+        android:id="@+id/photo_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="检查照片" />
+
+    <TextView
+        android:id="@+id/photo_empty"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@color/mc_white"
+        android:visibility="gone" />
+</FrameLayout>

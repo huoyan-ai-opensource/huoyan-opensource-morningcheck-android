@@ -1,0 +1,23 @@
+<resources>
+
+    <style name="AppTheme" parent="McTypographyTheme">
+        <item name="mcFontRegular">@font/retail_sans_regular</item>
+        <item name="mcFontBold">@font/retail_sans_bold</item>
+        <item name="colorPrimary">#3F3EED</item>
+        <item name="colorPrimaryDark">#F2F4F8</item>
+        <item name="colorAccent">#3F3EED</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:statusBarColor">#F2F4F8</item>
+        <item name="android:navigationBarColor">#F2F4F8</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">#F2F4F8</item>
+        <item name="android:windowAnimationStyle">@style/McActivityNoAnimation</item>
+    </style>
+
+    <style name="McActivityNoAnimation">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+    </style>
+</resources>

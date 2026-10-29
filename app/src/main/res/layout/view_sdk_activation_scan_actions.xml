@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/McLoginPanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/sdk_activation_scan_status_title"
+        style="@style/McLoginTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/retail_sans_bold"
+        android:text="@string/sdk_activation_scan_ready"
+        android:textColor="#293A51" />
+
+    <TextView
+        android:id="@+id/sdk_activation_scan_status_message"
+        style="@style/McLoginHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4"
+        android:accessibilityLiveRegion="polite"
+        android:ellipsize="end"
+        android:lineSpacingExtra="@dimen/dp_2"
+        android:maxLines="4"
+        android:text="@string/sdk_activation_scan_hint"
+        android:textColor="#637187" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/sdk_activation_scan_choose_camera"
+            style="@style/LoginAction"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1"
+            android:text="@string/sdk_activation_scan_choose_camera" />
+
+        <TextView
+            android:id="@+id/sdk_activation_scan_retry"
+            style="@style/LoginAction"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1"
+            android:background="@drawable/login_primary_action"
+            android:text="@string/sdk_activation_scan_retry"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/sdk_activation_scan_permission_settings"
+            style="@style/LoginAction"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1"
+            android:text="@string/sdk_activation_scan_permission_settings"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lighting_saved_short">灯光配置已保存</string>
+    <string name="lighting_turning_on">正在发送开灯命令…</string>
+    <string name="lighting_turning_off">正在发送关灯命令…</string>
+    <string name="lighting_command_format">指令格式</string>
+    <string name="lighting_command_format_help">自动转换开灯、关灯指令，发送内容保持一致</string>
+    <string name="lighting_format_character">字符</string>
+    <string name="lighting_format_decimal">十进制</string>
+    <string name="lighting_format_hexadecimal">十六进制</string>
+    <string name="lighting_character_hint">直接填写字符，如 A00101A0</string>
+    <string name="lighting_decimal_hint">填写 0–255，以空格分隔</string>
+    <string name="lighting_hexadecimal_hint">填写十六进制字节，如 41 30 30</string>
+    <string-array name="lighting_command_formats">
+        <item>@string/lighting_format_character</item>
+        <item>@string/lighting_format_decimal</item>
+        <item>@string/lighting_format_hexadecimal</item>
+    </string-array>
+    <string name="lighting_gpio_mapping">IO1=122 · IO2=148 · IO3=147 · IO4=101</string>
+</resources>

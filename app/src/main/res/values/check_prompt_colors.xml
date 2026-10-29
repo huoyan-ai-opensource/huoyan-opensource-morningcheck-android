@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mc_check_prompt_ink">#253B56</color>
+    <color name="mc_check_prompt_warning_ink">#9D420B</color>
+    <color name="mc_check_prompt_normal_surface">#F0F5FA</color>
+    <color name="mc_check_prompt_normal_border">#D9E4F0</color>
+    <color name="mc_check_prompt_warning_surface">#FFF1E6</color>
+    <color name="mc_check_prompt_warning_border">#EDB891</color>
+</resources>

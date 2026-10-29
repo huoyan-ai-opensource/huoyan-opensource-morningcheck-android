@@ -1,0 +1,7 @@
+
+cc.huoyan.opensource.morningcheck.DesignUiDeviceTest:..
+cc.huoyan.opensource.morningcheck.SdkActivationScanUiTest:....
+
+Time: 167.517
+
+OK (6 tests)

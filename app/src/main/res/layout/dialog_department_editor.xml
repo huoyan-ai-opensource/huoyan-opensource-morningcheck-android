@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/department_edit_panel"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:theme="@style/AppPreviewTheme">
+
+    <TextView
+        android:id="@+id/department_edit_title"
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/department_edit_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/department_edit_editor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/view_department_fields" />
+
+            <TextView
+                android:id="@+id/department_edit_members"
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                tools:text="12 名员工" />
+
+            <TextView
+                android:id="@+id/department_edit_hint"
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_4"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/department_rename_hint" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/department_edit_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/department_edit_cancel"
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="@string/department_dialog_close" />
+
+        <TextView
+            android:id="@+id/department_edit_save"
+            style="@style/PenPrimary"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="确定" />
+    </LinearLayout>
+</LinearLayout>

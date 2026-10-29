@@ -1,0 +1,179 @@
+import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.TaskAction
+import org.gradle.process.ExecOperations
+
+import javax.inject.Inject
+
+plugins {
+    id 'com.android.application'
+}
+
+def morningcheckClientVersion = rootProject.ext.morningcheckClientVersion
+// 手动发布工作流按 tag 注入版本名，本地构建保留当前版本。
+def appVersionName = providers.gradleProperty('appVersionName').getOrElse('0.1.0')
+if (!(appVersionName ==~ /(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)/)) {
+    throw new GradleException('版本号必须为 MAJOR.MINOR.PATCH，例如 0.1.0；tag 可加 v 前缀。')
+}
+
+// 正式签名只从未入库的本机配置读取，部分填写时不得静默回退到实验签名。
+def signingProperties = new Properties()
+def signingPropertiesFile = rootProject.file('local.properties')
+if (signingPropertiesFile.exists()) {
+    signingPropertiesFile.withInputStream { signingProperties.load(it) }
+}
+def signingKeys = ['signing.storeFile', 'signing.storePassword', 'signing.keyAlias', 'signing.keyPassword']
+def hasReleaseSigning = signingKeys.any { signingProperties.containsKey(it) }
+if (hasReleaseSigning && !signingKeys.every { signingProperties[it] }) {
+    throw new GradleException('正式签名配置不完整：请在 local.properties 中填写 ' + signingKeys.join(', '))
+}
+
+android {
+    namespace 'cc.huoyan.opensource.morningcheck'
+    compileSdk 35
+    buildToolsVersion '35.0.0'
+
+    defaultConfig {
+        applicationId 'cc.huoyan.opensource.morningcheck'
+        minSdk 21
+        targetSdk 35
+        versionCode 1
+        versionName appVersionName
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    signingConfigs {
+        // 公开的非商业实验签名，仅用于开源版本实验和测试 Release 打包。
+        demoRelease {
+            storeFile rootProject.file('signing/xinhai-debug-demo.jks')
+            storeType 'JKS'
+            storePassword 'xinhai-debug-demo'
+            keyAlias 'xinhai-debug-demo'
+            keyPassword 'xinhai-debug-demo'
+        }
+        if (hasReleaseSigning) {
+            release {
+                storeFile rootProject.file(signingProperties['signing.storeFile'])
+                storePassword signingProperties['signing.storePassword']
+                keyAlias signingProperties['signing.keyAlias']
+                keyPassword signingProperties['signing.keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig hasReleaseSigning ? signingConfigs.release : signingConfigs.demoRelease
+        }
+    }
+
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach {
+            outputFileName = "huoyan-morningcheck-${versionName}-${versionCode}-" +
+                    new Date().format('yyyyMMddHHmmss') + "-${variant.buildType.name}.apk"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+        coreLibraryDesugaringEnabled true
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    // 与零售项目一致，使用已交付 JAR；更新命令：:huoyanClient:updateAppSdkJar。
+    implementation files("src/main/libs/huoyan-morningcheck-client-${morningcheckClientVersion}.jar")
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    // 本地 JAR 不携带依赖元数据，OkHttp 及其 Kotlin/Okio 依赖由宿主提供。
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.licheedev:android-serialport:2.1.4'
+    implementation 'com.herohan:UVCAndroid:1.0.13'
+    implementation 'com.google.zxing:core:3.5.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:core:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+}
+
+/** 使用项目现有 SDK 工具生成只含元信息的安装测试 APK，不依赖真实发行包。 */
+abstract class GenerateSdkInstallFixture extends DefaultTask {
+    @InputFile
+    @PathSensitive(PathSensitivity.NONE)
+    abstract RegularFileProperty getFixtureManifest()
+
+    @InputFile
+    @PathSensitive(PathSensitivity.NONE)
+    abstract RegularFileProperty getAndroidJar()
+
+    @InputFile
+    @PathSensitive(PathSensitivity.NONE)
+    abstract RegularFileProperty getAapt2Executable()
+
+    @OutputDirectory
+    abstract DirectoryProperty getOutputDirectory()
+
+    @Inject
+    protected abstract ExecOperations getExecOperations()
+
+    @TaskAction
+    void generate() {
+        def destination = outputDirectory.get().asFile
+        if (!destination.isDirectory() && !destination.mkdirs()) {
+            throw new GradleException('无法创建 SDK 安装测试夹具目录')
+        }
+        execOperations.exec {
+            commandLine(aapt2Executable.get().asFile.absolutePath, 'link',
+                    '--manifest', fixtureManifest.get().asFile.absolutePath,
+                    '-I', androidJar.get().asFile.absolutePath,
+                    '-o', new File(destination, 'sdk-install-fixture.apk').absolutePath)
+        }
+    }
+}
+
+def sdkFixtureBuildTools = objects.property(String)
+androidComponents {
+    finalizeDsl { androidDsl ->
+        sdkFixtureBuildTools.set(androidDsl.buildToolsVersion)
+    }
+    onVariants(selector().all()) { variant ->
+        def tests = variant.androidTest
+        if (tests == null) {
+            return
+        }
+        def generator = tasks.register(
+                "generate${variant.name.capitalize()}SdkInstallFixture", GenerateSdkInstallFixture) {
+            description = '生成用于安装流程测试的晨检 SDK 元信息 APK'
+            fixtureManifest.set(layout.projectDirectory.file('src/androidTest/fixtures/sdk-install/AndroidManifest.xml'))
+            androidJar.set(sdkComponents.bootClasspath.map { files ->
+                files.find { it.asFile.name == 'android.jar' }
+            })
+            aapt2Executable.set(sdkComponents.sdkDirectory.zip(sdkFixtureBuildTools) { sdk, version ->
+                def executable = System.getProperty('os.name').toLowerCase(Locale.ROOT).startsWith('windows')
+                        ? 'aapt2.exe' : 'aapt2'
+                sdk.file("build-tools/${version}/${executable}")
+            })
+            outputDirectory.set(layout.buildDirectory.dir("generated/sdk-install-fixture/${variant.name}/assets"))
+        }
+        // 注册生成目录时一并建立依赖，merge AndroidTest Assets 会先生成夹具。
+        tests.sources.assets?.addGeneratedSourceDirectory(generator) { task -> task.outputDirectory }
+    }
+}

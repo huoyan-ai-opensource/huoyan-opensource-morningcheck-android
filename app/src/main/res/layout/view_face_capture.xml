@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/enrollment_capture_panel"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:theme="@style/AppPreviewTheme">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:background="@drawable/mc_face_enrollment_preview"
+        android:clipToOutline="true">
+
+        <cc.huoyan.opensource.morningcheck.FaceEnrollmentPreviewLayout
+            android:id="@+id/enrollment_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/enrollment_preview_placeholder"
+            style="@style/PenCaption"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/dp_8"
+            android:text="@string/face_enrollment_select_employee"
+            android:textColor="@color/mc_white" />
+
+        <TextView
+            android:id="@+id/enrollment_preview_status"
+            style="@style/McEnrollmentPreviewStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:text="@string/face_enrollment_status_select_employee" />
+    </FrameLayout>
+</LinearLayout>

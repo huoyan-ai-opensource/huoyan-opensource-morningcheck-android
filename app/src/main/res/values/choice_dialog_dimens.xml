@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 弹窗宽度、行高和留白按实际 dp 控制，避免跟随页面尺寸成倍放大。 -->
+    <dimen name="mc_choice_window_max_width">400dp</dimen>
+    <dimen name="mc_choice_window_margin">20dp</dimen>
+    <dimen name="mc_choice_padding">12dp</dimen>
+    <dimen name="mc_choice_title_min_height">26dp</dimen>
+    <dimen name="mc_choice_title_text_size">20sp</dimen>
+    <dimen name="mc_choice_subtitle_margin">4dp</dimen>
+    <dimen name="mc_choice_subtitle_text_size">14sp</dimen>
+    <dimen name="mc_choice_content_margin">8dp</dimen>
+    <dimen name="mc_choice_option_spacing">4dp</dimen>
+    <dimen name="mc_choice_empty_height">72dp</dimen>
+    <dimen name="mc_choice_action_min_height">48dp</dimen>
+    <dimen name="mc_choice_action_padding">10dp</dimen>
+    <dimen name="mc_choice_option_min_height">48dp</dimen>
+    <dimen name="mc_choice_option_padding_horizontal">16dp</dimen>
+    <dimen name="mc_choice_option_padding_vertical">8dp</dimen>
+    <dimen name="mc_choice_option_text_size">16sp</dimen>
+    <dimen name="mc_choice_radio_size">20dp</dimen>
+    <dimen name="mc_choice_radio_margin">12dp</dimen>
+    <dimen name="mc_choice_radio_text_size">10sp</dimen>
+</resources>

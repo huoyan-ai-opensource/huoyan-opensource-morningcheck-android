@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="McStaffFormPage" parent="">
+        <item name="android:padding">@dimen/dp_6</item>
+    </style>
+
+    <style name="McStaffFormPanel" parent="McPanel">
+        <item name="android:padding">@dimen/dp_6</item>
+    </style>
+
+    <style name="McStaffFormLabel" parent="McLabel">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:minHeight">@dimen/dp_16</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="McStaffFormInput" parent="McInput">
+        <item name="android:layout_height">@dimen/dp_40</item>
+        <item name="android:minHeight">@dimen/dp_40</item>
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:paddingTop">@dimen/dp_3</item>
+        <item name="android:paddingBottom">@dimen/dp_3</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="McStaffFormButton" parent="McButton">
+        <item name="android:layout_height">@dimen/dp_40</item>
+        <item name="android:minHeight">@dimen/dp_40</item>
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:paddingTop">@dimen/dp_3</item>
+        <item name="android:paddingBottom">@dimen/dp_3</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="McStaffFormButtonPrimary" parent="McStaffFormButton">
+        <item name="android:background">@drawable/mc_button_primary</item>
+        <item name="android:textColor">@color/mc_white</item>
+    </style>
+</resources>

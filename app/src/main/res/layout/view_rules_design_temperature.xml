@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="体温检查" />
+
+    <LinearLayout
+        android:id="@+id/rules_temperature_row"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="体温检查" />
+
+        <TextView
+            android:id="@+id/rules_temperature_state"
+            style="@style/PenCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/mc_button"
+            android:paddingStart="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingEnd="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_2"
+            android:textColor="@color/mc_blue" />
+
+        <cc.huoyan.opensource.morningcheck.LandscapeSwitch
+            android:id="@+id/settings_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:showText="false"
+            android:splitTrack="false"
+            android:switchMinWidth="@dimen/dp_52"
+            android:thumb="@drawable/land_switch_thumb"
+            android:thumbTint="@null"
+            android:track="@drawable/land_switch_track"
+            android:trackTint="@null" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:background="#E7EBF1" />
+
+    <TextView
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="异常体温阈值" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_26"
+        android:layout_marginTop="@dimen/dp_4"
+        android:background="@drawable/mc_field"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/settings_temperature_limit"
+            style="@style/PenInput"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/mc_edit"
+            android:drawablePadding="@dimen/dp_6"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/dp_8"
+            android:text="°C" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/settings_temperature_limit_status"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4" />
+</LinearLayout>

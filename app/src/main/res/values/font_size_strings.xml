@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_font_size_preview">员工信息与晨检结果</string>
+    <string name="app_font_size_saved">字体大小已保存</string>
+    <string name="app_font_size_dialog_title">应用字号</string>
+    <string name="app_font_size_preview_label">字号预览 · %1$s</string>
+    <string name="app_font_size_dialog_apply">应用</string>
+    <string name="app_font_size_dialog_cancel">取消</string>
+    <string name="app_font_size_value">%1$s  ›</string>
+    <string name="app_font_size_small">小号</string>
+    <string name="app_font_size_default">标准</string>
+    <string name="app_font_size_large">大号</string>
+    <string name="app_font_size_largest">特大</string>
+    <string-array name="app_font_size_labels">
+        <item>@string/app_font_size_small</item>
+        <item>@string/app_font_size_default</item>
+        <item>@string/app_font_size_large</item>
+        <item>@string/app_font_size_largest</item>
+    </string-array>
+    <string-array name="app_font_size_descriptions">
+        <item>小号，85%</item>
+        <item>标准，100%</item>
+        <item>大号，115%</item>
+        <item>特大，130%</item>
+    </string-array>
+    <string-array name="app_font_size_percentages">
+        <item>85%</item>
+        <item>100%</item>
+        <item>115%</item>
+        <item>130%</item>
+    </string-array>
+</resources>

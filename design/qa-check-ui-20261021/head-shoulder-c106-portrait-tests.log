@@ -1,0 +1,23 @@
+
+cc.huoyan.opensource.morningcheck.DesignUiDeviceTest:
+Error in checkAnimationPlaysInCardAndReleasesImagesOnRedraw(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest):
+java.lang.AssertionError: Timed out waiting for UI state
+	at org.junit.Assert.fail(Assert.java:89)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.await(DesignUiDeviceTest.java:1860)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.orient(DesignUiDeviceTest.java:1770)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.launch(DesignUiDeviceTest.java:1762)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.checkAnimationPlaysInCardAndReleasesImagesOnRedraw(DesignUiDeviceTest.java:975)
+
+
+Time: 14.423
+There was 1 failure:
+1) checkAnimationPlaysInCardAndReleasesImagesOnRedraw(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest)
+java.lang.AssertionError: Timed out waiting for UI state
+	at org.junit.Assert.fail(Assert.java:89)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.await(DesignUiDeviceTest.java:1860)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.orient(DesignUiDeviceTest.java:1770)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.launch(DesignUiDeviceTest.java:1762)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.checkAnimationPlaysInCardAndReleasesImagesOnRedraw(DesignUiDeviceTest.java:975)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1

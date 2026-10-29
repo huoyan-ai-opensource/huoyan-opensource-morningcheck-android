@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/record_date_panel"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_28"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/record_date_title"
+            style="@style/PenTitle"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="选择日期范围，长按展开更多筛选"
+            android:text="选择日期范围" />
+
+        <TextView
+            android:id="@+id/record_date_cancel"
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_26"
+            android:background="@drawable/mc_text_action"
+            android:contentDescription="关闭"
+            android:text="×" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4">
+
+        <TextView
+            android:id="@+id/record_date_today"
+            style="@style/PenDatePreset"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="今天" />
+
+        <TextView
+            android:id="@+id/record_date_yesterday"
+            style="@style/PenDatePreset"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="昨天" />
+
+        <TextView
+            android:id="@+id/record_date_7_days"
+            style="@style/PenDatePreset"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="近7天" />
+
+        <TextView
+            android:id="@+id/record_date_this_month"
+            style="@style/PenDatePreset"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="本月" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/record_date_extra"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_26"
+        android:layout_marginTop="@dimen/dp_4"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+            android:id="@+id/record_date_preset_picker"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field"
+            android:contentDescription="@string/record_date_quick_range" />
+
+        <CheckBox
+            android:id="@+id/record_date_follow_now"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/record_date_follow_now" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8">
+
+        <LinearLayout
+            android:id="@+id/record_date_start"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_0"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="开始日期" />
+
+            <TextView
+                android:id="@+id/record_date_start_date"
+                style="@style/PenButton"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/dp_2"
+                android:background="@drawable/mc_field_action"
+                android:drawableEnd="@drawable/mc_date_calendar"
+                android:gravity="center_vertical"
+                android:textColor="@color/mc_ink" />
+
+            <TextView
+                android:id="@+id/record_date_start_time"
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_20"
+                android:gravity="center"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/record_date_end"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="结束日期" />
+
+            <TextView
+                android:id="@+id/record_date_end_date"
+                style="@style/PenButton"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/dp_2"
+                android:background="@drawable/mc_field_action"
+                android:drawableEnd="@drawable/mc_date_calendar"
+                android:gravity="center_vertical"
+                android:textColor="@color/mc_ink" />
+
+            <TextView
+                android:id="@+id/record_date_end_time"
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_20"
+                android:gravity="center"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/record_date_calendar_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/record_date_month_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_26"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/record_date_previous"
+                    style="@style/PenButton"
+                    android:layout_width="@dimen/dp_26"
+                    android:background="@drawable/mc_text_action"
+                    android:contentDescription="上个月"
+                    android:text="‹" />
+
+                <TextView
+                    android:id="@+id/record_date_month_title"
+                    style="@style/PenText"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/record_date_next"
+                    style="@style/PenButton"
+                    android:layout_width="@dimen/dp_26"
+                    android:background="@drawable/mc_text_action"
+                    android:contentDescription="下个月"
+                    android:text="›" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/record_date_month_pickers"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_26"
+                android:visibility="gone">
+
+                <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+                    android:id="@+id/record_date_year"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+                    android:id="@+id/record_date_month"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_24">
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="一" />
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="二" />
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="三" />
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="四" />
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="五" />
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="六" />
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="日" />
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/record_date_days"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0"
+                android:layout_weight="1"
+                android:horizontalSpacing="@dimen/dp_0"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="7"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="@dimen/dp_0" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/record_date_time_editor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/record_date_editing"
+                style="@style/PenTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_36">
+
+                <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+                    android:id="@+id/record_date_hour"
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="match_parent" />
+
+                <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+                    android:id="@+id/record_date_minute"
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/record_date_back_to_calendar"
+                style="@style/PenButton"
+                android:layout_width="match_parent"
+                android:text="返回日历" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/record_date_error"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:textColor="@color/mc_orange"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8">
+
+        <TextView
+            android:id="@+id/record_date_reset"
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="重置" />
+
+        <TextView
+            android:id="@+id/record_date_confirm"
+            style="@style/PenPrimary"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="应用筛选" />
+    </LinearLayout>
+</LinearLayout>

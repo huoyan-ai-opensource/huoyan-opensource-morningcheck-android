@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sdk_install_missing_title">SDK 未安装</string>
+    <string name="sdk_install_guide_title">安装晨检 SDK</string>
+    <string name="sdk_install_guide_message">本机尚未安装晨检 SDK，下载后按系统提示完成安装。也可进入连接设置，接入其他设备。</string>
+    <string name="sdk_install_guide_settings">连接设置</string>
+    <string name="sdk_install_guide_later">稍后</string>
+    <string name="sdk_install_download">下载安装</string>
+    <string name="sdk_install_continue">继续安装</string>
+    <string name="sdk_install_pending">晨检 SDK 已下载，请继续完成安装。</string>
+    <string name="sdk_install_downloading">正在下载晨检 SDK…</string>
+    <string name="sdk_install_progress_value">正在下载晨检 SDK · %1$d%%</string>
+    <string name="sdk_install_cancel_download">取消下载</string>
+    <string name="sdk_install_permission_required">请允许火眼晨检安装应用，然后返回继续安装 SDK。</string>
+    <string name="sdk_install_download_failed">SDK 下载失败，请检查网络和存储空间后重试。</string>
+    <string name="sdk_install_invalid_apk">下载文件不是有效的晨检 SDK，请稍后重新下载。</string>
+    <string name="sdk_install_open_failed">无法打开系统安装或授权页面，请检查设备设置后继续安装。</string>
+</resources>

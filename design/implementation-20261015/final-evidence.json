@@ -1,0 +1,888 @@
+{
+  "c106": [
+    {
+      "file": "c106/activation-code-complete.png",
+      "device_mtime_epoch": 1792037074,
+      "size": 80393,
+      "final_layout_suite": true,
+      "sha256": "fcc0aa995f0e7dbeb3934279fd1a862b277100212dd500935b65326eec60e01d"
+    },
+    {
+      "file": "c106/activation-code.png",
+      "device_mtime_epoch": 1792037073,
+      "size": 76848,
+      "final_layout_suite": true,
+      "sha256": "b32ce3c016e432c263a2fd618516d45e8a6013e3f8a078411f60e1330e55e9b5"
+    },
+    {
+      "file": "c106/activation-scan-recovery.png",
+      "device_mtime_epoch": 1792031581,
+      "size": 68339,
+      "final_layout_suite": false,
+      "sha256": "6cc8ade3dba6bf186e775f5cd141942eafb36a76b50017b2cd013669ece48d26"
+    },
+    {
+      "file": "c106/activation-scan.png",
+      "device_mtime_epoch": 1792031580,
+      "size": 66603,
+      "final_layout_suite": false,
+      "sha256": "bd31b0e8c3fd0f38cd75da019bd2a4db423c717392315c00aa64b950427961e2"
+    },
+    {
+      "file": "c106/business-cloud-dialog.png",
+      "device_mtime_epoch": 1792037080,
+      "size": 52022,
+      "final_layout_suite": true,
+      "sha256": "e6ad4727310bfc26369c978b151c60213b7d34401002fdc87502ed50ed14f3f4"
+    },
+    {
+      "file": "c106/business-cloud-keyboard.png",
+      "device_mtime_epoch": 1792037081,
+      "size": 57480,
+      "final_layout_suite": true,
+      "sha256": "80e80438014917154b8792b9fa5ee34620b43a34bea99333695b48b440c2194d"
+    },
+    {
+      "file": "c106/camera-choice-empty.png",
+      "device_mtime_epoch": 1792031630,
+      "size": 72820,
+      "final_layout_suite": false,
+      "sha256": "2ca3591f0ba4b57fda2cffae5e6d21e700cc3a2803ee320c373a5fc489cebf3a"
+    },
+    {
+      "file": "c106/camera-choice.png",
+      "device_mtime_epoch": 1792031629,
+      "size": 79016,
+      "final_layout_suite": false,
+      "sha256": "6c0925d9b16a0c90885af4962cf737d8ac3deb0d87728da7bdc19059cc34f496"
+    },
+    {
+      "file": "c106/camera-face.png",
+      "device_mtime_epoch": 1792036690,
+      "size": 73834,
+      "final_layout_suite": true,
+      "sha256": "4110097ee13b7eb00ca0641d932adaf6096200c8e2f4957ffe2e29f360f59d28"
+    },
+    {
+      "file": "c106/camera-hand.png",
+      "device_mtime_epoch": 1792036690,
+      "size": 73022,
+      "final_layout_suite": true,
+      "sha256": "67582d09bc0bb6180d07bf99df00fe9ffecc6ecc3af35333cef1c59fc97fac02"
+    },
+    {
+      "file": "c106/camera-hardware-mirrored.png",
+      "device_mtime_epoch": 1792033231,
+      "size": 185494,
+      "final_layout_suite": false,
+      "sha256": "c312239cd5f184b7dcb3eeaf6b915f516b6397ac21add0da27df0d6ac6fa4c72"
+    },
+    {
+      "file": "c106/camera-hardware.png",
+      "device_mtime_epoch": 1792033230,
+      "size": 178305,
+      "final_layout_suite": false,
+      "sha256": "5e7f234514a1dd7ceff9fb9f10ddfb3fb50b79d10d92e378e7359b30a14f805e"
+    },
+    {
+      "file": "c106/camera.png",
+      "device_mtime_epoch": 1792033250,
+      "size": 76780,
+      "final_layout_suite": false,
+      "sha256": "88df689c3b0de7b2f70eb828f4853e79aa04ced78e9cbce7f7c4cfe1b333296c"
+    },
+    {
+      "file": "c106/check-disconnected.png",
+      "device_mtime_epoch": 1792031484,
+      "size": 34869,
+      "final_layout_suite": false,
+      "sha256": "9954f8b19baf50a1da22907cefbc66b0b535128473e60b32435ae9d5533c75d9"
+    },
+    {
+      "file": "c106/check-ready.png",
+      "device_mtime_epoch": 1792036695,
+      "size": 59789,
+      "final_layout_suite": true,
+      "sha256": "fa3f45fd0c7e89685b7ce270e218518d1b2050ef182b32b5419ae5e10c124144"
+    },
+    {
+      "file": "c106/cloud-service-enabled.png",
+      "device_mtime_epoch": 1792033242,
+      "size": 67241,
+      "final_layout_suite": false,
+      "sha256": "6dbe95d61a869c6d9a9447e4dc11fd20eda8e186c475805921aa42aa924b1809"
+    },
+    {
+      "file": "c106/cloud-service-progress.png",
+      "device_mtime_epoch": 1792033241,
+      "size": 59531,
+      "final_layout_suite": false,
+      "sha256": "9ce2aede9ee79ef29a11ee485618a93524659fee1450c53fffdc7113337d8b67"
+    },
+    {
+      "file": "c106/department-choice-end.png",
+      "device_mtime_epoch": 1792031626,
+      "size": 102585,
+      "final_layout_suite": false,
+      "sha256": "5e691cec043444d076bb3106e93d91e5cf1b1da1ff21d8054339d940d543f8ee"
+    },
+    {
+      "file": "c106/department-choice.png",
+      "device_mtime_epoch": 1792031625,
+      "size": 105803,
+      "final_layout_suite": false,
+      "sha256": "4eca22a18f44780076fd29dc618f0ebb6eb63126dee5053d4e0e724159efa8ee"
+    },
+    {
+      "file": "c106/department-delete-confirmation.png",
+      "device_mtime_epoch": 1792031520,
+      "size": 58315,
+      "final_layout_suite": false,
+      "sha256": "b4817310df4847ee8874c9d8245294b1636b6c64ffcd915f82da958fe4d13b99"
+    },
+    {
+      "file": "c106/department-editor-keyboard.png",
+      "device_mtime_epoch": 1792031510,
+      "size": 70668,
+      "final_layout_suite": false,
+      "sha256": "56b440dae12cee583f051f7fcb2dc053f8be122e4c4c1ce10f43c93fd95bac8e"
+    },
+    {
+      "file": "c106/department-editor.png",
+      "device_mtime_epoch": 1792031509,
+      "size": 48816,
+      "final_layout_suite": false,
+      "sha256": "761b360a05c062e5204d06aa18267d52ae2627932ee160b84c9831c274501d9b"
+    },
+    {
+      "file": "c106/departments.png",
+      "device_mtime_epoch": 1792031507,
+      "size": 37869,
+      "final_layout_suite": false,
+      "sha256": "9f36488bf9a8b6a0befedead18cf90575efd8f272e8e6f16c7076e2d11fbd844"
+    },
+    {
+      "file": "c106/face-clear-confirmation.png",
+      "device_mtime_epoch": 1792036234,
+      "size": 69109,
+      "final_layout_suite": true,
+      "sha256": "50a044dd28045103e4f3929e3e3aeee8623b4b0c74179acd90808e404d4bdca4"
+    },
+    {
+      "file": "c106/face-delete-confirmation.png",
+      "device_mtime_epoch": 1792036233,
+      "size": 65049,
+      "final_layout_suite": true,
+      "sha256": "476d072fb5ac1e7d251bf03705d4e1cd9709c6e1ae866555aaf9260c135e21e6"
+    },
+    {
+      "file": "c106/face-samples-end.png",
+      "device_mtime_epoch": 1792036228,
+      "size": 53522,
+      "final_layout_suite": true,
+      "sha256": "9ec4a07d9b452123d378caf6b3f2ea932d8380651e9c77599ab31e73a418b8d9"
+    },
+    {
+      "file": "c106/face-samples.png",
+      "device_mtime_epoch": 1792036226,
+      "size": 52695,
+      "final_layout_suite": true,
+      "sha256": "aeaba91de2ac6f1a80d8b1fce8d6a483a3dabafb8ca1aac3250eb92088fe5bbf"
+    },
+    {
+      "file": "c106/face-selection.png",
+      "device_mtime_epoch": 1792036692,
+      "size": 74933,
+      "final_layout_suite": true,
+      "sha256": "224b4cdad5db2ef28f48dfc002205cf1c5dce6f7800cc4f11c77d60656e0401f"
+    },
+    {
+      "file": "c106/face-workspace.png",
+      "device_mtime_epoch": 1792036693,
+      "size": 37259,
+      "final_layout_suite": true,
+      "sha256": "87c24c8348a27db1ed9adc8ee2b09137a909bdea87be18b16c9d2b8e8d3e0fdb"
+    },
+    {
+      "file": "c106/hand-back-fixture.png",
+      "device_mtime_epoch": 1791983939,
+      "size": 81330,
+      "final_layout_suite": false,
+      "sha256": "e591334729b43bf4d7c0bb3e2287afea31e3b6b1de28600d5b04eadf10fd8413"
+    },
+    {
+      "file": "c106/hand-palm-fixture.png",
+      "device_mtime_epoch": 1791983939,
+      "size": 79673,
+      "final_layout_suite": false,
+      "sha256": "6e7b5ea903df57a2f703f4a7846eac1051ce7ac666766ee44662e5637948238e"
+    },
+    {
+      "file": "c106/home-initializing.png",
+      "device_mtime_epoch": 1792031481,
+      "size": 100382,
+      "final_layout_suite": false,
+      "sha256": "aac092de975baedf31f545b8e2e4346a34839fc2cf81b920d4dded8de98fd7ac"
+    },
+    {
+      "file": "c106/home-missing.png",
+      "device_mtime_epoch": 1792031480,
+      "size": 94802,
+      "final_layout_suite": false,
+      "sha256": "58c3ac27ce11ce47986af1b8a792054907199c5fbceefae52c7218a581c1bb10"
+    },
+    {
+      "file": "c106/home-not_activated.png",
+      "device_mtime_epoch": 1792031480,
+      "size": 94639,
+      "final_layout_suite": false,
+      "sha256": "19010313f5d7be392931c09ef7f7d99f1ccebe343c5ae81093e1fc5b92b5b709"
+    },
+    {
+      "file": "c106/home-ready.png",
+      "device_mtime_epoch": 1792031481,
+      "size": 94406,
+      "final_layout_suite": false,
+      "sha256": "e7ec973dcbfd04cf78649ecf8c8ca333267293010d689e54eae424ecd1b49ea3"
+    },
+    {
+      "file": "c106/home.png",
+      "device_mtime_epoch": 1792037070,
+      "size": 99021,
+      "final_layout_suite": true,
+      "sha256": "e55a24abe0653075079e321bf20426ed16d7319077eff696d3dc9a2029e56063"
+    },
+    {
+      "file": "c106/license.png",
+      "device_mtime_epoch": 1792037072,
+      "size": 67716,
+      "final_layout_suite": true,
+      "sha256": "723f84ce7e6d0e36f2d1c7cc2fffb2e6aa722af9986f0d3571243a8e98ce1ae4"
+    },
+    {
+      "file": "c106/lighting-gpio-actions.png",
+      "device_mtime_epoch": 1792036688,
+      "size": 55061,
+      "final_layout_suite": true,
+      "sha256": "8841cb434796d1fc233c69280f6825f536dde2e21c0184e4dd07f7881ca31f9e"
+    },
+    {
+      "file": "c106/lighting-gpio.png",
+      "device_mtime_epoch": 1792036687,
+      "size": 55061,
+      "final_layout_suite": true,
+      "sha256": "8841cb434796d1fc233c69280f6825f536dde2e21c0184e4dd07f7881ca31f9e"
+    },
+    {
+      "file": "c106/lighting-serial.png",
+      "device_mtime_epoch": 1792036686,
+      "size": 56371,
+      "final_layout_suite": true,
+      "sha256": "4cadae8f5ca25870fd8b5bfde06e25c890cae1d46d45da7be241575c28690f93"
+    },
+    {
+      "file": "c106/login-scan-recovery.png",
+      "device_mtime_epoch": 1792031584,
+      "size": 59660,
+      "final_layout_suite": false,
+      "sha256": "7a398f582ee15103557d69138be73cc7f5c61842b7b024f85c9282acbfc850d2"
+    },
+    {
+      "file": "c106/login-scan.png",
+      "device_mtime_epoch": 1792031584,
+      "size": 43713,
+      "final_layout_suite": false,
+      "sha256": "a3dab8a7014d7dfc5711b0e399b57ca0fe6b0153df2c90e928af9e3395f0c535"
+    },
+    {
+      "file": "c106/record-date-extra.png",
+      "device_mtime_epoch": 1792031539,
+      "size": 58611,
+      "final_layout_suite": false,
+      "sha256": "f3d5ba8759cad36df244f1c06dc6afdc5111199b6f3aa26542b6121760370909"
+    },
+    {
+      "file": "c106/record-date-filter.png",
+      "device_mtime_epoch": 1792031536,
+      "size": 68111,
+      "final_layout_suite": false,
+      "sha256": "99d522b3d864da7a6735225aef4447bae80b5234fc487f61bcb631f6b06fed51"
+    },
+    {
+      "file": "c106/record-detail.png",
+      "device_mtime_epoch": 1792036184,
+      "size": 52147,
+      "final_layout_suite": true,
+      "sha256": "d6cb57ceb7974400e339c68f63898db0387fed4e81cc322fbc867a424629fa3c"
+    },
+    {
+      "file": "c106/record-photo.png",
+      "device_mtime_epoch": 1792037091,
+      "size": 21283,
+      "final_layout_suite": true,
+      "sha256": "57737b6f718c9242d138a7cdd894a5bca0b1322afd485f1f5dcd9b22842739fc"
+    },
+    {
+      "file": "c106/record-supplementary-photo.png",
+      "device_mtime_epoch": 1792036193,
+      "size": 24435,
+      "final_layout_suite": true,
+      "sha256": "2136afc175b9b642325bcccfeee8b3cab2be30504cc1fdbeb4776267dc79fd33"
+    },
+    {
+      "file": "c106/records.png",
+      "device_mtime_epoch": 1792036183,
+      "size": 60710,
+      "final_layout_suite": true,
+      "sha256": "20b4f0436a4c19ec4f90262c650db5b8067908192ab1c012ecef5d24b9c57201"
+    },
+    {
+      "file": "c106/result-abnormal.png",
+      "device_mtime_epoch": 1792037094,
+      "size": 63403,
+      "final_layout_suite": true,
+      "sha256": "e9ba948d436be21b3573c3aae955765bdd7f12af59cd218c9d4f5b97ad8a6c9b"
+    },
+    {
+      "file": "c106/result.png",
+      "device_mtime_epoch": 1792037093,
+      "size": 54863,
+      "final_layout_suite": true,
+      "sha256": "a1ccd3fde06783351138fd59928365d31d5aeee871ae75c9a2eb80cd52dd7a01"
+    },
+    {
+      "file": "c106/rules.png",
+      "device_mtime_epoch": 1792037076,
+      "size": 35449,
+      "final_layout_suite": true,
+      "sha256": "fbb89a10312689d16c4e2a391eb5663db34e9115d7322ce89053579e2a557f2b"
+    },
+    {
+      "file": "c106/sdk-connection.png",
+      "device_mtime_epoch": 1792037085,
+      "size": 43789,
+      "final_layout_suite": true,
+      "sha256": "a8c53f5eb806002fba4497086d7b0651d5e8afce6dc2822bb62b1a2b6f3e56a4"
+    },
+    {
+      "file": "c106/sdk-lan-draft.png",
+      "device_mtime_epoch": 1792031593,
+      "size": 45136,
+      "final_layout_suite": false,
+      "sha256": "399e3ed6ef11cbe3cd68374bb589284bf3d75a83eaccf668c3d272f8df7d4ad4"
+    },
+    {
+      "file": "c106/sdk-status.png",
+      "device_mtime_epoch": 1792037083,
+      "size": 60203,
+      "final_layout_suite": true,
+      "sha256": "f9924e55e4ea8a8c073460bf7442e09c229bddc29d445abb6955030335383fc1"
+    },
+    {
+      "file": "c106/shop-contact-saved.png",
+      "device_mtime_epoch": 1792036702,
+      "size": 40529,
+      "final_layout_suite": true,
+      "sha256": "3d7db9e145177e44f3cfe78c45cdd693f5cc3975a3e4a5c07b644cfa92664b15"
+    },
+    {
+      "file": "c106/shop-preserved-fields.png",
+      "device_mtime_epoch": 1792037087,
+      "size": 44333,
+      "final_layout_suite": true,
+      "sha256": "0c67e94f03ae8fd6d52bed43d3701fae898d62eb15d51e8842b7fe4eae166f9d"
+    },
+    {
+      "file": "c106/shop.png",
+      "device_mtime_epoch": 1792037086,
+      "size": 36188,
+      "final_layout_suite": true,
+      "sha256": "1592f05903d03c64b2c54fa78be189f2da356e16b70e6e4fd252abd86ad40f38"
+    },
+    {
+      "file": "c106/staff-actions.png",
+      "device_mtime_epoch": 1792036169,
+      "size": 100300,
+      "final_layout_suite": true,
+      "sha256": "b387ec44a0d23b8b8d502c05fccb8c6a32bcea3af2bddf590fd706633890e342"
+    },
+    {
+      "file": "c106/staff-edit-keyboard.png",
+      "device_mtime_epoch": 1792036180,
+      "size": 61780,
+      "final_layout_suite": true,
+      "sha256": "7e4b97b41af61661288ca3a5683e34b592a021f53f5e8d4d146e44740f0dc41b"
+    },
+    {
+      "file": "c106/staff-edit-preserved-fields.png",
+      "device_mtime_epoch": 1792036178,
+      "size": 103569,
+      "final_layout_suite": true,
+      "sha256": "bcf9a5af6d8d1aa879efc0166e9c7039356eb524c54b67a6c9da18cf990e0940"
+    },
+    {
+      "file": "c106/staff.png",
+      "device_mtime_epoch": 1792036167,
+      "size": 100334,
+      "final_layout_suite": true,
+      "sha256": "212cefd661218990b6ac78bb84eb009e5a7d560a7ec15ac479500d9d89de7e3c"
+    },
+    {
+      "file": "c106/system.png",
+      "device_mtime_epoch": 1792037079,
+      "size": 51130,
+      "final_layout_suite": true,
+      "sha256": "d5233281aa1d9819d39d0adc8beb0a1d1240ed1faf82a8e2c6ccfe46cfff91fd"
+    },
+    {
+      "file": "c106/temperature-threshold.png",
+      "device_mtime_epoch": 1792036160,
+      "size": 38480,
+      "final_layout_suite": true,
+      "sha256": "1e83c15d87ac32341699a11378775baa05382216febfff32221ade765fe8f3cb"
+    },
+    {
+      "file": "c106/temperature.png",
+      "device_mtime_epoch": 1792037078,
+      "size": 44205,
+      "final_layout_suite": true,
+      "sha256": "f92794e989fd946b67d4c2312ee6d782dac4a6e7db229254cb7589e687d46ee2"
+    }
+  ],
+  "nb55": [
+    {
+      "file": "nb55/activation-code-complete.png",
+      "device_mtime_epoch": 1792037074,
+      "size": 105455,
+      "final_layout_suite": true,
+      "sha256": "15084cbbcfa27269d226396324011aecfe0d638b04b476b02b03ea4bc9beddd3"
+    },
+    {
+      "file": "nb55/activation-code.png",
+      "device_mtime_epoch": 1792037073,
+      "size": 102111,
+      "final_layout_suite": true,
+      "sha256": "6ee17f19887e69597ebc5d48ce296d9576adf5fe948e1889cc4c8e348303cd16"
+    },
+    {
+      "file": "nb55/activation-scan-recovery.png",
+      "device_mtime_epoch": 1792031564,
+      "size": 92269,
+      "final_layout_suite": false,
+      "sha256": "5cc6fcde6af70b0468afe4e396f7909a76e4bd58d7cf920f3a11c311c9ad667e"
+    },
+    {
+      "file": "nb55/activation-scan.png",
+      "device_mtime_epoch": 1792031564,
+      "size": 79249,
+      "final_layout_suite": false,
+      "sha256": "42a074e984818a48c913332c7ecbcf713a8039672822c8a3dd658662833a1663"
+    },
+    {
+      "file": "nb55/business-cloud-dialog.png",
+      "device_mtime_epoch": 1792037082,
+      "size": 51863,
+      "final_layout_suite": true,
+      "sha256": "b04df05e82b9237f05cf59973d528beec76328ab85f7578c396ba02ace8e10a3"
+    },
+    {
+      "file": "nb55/business-cloud-keyboard.png",
+      "device_mtime_epoch": 1792037083,
+      "size": 70806,
+      "final_layout_suite": true,
+      "sha256": "e51842a066c7ea02fb507fc8d098c8388d9faaa56f5a17604598fbaa62b9cd9c"
+    },
+    {
+      "file": "nb55/camera-choice-empty.png",
+      "device_mtime_epoch": 1792031596,
+      "size": 81260,
+      "final_layout_suite": false,
+      "sha256": "3b11ed6fb9356da90ea68625714b0e15a6a81c13b6be9bf0414d27cf35d76a5c"
+    },
+    {
+      "file": "nb55/camera-choice.png",
+      "device_mtime_epoch": 1792031595,
+      "size": 87704,
+      "final_layout_suite": false,
+      "sha256": "1aa52f37ce198a8aa01a61187805a2ccd736bb363b4083d734e87fca8a2bd4c5"
+    },
+    {
+      "file": "nb55/camera-face.png",
+      "device_mtime_epoch": 1792036690,
+      "size": 83269,
+      "final_layout_suite": true,
+      "sha256": "32d8f18c609a1ec76cf3d78d66d8ed124ab6bdabe03f5fdb7b5dda6ac1c1a3bd"
+    },
+    {
+      "file": "nb55/camera-hand.png",
+      "device_mtime_epoch": 1792036689,
+      "size": 82348,
+      "final_layout_suite": true,
+      "sha256": "91d3ad21d9082367308fd8bf6dd335a71000f4ed5c3433994280c2519de16815"
+    },
+    {
+      "file": "nb55/camera.png",
+      "device_mtime_epoch": 1792033252,
+      "size": 86321,
+      "final_layout_suite": false,
+      "sha256": "564fd958a32057a724225ff69f19513c7aa23365a726a75922938503e73c9422"
+    },
+    {
+      "file": "nb55/check-disconnected.png",
+      "device_mtime_epoch": 1792031503,
+      "size": 37898,
+      "final_layout_suite": false,
+      "sha256": "cdeb73e1db13e4adee408ae77128dc46f978f1bca266519eb4cc4806b347d519"
+    },
+    {
+      "file": "nb55/check-ready.png",
+      "device_mtime_epoch": 1792036697,
+      "size": 65739,
+      "final_layout_suite": true,
+      "sha256": "438f573c6eb27ae968f0dc0aa39adcbf87c1f4c4df1411e7dbd576d178bf31e6"
+    },
+    {
+      "file": "nb55/cloud-service-enabled.png",
+      "device_mtime_epoch": 1792033247,
+      "size": 76450,
+      "final_layout_suite": false,
+      "sha256": "36f88da9fe10e257c7b7674108ca4de886ba7891ec1f7b8bf806e93e9fae12e3"
+    },
+    {
+      "file": "nb55/cloud-service-progress.png",
+      "device_mtime_epoch": 1792033246,
+      "size": 71883,
+      "final_layout_suite": false,
+      "sha256": "fc299508d493b7f42b0af2d3d037e05be3617c09c872441761b8ca728b95432b"
+    },
+    {
+      "file": "nb55/department-choice-end.png",
+      "device_mtime_epoch": 1792031593,
+      "size": 91588,
+      "final_layout_suite": false,
+      "sha256": "42a353d580a69d17d2fffde0ae93631c5484878940859de2159075ad7222d354"
+    },
+    {
+      "file": "nb55/department-choice.png",
+      "device_mtime_epoch": 1792031592,
+      "size": 95132,
+      "final_layout_suite": false,
+      "sha256": "c01c48b0d087b3f66d95224ffdbe9dc5394e5f68a6c93b15b0dfb490b804b9ea"
+    },
+    {
+      "file": "nb55/department-delete-confirmation.png",
+      "device_mtime_epoch": 1792031528,
+      "size": 64566,
+      "final_layout_suite": false,
+      "sha256": "ee25c82db154173bc87a88b2da13966ff3fa2d5ae67210a6f30b076894cf1077"
+    },
+    {
+      "file": "nb55/department-editor-keyboard.png",
+      "device_mtime_epoch": 1792031526,
+      "size": 79756,
+      "final_layout_suite": false,
+      "sha256": "99bab98ea224d7f7ddc27a030e87f6169654da8835f94f3098b0584c0529691a"
+    },
+    {
+      "file": "nb55/department-editor.png",
+      "device_mtime_epoch": 1792031524,
+      "size": 53027,
+      "final_layout_suite": false,
+      "sha256": "14f432b2ec7c4b214722872cd1c6f571d6754ff2fa4eb5fbc23f2d6ec8035203"
+    },
+    {
+      "file": "nb55/departments.png",
+      "device_mtime_epoch": 1792031523,
+      "size": 41441,
+      "final_layout_suite": false,
+      "sha256": "28539fed9d89208550705603315388f8882aff642fbe7bd79a5d452c6806eef1"
+    },
+    {
+      "file": "nb55/face-clear-confirmation.png",
+      "device_mtime_epoch": 1792036216,
+      "size": 66329,
+      "final_layout_suite": true,
+      "sha256": "dd9e635a27cacdf6bc7fdd539dbbf7cb1d691d0945c0b46841ff46abb25d5324"
+    },
+    {
+      "file": "nb55/face-delete-confirmation.png",
+      "device_mtime_epoch": 1792036215,
+      "size": 62158,
+      "final_layout_suite": true,
+      "sha256": "8f3d244119d79e00f259925d75f63bea3651adf80c611f4a8f205d9989636783"
+    },
+    {
+      "file": "nb55/face-samples-end.png",
+      "device_mtime_epoch": 1792036212,
+      "size": 59791,
+      "final_layout_suite": true,
+      "sha256": "a1c25d5f1c96bde219c00c3372dfdd16491a816298da2ad6e5e549c506d1c7f4"
+    },
+    {
+      "file": "nb55/face-samples.png",
+      "device_mtime_epoch": 1792036210,
+      "size": 57535,
+      "final_layout_suite": true,
+      "sha256": "710d165db8ee58c1aea95061efe83e82127dca5bce02d64ad7c2f85750d9ffed"
+    },
+    {
+      "file": "nb55/face-selection.png",
+      "device_mtime_epoch": 1792036693,
+      "size": 100381,
+      "final_layout_suite": true,
+      "sha256": "4238a76ade9fc046e7d3337a1777dfd77b1a630f04a1f8b604d70e85b7910b5a"
+    },
+    {
+      "file": "nb55/face-workspace.png",
+      "device_mtime_epoch": 1792036693,
+      "size": 41963,
+      "final_layout_suite": true,
+      "sha256": "4e64d9174c64290a1e1d3cfec9a2b90942dc9a13d3b2fceab57cd0cf80686686"
+    },
+    {
+      "file": "nb55/hand-back-fixture.png",
+      "device_mtime_epoch": 1791983944,
+      "size": 95184,
+      "final_layout_suite": false,
+      "sha256": "3e5cb13657464dd8b3ff05904ca3f4ddeb54ddd417352034ba4f0ad0cc45f738"
+    },
+    {
+      "file": "nb55/hand-palm-fixture.png",
+      "device_mtime_epoch": 1791983944,
+      "size": 93502,
+      "final_layout_suite": false,
+      "sha256": "092ed56ed66a17912b9df59ea83c53d10cff63496de9a94d187161e78ac59198"
+    },
+    {
+      "file": "nb55/home-initializing.png",
+      "device_mtime_epoch": 1792031499,
+      "size": 123908,
+      "final_layout_suite": false,
+      "sha256": "e3bba9aa401a5c0c0c6964885229066047f28caf00c851eddab95a4a3799e8af"
+    },
+    {
+      "file": "nb55/home-missing.png",
+      "device_mtime_epoch": 1792031498,
+      "size": 117902,
+      "final_layout_suite": false,
+      "sha256": "473a4b5f003ecf68a96074ec4efeaab46e895bb9842f7d408bc8c6fd6a31bf75"
+    },
+    {
+      "file": "nb55/home-not_activated.png",
+      "device_mtime_epoch": 1792031498,
+      "size": 118175,
+      "final_layout_suite": false,
+      "sha256": "a712b42474ca7e27bf9a5679fdc841c710842e999ab2ae35a11af0ac345b45d9"
+    },
+    {
+      "file": "nb55/home-ready.png",
+      "device_mtime_epoch": 1792031499,
+      "size": 121878,
+      "final_layout_suite": false,
+      "sha256": "665e0d810759b15a993fc11ded41fd10299d009347c4cb2d50b7292be4ee17ed"
+    },
+    {
+      "file": "nb55/home.png",
+      "device_mtime_epoch": 1792037069,
+      "size": 121825,
+      "final_layout_suite": true,
+      "sha256": "a548afd89838a8ee0b2621a89125c554e17eefe1dc72d1e82928f51c7d475084"
+    },
+    {
+      "file": "nb55/license.png",
+      "device_mtime_epoch": 1792037072,
+      "size": 77314,
+      "final_layout_suite": true,
+      "sha256": "1103e1f46e7e62490a4ce59e29eaa6e25c34b92452ad3752ea9763b087954d82"
+    },
+    {
+      "file": "nb55/lighting-gpio-actions.png",
+      "device_mtime_epoch": 1792036686,
+      "size": 61354,
+      "final_layout_suite": true,
+      "sha256": "0da1b20a4e56c360597d428cf21a0140835c2166fb53d7c6fb9c6779b1f98862"
+    },
+    {
+      "file": "nb55/lighting-gpio.png",
+      "device_mtime_epoch": 1792036686,
+      "size": 61354,
+      "final_layout_suite": true,
+      "sha256": "0da1b20a4e56c360597d428cf21a0140835c2166fb53d7c6fb9c6779b1f98862"
+    },
+    {
+      "file": "nb55/lighting-serial.png",
+      "device_mtime_epoch": 1792036685,
+      "size": 62752,
+      "final_layout_suite": true,
+      "sha256": "823ade3d3f65895eaa4e6f7ca04bc962551fbac945c3058dabdd873b9cb1597b"
+    },
+    {
+      "file": "nb55/login-scan-recovery.png",
+      "device_mtime_epoch": 1792031568,
+      "size": 61226,
+      "final_layout_suite": false,
+      "sha256": "8c38190aef0e109afa9a42d9ee6daf4011ddcc49fd64c8643b777271ffb0ddd3"
+    },
+    {
+      "file": "nb55/login-scan.png",
+      "device_mtime_epoch": 1792031567,
+      "size": 47381,
+      "final_layout_suite": false,
+      "sha256": "0770fbe4d386453cf20f71bfba6cb5c10bb91a0b98a0922ea11a202984f74909"
+    },
+    {
+      "file": "nb55/record-date-extra.png",
+      "device_mtime_epoch": 1792031539,
+      "size": 67103,
+      "final_layout_suite": false,
+      "sha256": "7b9e128d4d1403ce177dd341065d71eec48c265d9c71d2c38575a5a50eab7b71"
+    },
+    {
+      "file": "nb55/record-date-filter.png",
+      "device_mtime_epoch": 1792031538,
+      "size": 71001,
+      "final_layout_suite": false,
+      "sha256": "e7698ae59789b3ca5d43559de1cc4b9a5ed9c24a6ed2df8ef5b1432726c2aa82"
+    },
+    {
+      "file": "nb55/record-detail.png",
+      "device_mtime_epoch": 1792036172,
+      "size": 57961,
+      "final_layout_suite": true,
+      "sha256": "3d370aea075a569cc33c8db72ebd618070c2bf24c19e5c4e64338a9e79b776f5"
+    },
+    {
+      "file": "nb55/record-photo.png",
+      "device_mtime_epoch": 1792037093,
+      "size": 23904,
+      "final_layout_suite": true,
+      "sha256": "4d945f182b05801dd972765c27842fbf6d02d485666124a6f69a1f077a08dd00"
+    },
+    {
+      "file": "nb55/record-supplementary-photo.png",
+      "device_mtime_epoch": 1792036177,
+      "size": 27423,
+      "final_layout_suite": true,
+      "sha256": "cfd6499e2853d310593b8c4ae2ddbb1d88b59b2570a6b448d21cce02f6430532"
+    },
+    {
+      "file": "nb55/records.png",
+      "device_mtime_epoch": 1792036170,
+      "size": 95138,
+      "final_layout_suite": true,
+      "sha256": "b0ff93d000dfc9492e43c7593364945e323112d209ccded550aa388a8940ec4e"
+    },
+    {
+      "file": "nb55/result-abnormal.png",
+      "device_mtime_epoch": 1792037096,
+      "size": 68305,
+      "final_layout_suite": true,
+      "sha256": "f5cb59f422d9b235c9799f79ba924440b403ab55f9f7c9e90b14d5f36e3fa48d"
+    },
+    {
+      "file": "nb55/result.png",
+      "device_mtime_epoch": 1792037096,
+      "size": 60892,
+      "final_layout_suite": true,
+      "sha256": "011cefb1569912e5ae96a5078083ce6fd79ea8a3735b5a014c87f97467037a4c"
+    },
+    {
+      "file": "nb55/rules.png",
+      "device_mtime_epoch": 1792037076,
+      "size": 43732,
+      "final_layout_suite": true,
+      "sha256": "cfd95372e11f5b9a5d31d7b3af2c1089634970e2ca6216f98f445fa7917b2e78"
+    },
+    {
+      "file": "nb55/sdk-connection.png",
+      "device_mtime_epoch": 1792037088,
+      "size": 50515,
+      "final_layout_suite": true,
+      "sha256": "c07924f0e437d436662fe820796637cfa53290edd1f76fd5628ff34384da8564"
+    },
+    {
+      "file": "nb55/sdk-lan-draft.png",
+      "device_mtime_epoch": 1792031572,
+      "size": 51526,
+      "final_layout_suite": false,
+      "sha256": "30ee008eed5b7bc316bc89007e0d3547a1e1fdfb9c1f79875655fc3c315e241b"
+    },
+    {
+      "file": "nb55/sdk-status.png",
+      "device_mtime_epoch": 1792037086,
+      "size": 66429,
+      "final_layout_suite": true,
+      "sha256": "2908e3faafbb4d2804f1928dd50c6520e76ade5d8f3298b2a3e5f32370c6f9b9"
+    },
+    {
+      "file": "nb55/shop-contact-saved.png",
+      "device_mtime_epoch": 1792036701,
+      "size": 53137,
+      "final_layout_suite": true,
+      "sha256": "7e9e5960d2ba00fcb8a6ca4e9071236552c97347b31aea76b399d85292d64736"
+    },
+    {
+      "file": "nb55/shop-preserved-fields.png",
+      "device_mtime_epoch": 1792037091,
+      "size": 65196,
+      "final_layout_suite": true,
+      "sha256": "0ac7d49ecdb408bdb665d2743f03db8e5b412e9d9841970c6a45f25b864485f1"
+    },
+    {
+      "file": "nb55/shop.png",
+      "device_mtime_epoch": 1792037090,
+      "size": 50441,
+      "final_layout_suite": true,
+      "sha256": "58166a959a98264e8da3732c7cdcdc9d11758158d06f0ef0d334c2eb1cd4e241"
+    },
+    {
+      "file": "nb55/staff-actions.png",
+      "device_mtime_epoch": 1792036163,
+      "size": 127630,
+      "final_layout_suite": true,
+      "sha256": "403d71e79d522ecbda9333bc8b9a70641a72037e235ea9b9452924aafaa69932"
+    },
+    {
+      "file": "nb55/staff-edit-keyboard.png",
+      "device_mtime_epoch": 1792036166,
+      "size": 74170,
+      "final_layout_suite": true,
+      "sha256": "6031de6b62f8f07f20be93e5d8d01570d535e8bf52d593b3fbe378e12743ad73"
+    },
+    {
+      "file": "nb55/staff-edit-preserved-fields.png",
+      "device_mtime_epoch": 1792036164,
+      "size": 83833,
+      "final_layout_suite": true,
+      "sha256": "667142ef57c704201a203bcaa39b13a8f86d222794f80b0cf2e3372a1a9b3393"
+    },
+    {
+      "file": "nb55/staff.png",
+      "device_mtime_epoch": 1792036161,
+      "size": 127786,
+      "final_layout_suite": true,
+      "sha256": "8e4d29855b1348653ea5afac716684545819db07f96fb684c472301226e4c3a0"
+    },
+    {
+      "file": "nb55/system.png",
+      "device_mtime_epoch": 1792037081,
+      "size": 56833,
+      "final_layout_suite": true,
+      "sha256": "a3622140c8a8c363d51955a7534e55e54187641f0b45cf895df4286e520270ff"
+    },
+    {
+      "file": "nb55/temperature-threshold.png",
+      "device_mtime_epoch": 1792036156,
+      "size": 51867,
+      "final_layout_suite": true,
+      "sha256": "ace7e758758af56dc294fc2e39fb13f31c534a76fe0eef49a1358d75b9df0328"
+    },
+    {
+      "file": "nb55/temperature.png",
+      "device_mtime_epoch": 1792037079,
+      "size": 49630,
+      "final_layout_suite": true,
+      "sha256": "6af9f9b65fa65a3af64310de7cb0c587cdbbc94070834848afa58961aa18be96"
+    }
+  ]
+}

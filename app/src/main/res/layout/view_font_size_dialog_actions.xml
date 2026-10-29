@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/settings_font_cancel"
+        style="@style/PenButton"
+        android:layout_width="@dimen/dp_0"
+        android:layout_weight="1"
+        android:background="@drawable/mc_field_action"
+        android:minHeight="@dimen/mc_choice_action_min_height"
+        android:paddingTop="@dimen/mc_choice_action_padding"
+        android:paddingBottom="@dimen/mc_choice_action_padding"
+        android:text="@string/app_font_size_dialog_cancel"
+        android:textColor="@color/mc_ink"
+        android:textSize="@dimen/mc_choice_option_text_size" />
+
+    <TextView
+        android:id="@+id/settings_font_apply"
+        style="@style/PenPrimary"
+        android:layout_width="@dimen/dp_0"
+        android:layout_marginStart="@dimen/mc_choice_option_spacing"
+        android:layout_weight="1"
+        android:minHeight="@dimen/mc_choice_action_min_height"
+        android:paddingTop="@dimen/mc_choice_action_padding"
+        android:paddingBottom="@dimen/mc_choice_action_padding"
+        android:text="@string/app_font_size_dialog_apply"
+        android:textSize="@dimen/mc_choice_option_text_size" />
+</LinearLayout>

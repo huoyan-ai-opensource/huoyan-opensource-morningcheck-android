@@ -1,0 +1,12 @@
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="@dimen/dp_4"
+    android:insetTop="@dimen/dp_4"
+    android:insetRight="@dimen/dp_4"
+    android:insetBottom="@dimen/dp_4">
+    <shape android:shape="oval">
+        <solid android:color="#FFFFFF" />
+        <size
+            android:width="@dimen/dp_22"
+            android:height="@dimen/dp_22" />
+    </shape>
+</inset>

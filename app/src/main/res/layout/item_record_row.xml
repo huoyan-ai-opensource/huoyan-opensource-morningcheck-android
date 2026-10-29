@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_37"
+    android:background="@drawable/mc_list_table_row"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_8">
+
+    <TextView
+        android:id="@+id/record_row_name"
+        style="@style/PenRowCell" />
+
+    <TextView
+        android:id="@+id/record_row_date"
+        style="@style/PenRowCell"
+        android:layout_weight="1.5"
+        android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/record_row_result"
+        style="@style/PenRowCell" />
+
+    <TextView
+        android:id="@+id/record_row_number"
+        style="@style/PenRowCell"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/record_row_department"
+        style="@style/PenRowCell"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/record_row_view"
+        style="@style/PenButton"
+        android:layout_width="@dimen/dp_36"
+        android:paddingStart="@dimen/dp_0"
+        android:paddingEnd="@dimen/dp_0"
+        android:text="查看" />
+</LinearLayout>

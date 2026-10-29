@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 同类文字共用字号角色；各屏幕主题引用零售项目原尺寸表，不另建 dimen。 -->
+    <attr name="mcTextPageTitleSize" format="dimension" />
+    <attr name="mcTextTitleSize" format="dimension" />
+    <attr name="mcTextBodySize" format="dimension" />
+    <attr name="mcTextCaptionSize" format="dimension" />
+</resources>

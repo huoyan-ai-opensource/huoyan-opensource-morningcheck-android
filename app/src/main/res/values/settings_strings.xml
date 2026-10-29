@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_sdk_transport_value">连接方式：%1$s</string>
+    <string-array name="settings_sdk_transports">
+        <item>自动</item>
+        <item>本机 AIDL</item>
+        <item>WebSocket</item>
+    </string-array>
+    <string name="settings_cloud_url_label">晨检业务云地址</string>
+    <string name="settings_cloud_token_label">X-USER-TOKEN</string>
+    <string name="settings_cloud_tip">填写原晨检平台地址及当前设备的业务令牌</string>
+    <string name="settings_save_cloud_button">保存业务云配置</string>
+    <string name="settings_camera_auto">自动选择</string>
+    <string name="settings_camera_preview_face">身份 / 头部</string>
+    <string name="settings_camera_preview_hand">手部</string>
+    <string name="settings_camera_preview_loading">正在打开摄像头…</string>
+    <string name="settings_camera_preview_permission">请允许访问摄像头</string>
+    <string name="settings_camera_preview_permission_denied">相机权限未开启</string>
+    <string name="settings_camera_preview_retry">点击重试</string>
+    <string name="settings_camera_preview_label_value">%1$s · %2$s</string>
+    <string name="settings_temperature_label">采集体温</string>
+    <string name="settings_temperature_measurement_mode">测温模式</string>
+    <string name="settings_temperature_read_mode">读取方式</string>
+    <string name="settings_temperature_mode_trigger">动态触发</string>
+    <string name="settings_temperature_measurement_help">室内：取最高温度；室外：限定检测角度；动态触发：屏蔽固定热源。切换成功后保存，读取方式保持不变。</string>
+    <string name="settings_temperature_mode_switching">正在切换测温模式</string>
+    <string name="settings_temperature_mode_invalid_config">切换失败：请选择有效的串口路径与波特率</string>
+    <string name="settings_temperature_mode_switched">已切换为%1$s</string>
+    <string name="settings_temperature_mode_failed">切换失败：%1$s</string>
+    <string-array name="settings_temperature_measurement_modes">
+        <item>室内模式</item>
+        <item>室外模式</item>
+        <item>@string/settings_temperature_mode_trigger</item>
+    </string-array>
+    <string name="settings_read_temperature_button">开始读取</string>
+    <string name="settings_stop_temperature_button">停止读取</string>
+    <string name="settings_temperature_reading">正在连接测温设备</string>
+    <string name="settings_temperature_no_value">--.--</string>
+    <string name="settings_temperature_updated">更新时间  %1$s</string>
+    <string name="settings_temperature_no_update">尚未获取读数</string>
+    <string name="settings_temperature_read_failed">读取失败：%1$s</string>
+    <string name="settings_temperature_invalid_config">读取失败：请输入有效的 /dev/ 串口路径及正整数波特率</string>
+    <string name="settings_temperature_invalid_mode">读取失败：请选择串口被动上报或串口主动查询</string>
+    <string name="settings_temperature_unknown_error">请检查测温设备</string>
+    <string name="settings_version">火眼晨检-开源版</string>
+    <string name="settings_edit_cloud_url_button">业务云地址</string>
+    <string name="settings_edit_cloud_token_button">业务云令牌</string>
+    <string name="settings_head_full_label">检查头部着装</string>
+    <string name="settings_version_value">火眼晨检-开源版  %1$s</string>
+    <string-array name="settings_sections">
+        <item>SDK 连接</item>
+        <item>业务云连接</item>
+        <item>门店与设备</item>
+        <item>授权与密钥</item>
+        <item>摄像头</item>
+        <item>晨检规则</item>
+        <item>测温设备</item>
+        <item>系统设置</item>
+    </string-array>
+    <string-array name="settings_temperature_modes">
+        <item>串口被动上报</item>
+        <item>串口主动查询</item>
+    </string-array>
+</resources>

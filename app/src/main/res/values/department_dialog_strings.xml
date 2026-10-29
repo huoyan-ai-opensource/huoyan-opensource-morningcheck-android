@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="department_dialog_close">取消</string>
+    <string name="department_dialog_invalid_id">部门编号无效，请关闭后重新打开</string>
+    <string name="department_dialog_missing">部门已删除，请关闭后刷新列表</string>
+    <string name="department_dialog_parent_missing">上级部门已删除或移入当前部门，请关闭后重新选择；当前草稿已保留</string>
+    <string name="department_dialog_changed">部门资料已更改，请关闭后重新打开；当前草稿已保留</string>
+    <string name="department_dialog_read_failed">部门读取失败：%1$s；点击此处重试</string>
+    <string name="department_dialog_error_fallback">操作未完成，请重试</string>
+    <string name="department_dialog_discard_title">放弃修改</string>
+    <string name="department_dialog_discard_message">部门资料尚未保存，确定关闭？</string>
+    <string name="department_dialog_keep_editing">继续编辑</string>
+    <string name="department_dialog_discard_confirm">放弃并关闭</string>
+</resources>

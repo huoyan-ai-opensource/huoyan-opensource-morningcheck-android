@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cc.huoyan.opensource.morningcheck.FaceSampleCardLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_face_sample_card"
+    android:orientation="vertical"
+    tools:theme="@style/AppPreviewTheme">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/mc_preview">
+
+        <ImageView
+            android:id="@+id/face_sample_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/face_samples_photo"
+            android:minHeight="@dimen/dp_60"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/face_sample_missing"
+            style="@style/PenCaption"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/face_samples_missing"
+            android:textColor="@color/mc_white" />
+
+        <TextView
+            android:id="@+id/face_sample_delete"
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginEnd="@dimen/dp_2"
+            android:background="@drawable/mc_face_sample_delete"
+            android:clickable="true"
+            android:contentDescription="@string/face_samples_delete"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="×"
+            android:textColor="@color/mc_white" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/face_sample_uid"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingVertical="@dimen/dp_4"
+        android:textSize="@dimen/sp_7"
+        tools:text="人脸1" />
+</cc.huoyan.opensource.morningcheck.FaceSampleCardLayout>

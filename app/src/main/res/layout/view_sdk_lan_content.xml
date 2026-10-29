@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/settings_sdk_address_panel"
+        style="@style/PenPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SDK 设备 IP" />
+
+        <EditText
+            android:id="@+id/settings_sdk_url"
+            style="@style/PenInput"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/dp_6"
+            android:hint="192.168.1.100"
+            android:inputType="textNoSuggestions"
+            android:maxLength="15" />
+
+        <TextView
+            style="@style/PenCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="输入 IP，或从列表选择设备。" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/PenPanel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settings_sdk_discovery_title"
+            style="@style/PenText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="发现的设备（0）" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_weight="1">
+
+            <ListView
+                android:id="@+id/settings_sdk_discovery_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="@dimen/dp_4" />
+
+            <TextView
+                android:id="@+id/settings_sdk_discovery_empty"
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="暂无设备，请点击局域网探测" />
+        </FrameLayout>
+
+        <TextView
+            style="@style/PenCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="点击选择 IP · 向下滚动查看更多" />
+    </LinearLayout>
+</LinearLayout>

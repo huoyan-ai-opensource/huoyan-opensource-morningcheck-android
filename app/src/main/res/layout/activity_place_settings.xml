@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mc_bg"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_app_header" />
+
+    <LinearLayout
+        android:id="@+id/page_content"
+        style="@style/PenPage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_weight="1"
+            android:fillViewport="false">
+
+            <LinearLayout
+                style="@style/PenPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/place_name"
+                    android:text="场所名称" />
+
+                <EditText
+                    android:id="@+id/place_name"
+                    style="@style/PenInput"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/dp_6"
+                    android:hint="请输入场所名称"
+                    android:imeOptions="actionNext"
+                    android:inputType="text" />
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:labelFor="@id/place_phone"
+                    android:text="联系电话" />
+
+                <EditText
+                    android:id="@+id/place_phone"
+                    style="@style/PenInput"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/dp_6"
+                    android:hint="请输入联系电话"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone" />
+
+                <TextView
+                    style="@style/PenCaption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:labelFor="@id/place_address"
+                    android:text="店铺地址" />
+
+                <EditText
+                    android:id="@+id/place_address"
+                    style="@style/PenInput"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/dp_6"
+                    android:hint="请输入店铺地址"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPostalAddress" />
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:baselineAligned="false"
+            android:gravity="end|center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/place_login"
+                style="@style/PenButton"
+                android:layout_width="wrap_content"
+                android:minWidth="@dimen/dp_72"
+                android:text="场所登录" />
+
+            <TextView
+                android:id="@+id/place_save"
+                style="@style/PenPrimary"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/dp_8"
+                android:minWidth="@dimen/dp_72"
+                android:text="保存" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

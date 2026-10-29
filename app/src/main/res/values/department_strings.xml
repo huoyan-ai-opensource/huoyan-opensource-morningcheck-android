@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="department_page_title">部门管理</string>
+    <string name="department_create_title">新增部门</string>
+    <string name="department_edit_title">部门详情</string>
+    <string name="department_empty">暂无部门，可新增部门；导入员工名册后会自动收录已有部门</string>
+    <string name="department_no_match">没有找到匹配的部门</string>
+    <string name="department_back">返回首页</string>
+    <string name="department_name_label">部门名称</string>
+    <string name="department_name_hint">请输入部门名称</string>
+    <string name="department_local_hint">在本机维护部门目录</string>
+    <string name="department_rename_hint">查看员工和晨检记录包含所有下级。有员工、记录或子部门时不可删除。</string>
+    <string name="department_root">全部部门 · 一级部门</string>
+    <string name="department_search_scope">搜索全部层级 · 显示完整部门路径</string>
+    <string name="department_children_empty">暂无子部门，可在此新增部门</string>
+    <string name="department_counts">%1$d 名直属员工 · %2$d 个子部门</string>
+    <string name="department_parent_label">上级部门</string>
+    <string name="department_parent_root">无上级（一级部门）</string>
+</resources>

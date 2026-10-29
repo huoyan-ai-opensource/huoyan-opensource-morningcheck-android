@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/McHeader"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_36"
+    android:background="@color/mc_white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/dp_12"
+    android:paddingEnd="@dimen/dp_12"
+    tools:theme="@style/AppPreviewTheme">
+
+    <FrameLayout
+        android:id="@+id/header_leading"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/header_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/McPhoneHeaderLogo"
+                android:contentDescription="@string/mc_logo"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                style="@style/McPhoneHeaderBrand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mc_brand" />
+
+            <TextView
+                android:id="@+id/header_workspace"
+                style="@style/McHeaderWorkspace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" · 工作台"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/header_home"
+            style="@style/McHeaderBack"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_26"
+            android:layout_gravity="start|center_vertical"
+            android:background="@drawable/mc_button"
+            android:clickable="true"
+            android:contentDescription="返回首页"
+            android:focusable="true"
+            android:gravity="center"
+            android:minWidth="@dimen/dp_0"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/dp_9"
+                android:layout_height="@dimen/dp_9"
+                android:importantForAccessibility="no"
+                android:src="@drawable/mc_arrow_back" />
+
+            <TextView
+                android:id="@+id/header_back_label"
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="4"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="返回首页"
+                android:textColor="@color/mc_blue" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/header_page_title"
+        style="@style/PenTitle"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_0"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/header_trailing"
+        style="@style/McHeaderTrailing"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_0"
+        android:gravity="end|center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/header_shop"
+            style="@style/McHeaderShop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="end|center_vertical"
+            android:maxWidth="@dimen/dp_135"
+            android:maxLines="1"
+            android:minWidth="@dimen/dp_44"
+            android:minHeight="@dimen/dp_0"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="安和食堂 / 后厨"
+            tools:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/home_settings"
+        style="@style/McPhoneHeaderAbout"
+        android:layout_width="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/mc_home_design_about"
+        android:visibility="gone"
+        tools:visibility="visible" />
+</LinearLayout>

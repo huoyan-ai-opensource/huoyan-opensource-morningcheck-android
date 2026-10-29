@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/check_info_panel"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top"
+    android:orientation="horizontal">
+
+    <cc.huoyan.opensource.morningcheck.FaceAlignmentGuideView
+        android:id="@+id/check_face_guide"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_weight="1" />
+
+    <ScrollView
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_weight="1.2"
+        android:fillViewport="true">
+
+        <include layout="@layout/view_check_current_info" />
+    </ScrollView>
+</LinearLayout>

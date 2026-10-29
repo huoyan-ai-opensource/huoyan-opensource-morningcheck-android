@@ -1,0 +1,9 @@
+# 复制为 local.properties，按本机环境修改；local.properties 不得提交。
+sdk.dir=D:/AndroidSDK
+
+# 默认使用仓库公开的实验签名，无需填写下面四项。
+# 正式发布必须同时填写四项；密钥库相对路径以仓库根目录为基准。
+# signing.storeFile=signing/production.jks
+# signing.storePassword=YOUR_STORE_PASSWORD
+# signing.keyAlias=YOUR_KEY_ALIAS
+# signing.keyPassword=YOUR_KEY_PASSWORD

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 手机重新分配信息和触控空间，尺寸只引用零售原表。 -->
+
+    <style name="McPhoneHeaderLogo" parent="McHeaderLogo">
+        <item name="android:layout_width">@dimen/dp_24</item>
+        <item name="android:layout_height">@dimen/dp_24</item>
+    </style>
+
+    <style name="McPhoneHeaderBrand" parent="McHeaderBrand">
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+        <item name="android:layout_marginLeft">@dimen/dp_6</item>
+    </style>
+
+    <style name="McPhoneHeaderAbout" parent="HomeDesignAbout">
+        <item name="android:layout_width">@dimen/dp_50</item>
+        <item name="android:layout_height">@dimen/dp_50</item>
+        <item name="android:drawablePadding">@dimen/dp_0</item>
+        <item name="android:paddingStart">@dimen/dp_8</item>
+        <item name="android:paddingEnd">@dimen/dp_8</item>
+    </style>
+
+</resources>

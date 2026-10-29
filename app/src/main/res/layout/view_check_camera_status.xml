@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/check_camera_status_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/check_camera_status"
+        style="@style/PenCaption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mc_field"
+        android:paddingStart="@dimen/dp_6"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingEnd="@dimen/dp_6"
+        android:paddingBottom="@dimen/dp_3"
+        android:text="等待设备" />
+
+    <TextView
+        android:id="@+id/check_camera_stage"
+        style="@style/PenCaption"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:text="准备晨检" />
+</LinearLayout>

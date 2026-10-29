@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mc_system_voice_switch_width">@dimen/dp_34</dimen>
+    <dimen name="mc_system_voice_switch_height">@dimen/dp_20</dimen>
+    <dimen name="mc_system_voice_switch_thumb_size">@dimen/dp_14</dimen>
+    <dimen name="mc_system_voice_switch_thumb_inset">@dimen/dp_3</dimen>
+</resources>

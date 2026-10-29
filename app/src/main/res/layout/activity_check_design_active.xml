@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mc_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_check_header" />
+
+    <LinearLayout
+        android:id="@+id/page_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_margin="@dimen/dp_12"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/check_camera_slot"
+                style="@style/PenPanel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0"
+                android:layout_weight="3"
+                android:clipToOutline="true">
+
+            </FrameLayout>
+
+            <include
+                layout="@layout/view_check_design_info"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/PenFooter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/check_progress"
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="2"
+                android:text="识别到员工后自动开始" />
+
+            <TextView
+                android:id="@+id/check_pause"
+                style="@style/PenButton"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="@dimen/dp_6"
+                android:text="暂停"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/check_exit"
+                style="@style/PenButton"
+                android:layout_width="wrap_content"
+                android:text="@string/security_check_exit" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

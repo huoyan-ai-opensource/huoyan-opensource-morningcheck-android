@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="login_scan_title">扫描门店二维码</string>
+    <string name="login_scan_hint">将门店二维码放入画面，识别后自动登录。</string>
+    <string name="login_success">门店登录成功</string>
+    <string name="login_retry_scan">重新扫码</string>
+    <string name="login_retry_camera">重新打开相机</string>
+    <string name="login_choose_camera">选择摄像头</string>
+    <string name="login_camera_starting">正在打开摄像头…</string>
+    <string name="login_permission_denied">需要相机权限才能扫描门店二维码，请允许相机权限或前往系统设置开启。</string>
+    <string name="login_permission_settings">权限设置</string>
+    <string name="login_no_camera">未发现摄像头，请检查连接后重试。</string>
+</resources>

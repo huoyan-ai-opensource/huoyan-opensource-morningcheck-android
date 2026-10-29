@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="mc_choice_window_max_width">480dp</dimen>
+    <dimen name="mc_choice_padding">18dp</dimen>
+    <dimen name="mc_choice_content_margin">10dp</dimen>
+    <dimen name="mc_choice_option_spacing">6dp</dimen>
+    <dimen name="mc_choice_option_min_height">52dp</dimen>
+    <dimen name="mc_choice_action_min_height">52dp</dimen>
+</resources>

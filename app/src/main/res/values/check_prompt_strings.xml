@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mc_check_prompt_label">当前提示</string>
+    <string name="mc_check_prompt_warning_label">当前异常</string>
+    <string name="mc_check_temperature_value_placeholder">体温 · --°C</string>
+</resources>

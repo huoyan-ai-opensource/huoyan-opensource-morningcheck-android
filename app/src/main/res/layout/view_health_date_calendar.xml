@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/health_date_previous"
+            style="@style/McHealthDateArrow"
+            android:contentDescription="上个月"
+            android:text="‹" />
+
+        <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+            android:id="@+id/health_date_year"
+            style="@style/McHealthDatePicker"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1.3"
+            android:background="@drawable/mc_field"
+            android:contentDescription="选择年份"
+            android:popupBackground="@drawable/mc_panel"
+            android:spinnerMode="dropdown" />
+
+        <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+            android:id="@+id/health_date_month"
+            style="@style/McHealthDatePicker"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field"
+            android:contentDescription="选择月份"
+            android:spinnerMode="dropdown" />
+
+        <TextView
+            android:id="@+id/health_date_next"
+            style="@style/McHealthDateArrow"
+            android:contentDescription="下个月"
+            android:text="›" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/view_health_date_week"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <GridView
+        android:id="@+id/health_date_days"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:horizontalSpacing="@dimen/dp_0"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="7"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/dp_0" />
+</LinearLayout>

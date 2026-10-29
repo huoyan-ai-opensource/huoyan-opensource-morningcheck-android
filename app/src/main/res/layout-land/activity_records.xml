@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mc_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_app_header" />
+
+    <LinearLayout
+        android:id="@+id/page_content"
+        style="@style/PenPage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/PenPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/view_records_filters" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0"
+                android:layout_marginTop="@dimen/dp_6"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/records_table_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/view_record_table_header" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/records_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_0"
+                        android:layout_weight="1"
+                        android:scrollbars="vertical" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/records_empty"
+                    style="@style/PenCaption"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/records_load_more"
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_24"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="上拉加载更多" />
+
+            <include
+                layout="@layout/view_records_pagination"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

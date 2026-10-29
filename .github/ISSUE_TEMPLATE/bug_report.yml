@@ -1,0 +1,68 @@
+name: 问题反馈
+description: 反馈可以复现的晨检 App 或 SDK 对接问题。
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提交前请查阅[快速开始](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/blob/main/QUICKSTART.md)和[常见问题](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/blob/main/docs/faq.md)。
+        激活申请、包名登记通过 [火眼官网](https://www.huoyan.cc) 联系。
+        不要上传激活码、账号令牌、正式签名、员工人脸或健康证资料。安全问题按 [SECURITY.md](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/blob/main/SECURITY.md) 私密反馈。
+  - type: input
+    id: versions
+    attributes:
+      label: App / JAR / SDK 壳 / 模型版本
+      description: 源码运行时附分支、提交号及来源平台；无法取得的版本标为未知。
+      placeholder: "App 0.1.0；JAR 2.0.0；SDK/模型版本；main@提交号"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: 设备与外设
+      description: 型号、Android/API、CPU/ABI，相机、测温及补光设备和连接方式。
+      placeholder: "设备型号 / Android版本 / ABI / 相机与测温型号"
+    validations:
+      required: true
+  - type: dropdown
+    id: transport
+    attributes:
+      label: SDK 连接方式
+      options:
+        - 本机 AIDL
+        - 本机 WebSocket
+        - 局域网 WebSocket
+        - 尚未连接或不确定
+        - 与 SDK 无关
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 从哪个页面开始、执行了什么、是否必现；使用测试员工描述，说明相关晨检规则。
+      placeholder: |
+        1. 打开……
+        2. 点击或进入……
+        3. 出现……
+    validations:
+      required: true
+  - type: textarea
+    id: expected_actual
+    attributes:
+      label: 预期与实际结果
+      description: 附错误码、提示原文及时间；UI 问题说明横竖屏与字体大小，可附脱敏截图。
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 脱敏日志与补充信息
+      description: 只提供问题附近相关日志；串口问题可提供去除敏感字段的原始回包与参数，已有讨论请附链接。
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 提交确认
+      options:
+        - label: 我已检查日志和附件，未包含凭据、真实员工人脸、健康证或其他个人资料。
+          required: true

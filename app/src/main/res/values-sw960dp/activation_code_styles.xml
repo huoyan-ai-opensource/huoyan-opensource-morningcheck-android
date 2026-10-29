@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 弹窗保持常规字体大小，复用零售尺寸表，不随整屏等比放大。 -->
+    <style name="McActivationCodeTitle" parent="McTitle">
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="McActivationCodeSegment" parent="McText">
+        <item name="android:textSize">@dimen/sp_8</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/activation_code_segment</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="fontFamily">monospace</item>
+        <item name="android:gravity">center</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="McActivationCodeKey" parent="McText">
+        <item name="android:textSize">@dimen/sp_8</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/activation_code_key</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="fontFamily">monospace</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_0</item>
+        <item name="android:minHeight">@dimen/dp_0</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="McActivationCodeLink" parent="McText">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/mc_blue</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:minHeight">@dimen/dp_0</item>
+    </style>
+
+    <style name="McActivationCodeAction" parent="McButton">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/activation_code_secondary</item>
+        <item name="android:textColor">@color/mc_ink</item>
+        <item name="android:minHeight">@dimen/dp_0</item>
+        <item name="android:padding">@dimen/dp_0</item>
+    </style>
+</resources>
+

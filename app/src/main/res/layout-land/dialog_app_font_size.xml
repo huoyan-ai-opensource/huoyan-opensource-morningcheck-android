@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_panel"
+    android:orientation="vertical"
+    android:padding="@dimen/mc_choice_padding">
+
+    <TextView
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityHeading="true"
+        android:minHeight="@dimen/mc_choice_title_min_height"
+        android:text="@string/app_font_size_dialog_title"
+        android:textSize="@dimen/mc_choice_title_text_size" />
+
+    <LinearLayout
+        android:id="@+id/settings_font_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mc_choice_content_margin"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <include
+            layout="@layout/view_font_size_dialog_preview"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ListView
+            android:id="@+id/settings_font_options"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/mc_choice_padding"
+            android:layout_weight="1"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/mc_choice_option_spacing"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/view_font_size_dialog_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mc_choice_content_margin" />
+</LinearLayout>

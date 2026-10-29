@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sdk_details_text"
+    style="@style/McSdkDetails"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textIsSelectable="true"
+    tools:text="授权类型：正式版&#10;模型：晨检通用版&#10;到期时间：2027-01-01 08:00&#10;下次续期：2026-12-30 08:00"
+    tools:theme="@style/AppPreviewTheme" />

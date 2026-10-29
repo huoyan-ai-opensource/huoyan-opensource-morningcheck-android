@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/staff_edit_field_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/staff_edit_previous_field"
+            style="@style/McStaffFormButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1"
+            android:text="上一项" />
+
+        <TextView
+            android:id="@+id/staff_edit_field_position"
+            style="@style/McStaffFormLabel"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="1 / 4" />
+
+        <TextView
+            android:id="@+id/staff_edit_next_field"
+            style="@style/McStaffFormButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1"
+            android:text="下一项" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/staff_edit_group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_6"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/McStaffFormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="姓名（必填）" />
+
+                <EditText
+                    android:id="@+id/staff_edit_name"
+                    style="@style/McStaffFormInput"
+                    android:layout_width="match_parent"
+                    android:hint="请输入员工姓名"
+                    android:imeOptions="actionNext|flagNoExtractUi|flagNoFullscreen"
+                    android:inputType="textPersonName"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/staff_edit_group_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_6"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/McStaffFormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="工号（必填，不可重复）" />
+
+                <EditText
+                    android:id="@+id/staff_edit_number"
+                    style="@style/McStaffFormInput"
+                    android:layout_width="match_parent"
+                    android:hint="请输入工号"
+                    android:imeOptions="actionNext|flagNoExtractUi|flagNoFullscreen"
+                    android:inputType="text"
+                    android:singleLine="true" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_6"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/staff_edit_group_department"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_6"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/McStaffFormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="所属部门（可不分配）" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/staff_edit_department_value"
+                        style="@style/McStaffFormInput"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:text="选择部门（可不分配）" />
+
+                    <TextView
+                        android:id="@+id/staff_edit_clear_department"
+                        style="@style/McStaffFormButton"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:contentDescription="不分配部门"
+                        android:text="清空" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/staff_edit_group_health"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_6"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/McStaffFormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="健康证有效期（可留空）" />
+
+                <TextView
+                    android:id="@+id/staff_edit_health"
+                    style="@style/McStaffFormInput"
+                    android:layout_width="match_parent"
+                    android:clickable="true"
+                    android:contentDescription="选择健康证有效期"
+                    android:ellipsize="end"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="选择有效期（可留空）" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

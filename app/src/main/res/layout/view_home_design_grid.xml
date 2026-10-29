@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:columnCount="2"
+    android:orientation="horizontal"
+    android:rowCount="5">
+
+    <LinearLayout
+        android:id="@+id/home_staff"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_0"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="0"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_people"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="员工管理"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="资料、部门与人脸"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_records"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="0"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_checklist"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="晨检记录"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="检查结果与照片"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_connection"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_0"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="1"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_connection"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SDK 连接"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="本机与局域网"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_lighting"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="1"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_light"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="补光设置"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="串口与 GPIO 补光"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_authorization"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_0"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="2"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_shield"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="授权与密钥"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="授权状态与激活"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_camera"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="2"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_face"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="相机设置"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="头部与手部预览"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_items"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_0"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="3"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_checklist"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="晨检规则"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="着装与体温阈值"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_temperature"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="3"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_thermometer"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="测温设备"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="串口配置与测试"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_system"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_0"
+        android:layout_marginBottom="@dimen/dp_0"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_gravity="fill"
+        android:layout_row="4"
+        android:background="@drawable/mc_panel_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_50"
+        android:padding="@dimen/dp_8">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mc_home_info"
+            app:tint="@color/mc_blue" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="系统设置"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="语音、字号与安全"
+                android:textSize="@dimen/sp_7" />
+        </LinearLayout>
+    </LinearLayout>
+</GridLayout>

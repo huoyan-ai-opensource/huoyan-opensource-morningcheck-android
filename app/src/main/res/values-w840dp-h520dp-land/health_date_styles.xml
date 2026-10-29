@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 日期弹窗局部字号角色与触控高度随宽裕横窗放大，不使用宿主的 sw 等比尺寸表。 -->
+    <style name="McHealthDateDialogTheme" parent="">
+        <item name="mcTextTitleSize">@dimen/sp_18</item>
+        <item name="mcTextBodySize">@dimen/sp_16</item>
+        <item name="mcTextCaptionSize">@dimen/sp_14</item>
+    </style>
+
+    <style name="McHealthDatePanel" parent="McHealthDatePanelBase">
+        <item name="android:padding">@dimen/dp_20</item>
+    </style>
+
+    <style name="McHealthDateAction" parent="McHealthDateActionBase">
+        <item name="android:layout_height">@dimen/dp_60</item>
+        <item name="android:minHeight">@dimen/dp_60</item>
+    </style>
+
+    <style name="McHealthDateArrow" parent="McHealthDateArrowBase">
+        <item name="android:layout_width">@dimen/dp_60</item>
+    </style>
+
+    <style name="McHealthDatePicker" parent="">
+        <item name="android:layout_height">@dimen/dp_60</item>
+    </style>
+
+    <style name="McHealthDateOption" parent="McHealthDateOptionBase">
+        <item name="android:layout_height">@dimen/dp_60</item>
+        <item name="android:minHeight">@dimen/dp_60</item>
+    </style>
+
+    <style name="McHealthDateWeek" parent="McHealthDateWeekBase">
+        <item name="android:minHeight">@dimen/dp_30</item>
+    </style>
+</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="sdk_flow_activation_empty">激活码不能为空</string>
+    <string name="sdk_flow_activation_busy">设备正在处理请求，请稍后再试</string>
+</resources>

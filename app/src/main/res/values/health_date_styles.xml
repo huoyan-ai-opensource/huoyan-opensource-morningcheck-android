@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="McHealthDateDialogTheme" parent="" />
+
+    <style name="McHealthDatePanelBase" parent="">
+        <item name="android:background">@drawable/mc_panel</item>
+        <item name="android:padding">@dimen/dp_12</item>
+    </style>
+
+    <style name="McHealthDatePanel" parent="McHealthDatePanelBase" />
+
+    <style name="McHealthDateTitle" parent="McText">
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+        <item name="android:fontFamily">?attr/mcFontBold</item>
+        <item name="fontFamily">?attr/mcFontBold</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="McHealthDateSelected" parent="McHealthDateTitle">
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+        <item name="android:textColor">@color/mc_blue</item>
+    </style>
+
+    <style name="McHealthDateLabel" parent="McText">
+        <item name="android:textSize">?attr/mcTextCaptionSize</item>
+        <item name="android:textColor">@color/mc_muted</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="McHealthDateActionBase" parent="McButton">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:layout_height">@dimen/dp_44</item>
+        <item name="android:minHeight">@dimen/dp_44</item>
+        <item name="android:paddingLeft">@dimen/dp_8</item>
+        <item name="android:paddingRight">@dimen/dp_8</item>
+        <item name="android:paddingTop">@dimen/dp_0</item>
+        <item name="android:paddingBottom">@dimen/dp_0</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="McHealthDateAction" parent="McHealthDateActionBase" />
+
+    <style name="McHealthDatePrimary" parent="McHealthDateAction">
+        <item name="android:background">@drawable/mc_button_primary</item>
+        <item name="android:textColor">@color/mc_white</item>
+    </style>
+
+    <style name="McHealthDateArrowBase" parent="McHealthDateAction">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:layout_width">@dimen/dp_44</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:padding">@dimen/dp_0</item>
+    </style>
+
+    <style name="McHealthDateArrow" parent="McHealthDateArrowBase" />
+
+    <style name="McHealthDatePicker" parent="">
+        <item name="android:layout_height">@dimen/dp_44</item>
+    </style>
+
+    <style name="McHealthDateOptionBase" parent="McText">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:layout_height">@dimen/dp_44</item>
+        <item name="android:minHeight">@dimen/dp_44</item>
+        <item name="android:paddingLeft">@dimen/dp_8</item>
+        <item name="android:paddingRight">@dimen/dp_8</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="McHealthDateOption" parent="McHealthDateOptionBase" />
+
+    <style name="McHealthDateWeekBase" parent="McHealthDateLabel">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/dp_24</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="McHealthDateWeek" parent="McHealthDateWeekBase" />
+
+    <style name="McHealthDateDay" parent="McText">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_0</item>
+        <item name="android:maxLines">1</item>
+    </style>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/department_filter_option_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_choice_row"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/mc_choice_option_min_height"
+    android:paddingStart="@dimen/mc_choice_option_padding_horizontal"
+    android:paddingTop="@dimen/mc_choice_option_padding_vertical"
+    android:paddingEnd="@dimen/mc_choice_option_padding_horizontal"
+    android:paddingBottom="@dimen/mc_choice_option_padding_vertical">
+
+    <TextView
+        android:id="@+id/department_filter_option_name"
+        style="@style/PenText"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="@dimen/mc_choice_option_text_size" />
+
+    <TextView
+        android:id="@+id/department_filter_option_selected"
+        style="@style/PenText"
+        android:layout_width="@dimen/mc_choice_radio_size"
+        android:layout_height="@dimen/mc_choice_radio_size"
+        android:layout_marginStart="@dimen/mc_choice_radio_margin"
+        android:gravity="center"
+        android:importantForAccessibility="no"
+        android:includeFontPadding="false"
+        android:textSize="@dimen/mc_choice_radio_text_size" />
+</LinearLayout>

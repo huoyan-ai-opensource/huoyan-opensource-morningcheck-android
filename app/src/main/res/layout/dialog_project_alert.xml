@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_panel"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_11">
+
+    <TextView
+        android:id="@+id/confirmation_title"
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <ScrollView
+        android:id="@+id/confirmation_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_14"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:id="@+id/confirmation_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/confirmation_message"
+                style="@style/PenText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/confirmation_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_14"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@android:id/button2"
+            style="@style/ProjectDialogButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/mc_button"
+            android:textColor="@color/mc_ink" />
+
+        <Button
+            android:id="@android:id/button3"
+            style="@style/ProjectDialogButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mc_button"
+            android:textColor="@color/mc_ink"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@android:id/button1"
+            style="@style/ProjectDialogButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@drawable/mc_button_primary"
+            android:textColor="@color/mc_white" />
+    </LinearLayout>
+</LinearLayout>

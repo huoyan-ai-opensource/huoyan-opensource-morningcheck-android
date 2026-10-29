@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="头部检查" />
+
+    <LinearLayout
+        android:id="@+id/rules_head_row"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="头部检查" />
+
+        <TextView
+            android:id="@+id/rules_head_state"
+            style="@style/PenCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/mc_button"
+            android:paddingStart="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingEnd="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_2"
+            android:textColor="@color/mc_blue" />
+
+        <cc.huoyan.opensource.morningcheck.LandscapeSwitch
+            android:id="@+id/settings_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:showText="false"
+            android:splitTrack="false"
+            android:switchMinWidth="@dimen/dp_52"
+            android:thumb="@drawable/land_switch_thumb"
+            android:thumbTint="@null"
+            android:track="@drawable/land_switch_track"
+            android:trackTint="@null" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:background="#E7EBF1" />
+
+    <LinearLayout
+        android:id="@+id/rules_hat_row"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="厨师帽" />
+
+        <TextView
+            android:id="@+id/rules_hat_state"
+            style="@style/PenCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/mc_button"
+            android:paddingStart="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingEnd="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_2"
+            android:textColor="@color/mc_blue" />
+
+        <cc.huoyan.opensource.morningcheck.LandscapeSwitch
+            android:id="@+id/settings_hat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:showText="false"
+            android:splitTrack="false"
+            android:switchMinWidth="@dimen/dp_52"
+            android:thumb="@drawable/land_switch_thumb"
+            android:thumbTint="@null"
+            android:track="@drawable/land_switch_track"
+            android:trackTint="@null" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:background="#E7EBF1" />
+
+    <LinearLayout
+        android:id="@+id/rules_mask_row"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="口罩" />
+
+        <TextView
+            android:id="@+id/rules_mask_state"
+            style="@style/PenCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/mc_button"
+            android:paddingStart="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingEnd="@dimen/dp_6"
+            android:paddingBottom="@dimen/dp_2"
+            android:textColor="@color/mc_blue" />
+
+        <cc.huoyan.opensource.morningcheck.LandscapeSwitch
+            android:id="@+id/settings_mask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:showText="false"
+            android:splitTrack="false"
+            android:switchMinWidth="@dimen/dp_52"
+            android:thumb="@drawable/land_switch_thumb"
+            android:thumbTint="@null"
+            android:track="@drawable/land_switch_track"
+            android:trackTint="@null" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:background="#E7EBF1" />
+</LinearLayout>

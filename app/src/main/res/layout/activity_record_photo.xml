@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mc_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_app_header" />
+
+    <LinearLayout
+        android:id="@+id/page_content"
+        style="@style/PenPage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/photo_pager"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_weight="1"
+            android:background="#273342"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/photo_record_info"
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/photo_caption"
+                style="@style/PenCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_8" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_26"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/photo_position"
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/photo_previous"
+                style="@style/PenButton"
+                android:layout_width="wrap_content"
+                android:text="上一张" />
+
+            <TextView
+                android:id="@+id/photo_next"
+                style="@style/PenPrimary"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/dp_6"
+                android:text="下一张" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

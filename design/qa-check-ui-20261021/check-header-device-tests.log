@@ -1,0 +1,60 @@
+
+cc.huoyan.opensource.morningcheck.CheckGuidanceUiTest:.......
+cc.huoyan.opensource.morningcheck.DesignUiDeviceTest:..
+Error in checkAnimationPlaysInCardAndReleasesImagesOnRedraw(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest):
+java.lang.AssertionError: java.lang.AssertionError
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.main(DesignUiDeviceTest.java:1879)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.checkAnimationPlaysInCardAndReleasesImagesOnRedraw(DesignUiDeviceTest.java:1010)
+	... 34 trimmed
+Caused by: java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.visible(DesignUiDeviceTest.java:1802)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$checkAnimationPlaysInCardAndReleasesImagesOnRedraw$150$cc-huoyan-opensource-morningcheck-DesignUiDeviceTest(DesignUiDeviceTest.java:1018)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda9.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$main$263(DesignUiDeviceTest.java:1878)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda179.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2420)
+	at android.os.Handler.handleCallback(Handler.java:958)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:205)
+	at android.os.Looper.loop(Looper.java:294)
+	at android.app.ActivityThread.main(ActivityThread.java:8248)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+
+
+Time: 39.823
+There was 1 failure:
+1) checkAnimationPlaysInCardAndReleasesImagesOnRedraw(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest)
+java.lang.AssertionError: java.lang.AssertionError
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.main(DesignUiDeviceTest.java:1879)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.checkAnimationPlaysInCardAndReleasesImagesOnRedraw(DesignUiDeviceTest.java:1010)
+	... 34 trimmed
+Caused by: java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.visible(DesignUiDeviceTest.java:1802)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$checkAnimationPlaysInCardAndReleasesImagesOnRedraw$150$cc-huoyan-opensource-morningcheck-DesignUiDeviceTest(DesignUiDeviceTest.java:1018)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda9.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$main$263(DesignUiDeviceTest.java:1878)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda179.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2420)
+	at android.os.Handler.handleCallback(Handler.java:958)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:205)
+	at android.os.Looper.loop(Looper.java:294)
+	at android.app.ActivityThread.main(ActivityThread.java:8248)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+
+FAILURES!!!
+Tests run: 10,  Failures: 1

@@ -1,0 +1,6 @@
+
+cc.huoyan.opensource.morningcheck.DesignUiDeviceTest:.......
+
+Time: 112.469
+
+OK (7 tests)

@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+
+    <style name="McText">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:textColor">@color/mc_ink</item>
+        <item name="fontFamily">?attr/mcFontRegular</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="McLabel" parent="McText">
+        <item name="android:textSize">?attr/mcTextCaptionSize</item>
+        <item name="android:textColor">@color/mc_muted</item>
+    </style>
+
+    <style name="McTitle" parent="McText">
+        <item name="fontFamily">?attr/mcFontBold</item>
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+    </style>
+
+    <style name="McButton" parent="McText">
+        <item name="android:background">@drawable/mc_button</item>
+        <item name="android:textColor">@color/mc_blue</item>
+        <item name="fontFamily">?attr/mcFontBold</item>
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/dp_7</item>
+        <item name="android:paddingRight">@dimen/dp_7</item>
+        <item name="android:paddingTop">@dimen/dp_5</item>
+        <item name="android:paddingBottom">@dimen/dp_5</item>
+        <item name="android:minHeight">@dimen/dp_30</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="McInput" parent="McText">
+        <item name="android:background">@drawable/mc_field</item>
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:textColorHint">@color/mc_muted</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:paddingLeft">@dimen/dp_7</item>
+        <item name="android:paddingRight">@dimen/dp_7</item>
+        <item name="android:paddingTop">@dimen/dp_6</item>
+        <item name="android:paddingBottom">@dimen/dp_6</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <style name="McPanel">
+        <item name="android:background">@drawable/mc_panel</item>
+        <item name="android:padding">@dimen/dp_14</item>
+    </style>
+
+    <style name="McTypographyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="mcTextPageTitleSize">@dimen/sp_12</item>
+        <item name="mcTextTitleSize">@dimen/sp_11</item>
+        <item name="mcTextBodySize">@dimen/sp_9</item>
+        <item name="mcTextCaptionSize">@dimen/sp_8</item>
+
+        <item name="android:textAppearance">@style/McAppearanceBody</item>
+        <item name="android:textAppearanceSmall">@style/McAppearanceSmall</item>
+        <item name="android:textAppearanceMedium">@style/McAppearanceBody</item>
+        <item name="android:textAppearanceLarge">@style/McAppearanceTitle</item>
+        <item name="android:textAppearanceButton">@style/McAppearanceButton</item>
+        <item name="android:textViewStyle">@style/McDefaultText</item>
+        <item name="editTextStyle">@style/McDefaultInput</item>
+        <item name="android:editTextStyle">@style/McDefaultInput</item>
+        <item name="buttonStyle">@style/McDefaultButton</item>
+        <item name="android:buttonStyle">@style/McDefaultButton</item>
+        <item name="checkboxStyle">@style/McDefaultCheckBox</item>
+        <item name="radioButtonStyle">@style/McDefaultRadioButton</item>
+        <item name="switchStyle">@style/McDefaultSwitch</item>
+        <item name="android:spinnerItemStyle">@style/McSpinnerValue</item>
+        <item name="spinnerDropDownItemStyle">@style/McSpinnerOption</item>
+        <item name="android:dropDownItemStyle">@style/McSpinnerOption</item>
+        <item name="textAppearanceListItem">@style/McAppearanceBody</item>
+        <item name="textAppearanceListItemSmall">@style/McAppearanceBody</item>
+        <item name="textAppearanceListItemSecondary">@style/McAppearanceSmall</item>
+        <item name="alertDialogTheme">@style/McAlertDialogTheme</item>
+    </style>
+
+    <style name="McAppearanceBody" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+    </style>
+
+    <style name="McAppearanceSmall" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">?attr/mcTextCaptionSize</item>
+    </style>
+
+    <style name="McAppearanceTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+    </style>
+
+    <style name="McAppearanceButton" parent="TextAppearance.AppCompat.Widget.Button">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+    </style>
+
+    <style name="McDefaultText" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">@style/McAppearanceBody</item>
+    </style>
+
+    <style name="McDefaultInput" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+    </style>
+
+    <style name="McDefaultButton" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+    </style>
+
+    <style name="McDefaultCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+    </style>
+
+    <style name="McDefaultRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+    </style>
+
+    <style name="McDefaultSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+    </style>
+
+    <style name="McSpinnerValue" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="McSpinnerOption" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="McAlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="alertDialogStyle">@style/McAlertDialog</item>
+        <item name="android:windowTitleStyle">@style/McDialogTitle</item>
+        <item name="android:textAppearanceMedium">@style/McAppearanceBody</item>
+        <item name="textAppearanceListItem">@style/McAppearanceBody</item>
+        <item name="textAppearanceListItemSmall">@style/McAppearanceBody</item>
+        <item name="textAppearanceListItemSecondary">@style/McAppearanceSmall</item>
+        <item name="buttonBarButtonStyle">@style/McDialogButton</item>
+        <item name="buttonBarPositiveButtonStyle">@style/McDialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/McDialogButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/McDialogButton</item>
+    </style>
+
+    <style name="McAlertDialog" parent="AlertDialog.AppCompat.Light">
+        <item name="android:layout">@layout/mc_alert_dialog</item>
+    </style>
+
+    <style name="McDialogTitle" parent="RtlOverlay.DialogWindowTitle.AppCompat">
+        <item name="android:textAppearance">@style/McAppearanceTitle</item>
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+    </style>
+
+    <style name="McDialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+    </style>
+
+    <style name="McHeader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_40</item>
+        <item name="android:paddingLeft">@dimen/dp_12</item>
+        <item name="android:paddingRight">@dimen/dp_12</item>
+    </style>
+
+    <style name="McHeaderLogo">
+        <item name="android:layout_width">@dimen/dp_21</item>
+        <item name="android:layout_height">@dimen/dp_21</item>
+    </style>
+
+    <style name="McHeaderBrand" parent="McTitle">
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+        <item name="android:layout_marginLeft">@dimen/dp_7</item>
+    </style>
+
+    <style name="McHeaderWorkspace" parent="McTitle">
+        <item name="android:textSize">?attr/mcTextTitleSize</item>
+    </style>
+
+    <style name="McHeaderBack">
+        <item name="android:layout_height">@dimen/dp_30</item>
+        <item name="android:minWidth">@dimen/dp_30</item>
+        <item name="android:paddingLeft">@dimen/dp_5</item>
+        <item name="android:paddingRight">@dimen/dp_5</item>
+    </style>
+
+    <style name="McHeaderTrailing">
+        <item name="android:layout_marginLeft">@dimen/dp_7</item>
+    </style>
+
+    <style name="McHeaderShop" parent="McText">
+        <item name="android:textSize">?attr/mcTextBodySize</item>
+        <item name="android:minHeight">@dimen/dp_30</item>
+    </style>
+
+    <style name="McPreviewCaption" parent="McLabel">
+        <item name="android:layout_height">@dimen/dp_21</item>
+        <item name="android:paddingLeft">@dimen/dp_7</item>
+        <item name="android:paddingRight">@dimen/dp_7</item>
+    </style>
+
+    <style name="McDialogPanel">
+        <item name="android:minHeight">@dimen/dp_30</item>
+    </style>
+</resources>

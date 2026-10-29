@@ -1,0 +1,59 @@
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.CheckGuidanceUiTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+cc.huoyan.opensource.morningcheck.CheckGuidanceUiTest:
+INSTRUMENTATION_STATUS: test=portraitLandscapeAndFourFontsKeepPromptReadableAndActionsFixed
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.CheckGuidanceUiTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=portraitLandscapeAndFourFontsKeepPromptReadableAndActionsFixed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+cc.huoyan.opensource.morningcheck.DesignUiDeviceTest:
+INSTRUMENTATION_STATUS: test=checkAnimationPlaysInCardAndReleasesImagesOnRedraw
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Timed out waiting for UI state
+	at org.junit.Assert.fail(Assert.java:89)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.await(DesignUiDeviceTest.java:1842)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.launch(DesignUiDeviceTest.java:1742)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.checkAnimationPlaysInCardAndReleasesImagesOnRedraw(DesignUiDeviceTest.java:974)
+
+INSTRUMENTATION_STATUS: stream=
+Error in checkAnimationPlaysInCardAndReleasesImagesOnRedraw(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest):
+java.lang.AssertionError: Timed out waiting for UI state
+	at org.junit.Assert.fail(Assert.java:89)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.await(DesignUiDeviceTest.java:1842)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.launch(DesignUiDeviceTest.java:1742)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.checkAnimationPlaysInCardAndReleasesImagesOnRedraw(DesignUiDeviceTest.java:974)
+
+INSTRUMENTATION_STATUS: test=checkAnimationPlaysInCardAndReleasesImagesOnRedraw
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 26.33
+There was 1 failure:
+1) checkAnimationPlaysInCardAndReleasesImagesOnRedraw(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest)
+java.lang.AssertionError: Timed out waiting for UI state
+	at org.junit.Assert.fail(Assert.java:89)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.await(DesignUiDeviceTest.java:1842)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.launch(DesignUiDeviceTest.java:1742)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.checkAnimationPlaysInCardAndReleasesImagesOnRedraw(DesignUiDeviceTest.java:974)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

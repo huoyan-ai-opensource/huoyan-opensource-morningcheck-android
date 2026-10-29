@@ -1,0 +1,169 @@
+plugins {
+    id 'com.android.library'
+}
+
+def releaseVersion = rootProject.ext.morningcheckClientVersion as String
+version = releaseVersion
+// 两份指南和 JAR 共用客户端版本，项目、ZIP 和 Release 附件保留相同文件名。
+def integrationGuides = ['zh-CN', 'en'].collect { language ->
+    rootProject.file("app/src/main/libs/huoyan-morningcheck-client-${releaseVersion}-integration-guide.${language}.docx")
+}
+
+android {
+    namespace 'cc.huoyan.morningcheck.sdk.client'
+    compileSdk 35
+    buildToolsVersion '35.0.0'
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        aidl true
+        buildConfig false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    compileOnly 'androidx.annotation:annotation:1.8.1'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+}
+
+// Android 插件负责编译 AIDL；JAR 包含 Java 账号配置，不包含 Android res。
+def verifySdkBoundary = tasks.register('verifySdkBoundary') {
+    def sources = fileTree('src/main/java') {
+        include '**/*.java'
+    }
+    inputs.files(sources)
+    doLast {
+        def forbidden = ~/import\s+(android\.app\.Activity|android\.widget\.|androidx\.fragment\.)|import\s+[^;]*\.R;/
+        sources.each { source ->
+            def content = source.getText('UTF-8')
+            if (content.contains('cc.huoyan.morningapp.') ||
+                    content.contains('cc.huoyan.opensource.morningcheck.') ||
+                    forbidden.matcher(content).find()) {
+                throw new GradleException("客户端模块不得反向依赖 App 或界面资源：${source}")
+            }
+        }
+    }
+}
+
+def clientJar = tasks.register('clientJar', Jar) {
+    group = 'build'
+    description = '打包带版本号的晨检客户端 Release JAR'
+    dependsOn 'compileReleaseJavaWithJavac', verifySdkBoundary
+    archiveFileName.set("huoyan-morningcheck-client-${releaseVersion}.jar")
+    destinationDirectory.set(layout.buildDirectory.dir('outputs/jar'))
+    from(layout.buildDirectory.dir('intermediates/javac/release/compileReleaseJavaWithJavac/classes'))
+    from 'src/main/resources'
+    from('consumer-rules.pro') {
+        into 'META-INF/proguard'
+    }
+    manifest {
+        attributes 'Implementation-Version': releaseVersion
+    }
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.register('packageReleaseJar') {
+    group = 'build'
+    description = '生成可独立交付的晨检客户端 Release JAR'
+    dependsOn clientJar
+}
+
+// 显式更新本地接入文件；普通 App 构建不依赖客户端源码编译。
+tasks.register('updateAppSdkJar', Copy) {
+    group = 'distribution'
+    description = '重新打包晨检客户端 JAR 并更新 app/src/main/libs 中的接入文件'
+    from clientJar
+    into(rootProject.layout.projectDirectory.dir('app/src/main/libs'))
+}
+
+def clientJarElements = configurations.create('clientJarElements') {
+    canBeConsumed = true
+    canBeResolved = false
+    extendsFrom configurations.getByName('implementation')
+}
+artifacts {
+    add(clientJarElements.name, clientJar)
+}
+
+// 独立示例只引用 JAR 与 Android API，防止公共入口意外依赖宿主应用。
+def compileExample = tasks.register('compileExample', JavaCompile) {
+    dependsOn clientJar
+    source(fileTree('samples') {
+        include '**/*.java'
+    })
+    classpath = files(clientJar.flatMap { it.archiveFile }) + files(android.bootClasspath)
+    destinationDirectory.set(layout.buildDirectory.dir('example-classes'))
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+    options.encoding = 'UTF-8'
+}
+
+tasks.register('clientDistribution', Zip) {
+    group = 'distribution'
+    description = '打包带版本号的晨检客户端 JAR、依赖与接入示例'
+    dependsOn compileExample
+    archiveFileName.set("huoyan-morningcheck-client-${releaseVersion}.zip")
+    destinationDirectory.set(layout.buildDirectory.dir('distributions'))
+    from(clientJar) {
+        into 'libs'
+    }
+    from(configurations.getByName('releaseRuntimeClasspath')) {
+        into 'libs'
+        include '*.jar'
+    }
+    from 'README.md', 'README.en.md', 'INTEGRATION_GUIDE.md', 'INTEGRATION_GUIDE.en.md',
+            'PACKAGING.md', 'consumer-rules.pro'
+    // 保留源码文档的目录层级，供离线包内的导航引用；不包含 Android 业务源码。
+    from(projectDir) {
+        into 'huoyanClient'
+        include 'README.md', 'README.en.md', 'INTEGRATION_GUIDE.md',
+                'INTEGRATION_GUIDE.en.md', 'PACKAGING.md'
+    }
+    from rootProject.files('USAGE.md', 'THIRD_PARTY_NOTICES.md', 'QUICKSTART.md',
+            'SUPPORT.md', 'SECURITY.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md',
+            'CHANGELOG.md', 'AGENTS.md', 'Agents.en.md', 'FONT-LICENSE.txt',
+            'local.properties.example')
+    from(rootProject.file('docs')) {
+        into 'docs'
+    }
+    from(rootProject.file('signing')) {
+        into 'signing'
+        include 'README.md', 'README.en.md'
+    }
+    from(integrationGuides) {
+        into 'docs'
+    }
+    from('tools/set_account.py') {
+        into 'tools'
+    }
+    from('samples') {
+        into 'samples'
+    }
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+    inputs.files(integrationGuides)
+    doFirst {
+        // Gradle 会忽略缺失的复制源，发布前必须明确拦截缺失或空白指南。
+        integrationGuides.each { guide ->
+            if (!guide.isFile() || guide.length() == 0) {
+                throw new GradleException("缺少有效的中英文 Word 接入指南：${guide.name}")
+            }
+        }
+    }
+}

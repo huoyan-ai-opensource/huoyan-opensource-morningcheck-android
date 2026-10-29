@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenFooter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mc_white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/enrollment_camera_settings"
+        style="@style/PenButton"
+        android:layout_width="wrap_content"
+        android:text="@string/face_enrollment_camera_settings"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/enrollment_capture"
+        style="@style/PenPrimary"
+        android:layout_width="wrap_content"
+        android:background="@drawable/mc_face_capture"
+        android:minWidth="@dimen/dp_68"
+        android:text="@string/face_enrollment_capture" />
+
+    <Space
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/enrollment_faces_clear"
+        style="@style/PenPrimary"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:background="@drawable/mc_face_forget"
+        android:contentDescription="@string/face_samples_clear"
+        android:minWidth="@dimen/dp_68"
+        android:text="@string/face_samples_forget_short" />
+</LinearLayout>

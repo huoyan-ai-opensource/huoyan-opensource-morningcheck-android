@@ -1,0 +1,23 @@
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+cc.huoyan.opensource.morningcheck.DesignUiDeviceTest:
+INSTRUMENTATION_STATUS: test=currentPagesKeepTextAndFixedActionsAtLargestFont
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=currentPagesKeepTextAndFixedActionsAtLargestFont
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 58.93
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

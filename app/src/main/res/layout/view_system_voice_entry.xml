@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="语音提示" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_6"
+        android:background="@drawable/mc_field"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_26"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8">
+
+        <TextView
+            android:id="@+id/settings_voice_state"
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="已开启" />
+
+        <cc.huoyan.opensource.morningcheck.LandscapeSwitch
+            android:id="@+id/settings_voice"
+            android:layout_width="@dimen/mc_system_voice_switch_width"
+            android:layout_height="@dimen/mc_system_voice_switch_height"
+            android:background="@null"
+            android:contentDescription="语音提示"
+            android:minHeight="@dimen/dp_0"
+            android:minWidth="@dimen/dp_0"
+            android:padding="@dimen/dp_0"
+            android:showText="false"
+            android:splitTrack="false"
+            android:switchMinWidth="@dimen/mc_system_voice_switch_width"
+            android:thumb="@drawable/mc_system_switch_thumb"
+            android:thumbTint="@null"
+            android:track="@drawable/mc_system_switch_track"
+            android:trackTint="@null" />
+    </LinearLayout>
+</LinearLayout>

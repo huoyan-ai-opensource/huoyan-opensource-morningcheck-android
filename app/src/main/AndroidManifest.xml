@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="false"
+        tools:node="replace" />
+    <!-- UVC 仅用于预览和内存取帧，不申请库附带的录音、共享存储及前台服务权限。 -->
+    <uses-permission
+        android:name="android.permission.RECORD_AUDIO"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE"
+        tools:node="remove" />
+
+    <queries>
+        <package android:name="cc.huoyan.morningcheck" />
+
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data
+                android:mimeType="application/vnd.android.package-archive"
+                android:scheme="content" />
+        </intent>
+        <intent>
+            <action android:name="android.settings.MANAGE_UNKNOWN_APP_SOURCES" />
+            <data android:scheme="package" />
+        </intent>
+    </queries>
+    <application
+        android:name=".MorningApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="火眼晨检-开源版"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.sdk-files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/sdk_file_paths" />
+        </provider>
+
+        <receiver
+            android:name=".MorningBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".HomeActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".StaffActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".StaffEditActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:theme="@style/McStaffEditorTheme"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".DepartmentsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".FaceEnrollmentActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".CheckActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".ResultActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".RecordsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".RecordDetailActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".RecordPhotoActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".SdkDetailsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".DevicesActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".BusinessCloudSettingsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".LicenseSettingsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".SdkActivationScanActivity"
+            android:exported="false"
+            android:theme="@style/McStaffEditorTheme"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".CameraSettingsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".CheckRulesSettingsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".TemperatureSettingsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".LightingSettingsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".SystemSettingsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".PlaceSettingsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:theme="@style/McStaffEditorTheme"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
+        <!-- 保留 MainActivity 启动别名，统一桌面入口。 -->
+        <activity-alias
+            android:name=".MainActivity"
+            android:exported="true"
+            android:targetActivity=".HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+    </application>
+</manifest>

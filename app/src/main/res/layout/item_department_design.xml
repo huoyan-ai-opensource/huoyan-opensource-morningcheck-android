@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/dp_30"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_8">
+
+    <TextView
+        android:id="@+id/business_row_name"
+        style="@style/PenRowCell"
+        android:gravity="start|center_vertical"
+        android:maxLines="1"
+        android:textAlignment="gravity" />
+
+    <TextView
+        android:id="@+id/department_row_staff"
+        style="@style/PenText"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/business_row_state"
+        style="@style/PenButton"
+        android:layout_width="@dimen/dp_42"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp_24"
+        android:paddingStart="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_4"
+        android:text="编辑" />
+
+    <TextView
+        android:id="@+id/department_row_delete"
+        style="@style/PenDanger"
+        android:layout_width="@dimen/dp_42"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_6"
+        android:minHeight="@dimen/dp_24"
+        android:paddingStart="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_4"
+        android:text="删除" />
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="McEnrollmentPreviewStatus" parent="PenText">
+        <item name="android:layout_margin">@dimen/dp_6</item>
+        <item name="android:background">@drawable/mc_enrollment_preview_status</item>
+        <item name="android:backgroundTint">@color/mc_enrollment_status_idle</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">@dimen/dp_8</item>
+        <item name="android:paddingEnd">@dimen/dp_8</item>
+        <item name="android:paddingTop">@dimen/dp_4</item>
+        <item name="android:paddingBottom">@dimen/dp_4</item>
+        <item name="android:textColor">@color/mc_white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

@@ -1,0 +1,205 @@
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+cc.huoyan.opensource.morningcheck.DesignUiDeviceTest:
+INSTRUMENTATION_STATUS: test=shopContactFieldsPersistWithoutOptionalBusinessIds
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=shopContactFieldsPersistWithoutOptionalBusinessIds
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=sdkDraftSelectionAndCancelledProbeDoNotSaveConnection
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.main(DesignUiDeviceTest.java:894)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.sdkDraftSelectionAndCancelledProbeDoNotSaveConnection(DesignUiDeviceTest.java:540)
+	... 34 trimmed
+Caused by: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.visible(DesignUiDeviceTest.java:862)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$sdkDraftSelectionAndCancelledProbeDoNotSaveConnection$95$cc-huoyan-opensource-morningcheck-DesignUiDeviceTest(DesignUiDeviceTest.java:543)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda71.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$main$143(DesignUiDeviceTest.java:893)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda46.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:463)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2340)
+	at android.os.Handler.handleCallback(Handler.java:942)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:201)
+	at android.os.Looper.loop(Looper.java:288)
+	at android.app.ActivityThread.main(ActivityThread.java:8061)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:703)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:911)
+
+INSTRUMENTATION_STATUS: stream=
+Error in sdkDraftSelectionAndCancelledProbeDoNotSaveConnection(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest):
+java.lang.AssertionError: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.main(DesignUiDeviceTest.java:894)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.sdkDraftSelectionAndCancelledProbeDoNotSaveConnection(DesignUiDeviceTest.java:540)
+	... 34 trimmed
+Caused by: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.visible(DesignUiDeviceTest.java:862)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$sdkDraftSelectionAndCancelledProbeDoNotSaveConnection$95$cc-huoyan-opensource-morningcheck-DesignUiDeviceTest(DesignUiDeviceTest.java:543)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda71.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$main$143(DesignUiDeviceTest.java:893)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda46.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:463)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2340)
+	at android.os.Handler.handleCallback(Handler.java:942)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:201)
+	at android.os.Looper.loop(Looper.java:288)
+	at android.app.ActivityThread.main(ActivityThread.java:8061)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:703)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:911)
+
+INSTRUMENTATION_STATUS: test=sdkDraftSelectionAndCancelledProbeDoNotSaveConnection
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=homeAndLicenseUseDesignPanelsWithActualDeviceValues
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=cc.huoyan.opensource.morningcheck.DesignUiDeviceTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.main(DesignUiDeviceTest.java:894)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.homeAndLicenseUseDesignPanelsWithActualDeviceValues(DesignUiDeviceTest.java:425)
+	... 34 trimmed
+Caused by: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.visible(DesignUiDeviceTest.java:862)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$homeAndLicenseUseDesignPanelsWithActualDeviceValues$75$cc-huoyan-opensource-morningcheck-DesignUiDeviceTest(DesignUiDeviceTest.java:432)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda138.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$main$143(DesignUiDeviceTest.java:893)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda46.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:463)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2340)
+	at android.os.Handler.handleCallback(Handler.java:942)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:201)
+	at android.os.Looper.loop(Looper.java:288)
+	at android.app.ActivityThread.main(ActivityThread.java:8061)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:703)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:911)
+
+INSTRUMENTATION_STATUS: stream=
+Error in homeAndLicenseUseDesignPanelsWithActualDeviceValues(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest):
+java.lang.AssertionError: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.main(DesignUiDeviceTest.java:894)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.homeAndLicenseUseDesignPanelsWithActualDeviceValues(DesignUiDeviceTest.java:425)
+	... 34 trimmed
+Caused by: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.visible(DesignUiDeviceTest.java:862)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$homeAndLicenseUseDesignPanelsWithActualDeviceValues$75$cc-huoyan-opensource-morningcheck-DesignUiDeviceTest(DesignUiDeviceTest.java:432)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda138.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$main$143(DesignUiDeviceTest.java:893)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda46.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:463)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2340)
+	at android.os.Handler.handleCallback(Handler.java:942)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:201)
+	at android.os.Looper.loop(Looper.java:288)
+	at android.app.ActivityThread.main(ActivityThread.java:8061)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:703)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:911)
+
+INSTRUMENTATION_STATUS: test=homeAndLicenseUseDesignPanelsWithActualDeviceValues
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 33.05
+There were 2 failures:
+1) sdkDraftSelectionAndCancelledProbeDoNotSaveConnection(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest)
+java.lang.AssertionError: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.main(DesignUiDeviceTest.java:894)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.sdkDraftSelectionAndCancelledProbeDoNotSaveConnection(DesignUiDeviceTest.java:540)
+	... 34 trimmed
+Caused by: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.visible(DesignUiDeviceTest.java:862)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$sdkDraftSelectionAndCancelledProbeDoNotSaveConnection$95$cc-huoyan-opensource-morningcheck-DesignUiDeviceTest(DesignUiDeviceTest.java:543)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda71.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$main$143(DesignUiDeviceTest.java:893)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda46.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:463)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2340)
+	at android.os.Handler.handleCallback(Handler.java:942)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:201)
+	at android.os.Looper.loop(Looper.java:288)
+	at android.app.ActivityThread.main(ActivityThread.java:8061)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:703)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:911)
+2) homeAndLicenseUseDesignPanelsWithActualDeviceValues(cc.huoyan.opensource.morningcheck.DesignUiDeviceTest)
+java.lang.AssertionError: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.main(DesignUiDeviceTest.java:894)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.homeAndLicenseUseDesignPanelsWithActualDeviceValues(DesignUiDeviceTest.java:425)
+	... 34 trimmed
+Caused by: java.lang.AssertionError: Control must not be vertically clipped expected:<58> but was:<57>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.visible(DesignUiDeviceTest.java:862)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$homeAndLicenseUseDesignPanelsWithActualDeviceValues$75$cc-huoyan-opensource-morningcheck-DesignUiDeviceTest(DesignUiDeviceTest.java:432)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda138.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest.lambda$main$143(DesignUiDeviceTest.java:893)
+	at cc.huoyan.opensource.morningcheck.DesignUiDeviceTest$$ExternalSyntheticLambda46.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:463)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2340)
+	at android.os.Handler.handleCallback(Handler.java:942)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:201)
+	at android.os.Looper.loop(Looper.java:288)
+	at android.app.ActivityThread.main(ActivityThread.java:8061)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:703)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:911)
+
+FAILURES!!!
+Tests run: 3,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

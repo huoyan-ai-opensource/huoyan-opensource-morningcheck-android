@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-21T02:13:32.633Z" hostname="fangfengdeMacBook-Air.local" time="0.028">
+  <properties/>
+  <testcase name="activeOnceUsesLegacyCommandsAndWaitsForCompleteCtFrame" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.016"/>
+  <testcase name="continuousReadingKeepsLatestFramesAndStopsQueryingWhenPageStops" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.005"/>
+  <testcase name="queuedOldReadingCannotCompleteReplacementRequest" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.0"/>
+  <testcase name="readFailureReleasesPortAndReportsMatchingStateAndError" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.0"/>
+  <testcase name="continuousTimeoutReportsOnceAndKeepsWaitingForHardware" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.001"/>
+  <testcase name="onceDiscardsOldBytesAndReturnsFirstFreshValidReadingAfterRelease" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.001"/>
+  <testcase name="closeCancelsPendingOpenAndCannotBeRestarted" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.001"/>
+  <testcase name="openFailureHasExplicitErrorAndNextRequestCanRecover" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.0"/>
+  <testcase name="onceTimesOutAtTenSecondsAndReportsErrorAfterRelease" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.0"/>
+  <testcase name="invalidConfigurationStopsOldSessionWithoutOpeningAnotherPort" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.001"/>
+  <testcase name="pageClosingFromCompletionStateSuppressesTemperatureCallback" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.0"/>
+  <testcase name="rapidReplacementClosesOldPortBeforeOpeningLastRequestOnly" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.001"/>
+  <testcase name="stopDropsQueuedCompletionAndAllowsFreshSession" classname="cc.huoyan.opensource.morningcheck.hardware.TemperatureSourceTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

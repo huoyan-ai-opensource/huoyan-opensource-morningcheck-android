@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mc_brand">火眼晨检-开源版</string>
+    <string name="mc_logo">火眼</string>
+    <string name="mc_preview_hint">实时采集  ·  请站在镜头前</string>
+    <string name="mc_no_findings">各项检查正常，请按门店规范上岗。</string>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mc_home_design_cloud" />
+
+    <LinearLayout
+        android:id="@+id/settings_business_cloud"
+        style="@style/PenInput"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_6"
+        android:baselineAligned="false"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/settings_business_cloud_value"
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="未配置" />
+
+        <TextView
+            android:id="@+id/settings_business_cloud_action"
+            style="@style/PenCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_6"
+            android:text="配置服务地址  ›" />
+    </LinearLayout>
+</LinearLayout>

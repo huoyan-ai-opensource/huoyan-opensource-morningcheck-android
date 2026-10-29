@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_4"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/staff_page_info"
+        style="@style/McPaginationInfo"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="start|center_vertical"
+        android:text="@string/business_page_loading" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/staff_first"
+            style="@style/McPaginationIconButton"
+            android:layout_marginStart="@dimen/dp_0"
+            android:contentDescription="@string/pagination_first"
+            android:src="@drawable/mc_pagination_first" />
+
+        <ImageButton
+            android:id="@+id/staff_previous"
+            style="@style/McPaginationIconButton"
+            android:contentDescription="@string/business_page_previous"
+            android:src="@drawable/mc_pagination_previous" />
+
+        <EditText
+            android:id="@+id/staff_page_input"
+            style="@style/McPaginationPageInput"
+            android:contentDescription="@string/pagination_jump_input_hint"
+            android:imeOptions="actionGo"
+            android:inputType="number"
+            android:maxLength="10"
+            android:singleLine="true" />
+
+        <ImageButton
+            android:id="@+id/staff_next"
+            style="@style/McPaginationIconButton"
+            android:contentDescription="@string/business_page_next"
+            android:src="@drawable/mc_pagination_next" />
+
+        <ImageButton
+            android:id="@+id/staff_last"
+            style="@style/McPaginationIconButton"
+            android:contentDescription="@string/pagination_last"
+            android:src="@drawable/mc_pagination_last" />
+
+        <TextView
+            android:id="@+id/staff_page_jump"
+            style="@style/McPaginationJumpButton"
+            android:contentDescription="@string/pagination_jump_hint"
+            android:text="@string/pagination_jump_hint" />
+    </LinearLayout>
+</LinearLayout>

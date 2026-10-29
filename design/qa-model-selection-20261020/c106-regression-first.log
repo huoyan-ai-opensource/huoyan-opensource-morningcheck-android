@@ -1,0 +1,56 @@
+
+cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest:
+Error in regularAndCompactFormsBindAndValidateActivationWithoutWritingToSdk(cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest):
+java.lang.AssertionError: 授权界面回归失败
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest.onMain(LicenseSettingsUiTest.java:692)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest.regularAndCompactFormsBindAndValidateActivationWithoutWritingToSdk(LicenseSettingsUiTest.java:216)
+	... 34 trimmed
+Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'void android.widget.TextView.setText(java.lang.CharSequence)' on a null object reference
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsActivity.bindLicense(LicenseSettingsActivity.java:125)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsActivity.bindRegular(LicenseSettingsActivity.java:115)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest.lambda$regularAndCompactFormsBindAndValidateActivationWithoutWritingToSdk$5(LicenseSettingsUiTest.java:221)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest$$ExternalSyntheticLambda41.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest.lambda$onMain$68(LicenseSettingsUiTest.java:690)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest$$ExternalSyntheticLambda7.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2420)
+	at android.os.Handler.handleCallback(Handler.java:958)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:205)
+	at android.os.Looper.loop(Looper.java:294)
+	at android.app.ActivityThread.main(ActivityThread.java:8248)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+........
+cc.huoyan.opensource.morningcheck.ShopLoginNavigationTest:.......
+
+Time: 87.385
+There was 1 failure:
+1) regularAndCompactFormsBindAndValidateActivationWithoutWritingToSdk(cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest)
+java.lang.AssertionError: 授权界面回归失败
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest.onMain(LicenseSettingsUiTest.java:692)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest.regularAndCompactFormsBindAndValidateActivationWithoutWritingToSdk(LicenseSettingsUiTest.java:216)
+	... 34 trimmed
+Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'void android.widget.TextView.setText(java.lang.CharSequence)' on a null object reference
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsActivity.bindLicense(LicenseSettingsActivity.java:125)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsActivity.bindRegular(LicenseSettingsActivity.java:115)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest.lambda$regularAndCompactFormsBindAndValidateActivationWithoutWritingToSdk$5(LicenseSettingsUiTest.java:221)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest$$ExternalSyntheticLambda41.call(D8$$SyntheticClass:0)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest.lambda$onMain$68(LicenseSettingsUiTest.java:690)
+	at cc.huoyan.opensource.morningcheck.LicenseSettingsUiTest$$ExternalSyntheticLambda7.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2420)
+	at android.os.Handler.handleCallback(Handler.java:958)
+	at android.os.Handler.dispatchMessage(Handler.java:99)
+	at android.os.Looper.loopOnce(Looper.java:205)
+	at android.os.Looper.loop(Looper.java:294)
+	at android.app.ActivityThread.main(ActivityThread.java:8248)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+
+FAILURES!!!
+Tests run: 16,  Failures: 1

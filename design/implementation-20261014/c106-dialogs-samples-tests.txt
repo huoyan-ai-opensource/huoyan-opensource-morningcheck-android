@@ -1,0 +1,7 @@
+
+cc.huoyan.opensource.morningcheck.DesignUiDeviceTest:.....
+cc.huoyan.opensource.morningcheck.FaceEnrollmentNavigationTest:....
+
+Time: 77.671
+
+OK (9 tests)

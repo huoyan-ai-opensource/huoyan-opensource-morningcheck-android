@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mc_bg"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36">
+
+        <include layout="@layout/view_app_header" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/page_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_0">
+
+                <LinearLayout
+                    android:id="@+id/enrollment_work"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_0"
+                    android:layout_margin="@dimen/dp_12"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.6"
+                        android:background="@drawable/mc_panel"
+                        android:orientation="vertical">
+
+                        <include
+                            layout="@layout/view_face_capture"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_0"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <include
+                        layout="@layout/view_face_design_samples"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <include layout="@layout/view_face_actions" />
+            </LinearLayout>
+
+            <cc.huoyan.opensource.morningcheck.CenteredDialogLayout
+                android:id="@+id/enrollment_selection_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#66000000"
+                android:visibility="gone"
+                android:clickable="true">
+
+                <LinearLayout
+                    style="@style/PenPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/dp_12"
+                    android:paddingVertical="@dimen/dp_10">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_26"
+                        android:layout_marginBottom="@dimen/dp_8"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            style="@style/PenTitle"
+                            android:layout_width="@dimen/dp_0"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="切换录入人员" />
+
+                        <TextView
+                            android:id="@+id/enrollment_selection_close"
+                            style="@style/PenButton"
+                            android:layout_width="wrap_content"
+                            android:text="取消" />
+                    </LinearLayout>
+
+                    <include
+                        layout="@layout/view_face_staff_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_0"
+                        android:layout_weight="1" />
+                </LinearLayout>
+            </cc.huoyan.opensource.morningcheck.CenteredDialogLayout>
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

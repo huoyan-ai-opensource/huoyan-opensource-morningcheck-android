@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cc.huoyan.opensource.morningcheck.CenteredDialogLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/staff_editor_dialog_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/mc_panel"
+        android:clickable="true"
+        android:clipToOutline="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        tools:theme="@style/AppPreviewTheme">
+
+        <include
+            android:id="@+id/staff_edit_header"
+            layout="@layout/view_app_header"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/staff_edit_dialog_title"
+            style="@style/PenTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_0" />
+
+        <LinearLayout
+            android:id="@+id/page_content"
+            style="@style/McStaffFormPage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_0">
+
+            <LinearLayout
+                android:id="@+id/staff_edit_panel"
+                style="@style/PenPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dp_6">
+
+                <LinearLayout
+                    android:id="@+id/staff_edit_editor"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_0"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_0"
+                        android:layout_weight="1"
+                        android:fillViewport="true">
+
+                        <include
+                            layout="@layout/view_staff_edit_design_form"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </ScrollView>
+
+                    <TextView
+                        android:id="@+id/staff_edit_feedback"
+                        style="@style/McStaffFormLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="2"
+                        android:textColor="@color/mc_orange"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/staff_edit_reload"
+                        style="@style/McStaffFormLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:maxLines="2"
+                        android:text="重新读取资料并清空草稿"
+                        android:textColor="@color/mc_blue"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/staff_edit_actions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_0"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/staff_edit_cancel"
+                        style="@style/PenButton"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_weight="1"
+                        android:text="关闭" />
+
+                    <TextView
+                        android:id="@+id/staff_edit_save"
+                        style="@style/PenPrimary"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:layout_weight="1"
+                        android:text="确定" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</cc.huoyan.opensource.morningcheck.CenteredDialogLayout>

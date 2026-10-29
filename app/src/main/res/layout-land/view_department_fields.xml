@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/department_edit_fields"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/department_edit_name_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/department_edit_name_label"
+            style="@style/PenCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/department_edit_name"
+            android:text="@string/department_name_label" />
+
+        <EditText
+            android:id="@+id/department_edit_name"
+            style="@style/PenInput"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@drawable/mc_list_search_input"
+            android:hint="@string/department_name_hint"
+            android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
+            android:inputType="text"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/department_edit_parent_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/PenCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/department_edit_parent"
+            android:text="@string/department_parent_label" />
+
+        <Spinner
+            android:id="@+id/department_edit_parent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@drawable/mc_field"
+            android:contentDescription="@string/department_parent_label"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+</LinearLayout>

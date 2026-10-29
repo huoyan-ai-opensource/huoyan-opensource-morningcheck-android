@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/lighting_serial_fields"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:text="串口路径" />
+
+            <TextView
+                android:id="@+id/lighting_path"
+                style="@style/PenInput"
+                android:layout_width="@dimen/dp_0"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:drawableEnd="@drawable/mc_chevron_right"
+                android:drawablePadding="@dimen/dp_6"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:text="波特率" />
+
+            <TextView
+                android:id="@+id/lighting_baud"
+                style="@style/PenInput"
+                android:layout_width="@dimen/dp_0"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:drawableEnd="@drawable/mc_chevron_right"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:text="@string/lighting_command_format" />
+
+            <TextView
+                android:id="@+id/lighting_command_format"
+                style="@style/PenInput"
+                android:layout_width="@dimen/dp_0"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:drawableEnd="@drawable/mc_chevron_right"
+                android:focusable="true"
+                android:text="@string/lighting_format_character" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:text="开灯命令" />
+
+            <EditText
+                android:id="@+id/lighting_on_command"
+                style="@style/PenInput"
+                android:layout_width="@dimen/dp_0"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/mc_edit"
+                android:drawablePadding="@dimen/dp_6"
+                android:hint="@string/lighting_character_hint"
+                android:inputType="textNoSuggestions" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:text="关闭指令" />
+
+            <EditText
+                android:id="@+id/lighting_off_command"
+                style="@style/PenInput"
+                android:layout_width="@dimen/dp_0"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/mc_edit"
+                android:drawablePadding="@dimen/dp_6"
+                android:hint="@string/lighting_character_hint"
+                android:inputType="textNoSuggestions" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lighting_gpio_fields"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:text="GPIO 编号" />
+
+            <EditText
+                android:id="@+id/lighting_gpio"
+                style="@style/PenInput"
+                android:layout_width="@dimen/dp_0"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/mc_edit"
+                android:drawablePadding="@dimen/dp_6"
+                android:inputType="textNoSuggestions" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:text="开灯电平" />
+
+            <EditText
+                android:id="@+id/lighting_on_level"
+                style="@style/PenInput"
+                android:layout_width="@dimen/dp_0"
+                android:layout_weight="1"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="@dimen/dp_52"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:text="关灯电平" />
+
+            <EditText
+                android:id="@+id/lighting_off_level"
+                style="@style/PenInput"
+                android:layout_width="@dimen/dp_0"
+                android:layout_weight="1"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lighting_gpio_map"
+            style="@style/PenCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lighting_gpio_mapping" />
+    </LinearLayout>
+</LinearLayout>

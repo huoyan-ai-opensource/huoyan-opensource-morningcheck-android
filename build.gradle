@@ -1,0 +1,7 @@
+plugins {
+    id 'com.android.application' version '8.7.3' apply false
+    id 'com.android.library' version '8.7.3' apply false
+}
+
+// JAR、发行 ZIP 和 App 本地依赖共用此版本；升级后执行 :huoyanClient:updateAppSdkJar。
+ext.morningcheckClientVersion = '2.0.0'

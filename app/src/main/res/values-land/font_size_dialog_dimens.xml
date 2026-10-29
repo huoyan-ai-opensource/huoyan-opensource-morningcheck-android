@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mc_font_window_max_width">640dp</dimen>
+</resources>

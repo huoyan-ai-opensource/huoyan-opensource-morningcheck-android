@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sdk_activation_scan_ready">等待激活二维码</string>
+    <string name="sdk_activation_scan_hint">识别后将返回授权页，继续激活。</string>
+    <string name="sdk_activation_scan_camera_starting">正在打开摄像头…</string>
+    <string name="sdk_activation_scan_camera_unavailable">摄像头暂不可用</string>
+    <string name="sdk_activation_scan_camera_timeout">尚未收到摄像头画面，请检查连接或更换摄像头。</string>
+    <string name="sdk_activation_scan_permission_denied">请允许使用摄像头。若已拒绝，可前往权限设置开启。</string>
+    <string name="sdk_activation_scan_no_camera">没有可用的摄像头，请连接摄像头后重试。</string>
+    <string name="sdk_activation_scan_choose_camera">切换镜头</string>
+    <string name="sdk_activation_scan_retry">重试</string>
+    <string name="sdk_activation_scan_permission_settings">权限设置</string>
+    <string name="sdk_activation_scan_invalid_title">请使用激活二维码</string>
+    <string name="sdk_activation_scan_invalid_message">当前二维码未包含有效激活信息，请更换二维码。</string>
+</resources>

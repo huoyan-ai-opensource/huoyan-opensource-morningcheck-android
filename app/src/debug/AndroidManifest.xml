@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- 仅调试包的本地采集验收入口，不连接 SDK 或业务云。 -->
+        <activity
+            android:name=".CameraProbeActivity"
+            android:exported="false" />
+    </application>
+</manifest>

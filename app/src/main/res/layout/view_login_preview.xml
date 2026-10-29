@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#253343">
+
+    <TextureView
+        android:id="@+id/login_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no" />
+
+    <TextView
+        android:id="@+id/login_preview_message"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableTop="@drawable/activation_code_scan"
+        android:drawablePadding="@dimen/dp_8"
+        android:drawableTint="@color/mc_white"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:text="@string/login_camera_starting"
+        android:textColor="@color/mc_white" />
+</FrameLayout>

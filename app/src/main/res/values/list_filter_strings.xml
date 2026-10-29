@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="list_filter_department_all">全部部门</string>
+    <string name="list_filter_department_none">未分配部门</string>
+    <string name="list_filter_department_loading">正在读取部门…</string>
+    <string name="list_filter_back_department">返回部门</string>
+    <string-array name="list_filter_staff_statuses">
+        <item>全部</item>
+        <item>启用</item>
+        <item>停用</item>
+    </string-array>
+    <string-array name="list_filter_record_results">
+        <item>全部</item>
+        <item>正常</item>
+        <item>异常</item>
+    </string-array>
+</resources>

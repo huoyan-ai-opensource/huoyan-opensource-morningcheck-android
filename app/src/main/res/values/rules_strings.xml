@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rules_hat">工作帽</string>
+    <string name="rules_mask">口罩</string>
+    <string name="rules_wear">应佩戴</string>
+    <string name="rules_do_not_wear">不应佩戴</string>
+    <string name="rules_enabled">已开启</string>
+    <string name="rules_disabled">已关闭</string>
+    <string name="rules_saved">已保存，下次晨检生效</string>
+    <string name="rules_invalid_temperature">请输入 36.1–43°C，仍使用 %1$s°C</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/McHealthDatePanelBase"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/McHealthDateTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sdk_install_guide_title" />
+
+    <TextView
+        android:id="@+id/sdk_install_progress_text"
+        style="@style/McText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_12"
+        android:text="@string/sdk_install_downloading" />
+
+    <ProgressBar
+        android:id="@+id/sdk_install_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_12"
+        android:indeterminateTint="@color/mc_blue"
+        android:max="100"
+        android:progressTint="@color/mc_blue" />
+
+    <TextView
+        android:id="@+id/sdk_install_cancel"
+        style="@style/McHealthDateActionBase"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_12"
+        android:text="@string/sdk_install_cancel_download" />
+</LinearLayout>

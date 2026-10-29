@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="face_enrollment_capture">拍照录入</string>
+    <string name="face_enrollment_multiple">检测到多人入镜，请仅保留一人后再保存学习</string>
+    <string name="face_enrollment_no_face">未检测到人脸，请正对镜头</string>
+    <string name="face_enrollment_status_select_employee">请选择员工</string>
+    <string name="face_enrollment_status_waiting">等待画面</string>
+    <string name="face_enrollment_status_detecting">检测中</string>
+    <string name="face_enrollment_status_ready">可录入</string>
+    <string name="face_enrollment_status_no_face">未有人脸</string>
+    <string name="face_enrollment_status_multiple">多人入镜</string>
+    <string name="face_enrollment_status_processing">处理中</string>
+    <string name="face_enrollment_status_unavailable">暂不可录入</string>
+    <string name="face_enrollment_camera_settings">摄像头设置</string>
+    <string name="face_enrollment_staff_search">姓名 / 部门 / 工号</string>
+    <string name="face_enrollment_staff_empty">暂无员工，请先在员工管理中添加员工，再来录入人脸。</string>
+    <string name="face_enrollment_select_employee">请先从员工列表选择员工</string>
+    <string name="face_samples_photo">SDK 保存的录入照片</string>
+    <string name="face_samples_missing">原图不可用</string>
+    <string name="face_samples_empty">选中员工后查看已录入人脸</string>
+    <string name="face_samples_refresh">刷新当前员工的 SDK 人脸样本</string>
+    <string name="face_samples_refresh_short">刷新</string>
+    <string name="face_samples_clear">清空当前员工的全部人脸样本</string>
+    <string name="face_samples_forget_short">遗忘</string>
+    <string name="face_samples_delete">删除</string>
+    <string name="face_samples_count">共 %1$d 张</string>
+    <string name="face_samples_verifying">正在核对样本</string>
+</resources>

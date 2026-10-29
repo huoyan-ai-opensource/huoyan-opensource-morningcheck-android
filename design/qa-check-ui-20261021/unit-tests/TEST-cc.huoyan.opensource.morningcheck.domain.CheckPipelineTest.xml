@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" tests="26" skipped="0" failures="0" errors="0" timestamp="2026-10-21T02:13:32.595Z" hostname="fangfengdeMacBook-Air.local" time="0.026">
+  <properties/>
+  <testcase name="emptyAndUnknownHeadBoxesCannotAdvance" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.003"/>
+  <testcase name="everyAttireRuleCombinationRejectsMismatchAndAcceptsOnlyMatchingSamples" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.001"/>
+  <testcase name="invalidTemperatureClearsEarlierReadingWhileIdentityIsPending" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.004"/>
+  <testcase name="skippedTemperatureWaitsForIdentityAndSurvivesCandidateLoss" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="headCanBeDisabledWithoutFabricatingHeadFindings" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="latestValidTemperatureDeterminesFindingAfterIdentityFinishes" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="confirmedIdentityKeepsCheckingSameEmployeeWhileWaitingForTemperature" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="missingAttireRestartsFourConsecutiveSamplesAndCorrectionLeavesNoFinding" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="attireRulesStillRequireCurrentFaceEvidenceWhenNoAttireIsExpected" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="interruptionClearsUncommittedHandFindingsWithoutDiscardingEmployee" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="handRequiresTwoCorrectHandsWithoutOppositeOrInvalidPose" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="interruptionClearsPendingIdentityAndTemperatureTogether" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="abnormalitiesOnlyComeFromQualifiedConsecutiveHandFrames" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.001"/>
+  <testcase name="resultIsStableUntilResetAndFindingsAreSnapshot" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.001"/>
+  <testcase name="invalidConfidenceCannotProvidePoseEvidence" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="interruptionRestartsHeadSamplesWithoutDiscardingCommittedTemperature" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.002"/>
+  <testcase name="unmatchedFrameClearsEarlyTemperatureAndConfirmedIdentity" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="temperatureRejectsInvalidReadingsAndRecordsFeverAtThreshold" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="skippedTemperatureIsExplicitAndNeverNormalMeasurement" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="missingHatMaskOrBothCannotAdvanceEvenWithValidFace" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="rejectZeroSampleConfiguration" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.001"/>
+  <testcase name="identityRequiresConsecutiveSamplesOfSamePerson" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="pendingTemperatureCannotSurviveResetForNextEmployee" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="normalTemperatureMatchesOldBusinessExclusiveBounds" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.001"/>
+  <testcase name="identityAndTemperatureAdvanceTogetherInEitherArrivalOrder" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <testcase name="changingCandidateClearsPreviousEmployeesTemperatureAndConfirmation" classname="cc.huoyan.opensource.morningcheck.domain.CheckPipelineTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

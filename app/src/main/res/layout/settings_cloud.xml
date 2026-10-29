@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BusinessCloudSettingsActivity"
+    tools:theme="@style/AppPreviewTheme">
+
+    <TextView
+        style="@style/McSettingsLabel"
+        android:layout_width="match_parent"
+        android:text="@string/settings_cloud_url_label" />
+
+    <EditText
+        android:id="@+id/settings_cloud_url"
+        style="@style/McSettingsInput"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:hint="@string/settings_cloud_url_label"
+        android:inputType="textUri"
+        tools:text="https://example.com" />
+
+    <TextView
+        style="@style/McSettingsLabel"
+        android:layout_width="match_parent"
+        android:text="@string/settings_cloud_token_label" />
+
+    <EditText
+        android:id="@+id/settings_cloud_token"
+        style="@style/McSettingsInput"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:hint="@string/settings_cloud_token_label"
+        android:inputType="textPassword"
+        android:saveEnabled="false" />
+
+    <TextView
+        style="@style/McSettingsHint"
+        android:layout_width="match_parent"
+        android:text="@string/settings_cloud_tip" />
+
+    <Space
+        android:layout_width="@dimen/dp_0_5"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/settings_save_cloud"
+        style="@style/McSettingsButtonPrimary"
+        android:layout_width="match_parent"
+        android:text="@string/settings_save_cloud_button" />
+</LinearLayout>

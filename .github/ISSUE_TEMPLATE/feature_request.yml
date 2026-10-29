@@ -1,0 +1,33 @@
+name: 功能建议
+description: 描述晨检业务场景与希望改进的操作。
+title: "[建议] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 场景与当前问题
+      description: 说明员工晨检、管理或设备接入中的具体困难、设备和使用人数范围。
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 期望的行为
+      description: 用具体操作和结果说明，可附不含真实员工资料的草图。
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 已尝试的方法
+      description: 如有替代操作或相关讨论请附上。
+  - type: input
+    id: versions
+    attributes:
+      label: 相关版本和设备
+      description: 涉及兼容时填写 App/JAR/SDK/模型、Android、相机、测温与补光设备。
+  - type: markdown
+    attributes:
+      value: |
+        SDK 获取、激活和包名登记请通过 [火眼官网](https://www.huoyan.cc) 联系。
+        不公开账号凭据、激活码、员工照片或健康证资料。

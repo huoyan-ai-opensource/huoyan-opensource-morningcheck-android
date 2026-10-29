@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 使用导入的 openSource 尺寸表；按最小宽度选择引用，避免固定区域随整表同比放大。 -->
+
+    <style name="McInspectionCaption" parent="McLabel">
+        <item name="android:textSize">?attr/mcTextCaptionSize</item>
+    </style>
+
+</resources>

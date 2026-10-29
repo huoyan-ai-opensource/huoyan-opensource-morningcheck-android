@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="record_detail_photo_not_saved">本次未保存照片</string>
+    <string name="record_detail_photo_loading">正在读取照片…</string>
+    <string name="record_detail_photo_unreadable">照片已缺失或无法读取</string>
+    <string name="record_photo_position">%1$d / %2$d</string>
+    <string name="record_photo_open_hint">点击图片查看详情</string>
+    <string name="record_photo_fullscreen_description">%1$s，单指移动图片，双指缩放，单击关闭大图</string>
+</resources>

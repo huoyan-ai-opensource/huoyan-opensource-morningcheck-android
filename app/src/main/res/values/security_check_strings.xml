@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="security_settings_title">安全密码</string>
+    <string name="security_settings_change">修改密码  ›</string>
+    <string name="security_auto_check_title">开机自动进入晨检</string>
+    <string name="security_check_exit">退出晨检</string>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settings_camera_role"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_segment_background"
+    android:minHeight="@dimen/dp_24"
+    android:orientation="horizontal"
+    android:padding="@dimen/dp_2">
+
+    <RadioButton
+        android:id="@+id/settings_preview_face"
+        style="@style/PenSegment"
+        android:layout_width="@dimen/dp_0"
+        android:layout_weight="1"
+        android:text="头部相机" />
+
+    <RadioButton
+        android:id="@+id/settings_preview_hand"
+        style="@style/PenSegment"
+        android:layout_width="@dimen/dp_0"
+        android:layout_weight="1"
+        android:text="手部相机" />
+</RadioGroup>

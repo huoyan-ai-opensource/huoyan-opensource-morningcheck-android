@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pagination_first">首页</string>
+    <string name="pagination_last">末页</string>
+    <string name="pagination_jump_hint">跳转</string>
+    <string name="pagination_jump_input_hint">请输入页码</string>
+    <string name="pagination_jump_invalid">请输入有效页码</string>
+    <string name="pagination_jump_out_of_range">请输入 1 到 %1$d 的页码</string>
+    <string name="pagination_page_input_description">输入页码，范围 1 到 %1$d</string>
+</resources>

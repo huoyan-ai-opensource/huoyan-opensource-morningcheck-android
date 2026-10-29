@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 平板与新增员工弹窗共用字号；手机保留独立的可读字号。 -->
+    <dimen name="mc_choice_title_text_size">@dimen/sp_11</dimen>
+    <dimen name="mc_choice_subtitle_text_size">@dimen/sp_8</dimen>
+    <dimen name="mc_choice_option_text_size">@dimen/sp_8</dimen>
+</resources>

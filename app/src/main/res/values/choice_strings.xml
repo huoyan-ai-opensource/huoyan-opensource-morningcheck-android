@@ -1,0 +1,5 @@
+<resources>
+    <string name="choice_staff_status">启用状态</string>
+    <string name="choice_check_result">晨检结果</string>
+    <string name="choice_temperature_mode">测温方式</string>
+</resources>

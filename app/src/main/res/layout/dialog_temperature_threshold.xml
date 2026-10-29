@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="异常体温阈值 (°C)" />
+
+    <EditText
+        android:id="@+id/threshold_draft"
+        style="@style/PenInput"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36"
+        android:layout_marginTop="@dimen/dp_8"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:maxLength="8"
+        android:selectAllOnFocus="true"
+        android:textColor="@color/mc_blue"
+        android:textSize="@dimen/sp_16" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4">
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_0"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:1"
+            android:text="1"
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:2"
+            android:text="2"
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:3"
+            android:text="3"
+            android:textColor="@color/mc_ink" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4">
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_0"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:4"
+            android:text="4"
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:5"
+            android:text="5"
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:6"
+            android:text="6"
+            android:textColor="@color/mc_ink" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4">
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_0"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:7"
+            android:text="7"
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:8"
+            android:text="8"
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:9"
+            android:text="9"
+            android:textColor="@color/mc_ink" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4">
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_0"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:."
+            android:text="."
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:0"
+            android:text="0"
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:tag="threshold:删除"
+            android:text="删除"
+            android:textColor="@color/mc_ink" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/threshold_error"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:text="请输入 36.1–43°C 范围内的有效数值"
+        android:textColor="@color/mc_orange"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8">
+
+        <TextView
+            android:id="@android:id/button2"
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1"
+            android:background="@drawable/mc_field_action"
+            android:text="取消"
+            android:textColor="@color/mc_ink" />
+
+        <TextView
+            android:id="@android:id/button1"
+            style="@style/PenPrimary"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="确定" />
+    </LinearLayout>
+</LinearLayout>

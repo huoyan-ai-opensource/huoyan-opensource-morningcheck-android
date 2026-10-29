@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 日期快捷选项由代码创建，资源编号不再依赖旧弹窗布局。 -->
+    <item name="record_date_14_days" type="id" />
+    <item name="record_date_24_hours" type="id" />
+    <item name="record_date_30_days" type="id" />
+    <item name="record_date_all" type="id" />
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mcFontRegular" format="reference|string" />
+    <attr name="mcFontBold" format="reference|string" />
+
+    <style name="AppPreviewTheme" parent="AppTheme">
+        <item name="mcFontRegular">sans-serif</item>
+        <item name="mcFontBold">sans-serif-medium</item>
+    </style>
+</resources>

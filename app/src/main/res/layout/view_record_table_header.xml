@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/records_table_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_list_table_header"
+    android:baselineAligned="false"
+    android:minHeight="@dimen/dp_24"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_8">
+
+    <TextView
+        android:id="@+id/record_row_name_title"
+        style="@style/PenHeaderCell"
+        android:gravity="start|center_vertical"
+        android:paddingEnd="@dimen/dp_4"
+        android:text="员工" />
+
+    <TextView
+        android:id="@+id/record_row_date_title"
+        style="@style/PenHeaderCell"
+        android:layout_weight="1.5"
+        android:gravity="start|center_vertical"
+        android:paddingEnd="@dimen/dp_4"
+        android:text="检查时间" />
+
+    <TextView
+        android:id="@+id/record_row_result_title"
+        style="@style/PenHeaderCell"
+        android:gravity="start|center_vertical"
+        android:paddingEnd="@dimen/dp_4"
+        android:text="结果" />
+
+    <TextView
+        android:id="@+id/record_row_actions_title"
+        style="@style/PenHeaderCell"
+        android:layout_width="@dimen/dp_36"
+        android:layout_weight="0"
+        android:text="操作" />
+</LinearLayout>

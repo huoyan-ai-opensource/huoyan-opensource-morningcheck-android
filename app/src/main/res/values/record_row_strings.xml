@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="record_row_result_normal">正常</string>
+    <string name="record_row_result_abnormal">异常</string>
+    <string name="record_row_missing">未记录</string>
+</resources>

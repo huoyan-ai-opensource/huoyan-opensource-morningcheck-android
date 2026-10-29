@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_panel"
+    android:orientation="vertical"
+    android:padding="@dimen/mc_choice_padding">
+
+    <TextView
+        android:id="@+id/department_filter_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityHeading="true"
+        android:fontFamily="sans-serif"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:minHeight="@dimen/mc_choice_title_min_height"
+        android:textColor="#293A51"
+        android:textSize="@dimen/mc_choice_title_text_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/choice_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mc_choice_subtitle_margin"
+        android:fontFamily="sans-serif"
+        android:includeFontPadding="false"
+        android:text="点选后关闭"
+        android:textColor="#6E7C90"
+        android:textSize="@dimen/mc_choice_subtitle_text_size" />
+
+    <ListView
+        android:id="@+id/department_filter_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mc_choice_content_margin"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/mc_choice_option_spacing"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/department_filter_empty"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mc_choice_empty_height"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="暂无可选项"
+        android:textColor="#6E7C90"
+        android:textSize="@dimen/mc_choice_option_text_size"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/department_filter_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mc_choice_content_margin"
+        android:background="@drawable/mc_field_action"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:minHeight="@dimen/mc_choice_action_min_height"
+        android:paddingTop="@dimen/mc_choice_action_padding"
+        android:paddingBottom="@dimen/mc_choice_action_padding"
+        android:text="取消"
+        android:textColor="#293A51"
+        android:textSize="@dimen/mc_choice_option_text_size"
+        android:textStyle="bold" />
+</LinearLayout>

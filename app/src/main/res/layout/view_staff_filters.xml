@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_26"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/staff_search"
+            style="@style/PenInput"
+            android:layout_width="@dimen/dp_0"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/mc_list_search_icon"
+            android:hint="搜索姓名 / 工号"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/staff_add"
+            style="@style/PenPrimary"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:text="新增员工" />
+
+        <TextView
+            android:id="@+id/staff_departments"
+            style="@style/PenButton"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:text="部门" />
+
+        <TextView
+            android:id="@+id/staff_enroll"
+            style="@style/PenButton"
+            android:layout_width="wrap_content"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_26"
+        android:layout_marginTop="@dimen/dp_4">
+
+        <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+            android:id="@+id/staff_enabled_filter"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/mc_button"
+            android:prompt="@string/choice_staff_status"
+            android:spinnerMode="dialog" />
+
+        <cc.huoyan.opensource.morningcheck.DepartmentFilterSpinner
+            android:id="@+id/staff_department_filter"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_6"
+            android:layout_weight="1"
+            android:background="@drawable/mc_button" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="mc_home_design_about">关于设备</string>
+    <string name="mc_home_design_cloud">业务云连接</string>
+</resources>

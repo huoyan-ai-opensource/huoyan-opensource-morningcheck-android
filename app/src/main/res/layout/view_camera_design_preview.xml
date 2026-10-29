@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="相机预览" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_weight="1"
+        android:background="@drawable/mc_preview"
+        android:clipToOutline="true">
+
+        <TextureView
+            android:id="@+id/settings_camera_texture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="相机完整画面" />
+
+        <cc.huoyan.opensource.morningcheck.CameraCropView
+            android:id="@+id/settings_camera_crop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/settings_camera_preview_message"
+            style="@style/PenText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:padding="@dimen/dp_12"
+            android:text="正在连接相机"
+            android:textColor="@color/mc_white" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/settings_camera_preview_label"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_6"
+        android:ellipsize="end"
+        android:maxLines="2" />
+</LinearLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mc_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_app_header" />
+
+    <LinearLayout
+        android:id="@+id/page_content"
+        style="@style/PenPage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/PenPanel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sdk_detail_title"
+                style="@style/PenTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/sdk_detail_subtitle"
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_6" />
+
+            <ListView
+                android:id="@+id/sdk_detail_fields"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_weight="1"
+                android:divider="@null"
+                android:scrollbars="vertical" />
+
+            <TextView
+                android:id="@+id/sdk_detail_feedback"
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/sdk_detail_refresh"
+            style="@style/PenPrimary"
+            android:layout_width="@dimen/dp_100"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/dp_12"
+            android:text="刷新状态"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/sdk_detail_cloud_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

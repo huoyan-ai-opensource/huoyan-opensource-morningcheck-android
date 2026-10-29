@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_42"
+    android:background="@color/mc_white"
+    android:gravity="end|center_vertical"
+    android:paddingStart="@dimen/dp_12"
+    android:paddingEnd="@dimen/dp_12">
+
+    <TextView
+        android:id="@+id/lighting_save"
+        style="@style/PenPrimary"
+        android:layout_width="match_parent"
+        android:text="保存配置" />
+</LinearLayout>

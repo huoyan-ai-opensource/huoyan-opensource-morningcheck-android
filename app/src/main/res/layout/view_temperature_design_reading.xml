@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/settings_temperature_reading"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mc_field"
+        android:padding="@dimen/dp_8"
+        android:text="等待测温" />
+
+    <TextView
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_12"
+        android:text="实时采集温度" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/dp_60">
+
+        <TextView
+            android:id="@+id/settings_temperature_value"
+            style="@style/PenTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textSize="@dimen/sp_18" />
+
+        <TextView
+            style="@style/PenCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" °C" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/settings_temperature_updated"
+        style="@style/PenCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

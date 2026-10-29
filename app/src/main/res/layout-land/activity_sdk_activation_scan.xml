@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cc.huoyan.opensource.morningcheck.ScanDialogLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sdk_activation_scan_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/sdk_activation_scan_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:contentDescription="关闭扫码"
+        android:focusable="true" />
+
+    <ScrollView
+        android:id="@+id/scan_dialog_panel"
+        android:layout_width="@dimen/dp_260"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/mc_inspection_panel"
+        android:clickable="true"
+        android:clipToPadding="false"
+        android:fillViewport="false"
+        android:padding="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PenText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="请将激活码置于摄像头前扫描"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:id="@+id/scan_dialog_preview_frame"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_135"
+                android:layout_marginTop="@dimen/dp_10">
+
+                <include layout="@layout/view_sdk_activation_scan_preview" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/scan_dialog_controls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8"
+                android:visibility="gone">
+
+                <include layout="@layout/view_sdk_activation_scan_actions" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+</cc.huoyan.opensource.morningcheck.ScanDialogLayout>

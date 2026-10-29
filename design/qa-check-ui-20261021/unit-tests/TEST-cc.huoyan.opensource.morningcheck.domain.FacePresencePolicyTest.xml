@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" tests="20" skipped="0" failures="0" errors="0" timestamp="2026-10-21T02:13:32.626Z" hostname="fangfengdeMacBook-Air.local" time="0.004">
+  <properties/>
+  <testcase name="twoFacesAreMultipleAndNewSingleFaceClearsWarning" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="unmatchedNeedsBothRealFacePresenceAndAnExplicitFreshNegativeMatch" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="newUnavailableResultCancelsAbsenceUntilFreshEmptyEvidenceArrives" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="delayedPositiveCancelsOlderNegativeWithoutExtendingFaceBoxFreshness" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="acceptedNegativeNeverMeansUnmatchedWhenCurrentPreviewHasNoFace" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="negativeSourceAtFiveSecondAgeOrFromFutureIsRejected" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="sdkMatchedProofWinsAgainstSameFramePreviewEmptyOrFailure" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="positiveMatchStillNeedsSourceWithinPreviewFreshnessLimit" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="sameFrameNegativeCannotOverrideAcceptedPositive" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="olderAsyncResultCannotOverwriteNewFaceProof" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="negativeExpiresFiveSecondsAfterReceiptEvenWithContinuingFreshFaces" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="laterPositiveOrUnknownMatchCannotBeOverwrittenByLateOlderNegative" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="validMatchCancelsUnmatchedAndOlderNegativeCannotRestoreIt" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="stageResetCannotCarryOldAbsenceIntoTheNextStage" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="twoSecondNegativeReceiptUsesFreshPreviewInsteadOfOldSourcePresence" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="absentAndUnmatchedRemainSeparateWhenThePersonLeavesTheImage" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="detectionReceiptHasShortGuidanceLifetimeAndBoundedSourceAge" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.001"/>
+  <testcase name="unavailablePreviewOnlySuspendsUnmatchedUntilRealFaceReturns" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="noMatchResponseOrFailedResponseCannotBecomeUnmatched" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <testcase name="onlyAvailableFreshEmptyFramesCanStartAbsenceGuidance" classname="cc.huoyan.opensource.morningcheck.domain.FacePresencePolicyTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

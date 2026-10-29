@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PenPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/PenTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="设备信息" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="客户端版本" />
+
+        <TextView
+            android:id="@+id/license_client_version"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:gravity="end"
+            android:maxLines="2"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SDK 版本号" />
+
+        <TextView
+            android:id="@+id/license_sdk_version"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:gravity="end"
+            android:maxLines="2"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="设备型号" />
+
+        <TextView
+            android:id="@+id/license_device_model"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:gravity="end"
+            android:maxLines="2"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="硬件序列号" />
+
+        <TextView
+            android:id="@+id/license_device_serial"
+            style="@style/PenCaption"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:gravity="end"
+            android:maxLines="2"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_26"
+        android:background="@drawable/mc_field"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/PenText"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="云端服务" />
+
+        <TextView
+            android:id="@+id/license_cloud_state"
+            style="@style/PenCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="未连接" />
+
+        <cc.huoyan.opensource.morningcheck.LandscapeSwitch
+            android:id="@+id/license_cloud_enabled"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_8"
+            android:contentDescription="云端服务"
+            android:showText="false"
+            android:splitTrack="false"
+            android:switchMinWidth="@dimen/dp_52"
+            android:thumb="@drawable/land_switch_thumb"
+            android:thumbTint="@null"
+            android:track="@drawable/land_switch_track"
+            android:trackTint="@null" />
+    </LinearLayout>
+</LinearLayout>

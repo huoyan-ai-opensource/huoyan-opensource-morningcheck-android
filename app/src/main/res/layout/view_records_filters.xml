@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/records_search"
+        style="@style/PenInput"
+        android:layout_width="match_parent"
+        android:drawableEnd="@drawable/mc_list_search_icon"
+        android:hint="搜索姓名 / 工号"
+        android:inputType="text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_26"
+        android:layout_marginTop="@dimen/dp_4">
+
+        <TextView
+            android:id="@+id/records_date_filter"
+            style="@style/PenButton"
+            android:layout_width="@dimen/dp_0"
+            android:layout_marginStart="@dimen/dp_6"
+            android:layout_weight="1"
+            android:text="日期范围" />
+
+        <cc.huoyan.opensource.morningcheck.ChoiceSpinner
+            android:id="@+id/records_filter"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_6"
+            android:layout_weight="1"
+            android:background="@drawable/mc_button"
+            android:prompt="@string/choice_check_result"
+            android:spinnerMode="dialog" />
+
+        <cc.huoyan.opensource.morningcheck.DepartmentFilterSpinner
+            android:id="@+id/records_department_filter"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_6"
+            android:layout_weight="1"
+            android:background="@drawable/mc_button" />
+    </LinearLayout>
+</LinearLayout>

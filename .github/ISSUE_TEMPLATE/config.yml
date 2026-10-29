@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: SDK 获取、激活与包名登记
+    url: https://www.huoyan.cc
+    about: 联系火眼确认设备、晨检 SDK、模型及激活资料，请勿公开凭据。
+  - name: 安全与隐私问题
+    url: https://www.huoyan.cc
+    about: 先按仓库 SECURITY.md 联系火眼，再通过确认的私密渠道反馈。

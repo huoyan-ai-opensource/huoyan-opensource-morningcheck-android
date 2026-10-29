@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/staff_table_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/mc_list_table_header"
+    android:baselineAligned="false"
+    android:minHeight="@dimen/dp_24"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_8">
+
+    <TextView
+        style="@style/McStaffListHeaderCell"
+        android:layout_weight="1"
+        android:gravity="start|center_vertical"
+        android:text="@string/staff_row_title_name" />
+
+    <TextView
+        style="@style/McStaffListHeaderCell"
+        android:layout_weight="1.5"
+        android:text="@string/staff_row_title_number" />
+
+    <TextView
+        style="@style/McStaffListHeaderCell"
+        android:text="部门" />
+
+    <TextView
+        style="@style/McStaffListHeaderCell"
+        android:layout_weight="1.2"
+        android:text="人脸" />
+
+    <TextView
+        style="@style/McStaffListHeaderCell"
+        android:layout_weight="0.9"
+        android:text="状态" />
+
+    <TextView
+        style="@style/McStaffListHeaderCell"
+        android:layout_width="@dimen/dp_100"
+        android:layout_weight="0"
+        android:text="操作" />
+</LinearLayout>

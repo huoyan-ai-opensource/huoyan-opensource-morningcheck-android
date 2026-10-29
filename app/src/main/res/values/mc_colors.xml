@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mc_bg">#F2F4F8</color>
+    <color name="mc_ink">#293A51</color>
+    <color name="mc_muted">#69788C</color>
+    <color name="mc_blue">#3F3EED</color>
+    <color name="mc_soft">#EDEFFD</color>
+    <color name="mc_orange">#C85B08</color>
+    <color name="mc_green">#137C64</color>
+    <color name="mc_white">#FFFFFF</color>
+    <color name="mc_preview">#203148</color>
+</resources>
