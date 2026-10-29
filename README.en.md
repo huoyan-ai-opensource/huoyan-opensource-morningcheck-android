@@ -25,11 +25,11 @@ The complete App uses package `cc.huoyan.opensource.morningcheck`; the JAR's pub
 - Camera2 and USB UVC cameras, serial thermometers with indoor/outdoor/trigger modes, and serial/GPIO lighting.
 - Speech, font size, security password, automatic entry after boot, and local/LAN SDK connection and activation settings.
 
-| Morning check | Department management |
+| Home | Morning check |
 | --- | --- |
-| ![Morning check test screen in landscape](docs/images/check-landscape.png) | ![Department management test screen in landscape](docs/images/departments-landscape.png) |
+| ![Home screen in landscape](docs/images/home-landscape.png) | ![Morning check screen in landscape](docs/images/check-landscape.png) |
 
-These are historical Chinese test screens captured on October 21 and October 15, 2026, respectively. The check screen uses a simulated SDK with no camera or real-person capture, and its workplace name is hidden. The departments contain generic test data. Both editions show the same two-column layout; these images do not depict an English App interface or establish version 2.0.0 hardware acceptance. See [image details](docs/images/README.md). Landscape and portrait layouts are maintained in the [shared design source](design/huoyan-morningcheck.pen).
+These Chinese landscape screens were captured on a YF023D on October 29, 2026. Company, workplace, and device serial identifiers have been replaced with fictional sample values. The check screen shows the waiting-for-device guide with no real-person photos. Both READMEs use the same two-column layout. The device had App 0.1.0 and SDK 2.0.0 installed; these screenshots do not establish complete hardware acceptance for App 2.0.0. See [image details](docs/images/README.md). Landscape and portrait layouts are maintained in the [shared design source](design/huoyan-morningcheck.pen).
 
 ## Downloads and activation
 

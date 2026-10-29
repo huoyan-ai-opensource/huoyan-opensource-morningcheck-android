@@ -25,11 +25,11 @@
 - USB UVC 与 Camera2 相机接入、测温算法模式切换、串口和 GPIO 补光。
 - 语音、字体大小、安全密码与自动进入晨检设置，SDK 本机或局域网连接及激活选模。
 
-| 现场晨检 | 部门管理 |
+| 主页 | 现场晨检 |
 | --- | --- |
-| ![火眼晨检 App 现场晨检](docs/images/check-landscape.png) | ![火眼晨检 App 部门管理](docs/images/departments-landscape.png) |
+| ![火眼晨检 App 主页](docs/images/home-landscape.png) | ![火眼晨检 App 现场晨检](docs/images/check-landscape.png) |
 
-以上为 2026-10-21 和 2026-10-15 的中文横屏测试界面，场所信息已隐藏。晨检图使用模拟 SDK 和无相机测试环境，没有采集真人照片；部门图为通用测试数据。中英文 README 使用相同的双列排列，图片来源见[截图说明](docs/images/README.md)，当前界面以源码为准。横竖屏设计维护在[设计源文件](design/huoyan-morningcheck.pen)中。
+以上为 2026-10-29 在 YF023D 上采集的中文横屏界面，公司、场所和设备序列号已替换为虚构示例值；晨检页展示等待设备的引导画面，不含真人照片。中英文 README 使用相同的双列排列，截图时安装的 App 为 0.1.0、SDK 为 2.0.0，来源见[截图说明](docs/images/README.md)。横竖屏设计维护在[设计源文件](design/huoyan-morningcheck.pen)中。
 
 ## 下载与激活
 

@@ -1,21 +1,29 @@
 # 界面示例图片
 
-中文和英文 README 都按“现场晨检 / 部门管理”双列表格展示以下图片，尺寸均为 1280 × 800。
+中文和英文 README 都按“主页 / 现场晨检”双列表格展示以下图片，尺寸均为 1280 × 800。
 
-| 文件 | 来源与处理 |
+两张图片于 2026-10-29 在 YF023D 实机采集，设备当时安装 App 0.1.0 和 SDK 2.0.0；没有为了截图安装或升级应用。
+
+| 文件 | 内容与脱敏处理 |
 | --- | --- |
-| `check-landscape.png` | 来自 `design/qa-check-ui-20261021/c106/check-inline-animation.png`，采集于 2026-10-21；仅隐藏左上角场所文字，其余界面未重绘。使用模拟 SDK 和无相机测试环境，没有采集真人照片或进行真实测温。 |
-| `departments-landscape.png` | 来自 `design/revision-20261015/c106/revision-DepartmentsActivity-130.png`，采集于 2026-10-15；保留原始界面，使用通用测试部门和人数。 |
+| `home-landscape.png` | 主页。场所替换为“ABC 示例门店”，公司替换为“ABC 示例公司”，设备序列号替换为 `SN DEMO023D001`。 |
+| `check-landscape.png` | 现场晨检的等待设备引导界面。场所替换为“ABC 示例门店”，没有真人照片或实际测温读数。 |
 
-图片不包含员工照片、健康证、激活码、账号或内部地址，用于说明历史测试界面，不作为当前版本的完整真机验收记录。两份 README 展示的都是中文 App 界面，英文 README 没有将其描述为英文界面。更新图片时同时修改中英文的日期和说明。
+上述标识均为虚构展示值，不对应真实公司、场所或设备。脱敏仅覆盖标识文字，保留原有布局、时间、版本及运行状态；未脱敏原图不随项目或交付包发布。
 
-## Interface image
+两份 README 都展示中文 App 界面。图片用于介绍页面，不作为 App 2.0.0 的完整真机验收记录。更新图片时同步修改中英文的来源与说明。
 
-The Chinese and English READMEs show the same two-column table: morning check / department management. Both images are 1280 × 800.
+## Interface images
 
-| File | Source and changes |
+The Chinese and English READMEs show the same two-column table: home / morning check. Both images are 1280 × 800.
+
+Both screenshots were captured on a YF023D on October 29, 2026, with App 0.1.0 and SDK 2.0.0 installed. No App installation or upgrade was performed for these screenshots.
+
+| File | Content and anonymization |
 | --- | --- |
-| `check-landscape.png` | From `design/qa-check-ui-20261021/c106/check-inline-animation.png`, captured on October 21, 2026. Only the workplace text in the upper-left corner was hidden. The test used a simulated SDK and no camera; no real face images or temperature readings were captured. |
-| `departments-landscape.png` | Unchanged from `design/revision-20261015/c106/revision-DepartmentsActivity-130.png`, captured on October 15, 2026, with generic test departments and counts. |
+| `home-landscape.png` | Home screen. The workplace is replaced with “ABC 示例门店”, the company with “ABC 示例公司”, and the device serial with `SN DEMO023D001`. |
+| `check-landscape.png` | Morning check guide while waiting for the device. The workplace is replaced with “ABC 示例门店”. No real-person photos or actual temperature readings appear. |
 
-The images contain no staff photos, health certificates, activation codes, accounts, or internal addresses. They illustrate historical test layouts and do not establish complete hardware acceptance for the current version. Both READMEs show Chinese App screens; the English README does not present them as English screens. Update both editions' dates and captions when replacing images.
+These identifiers are fictional display values and do not identify a real company, workplace, or device. Only identifier text was replaced; layout, timestamps, versions, and runtime state were preserved. Unredacted originals are excluded from the repository and distribution package.
+
+Both READMEs show Chinese App screens. The images illustrate pages and do not establish complete hardware acceptance for App 2.0.0. Update the source notes in both languages when replacing images.
