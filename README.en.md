@@ -59,7 +59,7 @@ bash gradlew :app:assembleDebug
 bash gradlew :app:testDebugUnitTest :huoyanClient:testDebugUnitTest
 ```
 
-The App consumes the committed `app/src/main/libs/huoyan-morningcheck-client-2.0.0.jar`; an App build does not update it automatically. After changing client source, run `:huoyanClient:updateAppSdkJar` before rebuilding the App. Generate the complete client ZIP with `:huoyanClient:clientDistribution`. App and JAR versions are independent: App `2.0.1`, client JAR `2.0.0`.
+The App consumes the committed `app/src/main/libs/huoyan-morningcheck-client-2.0.0.jar`; an App build does not update it automatically. After changing client source, run `:huoyanClient:updateAppSdkJar` before rebuilding the App. Generate the complete client ZIP with `:huoyanClient:clientDistribution`. App and JAR versions are independent: App `2.0.2`, client JAR `2.0.0`.
 
 Debug uses the local debug signing key. Release defaults to the public [experimental key](signing/README.en.md), solely for noncommercial experiments and testing. Use your own key for production releases and configure it in the untracked `local.properties`. The experimental key's restrictions are separate from the use of Huoyan's own App source.
 

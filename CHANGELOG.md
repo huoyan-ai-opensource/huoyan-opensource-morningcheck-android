@@ -2,6 +2,12 @@
 
 本文件记录源码的用户可见变化；实际安装包和构建记录以 [GitHub Releases](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/releases) 与 [Actions](https://github.com/huoyan-ai-opensource/huoyan-opensource-morningcheck-android/actions) 为准。App、客户端 JAR、SDK 壳和模型分别版本，配套要求见[兼容表](docs/version-compatibility.md)。
 
+## 2.0.2（2026-11-20）
+
+- App 版本为 `2.0.2`（`versionCode=4`），配套客户端 JAR 为 `2.0.0`。
+- 需要悬浮窗或安装应用权限时，App 会引导用户授权。也可从系统维护手动打开 SDK 权限引导。
+- 调整横竖屏弹窗布局，统一界面尺寸资源。
+
 ## 2.0.1（2026-10-29）
 
 - App 升级为 `2.0.1`，`versionCode=3`；客户端 JAR 仍为 `2.0.0`，重新构建交付包，不改变公共接口。
