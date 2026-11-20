@@ -49,7 +49,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 手机竖屏的真实入口滚动容器在返回、统计刷新和重建后保持位置，使用只读业务库与本机 SDK 夹具。 */
+/**
+ * 手机竖屏的真实入口滚动容器在返回、统计刷新和重建后保持位置，使用只读业务库与本机 SDK 夹具。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class HomeScrollPositionTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -64,7 +66,8 @@ public final class HomeScrollPositionTest {
     private HomeActivity home;
     private Application.ActivityLifecycleCallbacks viewportFixture;
 
-    @Before public void prepareIsolatedSdkAndScrollableHome() throws Exception {
+    @Before
+    public void prepareIsolatedSdkAndScrollableHome() throws Exception {
         Context target = instrumentation.getTargetContext();
         // 当前横屏使用直接展示的网格；仅手机竖屏采用独立入口 ScrollView。
         assumeTrue("本项仅验证具有真实入口滚动容器的手机竖屏布局",
@@ -82,17 +85,24 @@ public final class HomeScrollPositionTest {
             return null;
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (!"/sdk".equals(request.getPath())) {
                     businessRequests.incrementAndGet();
                     return new MockResponse().setResponseCode(503);
                 }
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject request = new JSONObject(text);
                             String command = request.getString("cmd");
@@ -104,7 +114,9 @@ public final class HomeScrollPositionTest {
                             socket.send(new JSONObject().put("requestId", request.getString("requestId"))
                                     .put("code", 0).put("reason", "首页滚动测试夹具")
                                     .put("data", data).toString());
-                        } catch (Throwable error) { serverFailure.set(error); }
+                        } catch (Throwable error) {
+                            serverFailure.set(error);
+                        }
                     }
                 });
             }
@@ -115,13 +127,35 @@ public final class HomeScrollPositionTest {
                 .putString("cloud_url", endpoint.url("/cloud").toString())
                 .putString("cloud_token", "").putBoolean("voice", false).commit());
         viewportFixture = new Application.ActivityLifecycleCallbacks() {
-            @Override public void onActivityCreated(Activity activity, Bundle state) { constrainViewport(activity); }
-            @Override public void onActivityResumed(Activity activity) { constrainViewport(activity); }
-            @Override public void onActivityStarted(Activity activity) { }
-            @Override public void onActivityPaused(Activity activity) { }
-            @Override public void onActivityStopped(Activity activity) { }
-            @Override public void onActivitySaveInstanceState(Activity activity, Bundle state) { }
-            @Override public void onActivityDestroyed(Activity activity) { }
+            @Override
+            public void onActivityCreated(Activity activity, Bundle state) {
+                constrainViewport(activity);
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+                constrainViewport(activity);
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle state) {
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+            }
         };
         app.registerActivityLifecycleCallbacks(viewportFixture);
         scenario = ActivityScenario.launch(new Intent(app, HomeActivity.class));
@@ -131,19 +165,22 @@ public final class HomeScrollPositionTest {
         assertEquals("首页只需初始化一次 SDK", 1, initCount.get());
     }
 
-    @After public void finishPagesAndRestoreConfiguration() throws Exception {
+    @After
+    public void finishPagesAndRestoreConfiguration() throws Exception {
         try {
             if (scenario != null) scenario.close();
         } finally {
             try {
                 if (app != null) onMain(() -> {
-                    if (viewportFixture != null) app.unregisterActivityLifecycleCallbacks(viewportFixture);
+                    if (viewportFixture != null)
+                        app.unregisterActivityLifecycleCallbacks(viewportFixture);
                     finishPages();
                     app.sdkSession().disconnect();
                     return null;
                 });
                 instrumentation.waitForIdleSync();
-                if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+                if (app != null) app.io.submit(() -> {
+                }).get(10, TimeUnit.SECONDS);
             } finally {
                 try {
                     if (originalDevice != null) restore(device, originalDevice);
@@ -159,7 +196,8 @@ public final class HomeScrollPositionTest {
         assertNull("SDK 夹具不能出现协议解析失败", serverFailure.get());
     }
 
-    @Test public void openingSystemSettingsAndReturningKeepsBottomPosition() {
+    @Test
+    public void openingSystemSettingsAndReturningKeepsBottomPosition() {
         ScrollView originalScroll = onMain(() -> shortcutScroll(home));
         int bottom = scrollToBottom(home);
         onMain(() -> {
@@ -186,13 +224,15 @@ public final class HomeScrollPositionTest {
         assertEquals("页面切换不能重新初始化 SDK", 1, initCount.get());
     }
 
-    @Test public void staffAndRecordNotificationsRefreshSummaryWithoutResettingScroll() {
+    @Test
+    public void staffAndRecordNotificationsRefreshSummaryWithoutResettingScroll() {
         ScrollView originalScroll = onMain(() -> shortcutScroll(home));
         int bottom = scrollToBottom(home);
         for (boolean staff : new boolean[]{true, false}) {
             onMain(() -> {
                 home.loaded = false;
-                if (staff) app.notifyStaffChanged(); else app.notifyRecordsChanged();
+                if (staff) app.notifyStaffChanged();
+                else app.notifyRecordsChanged();
                 return null;
             });
             await(() -> onMain(() -> home.loaded), "员工和记录通知应完成首页统计刷新");
@@ -205,7 +245,8 @@ public final class HomeScrollPositionTest {
         }
     }
 
-    @Test public void layoutRenderAndActivityRecreationRestoreSavedScroll() {
+    @Test
+    public void layoutRenderAndActivityRecreationRestoreSavedScroll() {
         int bottom = scrollToBottom(home);
         ScrollView originalScroll = onMain(() -> shortcutScroll(home));
         onMain(() -> {
@@ -263,7 +304,10 @@ public final class HomeScrollPositionTest {
         awaitScrollable(activity);
         await(() -> onMain(() -> shortcutScroll(activity).getScrollY() == expected), message);
         instrumentation.waitForIdleSync();
-        onMain(() -> { assertEquals(message, expected, shortcutScroll(activity).getScrollY()); return null; });
+        onMain(() -> {
+            assertEquals(message, expected, shortcutScroll(activity).getScrollY());
+            return null;
+        });
     }
 
     private static int scrollRange(ScrollView scroll) {
@@ -281,10 +325,13 @@ public final class HomeScrollPositionTest {
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
-    private <T extends Activity> T resumed(Class<T> type) { return onMain(() -> resumedOnMain(type)); }
+    private <T extends Activity> T resumed(Class<T> type) {
+        return onMain(() -> resumedOnMain(type));
+    }
 
     private static <T extends Activity> T resumedOnMain(Class<T> type) {
         for (Activity activity : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
@@ -296,7 +343,11 @@ public final class HomeScrollPositionTest {
         AtomicReference<T> result = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { result.set(work.call()); } catch (Throwable error) { failure.set(error); }
+            try {
+                result.set(work.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError("首页滚动验收失败", failure.get());
         return result.get();

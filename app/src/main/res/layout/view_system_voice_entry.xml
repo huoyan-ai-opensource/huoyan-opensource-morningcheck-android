@@ -33,8 +33,8 @@
 
         <cc.huoyan.opensource.morningcheck.LandscapeSwitch
             android:id="@+id/settings_voice"
-            android:layout_width="@dimen/mc_system_voice_switch_width"
-            android:layout_height="@dimen/mc_system_voice_switch_height"
+            android:layout_width="@dimen/dp_34"
+            android:layout_height="@dimen/dp_20"
             android:background="@null"
             android:contentDescription="@string/ui_view_system_voice_entry_label_text"
             android:minHeight="@dimen/dp_0"
@@ -42,7 +42,7 @@
             android:padding="@dimen/dp_0"
             android:showText="false"
             android:splitTrack="false"
-            android:switchMinWidth="@dimen/mc_system_voice_switch_width"
+            android:switchMinWidth="@dimen/dp_34"
             android:thumb="@drawable/mc_system_switch_thumb"
             android:thumbTint="@null"
             android:track="@drawable/mc_system_switch_track"

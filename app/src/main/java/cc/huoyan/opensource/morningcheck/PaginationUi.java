@@ -65,7 +65,7 @@ final class PaginationUi {
         totalPages = data == null ? 1 : Math.max(1, data.totalPages);
         info.setText(error ? host.getString(R.string.i18n_b_retry_read)
                 : loading || data == null ? ""
-                  : host.getString(R.string.business_page_info, page, totalPages, data.total));
+                : host.getString(R.string.business_page_info, page, totalPages, data.total));
         info.setEnabled(failed);
         info.setContentDescription(info.getText());
         // 同一页重复绘制保留正在输入的草稿；新读取结果、页码变化或重新可用才显示当前页。

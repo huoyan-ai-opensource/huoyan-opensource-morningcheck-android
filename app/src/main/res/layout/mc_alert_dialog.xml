@@ -54,7 +54,7 @@
                 <android.widget.Space
                     android:id="@+id/textSpacerNoTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/abc_dialog_padding_top_material"
+                    android:layout_height="@dimen/dp_9"
                     android:visibility="gone" />
 
                 <TextView
@@ -68,7 +68,7 @@
                 <android.widget.Space
                     android:id="@+id/textSpacerNoButtons"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/abc_dialog_padding_top_material"
+                    android:layout_height="@dimen/dp_9"
                     android:visibility="gone" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

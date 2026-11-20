@@ -68,7 +68,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 仅操作激活草稿，以本机 SDK 夹具和结果监听器隔离真实授权写入。 */
+/**
+ * 仅操作激活草稿，以本机 SDK 夹具和结果监听器隔离真实授权写入。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class SdkActivationCodeUiTest {
     private static final String RAW = "Z2FBW9L7M78R586H", GROUPED = "Z2FB-W9L7-M78R-586H";
@@ -83,39 +85,53 @@ public final class SdkActivationCodeUiTest {
     private MockWebServer endpoint;
     private ActivityScenario<HomeActivity> scenario;
 
-    @Before public void isolateEveryEndpointBeforeShowingInput() throws Exception {
+    @Before
+    public void isolateEveryEndpointBeforeShowingInput() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         device = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         binding = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
-        originalDevice = snapshot(device); originalBinding = snapshot(binding);
+        originalDevice = snapshot(device);
+        originalBinding = snapshot(binding);
         onMain(() -> {
             assertFalse("测试不能打断门店登录", app.shopLogin().getState().isRunning());
             if (ToastEx.toast != null) ToastEx.toast.cancel();
             ToastEx.toast = null;
-            finishPages(); app.sdkSession().disconnect(); return null;
+            finishPages();
+            app.sdkSession().disconnect();
+            return null;
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (!"/sdk".equals(request.getPath())) {
                     businessRequests.incrementAndGet();
                     return new MockResponse().setResponseCode(503);
                 }
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject request = new JSONObject(text);
                             String command = request.getString("cmd");
-                            if (!"init".equals(command) && !command.startsWith("get")) managementWrites.incrementAndGet();
+                            if (!"init".equals(command) && !command.startsWith("get"))
+                                managementWrites.incrementAndGet();
                             JSONObject data = new JSONObject();
                             if ("getStatus".equals(command)) data.put("sdk_state", "READY")
                                     .put("model_ready", true).put("certificate_valid", true).put("key_lost", false);
                             socket.send(new JSONObject().put("requestId", request.getString("requestId"))
                                     .put("code", 0).put("reason", "输入窗只读隔离夹具").put("data", data).toString());
-                        } catch (Throwable error) { serverFailure.set(error); }
+                        } catch (Throwable error) {
+                            serverFailure.set(error);
+                        }
                     }
                 });
             }
@@ -127,22 +143,30 @@ public final class SdkActivationCodeUiTest {
                 .putString("cloud_token", "").putBoolean("voice", false).commit());
     }
 
-    @After public void closeInputAndRestoreOriginalConfiguration() throws Exception {
+    @After
+    public void closeInputAndRestoreOriginalConfiguration() throws Exception {
         Map<String, Object> bindingAfter = null;
-        try { if (scenario != null) scenario.close(); }
-        finally {
+        try {
+            if (scenario != null) scenario.close();
+        } finally {
             try {
                 if (app != null) onMain(() -> {
                     if (ToastEx.toast != null) ToastEx.toast.cancel();
                     ToastEx.toast = null;
-                    finishPages(); app.sdkSession().disconnect(); return null;
+                    finishPages();
+                    app.sdkSession().disconnect();
+                    return null;
                 });
                 instrumentation.waitForIdleSync();
-                if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+                if (app != null) app.io.submit(() -> {
+                }).get(10, TimeUnit.SECONDS);
             } finally {
                 try {
                     if (originalDevice != null) restore(device, originalDevice);
-                    if (originalBinding != null) { bindingAfter = snapshot(binding); restore(binding, originalBinding); }
+                    if (originalBinding != null) {
+                        bindingAfter = snapshot(binding);
+                        restore(binding, originalBinding);
+                    }
                 } finally {
                     for (WebSocket socket : sockets) socket.close(1001, "测试结束");
                     if (endpoint != null) endpoint.shutdown();
@@ -155,7 +179,8 @@ public final class SdkActivationCodeUiTest {
         assertNull("本机夹具协议应正确", serverFailure.get());
     }
 
-    @Test public void dedicatedKeyboardUsesLegalAlphabetAndEnablesOnlyCompleteGroupedSubmission() {
+    @Test
+    public void dedicatedKeyboardUsesLegalAlphabetAndEnablesOnlyCompleteGroupedSubmission() {
         launchInput();
         onMain(() -> {
             Dialog dialog = input().getDialog();
@@ -166,14 +191,17 @@ public final class SdkActivationCodeUiTest {
             assertEquals(ActivationCodeInput.CHARACTERS.length(), alphabet.size());
             for (int i = 0; i < ActivationCodeInput.CHARACTERS.length(); i++)
                 assertTrue(alphabet.contains(String.valueOf(ActivationCodeInput.CHARACTERS.charAt(i))));
-            assertFalse(alphabet.contains("0")); assertFalse(alphabet.contains("I")); assertFalse(alphabet.contains("O"));
+            assertFalse(alphabet.contains("0"));
+            assertFalse(alphabet.contains("I"));
+            assertFalse(alphabet.contains("O"));
             saveEvidence(dialog.findViewById(R.id.activation_code_panel), "attached-empty.png");
             for (int i = 0; i < RAW.length(); i++) {
                 key(dialog, "activation-key-" + RAW.charAt(i)).performClick();
                 assertEquals("每次键入只增一个字符", RAW.substring(0, i + 1), editor().getText().toString());
                 assertEquals("恰好十六位才启用", i == RAW.length() - 1,
                         dialog.findViewById(R.id.activation_code_activate).isEnabled());
-                if (i == 5) saveEvidence(dialog.findViewById(R.id.activation_code_panel), "attached-partial.png");
+                if (i == 5)
+                    saveEvidence(dialog.findViewById(R.id.activation_code_panel), "attached-partial.png");
             }
             int[] groups = {R.id.activation_code_segment_1, R.id.activation_code_segment_2,
                     R.id.activation_code_segment_3, R.id.activation_code_segment_4};
@@ -181,7 +209,8 @@ public final class SdkActivationCodeUiTest {
                 assertEquals(RAW.substring(i * 4, i * 4 + 4), ((TextView) dialog.findViewById(groups[i])).getText().toString());
             saveEvidence(dialog.findViewById(R.id.activation_code_panel), "attached-complete.png");
             View submit = dialog.findViewById(R.id.activation_code_activate);
-            submit.performClick(); submit.performClick();
+            submit.performClick();
+            submit.performClick();
             assertEquals("同次双击只产生一个提交结果", 1, results.size());
             assertEquals("activate", results.get(0).getString("action"));
             assertEquals(GROUPED, results.get(0).getString("code"));
@@ -189,11 +218,13 @@ public final class SdkActivationCodeUiTest {
         });
     }
 
-    @Test public void invalidPastePreservesSelectedCharactersAndLegalPasteOrReplacementKeepsSelection() {
+    @Test
+    public void invalidPastePreservesSelectedCharactersAndLegalPasteOrReplacementKeepsSelection() {
         launchInput();
         onMain(() -> {
             EditText editor = editor();
-            editor.setText("ABCD1234"); editor.setSelection(2, 6);
+            editor.setText("ABCD1234");
+            editor.setSelection(2, 6);
             for (String invalid : new String[]{"0", "I", "O", "ab", "A0B", "中文"}) {
                 editor.getText().replace(2, 6, invalid);
                 assertEquals("拒绝非法输入不能删除原选区：" + invalid, "ABCD1234", editor.getText().toString());
@@ -204,14 +235,16 @@ public final class SdkActivationCodeUiTest {
             editor.setSelection(2, 6);
             key(input().getDialog(), "activation-key-Z").performClick();
             assertEquals("ABZ34", editor.getText().toString());
-            assertEquals(3, editor.getSelectionStart()); assertEquals(3, editor.getSelectionEnd());
+            assertEquals(3, editor.getSelectionStart());
+            assertEquals(3, editor.getSelectionEnd());
             assertNoInputMessage();
             editor.getText().replace(0, editor.length(), GROUPED);
             assertEquals("完整四组粘贴应还原成可编辑原码", RAW, editor.getText().toString());
             editor.setSelection(4, 8);
             editor.getText().replace(4, 8, "1-23");
             assertEquals("任意位置连字符不能被删掉后冒充有效输入", RAW, editor.getText().toString());
-            assertEquals(4, editor.getSelectionStart()); assertEquals(8, editor.getSelectionEnd());
+            assertEquals(4, editor.getSelectionStart());
+            assertEquals(8, editor.getSelectionEnd());
             assertInvalidInputMessage();
             editor.setSelection(0, 4);
             key(input().getDialog(), "activation-backspace").performClick();
@@ -226,22 +259,27 @@ public final class SdkActivationCodeUiTest {
         });
     }
 
-    @Test public void rejectedCharacterWithoutSelectionDoesNotSwallowNextLegalKeyOrLeaveStaleError() {
+    @Test
+    public void rejectedCharacterWithoutSelectionDoesNotSwallowNextLegalKeyOrLeaveStaleError() {
         launchInput();
         onMain(() -> {
             EditText editor = editor();
-            editor.setText(""); editor.setSelection(0);
+            editor.setText("");
+            editor.setSelection(0);
             editor.getText().insert(0, "0");
             assertEquals("空选区的非法字符必须被完整拒绝", "", editor.getText().toString());
-            assertEquals(0, editor.getSelectionStart()); assertEquals(0, editor.getSelectionEnd());
+            assertEquals(0, editor.getSelectionStart());
+            assertEquals(0, editor.getSelectionEnd());
             assertInvalidInputMessage();
             key(input().getDialog(), "activation-key-Z").performClick();
             assertEquals("合法输入不能被上一次拒绝标记吞掉", "Z", editor.getText().toString());
-            assertEquals(1, editor.getSelectionStart()); assertEquals(1, editor.getSelectionEnd());
+            assertEquals(1, editor.getSelectionStart());
+            assertEquals(1, editor.getSelectionEnd());
             assertNoInputMessage();
             input().getDialog().findViewById(R.id.activation_code_clear).performClick();
             assertEquals("", editor.getText().toString());
-            assertEquals(0, editor.getSelectionStart()); assertEquals(0, editor.getSelectionEnd());
+            assertEquals(0, editor.getSelectionStart());
+            assertEquals(0, editor.getSelectionEnd());
             assertNoInputMessage();
             assertFalse(input().getDialog().findViewById(R.id.activation_code_activate).isEnabled());
             return null;
@@ -249,14 +287,16 @@ public final class SdkActivationCodeUiTest {
         assertTrue("草稿操作不能产生业务提交", results.isEmpty());
     }
 
-    @Test public void requestedOrientationRotationResizesActualDialogAndPreservesDraftAndSelection() {
+    @Test
+    public void requestedOrientationRotationResizesActualDialogAndPreservesDraftAndSelection() {
         launchInput();
         int originalRequest = onMain(() -> home().getRequestedOrientation());
         int originalOrientation = onMain(() -> home().getResources().getConfiguration().orientation);
         int opposite = originalOrientation == Configuration.ORIENTATION_PORTRAIT
                 ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
         onMain(() -> {
-            editor().setText("Z2FBW9L7"); editor().setSelection(2, 6);
+            editor().setText("Z2FBW9L7");
+            editor().setSelection(2, 6);
             return null;
         });
         try {
@@ -282,7 +322,8 @@ public final class SdkActivationCodeUiTest {
                     assertEquals("面板高度应与旋转后的实际窗口一致", expected[1], panel.getHeight());
                     for (int id : requiredViews()) assertVisible(dialog.findViewById(id));
                     for (View key : allKeys(input().keyboardView())) {
-                        assertVisible(key); assertTouchSize(key);
+                        assertVisible(key);
+                        assertTouchSize(key);
                     }
                     assertSame("旋转后键区仍应属于当前业务弹窗", dialog.findViewById(R.id.activation_code_keyboard),
                             input().keyboardView());
@@ -294,7 +335,10 @@ public final class SdkActivationCodeUiTest {
                 });
             }
         } finally {
-            onMain(() -> { if (home() != null) home().setRequestedOrientation(originalRequest); return null; });
+            onMain(() -> {
+                if (home() != null) home().setRequestedOrientation(originalRequest);
+                return null;
+            });
         }
         assertTrue("实际旋转不能生成授权提交", results.isEmpty());
     }
@@ -303,10 +347,12 @@ public final class SdkActivationCodeUiTest {
         HomeActivity activity = home();
         SdkActivationCodeDialog fragment = input();
         if (activity == null || fragment == null || fragment.getDialog() == null
-                || activity.getResources().getConfiguration().orientation != orientation) return false;
+                || activity.getResources().getConfiguration().orientation != orientation)
+            return false;
         View decor = activity.getWindow().getDecorView();
         boolean landscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
-        if (decor.getWidth() <= 0 || decor.getHeight() <= 0 || (decor.getWidth() > decor.getHeight()) != landscape) return false;
+        if (decor.getWidth() <= 0 || decor.getHeight() <= 0 || (decor.getWidth() > decor.getHeight()) != landscape)
+            return false;
         Dialog dialog = fragment.getDialog();
         if (!dialog.isShowing() || dialog.getWindow() == null) return false;
         View panel = dialog.findViewById(R.id.activation_code_panel);
@@ -318,7 +364,8 @@ public final class SdkActivationCodeUiTest {
 
     private int[] actualPanelSize(Activity activity) {
         Rect bounds;
-        if (Build.VERSION.SDK_INT >= 30) bounds = activity.getWindowManager().getCurrentWindowMetrics().getBounds();
+        if (Build.VERSION.SDK_INT >= 30)
+            bounds = activity.getWindowManager().getCurrentWindowMetrics().getBounds();
         else {
             View decor = activity.getWindow().getDecorView();
             bounds = new Rect(0, 0, decor.getWidth(), decor.getHeight());
@@ -349,11 +396,13 @@ public final class SdkActivationCodeUiTest {
         assertEquals(expected, message.getText().toString());
     }
 
-    @Test public void rejectedSubmissionReenablesEditingAndScanOrCancelNeverWritesSdk() {
+    @Test
+    public void rejectedSubmissionReenablesEditingAndScanOrCancelNeverWritesSdk() {
         launchInput();
         onMain(() -> {
             SdkActivationCodeDialog dialog = input();
-            editor().setText(RAW); editor().setSelection(5);
+            editor().setText(RAW);
+            editor().setSelection(5);
             dialog.getDialog().findViewById(R.id.activation_code_activate).performClick();
             assertEquals(1, results.size());
             dialog.onSubmitRejected("连接配置已改变，请先重新连接。");
@@ -374,11 +423,15 @@ public final class SdkActivationCodeUiTest {
             return null;
         });
         instrumentation.waitForIdleSync();
-        onMain(() -> { assertNull("取消必须移除输入窗", input()); return null; });
+        onMain(() -> {
+            assertNull("取消必须移除输入窗", input());
+            return null;
+        });
         assertEquals("取消不能产生额外提交结果", 2, results.size());
     }
 
-    @Test public void currentAttachedWindowKeepsSegmentsKeysAndActionsVisibleWithSystemImeDisabled() {
+    @Test
+    public void currentAttachedWindowKeepsSegmentsKeysAndActionsVisibleWithSystemImeDisabled() {
         launchInput();
         onMain(() -> {
             Dialog dialog = input().getDialog();
@@ -387,10 +440,12 @@ public final class SdkActivationCodeUiTest {
             assertExpandedLandscapeSizing(panel);
             for (int id : requiredViews()) assertVisible(dialog.findViewById(id));
             for (View key : allKeys(input().keyboardView())) {
-                assertVisible(key); assertTouchSize(key);
+                assertVisible(key);
+                assertTouchSize(key);
             }
             for (int id : new int[]{R.id.activation_code_activate, R.id.activation_code_cancel,
-                    R.id.activation_code_scan, R.id.activation_code_clear}) assertTouchSize(dialog.findViewById(id));
+                    R.id.activation_code_scan, R.id.activation_code_clear})
+                assertTouchSize(dialog.findViewById(id));
             editor().performClick();
             assertFalse(editor().getShowSoftInputOnFocus());
             editor().setText(RAW);
@@ -400,13 +455,15 @@ public final class SdkActivationCodeUiTest {
             long now = SystemClock.uptimeMillis();
             MotionEvent tap = MotionEvent.obtain(now, now, MotionEvent.ACTION_UP,
                     box.centerX() - edit.left, box.centerY() - edit.top, 0);
-            editor().onTouchEvent(tap); tap.recycle();
+            editor().onTouchEvent(tap);
+            tap.recycle();
             assertTrue("二维分组点击必须选择第四组，而非同列的第二组", editor().getSelectionStart() >= 12);
             return null;
         });
     }
 
-    @Test public void floatingCodeInputNeverResizesOrMovesTheHomeLayout() {
+    @Test
+    public void floatingCodeInputNeverResizesOrMovesTheHomeLayout() {
         launchHome();
         Map<View, Rect> originalLayout = onMain(() -> {
             Map<View, Rect> bounds = new HashMap<>();
@@ -444,7 +501,8 @@ public final class SdkActivationCodeUiTest {
         assertTrue("输入和取消不能提交激活", results.isEmpty());
     }
 
-    @Test public void inlineKeyboardEditsOriginalCodeAndScanOrBackActsOnTheSameDialog() {
+    @Test
+    public void inlineKeyboardEditsOriginalCodeAndScanOrBackActsOnTheSameDialog() {
         launchInput();
         await(() -> onMain(() -> {
             WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(input().keyboardView());
@@ -517,11 +575,17 @@ public final class SdkActivationCodeUiTest {
         long now = SystemClock.uptimeMillis();
         MotionEvent down = MotionEvent.obtain(now, now, MotionEvent.ACTION_DOWN, target.centerX(), target.centerY(), 0);
         MotionEvent up = MotionEvent.obtain(now, now + 40, MotionEvent.ACTION_UP, target.centerX(), target.centerY(), 0);
-        try { instrumentation.sendPointerSync(down); instrumentation.sendPointerSync(up); }
-        finally { down.recycle(); up.recycle(); }
+        try {
+            instrumentation.sendPointerSync(down);
+            instrumentation.sendPointerSync(up);
+        } finally {
+            down.recycle();
+            up.recycle();
+        }
     }
 
-    @Test public void phoneAndTabletContextsKeepInlineControlsVisibleAtRegularAndLargestFonts() {
+    @Test
+    public void phoneAndTabletContextsKeepInlineControlsVisibleAtRegularAndLargestFonts() {
         onMain(() -> {
             for (float fontScale : new float[]{1f, 1.3f}) {
                 assertConfigurationFits(320, 640, fontScale, "phone-portrait");
@@ -539,8 +603,10 @@ public final class SdkActivationCodeUiTest {
 
     private void assertConfigurationFits(int widthDp, int heightDp, float fontScale, String name) {
         Configuration config = new Configuration(app.getResources().getConfiguration());
-        config.screenWidthDp = widthDp; config.screenHeightDp = heightDp;
-        config.smallestScreenWidthDp = 1; config.fontScale = fontScale;
+        config.screenWidthDp = widthDp;
+        config.screenHeightDp = heightDp;
+        config.smallestScreenWidthDp = 1;
+        config.fontScale = fontScale;
         boolean landscape = widthDp > heightDp;
         config.orientation = landscape ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
         Context context = new ContextThemeWrapper(app.createConfigurationContext(config), R.style.AppTheme);
@@ -591,6 +657,7 @@ public final class SdkActivationCodeUiTest {
                 View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
         panel.layout(0, 0, panel.getMeasuredWidth(), panel.getMeasuredHeight());
     }
+
     private static void assertConfiguredControls(ViewGroup panel) {
         assertNoScroll(panel);
         for (int id : requiredViews()) assertContained(panel, panel.findViewById(id));
@@ -598,21 +665,30 @@ public final class SdkActivationCodeUiTest {
         View rules = panel.findViewById(R.id.activation_code_rules);
         if (rules.getVisibility() == View.VISIBLE) assertContained(panel, rules);
         assertContained(panel, panel.findViewById(R.id.activation_code_keyboard));
-        for (View key : allKeys(panel.findViewById(R.id.activation_code_keyboard))) assertContained(panel, key);
+        for (View key : allKeys(panel.findViewById(R.id.activation_code_keyboard)))
+            assertContained(panel, key);
         for (int id : new int[]{R.id.activation_code_activate, R.id.activation_code_cancel,
-                R.id.activation_code_scan, R.id.activation_code_clear}) assertTouchSize(panel.findViewById(id));
+                R.id.activation_code_scan, R.id.activation_code_clear})
+            assertTouchSize(panel.findViewById(id));
     }
+
     private static void assertKeyboardControls(LinearLayout keyboard) {
         assertNoScroll(keyboard);
         assertNull("内嵌键区不应复制标题", keyboard.findViewById(R.id.activation_code_title));
         assertNull("内嵌键区不应复制输入框", keyboard.findViewById(R.id.activation_code_editor));
         List<View> keys = allKeys(keyboard);
         assertEquals("全部合法字符和退格键都应参与实际布局", ActivationCodeInput.CHARACTERS.length() + 1, keys.size());
-        for (View key : keys) { assertContained(keyboard, key); assertTouchSize(key); }
+        for (View key : keys) {
+            assertContained(keyboard, key);
+            assertTouchSize(key);
+        }
     }
+
     private static void assertContained(ViewGroup root, View view) {
         assertNotNull(view);
-        Rect bounds = new Rect(); view.getDrawingRect(bounds); root.offsetDescendantRectToMyCoords(view, bounds);
+        Rect bounds = new Rect();
+        view.getDrawingRect(bounds);
+        root.offsetDescendantRectToMyCoords(view, bounds);
         assertTrue("控件必须有尺寸：" + view.getTag() + bounds, bounds.width() > 0 && bounds.height() > 0);
         assertTrue("控件不能超出配置面板：" + view.getTag() + bounds,
                 bounds.left >= 0 && bounds.top >= 0 && bounds.right <= root.getWidth() && bounds.bottom <= root.getHeight());
@@ -620,11 +696,12 @@ public final class SdkActivationCodeUiTest {
         while (ancestor != root && ancestor.getParent() instanceof ViewGroup) {
             ViewGroup parent = (ViewGroup) ancestor.getParent();
             if (parent.getClipChildren()) {
-                Rect childBounds = new Rect(); view.getDrawingRect(childBounds);
+                Rect childBounds = new Rect();
+                view.getDrawingRect(childBounds);
                 parent.offsetDescendantRectToMyCoords(view, childBounds);
                 Rect clipping = parent.getClipToPadding()
                         ? new Rect(parent.getPaddingLeft(), parent.getPaddingTop(),
-                                parent.getWidth() - parent.getPaddingRight(), parent.getHeight() - parent.getPaddingBottom())
+                        parent.getWidth() - parent.getPaddingRight(), parent.getHeight() - parent.getPaddingBottom())
                         : new Rect(0, 0, parent.getWidth(), parent.getHeight());
                 assertTrue("控件不能被中间父容器裁切：" + view.getTag() + childBounds + " / " + clipping,
                         clipping.contains(childBounds));
@@ -650,9 +727,12 @@ public final class SdkActivationCodeUiTest {
         String orientation = InstrumentationRegistry.getArguments().getString("design_orientation", "");
         if (!orientation.isEmpty()) {
             boolean portrait = "portrait".equals(orientation);
-            onMain(() -> { home().setRequestedOrientation(portrait
-                    ? android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                    : android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); return null; });
+            onMain(() -> {
+                home().setRequestedOrientation(portrait
+                        ? android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                        : android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                return null;
+            });
             await(() -> onMain(() -> home().getResources().getConfiguration().orientation == (portrait ? 1 : 2)),
                     "输入窗使用指定真机方向");
         }
@@ -672,7 +752,8 @@ public final class SdkActivationCodeUiTest {
             activity.getSupportFragmentManager().setFragmentResultListener(SdkActivationCodeDialog.RESULT_KEY, activity,
                     (key, result) -> {
                         String action = result.getString("action");
-                        if ("activate".equals(action) || "scan".equals(action)) results.add(new Bundle(result));
+                        if ("activate".equals(action) || "scan".equals(action))
+                            results.add(new Bundle(result));
                     });
             SdkActivationCodeDialog.open(activity.getSupportFragmentManager());
             activity.getSupportFragmentManager().executePendingTransactions();
@@ -680,8 +761,8 @@ public final class SdkActivationCodeUiTest {
         });
         instrumentation.waitForIdleSync();
         await(() -> onMain(() -> input() != null && input().getDialog() != null
-                && input().getDialog().isShowing() && input().getDialog().findViewById(R.id.activation_code_panel).getWidth() > 0
-                && input().isKeyboardShowing() && input().keyboardView().getWidth() > 0),
+                        && input().getDialog().isShowing() && input().getDialog().findViewById(R.id.activation_code_panel).getWidth() > 0
+                        && input().isKeyboardShowing() && input().keyboardView().getWidth() > 0),
                 "专用输入窗应显示并完成布局");
     }
 
@@ -689,7 +770,8 @@ public final class SdkActivationCodeUiTest {
         if (view.isShown()) bounds.put(view, ScreenViewGeometry.bounds(view));
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
-            for (int i = 0; i < group.getChildCount(); i++) rememberHostBounds(group.getChildAt(i), bounds);
+            for (int i = 0; i < group.getChildCount(); i++)
+                rememberHostBounds(group.getChildAt(i), bounds);
         }
     }
 
@@ -708,27 +790,38 @@ public final class SdkActivationCodeUiTest {
         Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(SdkActivationCodeDialog.TAG);
         return fragment instanceof SdkActivationCodeDialog ? (SdkActivationCodeDialog) fragment : null;
     }
-    private EditText editor() { return input().getDialog().findViewById(R.id.activation_code_editor); }
+
+    private EditText editor() {
+        return input().getDialog().findViewById(R.id.activation_code_editor);
+    }
+
     private HomeActivity home() {
         for (Activity activity : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
             if (activity instanceof HomeActivity) return (HomeActivity) activity;
         return null;
     }
+
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
+
     private View key(Dialog dialog, String tag) {
         View key = input().keyboardView().findViewWithTag(tag);
-        assertNotNull("缺少专用键：" + tag, key); return key;
+        assertNotNull("缺少专用键：" + tag, key);
+        return key;
     }
+
     private static List<TextView> characterKeys(View root) {
         List<TextView> keys = new ArrayList<>();
         for (View key : allKeys(root))
-            if (key instanceof TextView && ((String) key.getTag()).startsWith("activation-key-")) keys.add((TextView) key);
+            if (key instanceof TextView && ((String) key.getTag()).startsWith("activation-key-"))
+                keys.add((TextView) key);
         return keys;
     }
+
     private static List<View> allKeys(View root) {
         List<View> keys = new ArrayList<>();
         if (root.getTag() instanceof String && (((String) root.getTag()).startsWith("activation-key-")
@@ -737,17 +830,21 @@ public final class SdkActivationCodeUiTest {
             keys.addAll(allKeys(((ViewGroup) root).getChildAt(i)));
         return keys;
     }
+
     private static int[] requiredViews() {
         return new int[]{R.id.activation_code_title,
                 R.id.activation_code_segment_1, R.id.activation_code_segment_2,
                 R.id.activation_code_segment_3, R.id.activation_code_segment_4, R.id.activation_code_scan,
                 R.id.activation_code_clear, R.id.activation_code_cancel, R.id.activation_code_activate};
     }
+
     private static void assertVisible(View view) {
-        assertNotNull(view); Rect visible = new Rect();
+        assertNotNull(view);
+        Rect visible = new Rect();
         assertTrue("控件必须真实可见", view.isShown() && ScreenViewGeometry.visibleOnScreen(view, visible));
         assertEquals("控件不能被窗口或父容器裁切", ScreenViewGeometry.bounds(view), visible);
     }
+
     private static void assertTouchSize(View view) {
         float density = view.getResources().getDisplayMetrics().density;
         Configuration config = view.getResources().getConfiguration();
@@ -792,11 +889,13 @@ public final class SdkActivationCodeUiTest {
         assertEquals("大横屏激活码应清晰可读", panel.getResources().getDimension(R.dimen.sp_24), segment.getTextSize(), 1);
         assertEquals("大横屏键帽应同步放大", panel.getResources().getDimension(R.dimen.sp_22), key.getTextSize(), 1);
     }
+
     private static void assertNoScroll(View root) {
         assertFalse("激活表单不允许依赖滚动", root instanceof ScrollView);
         if (root instanceof ViewGroup) for (int i = 0; i < ((ViewGroup) root).getChildCount(); i++)
             assertNoScroll(((ViewGroup) root).getChildAt(i));
     }
+
     private void saveEvidence(View view, String filename) {
         assertTrue(view.getWidth() > 0 && view.getHeight() > 0);
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
@@ -805,22 +904,36 @@ public final class SdkActivationCodeUiTest {
         assertTrue(directory.isDirectory() || directory.mkdirs());
         try (FileOutputStream output = new FileOutputStream(new File(directory, filename))) {
             assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output));
-        } catch (Exception failure) { throw new AssertionError("应写出原生 UI 验证图片", failure); }
-        finally { bitmap.recycle(); }
+        } catch (Exception failure) {
+            throw new AssertionError("应写出原生 UI 验证图片", failure);
+        } finally {
+            bitmap.recycle();
+        }
     }
+
     private <T> T onMain(Callable<T> work) {
-        AtomicReference<T> result = new AtomicReference<>(); AtomicReference<Throwable> failure = new AtomicReference<>();
-        instrumentation.runOnMainSync(() -> { try { result.set(work.call()); } catch (Throwable error) { failure.set(error); } });
+        AtomicReference<T> result = new AtomicReference<>();
+        AtomicReference<Throwable> failure = new AtomicReference<>();
+        instrumentation.runOnMainSync(() -> {
+            try {
+                result.set(work.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
+        });
         if (failure.get() != null) throw new AssertionError("激活输入 UI 回归失败", failure.get());
         return result.get();
     }
+
     private static Map<String, Object> snapshot(SharedPreferences preferences) {
         Map<String, Object> values = new HashMap<>();
         for (Map.Entry<String, ?> entry : preferences.getAll().entrySet())
             values.put(entry.getKey(), entry.getValue() instanceof Set ? new HashSet<>((Set<?>) entry.getValue()) : entry.getValue());
         return values;
     }
-    @SuppressWarnings("unchecked") private static void restore(SharedPreferences preferences, Map<String, Object> values) {
+
+    @SuppressWarnings("unchecked")
+    private static void restore(SharedPreferences preferences, Map<String, Object> values) {
         SharedPreferences.Editor editor = preferences.edit().clear();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
             Object value = entry.getValue();
@@ -835,9 +948,13 @@ public final class SdkActivationCodeUiTest {
         assertTrue("应恢复测试前配置", editor.commit());
         assertEquals(values, preferences.getAll());
     }
+
     private static void await(BooleanSupplier condition, String message) {
         long deadline = SystemClock.elapsedRealtime() + 10_000;
-        do { if (condition.getAsBoolean()) return; SystemClock.sleep(50); } while (SystemClock.elapsedRealtime() < deadline);
+        do {
+            if (condition.getAsBoolean()) return;
+            SystemClock.sleep(50);
+        } while (SystemClock.elapsedRealtime() < deadline);
         fail(message);
     }
 }

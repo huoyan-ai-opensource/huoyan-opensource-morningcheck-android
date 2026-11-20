@@ -35,7 +35,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 
-/** 未选员工时的只读验收；不打开镜头、不创建员工、不写配置、不发送学习或业务云写请求。 */
+/**
+ * 未选员工时的只读验收；不打开镜头、不创建员工、不写配置、不发送学习或业务云写请求。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class FaceEnrollmentUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -46,7 +48,8 @@ public final class FaceEnrollmentUiTest {
     private long originalWriteVersion;
     private boolean hardwareEnabled;
 
-    @Before public void checkReadOnlyPreconditions() throws Exception {
+    @Before
+    public void checkReadOnlyPreconditions() throws Exception {
         hardwareEnabled = "true".equals(InstrumentationRegistry.getArguments()
                 .getString("enableFaceEnrollmentCamera"));
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
@@ -64,7 +67,8 @@ public final class FaceEnrollmentUiTest {
         });
     }
 
-    @After public void closePageWithoutChangingDeviceData() throws Exception {
+    @After
+    public void closePageWithoutChangingDeviceData() throws Exception {
         if (scenario != null) scenario.close();
         if (originalStaff != null) {
             // 先清空之前提交的本地读队列，再核对没有出现学习标记或员工资料变化。
@@ -75,7 +79,8 @@ public final class FaceEnrollmentUiTest {
         }
     }
 
-    @Test public void missingEmployeeDisablesLearningBeforeAndAfterRecreation() throws Exception {
+    @Test
+    public void missingEmployeeDisablesLearningBeforeAndAfterRecreation() throws Exception {
         // 故意不传 EXTRA_STAFF_ID，验证外部漏传时不能误选第一名员工。
         launch(false);
         assertMissingEmployeePage();
@@ -95,7 +100,8 @@ public final class FaceEnrollmentUiTest {
         holdForScreenshot();
     }
 
-    @Test public void backgroundAndResumeKeepMissingEmployeeInWorkspaceWithoutCamera() {
+    @Test
+    public void backgroundAndResumeKeepMissingEmployeeInWorkspaceWithoutCamera() {
         launch(true);
         scenario.onActivity(activity -> {
             assertNull("显式无效员工 0 也不能建立预览相机宿主", activity.camera);
@@ -119,7 +125,8 @@ public final class FaceEnrollmentUiTest {
         assertMissingEmployeePage();
     }
 
-    @Test public void hardwareEnabledInvalidEmployeeStillCannotOpenCameraAfterReturning() {
+    @Test
+    public void hardwareEnabledInvalidEmployeeStillCannotOpenCameraAfterReturning() {
         assumeTrue("现场相机授权回归需要 enableFaceEnrollmentCamera=true", hardwareEnabled);
         launch(true);
         scenario.onActivity(activity -> {
@@ -257,7 +264,9 @@ public final class FaceEnrollmentUiTest {
         assertEquals("底部两个操作应在同一行", capture.centerY(), clear.centerY());
     }
 
-    /** 只核对无效员工的共享写锁和代次，不构造帧、不调用 SDK register。 */
+    /**
+     * 只核对无效员工的共享写锁和代次，不构造帧、不调用 SDK register。
+     */
     private void assertNoLearningWrite() {
         assertFalse("无效员工页面不能占用人脸写锁", app.faceOperations.isWriting(0));
         assertEquals("重建或恢复页面不能发起或重放人脸学习", originalWriteVersion,
@@ -267,13 +276,15 @@ public final class FaceEnrollmentUiTest {
     private Map<String, String> staffSnapshot() throws Exception {
         return app.io.submit(() -> {
             Map<String, String> snapshot = new TreeMap<>();
-            for (JSONObject person : app.store.staff()) snapshot.put(person.optString("id"), person.toString());
+            for (JSONObject person : app.store.staff())
+                snapshot.put(person.optString("id"), person.toString());
             return snapshot;
         }).get(10, TimeUnit.SECONDS);
     }
 
     private void drainLocalCallbacks() throws Exception {
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         instrumentation.waitForIdleSync();
     }
 

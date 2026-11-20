@@ -8,6 +8,7 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.35</item>
     </style>
+
     <string name="design_edit">编辑</string>
     <string name="design_hand_palm_guide">请张开双手，手心朝向相机</string>
     <string name="design_hand_back_guide">请张开双手，手背朝向相机</string>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ChoiceDialogPanel" parent="">
+        <item name="android:padding">@dimen/dp_6</item>
+    </style>
+
+    <style name="FontChoiceList" parent="">
+        <item name="android:layout_marginStart">@dimen/dp_6</item>
+        <item name="android:dividerHeight">@dimen/dp_2</item>
+    </style>
+
+    <style name="ChoiceContent" parent="">
+        <item name="android:layout_marginTop">@dimen/dp_4</item>
+    </style>
+
+    <style name="ChoiceList" parent="ChoiceContent">
+        <item name="android:dividerHeight">@dimen/dp_2</item>
+    </style>
+
+    <style name="ChoiceRow" parent="">
+        <item name="android:minHeight">@dimen/dp_24</item>
+    </style>
+
+    <style name="ChoiceClose" parent="ChoiceContent">
+        <item name="android:minHeight">@dimen/dp_24</item>
+    </style>
+
+    <style name="FontChoicePreview" parent="PenText">
+        <item name="android:minHeight">@dimen/dp_24</item>
+    </style>
+
+    <style name="FontChoiceCancel" parent="PenButton">
+        <item name="android:minHeight">@dimen/dp_24</item>
+    </style>
+
+    <style name="FontChoiceApply" parent="PenPrimary">
+        <item name="android:layout_marginStart">@dimen/dp_2</item>
+        <item name="android:minHeight">@dimen/dp_24</item>
+    </style>
+
+    <style name="ChoiceTitle" parent="">
+        <item name="android:textSize">@dimen/sp_10</item>
+    </style>
+
+    <style name="FontChoiceTitle" parent="PenTitle">
+        <item name="android:textSize">@dimen/sp_10</item>
+    </style>
+
+    <style name="ChoiceSubtitle" parent="">
+        <item name="android:textSize">@dimen/sp_7</item>
+    </style>
+
+    <style name="FontChoiceSubtitle" parent="PenCaption">
+        <item name="android:textSize">@dimen/sp_7</item>
+    </style>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ChoiceTitle" parent="">
+        <item name="android:textSize">@dimen/sp_11</item>
+    </style>
+
+    <style name="FontChoiceTitle" parent="PenTitle">
+        <item name="android:textSize">@dimen/sp_11</item>
+    </style>
+
+    <style name="ChoiceSubtitle" parent="">
+        <item name="android:textSize">@dimen/sp_8</item>
+    </style>
+
+    <style name="FontChoiceSubtitle" parent="PenCaption">
+        <item name="android:textSize">@dimen/sp_8</item>
+    </style>
+</resources>

@@ -1,6 +1,7 @@
 package cc.huoyan.opensource.morningcheck;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -82,8 +83,11 @@ final class DesignChoiceDialog {
         android.util.DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
         int hostWidth = host.getWidth() > 0 ? host.getWidth() : metrics.widthPixels;
         int hostHeight = host.getHeight() > 0 ? host.getHeight() : metrics.heightPixels;
-        int margin = activity.getResources().getDimensionPixelSize(R.dimen.mc_choice_window_margin);
-        int maxWidth = activity.getResources().getDimensionPixelSize(R.dimen.mc_choice_window_max_width);
+        Configuration configuration = activity.getResources().getConfiguration();
+        int margin = activity.getResources().getDimensionPixelSize(R.dimen.dp_10);
+        int maxWidth = activity.getResources().getDimensionPixelSize(
+                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && configuration.screenHeightDp >= 480
+                        ? R.dimen.dp_240 : R.dimen.dp_200);
         int width = Math.max(1, Math.min(hostWidth - margin * 2, maxWidth));
         dialog.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
         ListView list = body.findViewById(R.id.department_filter_options);

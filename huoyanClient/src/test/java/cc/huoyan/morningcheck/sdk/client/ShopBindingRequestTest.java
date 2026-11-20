@@ -6,7 +6,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ShopBindingRequestTest {
-    @Test public void loginPreservesExternalIdentityAndUsesIssuingAccount() throws Exception {
+    @Test
+    public void loginPreservesExternalIdentityAndUsesIssuingAccount() throws Exception {
         for (String raw : new String[]{"007", "erp-shop-007", "account:user_123", " 123 "}) {
             JSONObject request = ShopBindingRequest.create(raw);
             assertEquals(raw, request.getString("shop_id"));
@@ -15,7 +16,8 @@ public class ShopBindingRequestTest {
         }
     }
 
-    @Test public void emptyQrCannotStartBinding() {
+    @Test
+    public void emptyQrCannotStartBinding() {
         for (String raw : new String[]{null, "", " \n\t "}) {
             assertThrows(IllegalArgumentException.class, () -> ShopBindingRequest.create(raw));
         }

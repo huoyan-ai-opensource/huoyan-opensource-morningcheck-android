@@ -217,7 +217,8 @@ public final class DepartmentsActivity extends BaseMorningActivity {
                 : parentId > 0 ? R.string.department_children_empty : R.string.department_empty);
         empty.setVisibility(!pageLoading && rowsLoaded && values.isEmpty() ? View.VISIBLE : View.GONE);
         if (readingDialog == null) readingDialog = new LoadingDialog(this);
-        if (pageLoading && foreground) readingDialog.showReadOnly(getString(R.string.i18n_a_loading_departments));
+        if (pageLoading && foreground)
+            readingDialog.showReadOnly(getString(R.string.i18n_a_loading_departments));
         else readingDialog.dismiss();
         endView.setText(pageError ? getString(R.string.i18n_a_tap_to_retry) : getString(R.string.i18n_a_departments_end, values.size()));
         endView.setVisibility(!pageLoading && (pageError || !values.isEmpty()) ? View.VISIBLE : View.GONE);
@@ -423,7 +424,8 @@ public final class DepartmentsActivity extends BaseMorningActivity {
             });
             row.setOnLongClickListener(v -> {
                 JSONObject item = currentItem();
-                if (item == null || !foreground || navigating || isFinishing() || pageLoading) return true;
+                if (item == null || !foreground || navigating || isFinishing() || pageLoading)
+                    return true;
                 long id = item.optLong("id");
                 ImmersiveUi.show(new ProjectDialog.Builder(DepartmentsActivity.this)
                         .setTitle(item.optString("name"))

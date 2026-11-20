@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 
 import org.json.JSONObject;
 
@@ -46,6 +47,7 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
     protected HuoyanClient sdk;
     protected MorningSdkSession sdkSession;
     protected boolean foreground, destroyed, loaded, wide, compact, navigating;
+    private Object pendingPermissionCheck;
     protected String connection = "";
     protected LinearLayout content;
     protected JSONObject currentRecord;
@@ -109,6 +111,12 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
         if (!ensureAppFontCurrent()) return;
         // 快速切页返回可能只经历暂停，不再触发 onStart；恢复前台时解除导航防连点。
         navigating = false;
+    }
+
+    @Override
+    protected void onPause() {
+        pendingPermissionCheck = null;
+        super.onPause();
     }
 
     @Override
@@ -343,8 +351,37 @@ public abstract class BaseMorningActivity extends AppFontActivity implements Mor
             ToastEx.showFailureToast(this, UiMessages.text(this, value));
     }
 
+    /**
+     * 仅在用户操作的回执明确表示缺权时，打开前台授权引导。
+     */
+    protected final boolean guideSdkPermissions(int code, String reason) {
+        return MorningSdkSession.missingPermission(code, reason) && SdkPermissionGuide.open(this);
+    }
+
+    /**
+     * 进入晨检或录入之前可检查权限，即使缺权已阻止 SDK 就绪或相机采集。
+     */
+    protected final void afterSdkPermissionCheck(Runnable action) {
+        if (pendingPermissionCheck != null) return;
+        if (!sdk.isConnected()) {
+            action.run();
+            return;
+        }
+        Object check = new Object();
+        pendingPermissionCheck = check;
+        long generation = sdkGeneration();
+        sdkSession.read("getCertInfo", (code, reason, data) -> {
+            if (pendingPermissionCheck != check) return;
+            pendingPermissionCheck = null;
+            if (sdkGeneration() != generation || navigating || isFinishing()
+                    || !getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) return;
+            if (!guideSdkPermissions(code, reason)) action.run();
+        });
+    }
+
     @Override
     public void onConnection(boolean connected, String message) {
+        if (!connected) pendingPermissionCheck = null;
         connection = message == null || message.isEmpty() ? getString(R.string.i18n_a_sdk_disconnected) : UiMessages.text(this, message);
         onSdkStateChanged();
     }

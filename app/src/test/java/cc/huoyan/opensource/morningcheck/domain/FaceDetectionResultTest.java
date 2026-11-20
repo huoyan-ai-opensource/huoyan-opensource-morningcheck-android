@@ -7,7 +7,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public final class FaceDetectionResultTest {
-    @Test public void zeroOneTwoAndThreeFacesHaveDistinctAdmission() throws Exception {
+    @Test
+    public void zeroOneTwoAndThreeFacesHaveDistinctAdmission() throws Exception {
         for (int count = 0; count <= 3; count++) {
             JSONArray faces = new JSONArray();
             for (int i = 0; i < count; i++) faces.put(face());
@@ -18,7 +19,8 @@ public final class FaceDetectionResultTest {
         }
     }
 
-    @Test public void smallOrLowScoreBackgroundFaceStillMakesItMultiple() throws Exception {
+    @Test
+    public void smallOrLowScoreBackgroundFaceStillMakesItMultiple() throws Exception {
         JSONArray faces = new JSONArray().put(face())
                 .put(face().put("w", .005).put("h", .005).put("score", .01));
         FaceDetectionResult result = FaceDetectionResult.parse(new JSONObject().put("faces", faces));
@@ -26,7 +28,8 @@ public final class FaceDetectionResultTest {
         assertFalse(result.isSingle());
     }
 
-    @Test public void missingMalformedOrIncompleteResultsCannotEnableSaving() throws Exception {
+    @Test
+    public void missingMalformedOrIncompleteResultsCannotEnableSaving() throws Exception {
         assertInvalid(new JSONObject());
         assertInvalid(new JSONObject().put("faces", "1"));
         assertInvalid(new JSONObject().put("faces", new JSONArray().put(JSONObject.NULL)));
@@ -39,7 +42,8 @@ public final class FaceDetectionResultTest {
         assertInvalid(new JSONObject().put("faces", new JSONArray().put(face()).put(face()).put(face()).put(face())));
     }
 
-    @Test public void parsedSnapshotDoesNotChangeWhenCallerReusesResponse() throws Exception {
+    @Test
+    public void parsedSnapshotDoesNotChangeWhenCallerReusesResponse() throws Exception {
         JSONObject source = face();
         FaceDetectionResult result = FaceDetectionResult.parse(new JSONObject()
                 .put("faces", new JSONArray().put(source)));
@@ -55,7 +59,10 @@ public final class FaceDetectionResultTest {
     }
 
     private static void assertInvalid(JSONObject response) {
-        try { FaceDetectionResult.parse(response); fail("损坏的检测结果不得放行"); }
-        catch (IllegalArgumentException expected) { }
+        try {
+            FaceDetectionResult.parse(response);
+            fail("损坏的检测结果不得放行");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 }

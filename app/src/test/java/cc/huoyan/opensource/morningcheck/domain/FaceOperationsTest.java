@@ -1,10 +1,12 @@
 package cc.huoyan.opensource.morningcheck.domain;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class FaceOperationsTest {
-    @Test public void oldEmptyQueryCannotEraseRegistrationEvenAfterWriteFinishes() {
+    @Test
+    public void oldEmptyQueryCannotEraseRegistrationEvenAfterWriteFinishes() {
         FaceOperations operations = new FaceOperations();
         long beforeRegister = operations.version(21);
         assertTrue(operations.acceptsQuery(21, beforeRegister));
@@ -15,7 +17,8 @@ public class FaceOperationsTest {
         assertTrue(operations.acceptsQuery(21, operations.version(21)));
     }
 
-    @Test public void separateEmployeesDoNotBlockEachOtherAndSameEmployeeCannotWriteTwice() {
+    @Test
+    public void separateEmployeesDoNotBlockEachOtherAndSameEmployeeCannotWriteTwice() {
         FaceOperations operations = new FaceOperations();
         long otherEmployee = operations.version(22);
         assertTrue(operations.beginWrite(21));

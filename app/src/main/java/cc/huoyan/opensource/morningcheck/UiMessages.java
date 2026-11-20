@@ -87,12 +87,16 @@ public final class UiMessages {
         Catalog(Resources resources) {
             String[] sources = resources.getStringArray(R.array.ui_message_sources);
             String[] values = resources.getStringArray(R.array.ui_message_values);
-            if (sources.length != values.length) throw new IllegalStateException("文案翻译数量不一致");
-            for (int index = 0; index < sources.length; index++) exact.put(sources[index], values[index]);
+            if (sources.length != values.length)
+                throw new IllegalStateException("文案翻译数量不一致");
+            for (int index = 0; index < sources.length; index++)
+                exact.put(sources[index], values[index]);
             String[] templates = resources.getStringArray(R.array.ui_message_template_sources);
             String[] translated = resources.getStringArray(R.array.ui_message_template_values);
-            if (templates.length != translated.length) throw new IllegalStateException("文案模板数量不一致");
-            for (int index = 0; index < templates.length; index++) rules.add(new Rule(templates[index], translated[index]));
+            if (templates.length != translated.length)
+                throw new IllegalStateException("文案模板数量不一致");
+            for (int index = 0; index < templates.length; index++)
+                rules.add(new Rule(templates[index], translated[index]));
         }
     }
 

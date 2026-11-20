@@ -63,7 +63,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 真实记录和图片解码的界面回归；所有照片为测试色块，SDK 和云端均隔离在本机夹具。 */
+/**
+ * 真实记录和图片解码的界面回归；所有照片为测试色块，SDK 和云端均隔离在本机夹具。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class ResultEvidenceUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -78,12 +80,16 @@ public final class ResultEvidenceUiTest {
     private ActivityScenario<ResultActivity> scenario;
     private CountDownLatch pendingIoRelease;
 
-    /** 拒绝所有 SDK 请求，保证测试不会发起真实识别、登录、云上传或切换下一位。 */
-    @Before public void isolateConnections() throws Exception {
+    /**
+     * 拒绝所有 SDK 请求，保证测试不会发起真实识别、登录、云上传或切换下一位。
+     */
+    @Before
+    public void isolateConnections() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         for (String key : new String[]{MorningSdkSettings.TRANSPORT_KEY, MorningSdkSettings.ENDPOINT_KEY,
-                "cloud_url", "cloud_token", "voice"}) changedPreferences.put(key, preferences.getAll().get(key));
+                "cloud_url", "cloud_token", "voice"})
+            changedPreferences.put(key, preferences.getAll().get(key));
         String fontArgument = InstrumentationRegistry.getArguments().getString("photo_test_font_index", "");
         if (!fontArgument.isEmpty()) {
             int fontIndex = Integer.parseInt(fontArgument);
@@ -94,8 +100,10 @@ public final class ResultEvidenceUiTest {
         instrumentation.runOnMainSync(() -> app.sdkSession().disconnect());
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
-                if (request.getPath() != null && request.getPath().startsWith("/cloud")) cloudRequests.incrementAndGet();
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
+                if (request.getPath() != null && request.getPath().startsWith("/cloud"))
+                    cloudRequests.incrementAndGet();
                 return new MockResponse().setResponseCode(503).setBody("仅测试界面，SDK 保持未就绪");
             }
         });
@@ -107,8 +115,11 @@ public final class ResultEvidenceUiTest {
         onIo(() -> null);
     }
 
-    /** 只删除本用例显式创建的 UUID 记录和照片，并恢复自己更改的配置键。 */
-    @After public void restoreOwnFixtures() throws Exception {
+    /**
+     * 只删除本用例显式创建的 UUID 记录和照片，并恢复自己更改的配置键。
+     */
+    @After
+    public void restoreOwnFixtures() throws Exception {
         if (pendingIoRelease != null) pendingIoRelease.countDown();
         try {
             if (scenario != null) scenario.close();
@@ -133,9 +144,12 @@ public final class ResultEvidenceUiTest {
                 if (preferences != null) {
                     SharedPreferences.Editor restore = preferences.edit();
                     for (Map.Entry<String, Object> entry : changedPreferences.entrySet()) {
-                        if (entry.getValue() instanceof String) restore.putString(entry.getKey(), (String) entry.getValue());
-                        else if (entry.getValue() instanceof Boolean) restore.putBoolean(entry.getKey(), (Boolean) entry.getValue());
-                        else if (entry.getValue() instanceof Integer) restore.putInt(entry.getKey(), (Integer) entry.getValue());
+                        if (entry.getValue() instanceof String)
+                            restore.putString(entry.getKey(), (String) entry.getValue());
+                        else if (entry.getValue() instanceof Boolean)
+                            restore.putBoolean(entry.getKey(), (Boolean) entry.getValue());
+                        else if (entry.getValue() instanceof Integer)
+                            restore.putInt(entry.getKey(), (Integer) entry.getValue());
                         else restore.remove(entry.getKey());
                     }
                     assertTrue("应恢复测试前配置", restore.commit());
@@ -146,7 +160,8 @@ public final class ResultEvidenceUiTest {
         }
     }
 
-    @Test public void resultReadsOnlyItsOwnRecordEvenWhenUnrelatedRecordIsDamaged() throws Exception {
+    @Test
+    public void resultReadsOnlyItsOwnRecordEvenWhenUnrelatedRecordIsDamaged() throws Exception {
         String recordId = newRecordId("direct-read");
         String damagedId = newRecordId("unrelated-damaged");
         saveRecord(record(recordId).put("staff_name", "按编号读取的测试结果"));
@@ -168,7 +183,10 @@ public final class ResultEvidenceUiTest {
         // 本地记录修改后仍应按 ID 刷新当前页，不能重新解码无关记录。
         JSONObject changes = new JSONObject().put("staff_name", "更新后的测试员工")
                 .put("health_expiry", "2032-12-31");
-        onIo(() -> { app.store.patchRecord(recordId, changes); return null; });
+        onIo(() -> {
+            app.store.patchRecord(recordId, changes);
+            return null;
+        });
         scenario.onActivity(activity -> {
             app.notifyRecordsChanged();
             activity.reload(false, null);
@@ -190,7 +208,8 @@ public final class ResultEvidenceUiTest {
         });
     }
 
-    @Test public void readablePhotoMissingSlotAndRecreationRejectOldDecode() throws Exception {
+    @Test
+    public void readablePhotoMissingSlotAndRecreationRejectOldDecode() throws Exception {
         String recordId = newRecordId("mixed");
         String redFile = createPhoto(recordId, "red", Color.RED);
         String blueFile = createPhoto(recordId, "blue", Color.BLUE);
@@ -230,8 +249,12 @@ public final class ResultEvidenceUiTest {
         pendingIoRelease = new CountDownLatch(1);
         app.io.execute(() -> {
             ioEntered.countDown();
-            try { assertTrue("测试队列等待超时", pendingIoRelease.await(10, TimeUnit.SECONDS)); }
-            catch (InterruptedException error) { Thread.currentThread().interrupt(); throw new AssertionError(error); }
+            try {
+                assertTrue("测试队列等待超时", pendingIoRelease.await(10, TimeUnit.SECONDS));
+            } catch (InterruptedException error) {
+                Thread.currentThread().interrupt();
+                throw new AssertionError(error);
+            }
         });
         assertTrue(ioEntered.await(5, TimeUnit.SECONDS));
         AtomicReference<ResultActivity> previous = new AtomicReference<>();
@@ -251,8 +274,11 @@ public final class ResultEvidenceUiTest {
             assertEmptyImage("重排后的新视图应等待读盘", detachedPendingImage.get());
         });
         Future<?> patched = app.io.submit(() -> {
-            try { app.store.patchRecord(recordId, new JSONObject().put("face_img_file", blueFile)); }
-            catch (Exception error) { throw new AssertionError(error); }
+            try {
+                app.store.patchRecord(recordId, new JSONObject().put("face_img_file", blueFile));
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         try {
             scenario.recreate();
@@ -274,7 +300,8 @@ public final class ResultEvidenceUiTest {
         });
     }
 
-    @Test public void historicalRecordsWithoutReadablePhotosShowPlaceholders() throws Exception {
+    @Test
+    public void historicalRecordsWithoutReadablePhotosShowPlaceholders() throws Exception {
         for (boolean missingFile : new boolean[]{true, false}) {
             String recordId = newRecordId(missingFile ? "missing" : "empty");
             JSONObject value = record(recordId);
@@ -312,7 +339,8 @@ public final class ResultEvidenceUiTest {
         }
     }
 
-    @Test public void allCapturedPhotosScrollWithoutRecycledImageOrIndexMixup() throws Exception {
+    @Test
+    public void allCapturedPhotosScrollWithoutRecycledImageOrIndexMixup() throws Exception {
         String recordId = newRecordId("scroll-reuse");
         JSONArray captured = new JSONArray();
         int missingIndex = 6;
@@ -400,7 +428,8 @@ public final class ResultEvidenceUiTest {
         });
     }
 
-    @Test public void detachedCheckLayoutFitsWithoutCameraOrRecognition() throws Exception {
+    @Test
+    public void detachedCheckLayoutFitsWithoutCameraOrRecognition() throws Exception {
         String recordId = newRecordId("layout-host");
         saveRecord(record(recordId));
         launch(recordId);
@@ -450,8 +479,11 @@ public final class ResultEvidenceUiTest {
         });
     }
 
-    /** 不绑定业务控制器，只检查当前设备资源选择后的全部本项目 XML 能否真实膨胀和排版。 */
-    @Test public void allLocalLayoutsInflateAndMeasureWithoutStartingTheirFlows() throws Exception {
+    /**
+     * 不绑定业务控制器，只检查当前设备资源选择后的全部本项目 XML 能否真实膨胀和排版。
+     */
+    @Test
+    public void allLocalLayoutsInflateAndMeasureWithoutStartingTheirFlows() throws Exception {
         String recordId = newRecordId("all-layout-host");
         saveRecord(record(recordId));
         launch(recordId);
@@ -462,7 +494,8 @@ public final class ResultEvidenceUiTest {
             List<String> failures = new ArrayList<>();
             int checked = 0;
             for (Field resource : resources) {
-                if (resource.getType() != int.class || !Modifier.isStatic(resource.getModifiers())) continue;
+                if (resource.getType() != int.class || !Modifier.isStatic(resource.getModifiers()))
+                    continue;
                 try {
                     // 项目开启 nonTransitiveRClass，遍历只包含自己的布局。提供父容器才能验证根节点尺寸。
                     // 设置容器是 FrameLayout，摄像头只是 TextureView；单独膨胀 XML 不会启动真实流程。
@@ -482,8 +515,11 @@ public final class ResultEvidenceUiTest {
         });
     }
 
-    /** 检查当前九宫格主页，滚动只作用于入口，主卡与页头始终固定。 */
-    @Test public void detachedHomeKeepsCurrentCardsStartAndHeaderAboutVisible() throws Exception {
+    /**
+     * 检查当前九宫格主页，滚动只作用于入口，主卡与页头始终固定。
+     */
+    @Test
+    public void detachedHomeKeepsCurrentCardsStartAndHeaderAboutVisible() throws Exception {
         String recordId = newRecordId("home-layout-host");
         saveRecord(record(recordId));
         launch(recordId);
@@ -540,7 +576,8 @@ public final class ResultEvidenceUiTest {
         });
     }
 
-    @Test public void currentHomeShortcutsKeepNavigationAndScrollAfterRecreation() {
+    @Test
+    public void currentHomeShortcutsKeepNavigationAndScrollAfterRecreation() {
         AtomicReference<Integer> offset = new AtomicReference<>();
         try (ActivityScenario<HomeActivity> home = ActivityScenario.launch(HomeActivity.class)) {
             instrumentation.waitForIdleSync();
@@ -559,7 +596,8 @@ public final class ResultEvidenceUiTest {
             home.recreate();
             instrumentation.waitForIdleSync();
             home.onActivity(activity -> {
-                for (int id : homeShortcutIds()) assertTrue("重建后入口仍可导航", activity.findViewById(id).hasOnClickListeners());
+                for (int id : homeShortcutIds())
+                    assertTrue("重建后入口仍可导航", activity.findViewById(id).hasOnClickListeners());
                 if (offset.get() != null) assertEquals("重建后恢复入口滚动位置", (int) offset.get(),
                         ((ScrollView) activity.findViewById(R.id.home_shortcut_scroll)).getScrollY());
             });
@@ -572,7 +610,9 @@ public final class ResultEvidenceUiTest {
                 R.id.home_items, R.id.home_temperature, R.id.home_system};
     }
 
-    /** 对当前规格展示的文字与图标共同验收，保留全部名称和可访问入口。 */
+    /**
+     * 对当前规格展示的文字与图标共同验收，保留全部名称和可访问入口。
+     */
     private static void assertHomeCardContentVisible(ViewGroup root, View entry, String label) {
         List<TextView> texts = homeCardTexts(entry, label);
         for (int index = 0; index < texts.size(); index++) {
@@ -606,7 +646,9 @@ public final class ResultEvidenceUiTest {
         return icon;
     }
 
-    /** 所有规格都使用左侧图标、右侧上下两段文字，不能退回图标在上方或隐藏解释的排法。 */
+    /**
+     * 所有规格都使用左侧图标、右侧上下两段文字，不能退回图标在上方或隐藏解释的排法。
+     */
     private static void assertHomeCardArrangement(View entry, List<TextView> texts, ImageView icon, String label) {
         assertTrue(label + " 卡片必须有子视图容器", entry instanceof ViewGroup);
         ViewGroup card = (ViewGroup) entry;
@@ -624,8 +666,8 @@ public final class ResultEvidenceUiTest {
         // 按实际子视图验收整个组合，避免文字容器占满剩余宽度后只有垂直居中的情况。
         if (entry.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
             assertTrue(label + " 图标与两段文字必须水平整体居中，内容=" + contentBounds
-                        + "，可用区域=" + availableBounds,
-                Math.abs(contentBounds.exactCenterX() - availableBounds.exactCenterX()) <= 2f);
+                            + "，可用区域=" + availableBounds,
+                    Math.abs(contentBounds.exactCenterX() - availableBounds.exactCenterX()) <= 2f);
         assertTrue(label + " 图标与两段文字必须垂直整体居中，内容=" + contentBounds
                         + "，可用区域=" + availableBounds,
                 Math.abs(contentBounds.exactCenterY() - availableBounds.exactCenterY()) <= 2f);
@@ -669,7 +711,9 @@ public final class ResultEvidenceUiTest {
         return bounds;
     }
 
-    /** 滚动容器的本地坐标包含滚动量，先换算真实视口，再验收图标及两段文字的完整行盒。 */
+    /**
+     * 滚动容器的本地坐标包含滚动量，先换算真实视口，再验收图标及两段文字的完整行盒。
+     */
     private static void assertHomeGridEntryVisible(ViewGroup home, ScrollView viewport,
                                                    View entry, TextView title, String label) {
         Rect available = new Rect(viewport.getScrollX() + viewport.getPaddingLeft(),
@@ -716,15 +760,21 @@ public final class ResultEvidenceUiTest {
     }
 
     private void saveRecord(JSONObject record) throws Exception {
-        onIo(() -> { app.store.saveRecord(record); return null; });
+        onIo(() -> {
+            app.store.saveRecord(record);
+            return null;
+        });
     }
 
     private String createPhoto(String recordId, String stage, int color) throws Exception {
         String name = onIo(() -> {
             Bitmap bitmap = Bitmap.createBitmap(1600, 900, Bitmap.Config.ARGB_8888);
             bitmap.eraseColor(color);
-            try { return app.store.savePhoto(recordId, stage, bitmap); }
-            finally { bitmap.recycle(); }
+            try {
+                return app.store.savePhoto(recordId, stage, bitmap);
+            } finally {
+                bitmap.recycle();
+            }
         });
         photoNames.add(name);
         return name;
@@ -772,7 +822,9 @@ public final class ResultEvidenceUiTest {
         }
     }
 
-    /** 先等数据库回调排入解码，再等待解码回主线程，避免仅靠初始 GONE 得到假阳性。 */
+    /**
+     * 先等数据库回调排入解码，再等待解码回主线程，避免仅靠初始 GONE 得到假阳性。
+     */
     private void drainLocalDecode() throws Exception {
         for (int i = 0; i < 3; i++) {
             onIo(() -> null);
@@ -786,12 +838,15 @@ public final class ResultEvidenceUiTest {
             RecyclerView grid = activity.findViewById(R.id.result_evidence_grid);
             if (grid == null || grid.getLayoutManager() == null) return;
             View cell = grid.getLayoutManager().findViewByPosition(0);
-            if (cell != null) matches.set(hasColor(cell.findViewById(R.id.result_photo_image), color));
+            if (cell != null)
+                matches.set(hasColor(cell.findViewById(R.id.result_photo_image), color));
         });
         return matches.get();
     }
 
-    /** 只读取实际屏幕里的照片卡片，不能手工绑定脱离窗口的假证据。 */
+    /**
+     * 只读取实际屏幕里的照片卡片，不能手工绑定脱离窗口的假证据。
+     */
     private static View photoCell(ResultActivity activity, int position) {
         RecyclerView grid = activity.findViewById(R.id.result_evidence_grid);
         assertNotNull("结果页应直接展示照片列表", grid);
@@ -910,7 +965,8 @@ public final class ResultEvidenceUiTest {
     }
 
     private static boolean hasColor(ImageView image, int expected) {
-        if (image == null || !(image.getDrawable() instanceof BitmapDrawable) || !image.isShown()) return false;
+        if (image == null || !(image.getDrawable() instanceof BitmapDrawable) || !image.isShown())
+            return false;
         Rect visible = new Rect();
         if (!image.getGlobalVisibleRect(visible) || visible.isEmpty()) return false;
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
@@ -921,7 +977,9 @@ public final class ResultEvidenceUiTest {
                 && Math.abs(Color.blue(actual) - Color.blue(expected)) < 15;
     }
 
-    /** Android 11 的 setImageBitmap(null) 可保留空 BitmapDrawable，空图语义以是否有 bitmap 为准。 */
+    /**
+     * Android 11 的 setImageBitmap(null) 可保留空 BitmapDrawable，空图语义以是否有 bitmap 为准。
+     */
     private static void assertEmptyImage(String message, ImageView image) {
         assertTrue(message, image.getDrawable() == null
                 || (image.getDrawable() instanceof BitmapDrawable
@@ -943,7 +1001,9 @@ public final class ResultEvidenceUiTest {
         }
     }
 
-    /** 有照片不只检查 drawable；证据必须占有用户能看见的实际画面区域。 */
+    /**
+     * 有照片不只检查 drawable；证据必须占有用户能看见的实际画面区域。
+     */
     private static void assertPhotoViewport(ImageView image) {
         Rect visible = new Rect();
         assertTrue("已解码证据应在当前窗口可见", image.getGlobalVisibleRect(visible));
@@ -951,7 +1011,9 @@ public final class ResultEvidenceUiTest {
         assertTrue("照片视口不能被标题和操作区挤成细线", visible.width() >= 24 * density && visible.height() >= 24 * density);
     }
 
-    /** 异常列表允许滚动，但初始可见区域至少应能完整显示第一行文字。 */
+    /**
+     * 异常列表允许滚动，但初始可见区域至少应能完整显示第一行文字。
+     */
     private static void assertFindingsViewport(ResultActivity activity) {
         TextView findings = activity.findViewById(R.id.result_findings);
         if (activity.currentRecord.optInt("status") == 1) {
@@ -985,7 +1047,9 @@ public final class ResultEvidenceUiTest {
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
     }
 
-    /** 离线树不会收到系统栏 Insets，复制宿主实际留白，按用户真正可用的内容区域检查容量。 */
+    /**
+     * 离线树不会收到系统栏 Insets，复制宿主实际留白，按用户真正可用的内容区域检查容量。
+     */
     private static void copyWindowInsets(View layout, View window) {
         View root = layout.findViewById(R.id.main_root);
         if (root != null) root.setPadding(window.getPaddingLeft(), window.getPaddingTop(),
@@ -1003,7 +1067,8 @@ public final class ResultEvidenceUiTest {
 
     private static TextView firstVisibleText(View view) {
         if (view.getVisibility() != View.VISIBLE) return null;
-        if (view instanceof TextView && ((TextView) view).getText().length() > 0) return (TextView) view;
+        if (view instanceof TextView && ((TextView) view).getText().length() > 0)
+            return (TextView) view;
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
             for (int index = 0; index < group.getChildCount(); index++) {
@@ -1014,13 +1079,16 @@ public final class ResultEvidenceUiTest {
         return null;
     }
 
-    /** 使用文本真实行盒与全部父级裁切区域判断，不把有尺寸但被父级截掉的文字误当可见。 */
+    /**
+     * 使用文本真实行盒与全部父级裁切区域判断，不把有尺寸但被父级截掉的文字误当可见。
+     */
     private static void assertDetachedFirstLineVisible(ViewGroup root, TextView text, String label, boolean complete) {
         assertNotNull(label + " 文字控件必须存在", text);
         Layout layout = text.getLayout();
         assertNotNull(label + " 必须完成文字排版", layout);
         assertTrue(label + " 不能是空文字", text.getText().length() > 0 && layout.getLineCount() > 0);
-        if (complete) assertEquals(label + " 的核心入口名称不能省略", 0, layout.getEllipsisCount(0));
+        if (complete)
+            assertEquals(label + " 的核心入口名称不能省略", 0, layout.getEllipsisCount(0));
         Rect line = new Rect(
                 text.getCompoundPaddingLeft() + (int) Math.floor(layout.getLineLeft(0)),
                 text.getTotalPaddingTop() + layout.getLineTop(0),
@@ -1053,7 +1121,9 @@ public final class ResultEvidenceUiTest {
         }
     }
 
-    /** 截图仅存 App 缓存供主任务 run-as 导出，不把模拟色块写入业务相册。 */
+    /**
+     * 截图仅存 App 缓存供主任务 run-as 导出，不把模拟色块写入业务相册。
+     */
     private void saveScreenshot(View root, String label) {
         File directory = new File(app.getCacheDir(), "ui-reshape-evidence");
         assertTrue(directory.isDirectory() || directory.mkdirs());
@@ -1062,8 +1132,11 @@ public final class ResultEvidenceUiTest {
         File output = new File(directory, label + "-" + root.getWidth() + "x" + root.getHeight() + ".png");
         try (FileOutputStream stream = new FileOutputStream(output)) {
             assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream));
-        } catch (Exception error) { throw new AssertionError("测试截图保存失败", error); }
-        finally { bitmap.recycle(); }
+        } catch (Exception error) {
+            throw new AssertionError("测试截图保存失败", error);
+        } finally {
+            bitmap.recycle();
+        }
     }
 
     private <T> T onIo(Callable<T> operation) throws Exception {

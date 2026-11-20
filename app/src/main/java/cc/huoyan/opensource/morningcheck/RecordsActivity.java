@@ -281,7 +281,8 @@ public final class RecordsActivity extends RecordSupportActivity {
                     loadedDates = dates;
                     // 追加只读新页并按 ID 合并；页码随成功回执推进，失败重试仍读取同一边界。
                     Map<String, JSONObject> merged = new LinkedHashMap<>();
-                    if (adding) for (JSONObject item : records) merged.put(item.optString("id"), item);
+                    if (adding)
+                        for (JSONObject item : records) merged.put(item.optString("id"), item);
                     for (JSONObject item : data.rows) merged.put(item.optString("id"), item);
                     records = new ArrayList<>(merged.values());
                     recordPage = data.page;
@@ -363,7 +364,8 @@ public final class RecordsActivity extends RecordSupportActivity {
 
     private void showRecordPage() {
         if (listLoading == null) listLoading = new LoadingDialog(this);
-        if (pageLoading && foreground) listLoading.showReadOnly(getString(R.string.i18n_b_reading_list));
+        if (pageLoading && foreground)
+            listLoading.showReadOnly(getString(R.string.i18n_b_reading_list));
         else listLoading.dismiss();
         if (content == null) return;
         List<JSONObject> values = records;
@@ -380,7 +382,7 @@ public final class RecordsActivity extends RecordSupportActivity {
         recordList.setEnabled(!values.isEmpty() || !pageLoading);
         ((TextView) content.findViewById(R.id.records_load_more)).setText(pageLoading ? ""
                 : pageError ? getString(R.string.i18n_b_retry_read) : recordData == null || recordData.page >= recordData.totalPages
-                                               ? getString(R.string.i18n_b_end_list) : getString(R.string.i18n_b_load_more));
+                ? getString(R.string.i18n_b_end_list) : getString(R.string.i18n_b_load_more));
         TextView empty = content.findViewById(R.id.records_empty);
         empty.setText(recordData == null || recordData.totalRows == 0
                 ? R.string.business_records_empty : R.string.business_records_no_match);

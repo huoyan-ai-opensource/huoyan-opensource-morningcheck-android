@@ -18,7 +18,8 @@ public class MorningCloudApiTest {
     private MockWebServer server;
     private MorningCloudApi api;
 
-    @Before public void prepare() throws Exception {
+    @Before
+    public void prepare() throws Exception {
         server = new MockWebServer();
         server.start();
         api = new MorningCloudApi(new OkHttpClient.Builder()
@@ -26,13 +27,17 @@ public class MorningCloudApiTest {
                 .callTimeout(1500, TimeUnit.MILLISECONDS).build());
     }
 
-    @After public void close() throws Exception {
+    @After
+    public void close() throws Exception {
         server.shutdown();
     }
 
-    private String base() { return server.url("/").toString(); }
+    private String base() {
+        return server.url("/").toString();
+    }
 
-    @Test public void staffQueriesKeepRawResponseAndUseExpectedPaths() throws Exception {
+    @Test
+    public void staffQueriesKeepRawResponseAndUseExpectedPaths() throws Exception {
         server.enqueue(new MockResponse().setBody("{\"code\":0,\"data\":{\"id\":\"7\",\"name\":\"员工\"}}"));
         server.enqueue(new MockResponse().setBody("{\"code\":0,\"data\":{\"records\":[]}}"));
         assertEquals("7", api.getStaff(base(), "demo-token", 7).getJSONObject("data").getString("id"));
@@ -46,7 +51,8 @@ public class MorningCloudApiTest {
         assertEquals("demo-token", list.getHeader("X-USER-TOKEN"));
     }
 
-    @Test public void explicitBusinessRejectionPreservesBusinessCode() throws Exception {
+    @Test
+    public void explicitBusinessRejectionPreservesBusinessCode() throws Exception {
         server.enqueue(new MockResponse().setBody("{\"code\":4001,\"message\":\"门店无效\"}"));
         try {
             api.listStaff(base(), "demo-token", 1, 20);
@@ -57,7 +63,8 @@ public class MorningCloudApiTest {
         }
     }
 
-    @Test public void malformedBusinessCodeCannotBecomeSuccessfulEmployeeSync() throws Exception {
+    @Test
+    public void malformedBusinessCodeCannotBecomeSuccessfulEmployeeSync() throws Exception {
         for (String response : new String[]{"{\"data\":{\"records\":[]}}", "{\"code\":0.5}"}) {
             server.enqueue(new MockResponse().setBody(response));
             try {
@@ -70,7 +77,8 @@ public class MorningCloudApiTest {
         assertEquals(2, server.getRequestCount());
     }
 
-    @Test public void invalidPaginationIsRejectedBeforeAnyNetworkRequest() throws Exception {
+    @Test
+    public void invalidPaginationIsRejectedBeforeAnyNetworkRequest() throws Exception {
         for (int[] page : new int[][]{{0, 20}, {1, 0}, {1, 101}}) {
             try {
                 api.listStaff(base(), "demo-token", page[0], page[1]);

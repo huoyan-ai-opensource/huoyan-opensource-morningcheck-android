@@ -21,6 +21,20 @@
             <include layout="@layout/view_system_font" />
 
             <include layout="@layout/view_system_security" />
+
+            <TextView
+                style="@style/PenCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="@string/sdk_permissions_maintenance" />
+
+            <TextView
+                android:id="@+id/settings_sdk_permissions"
+                style="@style/PenButton"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/dp_6"
+                android:text="@string/sdk_permissions_title" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

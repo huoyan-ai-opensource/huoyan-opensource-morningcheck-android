@@ -21,26 +21,32 @@ import okio.Buffer;
 
 import static org.junit.Assert.*;
 
-/** 使用本机 HTTP 服务检查下载字节、取消以及失败时的临时文件清理。 */
+/**
+ * 使用本机 HTTP 服务检查下载字节、取消以及失败时的临时文件清理。
+ */
 public class SdkApkDownloaderTest {
-    @Rule public TemporaryFolder temporary = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder temporary = new TemporaryFolder();
     private MockWebServer server;
     private OkHttpClient http;
 
-    @Before public void setUp() throws IOException {
+    @Before
+    public void setUp() throws IOException {
         server = new MockWebServer();
         server.start();
         http = new OkHttpClient.Builder().readTimeout(3, TimeUnit.SECONDS).build();
     }
 
-    @After public void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         http.dispatcher().cancelAll();
         awaitDownloadWorker();
         http.connectionPool().evictAll();
         server.shutdown();
     }
 
-    @Test public void completeAndUnknownLengthDownloadsDeliverExactBytesToSeparateFiles() throws Exception {
+    @Test
+    public void completeAndUnknownLengthDownloadsDeliverExactBytesToSeparateFiles() throws Exception {
         byte[] bytes = new byte[150_000];
         for (int i = 0; i < bytes.length; i++) bytes[i] = (byte) i;
         server.enqueue(new MockResponse().setBody(new Buffer().write(bytes)));
@@ -64,7 +70,8 @@ public class SdkApkDownloaderTest {
         assertEquals("/apk/morningcheck_sdk_lastest.apk", request.getPath());
     }
 
-    @Test public void httpErrorEmptyAndTruncatedResponsesNeverDeliverAnApk() throws Exception {
+    @Test
+    public void httpErrorEmptyAndTruncatedResponsesNeverDeliverAnApk() throws Exception {
         server.enqueue(new MockResponse().setResponseCode(403).setBody("拒绝访问"));
         server.enqueue(new MockResponse().setBody(""));
         server.enqueue(new MockResponse().setBody("ab").setHeader("Content-Length", 10)
@@ -79,7 +86,8 @@ public class SdkApkDownloaderTest {
         assertEquals(0, temporary.getRoot().list().length);
     }
 
-    @Test public void cancellationDuringTransferSuppressesResultAndRemovesPartialFile() throws Exception {
+    @Test
+    public void cancellationDuringTransferSuppressesResultAndRemovesPartialFile() throws Exception {
         server.enqueue(new MockResponse().setBody(new Buffer().write(new byte[150_000]))
                 .throttleBody(4096, 1, TimeUnit.SECONDS));
 
@@ -92,7 +100,8 @@ public class SdkApkDownloaderTest {
         assertEquals(0, temporary.getRoot().list().length);
     }
 
-    @Test public void cancellationFromFinalProgressDoesNotDeliverCompletedFile() throws Exception {
+    @Test
+    public void cancellationFromFinalProgressDoesNotDeliverCompletedFile() throws Exception {
         server.enqueue(new MockResponse().setChunkedBody(new Buffer().write(new byte[150_000]), 8192));
 
         Result result = download(CancelMode.FINAL_PROGRESS);
@@ -110,7 +119,8 @@ public class SdkApkDownloaderTest {
         Result result = new Result();
         CountDownLatch callback = new CountDownLatch(1);
         task.start(new SdkApkDownloader.Listener() {
-            @Override public void onProgress(long downloaded, long total) {
+            @Override
+            public void onProgress(long downloaded, long total) {
                 if (downloaded == 0) result.initialTotal = total;
                 result.downloaded = downloaded;
                 result.total = total;
@@ -120,11 +130,15 @@ public class SdkApkDownloaderTest {
                     callback.countDown();
                 }
             }
-            @Override public void onComplete(File apk) {
+
+            @Override
+            public void onComplete(File apk) {
                 result.apk = apk;
                 callback.countDown();
             }
-            @Override public void onFailure(IOException error) {
+
+            @Override
+            public void onFailure(IOException error) {
                 result.error = error;
                 callback.countDown();
             }
@@ -133,13 +147,15 @@ public class SdkApkDownloaderTest {
         return result;
     }
 
-    /** 取消回调先返回，必须等待工作线程完成 finally 后再检查文件。 */
+    /**
+     * 取消回调先返回，必须等待工作线程完成 finally 后再检查文件。
+     */
     private void awaitDownloadWorker() throws InterruptedException {
         http.dispatcher().executorService().shutdown();
         assertTrue("等待后台清理文件", http.dispatcher().executorService().awaitTermination(5, TimeUnit.SECONDS));
     }
 
-    private enum CancelMode { NONE, TRANSFER, FINAL_PROGRESS }
+    private enum CancelMode {NONE, TRANSFER, FINAL_PROGRESS}
 
     private static final class Result {
         File apk;

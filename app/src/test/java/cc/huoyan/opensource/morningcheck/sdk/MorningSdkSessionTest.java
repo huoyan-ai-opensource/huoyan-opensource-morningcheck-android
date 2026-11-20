@@ -13,16 +13,20 @@ import cc.huoyan.morningcheck.sdk.client.SdkConfig;
 
 import static org.junit.Assert.*;
 
-/** 验证页面订阅、状态查询及写操作的所有权，不依赖 Android 主线程或真实云端。 */
+/**
+ * 验证页面订阅、状态查询及写操作的所有权，不依赖 Android 主线程或真实云端。
+ */
 public class MorningSdkSessionTest {
     private static final SdkConfig FIRST = SdkConfig.webSocket("ws://127.0.0.1:18087/");
     private static final SdkConfig SECOND = SdkConfig.webSocket("ws://127.0.0.1:18088/");
 
-    @Test public void certificatePageImmediatelyReadsAndSharesOneFiveSecondReservation() {
+    @Test
+    public void certificatePageImmediatelyReadsAndSharesOneFiveSecondReservation() {
         Fixture f = new Fixture();
         f.port.immediate = true;
         MorningSdkSession.Listener first = certificateObserver(), second = certificateObserver();
-        f.session.attach(first); f.session.connect(FIRST);
+        f.session.attach(first);
+        f.session.connect(FIRST);
         int reads = f.port.count("getCertInfo");
         f.timer.advance(4_999);
         assertEquals(reads, f.port.count("getCertInfo"));
@@ -47,10 +51,13 @@ public class MorningSdkSessionTest {
         assertEquals(0, f.port.closes);
     }
 
-    @Test public void leavingCertificatePageRestoresStatusPollingAndReturningReadsImmediately() {
-        Fixture f = new Fixture(); f.port.immediate = true;
+    @Test
+    public void leavingCertificatePageRestoresStatusPollingAndReturningReadsImmediately() {
+        Fixture f = new Fixture();
+        f.port.immediate = true;
         MorningSdkSession.Listener home = observer(), license = certificateObserver();
-        f.session.attach(home); f.session.connect(FIRST);
+        f.session.attach(home);
+        f.session.connect(FIRST);
         f.session.attach(license);
         int reads = f.port.count("getCertInfo"), statuses = f.port.count("getStatus");
         f.timer.advance(1_500);
@@ -66,8 +73,11 @@ public class MorningSdkSessionTest {
         assertEquals(reads + 1, f.port.count("getCertInfo"));
     }
 
-    @Test public void slowCertificateDetailsMergeAcrossFiveSecondCyclesAndRetryAfterFailure() {
-        Fixture f = new Fixture(); f.session.attach(certificateObserver()); f.session.connect(FIRST);
+    @Test
+    public void slowCertificateDetailsMergeAcrossFiveSecondCyclesAndRetryAfterFailure() {
+        Fixture f = new Fixture();
+        f.session.attach(certificateObserver());
+        f.session.connect(FIRST);
         f.timer.advance(20_000);
         for (String command : new String[]{"getStatus", "getCertInfo", "getDownloadProgress"})
             assertEquals(command, 1, f.port.count(command));
@@ -80,8 +90,11 @@ public class MorningSdkSessionTest {
         assertEquals("SAMPLE-ONLY", f.session.certificate().optString("activation_serial"));
     }
 
-    @Test public void certificateObservationPausesForActivationAndResumesWithoutRepeatingWrite() {
-        Fixture f = new Fixture(); f.session.attach(certificateObserver()); f.session.connect(FIRST);
+    @Test
+    public void certificateObservationPausesForActivationAndResumesWithoutRepeatingWrite() {
+        Fixture f = new Fixture();
+        f.session.attach(certificateObserver());
+        f.session.connect(FIRST);
         Call oldCertificate = f.port.last("getCertInfo");
         int certificateReads = f.port.count("getCertInfo");
         f.session.activate("SAMPLE-ONLY", "morningcheck");
@@ -102,7 +115,8 @@ public class MorningSdkSessionTest {
         assertEquals(0, f.port.count("init"));
     }
 
-    @Test public void pagesShareOneConnectionAndLastDetachStopsPollingOnly() {
+    @Test
+    public void pagesShareOneConnectionAndLastDetachStopsPollingOnly() {
         Fixture f = new Fixture();
         MorningSdkSession.Listener home = observer(), staff = observer();
         f.session.attach(home);
@@ -122,7 +136,8 @@ public class MorningSdkSessionTest {
         assertEquals(0, f.port.closes);
     }
 
-    @Test public void pollingObservesOfflineReadinessAndOnlineRecoveryWithoutReconnectingOrReinitializing() {
+    @Test
+    public void pollingObservesOfflineReadinessAndOnlineRecoveryWithoutReconnectingOrReinitializing() {
         Fixture f = new Fixture();
         f.session.attach(observer());
         f.session.connect(FIRST);
@@ -144,11 +159,14 @@ public class MorningSdkSessionTest {
         assertEquals(0, f.port.closes);
     }
 
-    @Test public void slowStatusReadDoesNotPileUpPollingRequests() {
+    @Test
+    public void slowStatusReadDoesNotPileUpPollingRequests() {
         Fixture f = new Fixture();
         f.session.attach(observer());
         f.session.connect(FIRST);
-        f.timer.fire(); f.timer.fire(); f.timer.fire();
+        f.timer.fire();
+        f.timer.fire();
+        f.timer.fire();
         assertEquals(1, f.port.count("getStatus"));
         assertEquals(1, f.port.count("getDownloadProgress"));
         f.port.complete("getStatus", 0, json("sdk_state", "NOT_ACTIVATED"));
@@ -157,7 +175,8 @@ public class MorningSdkSessionTest {
         assertEquals("前台预约只查询现有 SDK 状态，不查询云端托管", 0, f.port.count("getCloudStatus"));
     }
 
-    @Test public void explicitExitAllowsSameConfigurationToStartANewClientConnection() {
+    @Test
+    public void explicitExitAllowsSameConfigurationToStartANewClientConnection() {
         Fixture f = new Fixture();
         MorningSdkSession.Listener home = observer();
         f.session.attach(home);
@@ -176,7 +195,8 @@ public class MorningSdkSessionTest {
         assertEquals("后续普通页面继续共享这一条新连接", 2, f.port.connects);
     }
 
-    @Test public void oldConnectionDetailsNeverOverwriteNewDevice() {
+    @Test
+    public void oldConnectionDetailsNeverOverwriteNewDevice() {
         Fixture f = new Fixture();
         f.session.attach(observer());
         f.session.connect(FIRST);
@@ -422,12 +442,14 @@ public class MorningSdkSessionTest {
         f.port.complete("activate", 0, new JSONObject());
         f.session.read("getStatus", null);
         f.port.complete("getStatus", 0, ready());
-        f.session.read("getStatus", (code, message, data) -> { });
+        f.session.read("getStatus", (code, message, data) -> {
+        });
         Call old = f.port.last("getStatus");
         f.session.onStatus(ready());
         old.reply(0, json("sdk_state", "NOT_ACTIVATED", "model_ready", false));
         assertTrue("已通过传输层顺序保护的新事实不能被旧回调撤回", f.session.viewState().ready);
-        f.session.read("getStatus", (code, message, data) -> { });
+        f.session.read("getStatus", (code, message, data) -> {
+        });
         Call oldReady = f.port.last("getStatus");
         f.session.onStatus(json("sdk_state", "NOT_ACTIVATED", "model_ready", false));
         oldReady.reply(0, ready());
@@ -571,9 +593,16 @@ public class MorningSdkSessionTest {
         Fixture f = new Fixture();
         f.session.connect(FIRST);
         f.session.attach(new MorningSdkSession.Listener() {
-            @Override public void onConnection(boolean connected, String message) { }
-            @Override public void onStatus(JSONObject status) { }
-            @Override public void onSdkDetailsChanged() {
+            @Override
+            public void onConnection(boolean connected, String message) {
+            }
+
+            @Override
+            public void onStatus(JSONObject status) {
+            }
+
+            @Override
+            public void onSdkDetailsChanged() {
                 if (f.session.activation().running) f.session.disconnect();
             }
         });
@@ -585,10 +614,12 @@ public class MorningSdkSessionTest {
         assertEquals(0, f.port.count("init"));
     }
 
-    @Test public void managementWriteSurvivesPageLeavingAndDuplicateIsRejected() {
+    @Test
+    public void managementWriteSurvivesPageLeavingAndDuplicateIsRejected() {
         Fixture f = new Fixture();
         MorningSdkSession.Listener page = observer();
-        f.session.attach(page); f.session.connect(FIRST);
+        f.session.attach(page);
+        f.session.connect(FIRST);
         AtomicInteger result = new AtomicInteger(-1), duplicate = new AtomicInteger(-1);
         f.session.execute("setCloudStatus", json("enabled", true), "开启云服务",
                 (code, message, data) -> result.set(code));
@@ -604,9 +635,11 @@ public class MorningSdkSessionTest {
         assertFalse("没有真实读回不能乐观显示已启用", f.session.cloudStatus().has("enabled"));
     }
 
-    @Test public void cloudWriteInvalidatesEarlierReadsAndAlwaysConfirmsActualSwitch() {
+    @Test
+    public void cloudWriteInvalidatesEarlierReadsAndAlwaysConfirmsActualSwitch() {
         Fixture f = new Fixture();
-        f.session.attach(observer()); f.session.connect(FIRST);
+        f.session.attach(observer());
+        f.session.connect(FIRST);
         f.session.read("getCloudStatus", null);
         Call before = f.port.last("getCloudStatus");
         f.session.execute("setCloudStatus", json("enabled", true), "开启云服务", null);
@@ -624,7 +657,8 @@ public class MorningSdkSessionTest {
         assertEquals(Boolean.TRUE, f.session.cloudStatus().opt("enabled"));
     }
 
-    @Test public void switchingDeviceMakesOldWriteUnknownWithoutReplay() {
+    @Test
+    public void switchingDeviceMakesOldWriteUnknownWithoutReplay() {
         Fixture f = new Fixture();
         f.session.connect(FIRST);
         AtomicInteger result = new AtomicInteger(-1);
@@ -636,7 +670,8 @@ public class MorningSdkSessionTest {
         assertEquals(1, f.port.count("setBaseUrl"));
     }
 
-    @Test public void disconnectedManagementDoesNotSendAndExplicitDisconnectClearsFacts() {
+    @Test
+    public void disconnectedManagementDoesNotSendAndExplicitDisconnectClearsFacts() {
         Fixture f = new Fixture();
         AtomicInteger result = new AtomicInteger();
         assertFalse(f.session.execute("activate", json("activation_code", "fixture", "model_code", "morningcheck"), "激活",
@@ -650,28 +685,53 @@ public class MorningSdkSessionTest {
         assertEquals(0, f.session.status().length());
     }
 
-    @Test public void listenerCanDetachItselfDuringImmediateConnectionWithoutMoreCallbacks() {
+    @Test
+    public void listenerCanDetachItselfDuringImmediateConnectionWithoutMoreCallbacks() {
         Fixture f = new Fixture();
         AtomicInteger updates = new AtomicInteger();
         f.session.attach(new MorningSdkSession.Listener() {
-            @Override public void onConnection(boolean connected, String message) { f.session.detach(this); }
-            @Override public void onStatus(JSONObject status) { updates.incrementAndGet(); }
-            @Override public void onSdkDetailsChanged() { updates.incrementAndGet(); }
+            @Override
+            public void onConnection(boolean connected, String message) {
+                f.session.detach(this);
+            }
+
+            @Override
+            public void onStatus(JSONObject status) {
+                updates.incrementAndGet();
+            }
+
+            @Override
+            public void onSdkDetailsChanged() {
+                updates.incrementAndGet();
+            }
         });
         assertEquals(0, updates.get());
         assertFalse(f.timer.hasActive());
     }
 
-    @Test public void observerRemovedDuringBroadcastDoesNotReceiveOldDeviceStatus() {
+    @Test
+    public void observerRemovedDuringBroadcastDoesNotReceiveOldDeviceStatus() {
         Fixture f = new Fixture();
         AtomicInteger updates = new AtomicInteger();
         MorningSdkSession.Listener second = new MorningSdkSession.Listener() {
-            @Override public void onConnection(boolean connected, String message) { }
-            @Override public void onStatus(JSONObject status) { updates.incrementAndGet(); }
+            @Override
+            public void onConnection(boolean connected, String message) {
+            }
+
+            @Override
+            public void onStatus(JSONObject status) {
+                updates.incrementAndGet();
+            }
         };
         f.session.attach(new MorningSdkSession.Listener() {
-            @Override public void onConnection(boolean connected, String message) { }
-            @Override public void onStatus(JSONObject status) { if (status.has("sdk_state")) f.session.detach(second); }
+            @Override
+            public void onConnection(boolean connected, String message) {
+            }
+
+            @Override
+            public void onStatus(JSONObject status) {
+                if (status.has("sdk_state")) f.session.detach(second);
+            }
         });
         f.session.attach(second);
         updates.set(0);
@@ -679,13 +739,17 @@ public class MorningSdkSessionTest {
         assertEquals(0, updates.get());
     }
 
-    @Test public void failedConnectionDoesNotRememberInvalidConfigOrKeepOldReadyFacts() {
+    @Test
+    public void failedConnectionDoesNotRememberInvalidConfigOrKeepOldReadyFacts() {
         Fixture f = new Fixture();
         f.session.connect(FIRST);
         f.session.onStatus(json("sdk_state", "READY", "model_ready", true, "certificate_valid", true));
         f.port.rejectConnect = true;
-        try { f.session.connect(SECOND); fail("应拒绝配置"); }
-        catch (IllegalArgumentException expected) { }
+        try {
+            f.session.connect(SECOND);
+            fail("应拒绝配置");
+        } catch (IllegalArgumentException expected) {
+        }
         assertFalse(f.session.viewState().ready);
         assertFalse(f.session.matchesConfiguration(SECOND));
         f.port.rejectConnect = false;
@@ -696,34 +760,56 @@ public class MorningSdkSessionTest {
 
     private static MorningSdkSession.Listener observer() {
         return new MorningSdkSession.Listener() {
-            @Override public void onConnection(boolean connected, String message) { }
-            @Override public void onStatus(JSONObject status) { }
+            @Override
+            public void onConnection(boolean connected, String message) {
+            }
+
+            @Override
+            public void onStatus(JSONObject status) {
+            }
         };
     }
+
     private static MorningSdkSession.Listener certificateObserver() {
         return new MorningSdkSession.Listener() {
-            @Override public boolean observesCertificateDetails() { return true; }
-            @Override public void onConnection(boolean connected, String message) { }
-            @Override public void onStatus(JSONObject status) { }
+            @Override
+            public boolean observesCertificateDetails() {
+                return true;
+            }
+
+            @Override
+            public void onConnection(boolean connected, String message) {
+            }
+
+            @Override
+            public void onStatus(JSONObject status) {
+            }
         };
     }
+
     private static JSONObject json(Object... pairs) {
         JSONObject result = new JSONObject();
         try {
             for (int i = 0; i < pairs.length; i += 2) result.put((String) pairs[i], pairs[i + 1]);
-        } catch (org.json.JSONException invalid) { throw new AssertionError(invalid); }
+        } catch (org.json.JSONException invalid) {
+            throw new AssertionError(invalid);
+        }
         return result;
     }
+
     private static JSONObject ready() {
         return json("sdk_state", "READY", "model_ready", true, "certificate_valid", true, "key_lost", false);
     }
+
     private static final class Fixture {
         final FakeTimer timer = new FakeTimer();
         final FakePort port = new FakePort();
         final MorningSdkSession session = new MorningSdkSession(listener -> {
-            port.listener = listener; return port;
+            port.listener = listener;
+            return port;
         }, timer);
     }
+
     private static final class FakePort implements MorningSdkSession.Port {
         HuoyanClient.Listener listener;
         int connects, closes;
@@ -731,70 +817,128 @@ public class MorningSdkSessionTest {
         boolean rejectConnect;
         boolean immediate;
         final List<Call> calls = new ArrayList<>();
-        @Override public void connect(SdkConfig config) {
+
+        @Override
+        public void connect(SdkConfig config) {
             connects++;
             if (rejectConnect) throw new IllegalArgumentException("连接配置不可用");
-            connected = true; listener.onConnection(true, "已连接");
+            connected = true;
+            listener.onConnection(true, "已连接");
         }
-        @Override public void close() { closes++; connected = false; listener.onConnection(false, "已断开"); }
-        @Override public boolean isConnected() { return connected; }
-        @Override public HuoyanClient client() { return null; }
-        @Override public String request(String name, JSONObject params, HuoyanClient.Callback callback) {
-            Call call = new Call(name, params, callback); calls.add(call);
+
+        @Override
+        public void close() {
+            closes++;
+            connected = false;
+            listener.onConnection(false, "已断开");
+        }
+
+        @Override
+        public boolean isConnected() {
+            return connected;
+        }
+
+        @Override
+        public HuoyanClient client() {
+            return null;
+        }
+
+        @Override
+        public String request(String name, JSONObject params, HuoyanClient.Callback callback) {
+            Call call = new Call(name, params, callback);
+            calls.add(call);
             if (immediate) call.reply(0, "getStatus".equals(name) ? ready() : new JSONObject());
             return String.valueOf(calls.size());
         }
-        int count(String name) { int n = 0; for (Call c : calls) if (c.name.equals(name)) n++; return n; }
+
+        int count(String name) {
+            int n = 0;
+            for (Call c : calls) if (c.name.equals(name)) n++;
+            return n;
+        }
+
         Call last(String name) {
-            for (int i = calls.size() - 1; i >= 0; i--) if (calls.get(i).name.equals(name)) return calls.get(i);
+            for (int i = calls.size() - 1; i >= 0; i--)
+                if (calls.get(i).name.equals(name)) return calls.get(i);
             throw new AssertionError(name);
         }
+
         void complete(String name, int code, JSONObject data) {
-            for (Call c : calls) if (c.name.equals(name) && !c.completed) {
-                if ("getStatus".equals(name) && code == 0) listener.onStatus(data);
-                c.reply(code, data); return;
-            }
+            for (Call c : calls)
+                if (c.name.equals(name) && !c.completed) {
+                    if ("getStatus".equals(name) && code == 0) listener.onStatus(data);
+                    c.reply(code, data);
+                    return;
+                }
             throw new AssertionError(name);
         }
     }
+
     private static final class Call {
         final String name;
         final HuoyanClient.Callback callback;
         final JSONObject params;
         boolean completed;
+
         Call(String name, JSONObject params, HuoyanClient.Callback callback) {
-            this.name = name; this.params = params; this.callback = callback;
+            this.name = name;
+            this.params = params;
+            this.callback = callback;
         }
-        void reply(int code, JSONObject data) { completed = true; callback.onResult(code, "测试回执", data); }
+
+        void reply(int code, JSONObject data) {
+            completed = true;
+            callback.onResult(code, "测试回执", data);
+        }
     }
+
     private static final class FakeTimer implements MorningSdkSession.Timer {
         final List<Task> tasks = new ArrayList<>();
         long now;
-        @Override public Runnable after(long delay, Runnable action) {
-            Task task = new Task(now + delay, action); tasks.add(task); return () -> task.cancelled = true;
+
+        @Override
+        public Runnable after(long delay, Runnable action) {
+            Task task = new Task(now + delay, action);
+            tasks.add(task);
+            return () -> task.cancelled = true;
         }
-        boolean hasActive() { for (Task t : tasks) if (!t.cancelled) return true; return false; }
+
+        boolean hasActive() {
+            for (Task t : tasks) if (!t.cancelled) return true;
+            return false;
+        }
+
         void fire() {
             Task task = earliest();
             if (task == null) throw new AssertionError("没有待执行预约");
             now = Math.max(now, task.due);
-            task.cancelled = true; task.action.run();
+            task.cancelled = true;
+            task.action.run();
         }
+
         void advance(long millis) {
             long target = now + millis;
             Task task;
             while ((task = earliest()) != null && task.due <= target) fire();
             now = target;
         }
+
         private Task earliest() {
             Task first = null;
-            for (Task task : tasks) if (!task.cancelled && (first == null || task.due < first.due)) first = task;
+            for (Task task : tasks)
+                if (!task.cancelled && (first == null || task.due < first.due)) first = task;
             return first;
         }
     }
+
     private static final class Task {
         final long due;
-        final Runnable action; boolean cancelled;
-        Task(long due, Runnable action) { this.due = due; this.action = action; }
+        final Runnable action;
+        boolean cancelled;
+
+        Task(long due, Runnable action) {
+            this.due = due;
+            this.action = action;
+        }
     }
 }

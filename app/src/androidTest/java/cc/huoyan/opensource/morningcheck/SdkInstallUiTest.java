@@ -63,7 +63,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 
-/** 下载只访问本机夹具，安装器与未知来源授权全部拦截，不安装真实 SDK。 */
+/**
+ * 下载只访问本机夹具，安装器与未知来源授权全部拦截，不安装真实 SDK。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class SdkInstallUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -87,7 +89,8 @@ public final class SdkInstallUiTest {
     private volatile CountDownLatch responseRelease;
     private boolean isolated;
 
-    @Before public void isolateEndpointsAndHost() throws Exception {
+    @Before
+    public void isolateEndpointsAndHost() throws Exception {
         boolean x86 = false;
         for (String abi : Build.SUPPORTED_ABIS) x86 |= abi.startsWith("x86");
         String hardware = Build.HARDWARE.toLowerCase(java.util.Locale.ROOT);
@@ -106,14 +109,16 @@ public final class SdkInstallUiTest {
             return null;
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         try (InputStream input = instrumentation.getContext().getAssets().open("sdk-install-fixture.apk")) {
             sdkApk = readBytes(input);
         }
         responseBody = sdkApk;
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
                 if (!"/morningcheck_sdk_lastest.apk".equals(request.getPath()))
                     return new MockResponse().setResponseCode(503);
                 downloads.incrementAndGet();
@@ -137,7 +142,8 @@ public final class SdkInstallUiTest {
                 endpoint.url("/morningcheck_sdk_lastest.apk").toString(), platform));
     }
 
-    @After public void releaseHostAndRestorePreferences() throws Exception {
+    @After
+    public void releaseHostAndRestorePreferences() throws Exception {
         if (responseRelease != null) responseRelease.countDown();
         try {
             onMain(() -> {
@@ -156,19 +162,23 @@ public final class SdkInstallUiTest {
                     return null;
                 });
                 instrumentation.waitForIdleSync();
-                if (app != null && isolated) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+                if (app != null && isolated) app.io.submit(() -> {
+                }).get(10, TimeUnit.SECONDS);
             } finally {
-                if (isolated && device != null && originalDevice != null) restore(device, originalDevice);
+                if (isolated && device != null && originalDevice != null)
+                    restore(device, originalDevice);
                 if (endpoint != null) endpoint.shutdown();
                 generatedFiles.addAll(platform.installedFiles);
                 for (File file : generatedFiles) {
-                    if (file != null && file.exists()) assertTrue("删除本次下载夹具失败", file.delete());
+                    if (file != null && file.exists())
+                        assertTrue("删除本次下载夹具失败", file.delete());
                 }
             }
         }
     }
 
-    @Test public void missingShellCancelAndManualDownloadDoNotForceNetworkOnResume() {
+    @Test
+    public void missingShellCancelAndManualDownloadDoNotForceNetworkOnResume() {
         resume(true);
         onMain(() -> {
             Dialog prompt = prompt();
@@ -190,7 +200,8 @@ public final class SdkInstallUiTest {
         assertDownloadedPackage();
     }
 
-    @Test public void connectionEntryAllowsRemoteConfigurationWithoutDownloading() {
+    @Test
+    public void connectionEntryAllowsRemoteConfigurationWithoutDownloading() {
         resume(true);
         onMain(() -> {
             prompt().findViewById(android.R.id.button3).performClick();
@@ -201,7 +212,8 @@ public final class SdkInstallUiTest {
         assertEquals(0, platform.installs.get());
     }
 
-    @Test public void failedHttpCanRetryAndWrongPackageNeverReachesInstaller() throws Exception {
+    @Test
+    public void failedHttpCanRetryAndWrongPackageNeverReachesInstaller() throws Exception {
         responseCode = 503;
         resume(false);
         startDownload();
@@ -222,7 +234,8 @@ public final class SdkInstallUiTest {
         assertDownloadedPackage();
     }
 
-    @Test public void permissionReturnUsesSameApkAndResumeDoesNotRepeatDownload() {
+    @Test
+    public void permissionReturnUsesSameApkAndResumeDoesNotRepeatDownload() {
         platform.allowPackages = false;
         resume(false);
         startDownload();
@@ -230,7 +243,10 @@ public final class SdkInstallUiTest {
         assertEquals(0, platform.installs.get());
         File pending = onMain(this::rememberPending);
         assertNotNull(pending);
-        onMain(() -> { controller.onPause(); return null; });
+        onMain(() -> {
+            controller.onPause();
+            return null;
+        });
         platform.allowPackages = true;
         resume(false);
         await(() -> platform.installs.get() == 1, "授权返回后应接着安装");
@@ -243,12 +259,16 @@ public final class SdkInstallUiTest {
         assertEquals(1, platform.permissions.get());
     }
 
-    @Test public void canceledInstallationCanRetryExistingApkAndSuccessReconnectsOnce() {
+    @Test
+    public void canceledInstallationCanRetryExistingApkAndSuccessReconnectsOnce() {
         resume(false);
         startDownload();
         await(() -> platform.installs.get() == 1, "首次下载应进入安装器");
         File apk = platform.installedFiles.get(0);
-        onMain(() -> { controller.onPause(); return null; });
+        onMain(() -> {
+            controller.onPause();
+            return null;
+        });
         resume(false);
         await(() -> onMain(() -> showing(prompt())), "安装取消后应该提供继续安装入口");
         retryPrompt();
@@ -256,7 +276,10 @@ public final class SdkInstallUiTest {
         assertEquals(apk, platform.installedFiles.get(1));
         assertEquals("继续安装无需重复下载", 1, downloads.get());
         platform.installed = true;
-        onMain(() -> { controller.onPause(); return null; });
+        onMain(() -> {
+            controller.onPause();
+            return null;
+        });
         resume(false);
         resume(true);
         instrumentation.waitForIdleSync();
@@ -264,13 +287,17 @@ public final class SdkInstallUiTest {
         assertFalse(onMain(() -> showing(prompt())));
     }
 
-    @Test public void backgroundCompletionWaitsForForegroundBeforePermissionOrInstaller() {
+    @Test
+    public void backgroundCompletionWaitsForForegroundBeforePermissionOrInstaller() {
         responseRelease = new CountDownLatch(1);
         platform.allowPackages = false;
         resume(false);
         startDownload();
         await(() -> downloads.get() == 1, "下载请求应该已进入夹具");
-        onMain(() -> { controller.onPause(); return null; });
+        onMain(() -> {
+            controller.onPause();
+            return null;
+        });
         responseRelease.countDown();
         await(() -> onMain(() -> read(controller, "pendingApk") != null
                 && read(controller, "download") == null), "后台下载应完成并保存 APK");
@@ -281,7 +308,8 @@ public final class SdkInstallUiTest {
         assertEquals(1, downloads.get());
     }
 
-    @Test public void savedPendingApkSurvivesControllerRecreationWithoutRedownload() {
+    @Test
+    public void savedPendingApkSurvivesControllerRecreationWithoutRedownload() {
         platform.allowPackages = false;
         resume(false);
         startDownload();
@@ -307,7 +335,8 @@ public final class SdkInstallUiTest {
         assertEquals(1, platform.permissions.get());
     }
 
-    @Test public void cancelActiveDownloadDoesNotInstallItsLateResponse() {
+    @Test
+    public void cancelActiveDownloadDoesNotInstallItsLateResponse() {
         responseRelease = new CountDownLatch(1);
         resume(false);
         startDownload();
@@ -327,7 +356,8 @@ public final class SdkInstallUiTest {
         assertEquals("被取消的响应不能启动第二次安装", 1, platform.installs.get());
     }
 
-    @Test public void corruptedSavedApkIsRejectedBeforeInstallerAndCanDownloadAgain() throws Exception {
+    @Test
+    public void corruptedSavedApkIsRejectedBeforeInstallerAndCanDownloadAgain() throws Exception {
         platform.allowPackages = false;
         resume(false);
         startDownload();
@@ -373,7 +403,8 @@ public final class SdkInstallUiTest {
         assertDownloadedPackage();
     }
 
-    @Test public void privateApkProviderAndSystemIntentsKeepReadGrantWithoutLaunchingPages() throws Exception {
+    @Test
+    public void privateApkProviderAndSystemIntentsKeepReadGrantWithoutLaunchingPages() throws Exception {
         resume(false);
         startDownload();
         await(() -> platform.installs.get() == 1, "元信息验证应取得下载后的 APK");
@@ -410,7 +441,8 @@ public final class SdkInstallUiTest {
                         new File(apk.getParentFile(), "../sdk-install-outside.apk")));
     }
 
-    @Test public void missingLocalShellHomeActionStartsDownloadAfterGuideWasCanceled() throws Exception {
+    @Test
+    public void missingLocalShellHomeActionStartsDownloadAfterGuideWasCanceled() throws Exception {
         assumeTrue("真实首页缺壳入口只在未安装本机 SDK 的模拟器验证", !shellInstalled());
         closeSystemHost();
         homeScenario = ActivityScenario.launch(new Intent(app, HomeActivity.class));
@@ -456,7 +488,8 @@ public final class SdkInstallUiTest {
         assertDownloadedPackage();
     }
 
-    @Test public void remoteWsHomeDoesNotOfferLocalShellInstallation() {
+    @Test
+    public void remoteWsHomeDoesNotOfferLocalShellInstallation() {
         assumeTrue("远端连接场景需要本机确实未安装 SDK", !shellInstalled());
         closeSystemHost();
         assertTrue(device.edit().putString(MorningSdkSettings.TRANSPORT_KEY, "ws")
@@ -485,7 +518,8 @@ public final class SdkInstallUiTest {
         assertEquals(0, platform.permissions.get());
     }
 
-    @Test public void multipleMissingObserversNotifyInstallOnceUntilShellReallyBecomesMissingAgain() {
+    @Test
+    public void multipleMissingObserversNotifyInstallOnceUntilShellReallyBecomesMissingAgain() {
         AtomicReference<SdkInstallController> peer = new AtomicReference<>();
         scenario.onActivity(activity -> {
             SdkInstallController observer = new SdkInstallController(activity, null,
@@ -538,18 +572,24 @@ public final class SdkInstallUiTest {
         if (scenario != null) scenario.close();
         scenario = null;
         instrumentation.waitForIdleSync();
-        onMain(() -> { app.sdkSession().disconnect(); return null; });
+        onMain(() -> {
+            app.sdkSession().disconnect();
+            return null;
+        });
     }
 
     private boolean shellInstalled() {
         try {
             app.getPackageManager().getApplicationInfo("cc.huoyan.morningcheck", 0);
             return true;
-        } catch (PackageManager.NameNotFoundException missing) { return false; }
+        } catch (PackageManager.NameNotFoundException missing) {
+            return false;
+        }
     }
 
     private void screenshotIfRequested(String label) throws Exception {
-        if (!"true".equals(InstrumentationRegistry.getArguments().getString("sdkInstallScreenshots"))) return;
+        if (!"true".equals(InstrumentationRegistry.getArguments().getString("sdkInstallScreenshots")))
+            return;
         settleWindowFrames();
         Bitmap image = instrumentation.getUiAutomation().takeScreenshot();
         assertNotNull("截图应取得实际设备画面", image);
@@ -558,7 +598,9 @@ public final class SdkInstallUiTest {
         String orientation = image.getWidth() > image.getHeight() ? "landscape" : "portrait";
         try (FileOutputStream stream = new FileOutputStream(new File(directory, label + "-" + orientation + ".png"))) {
             assertTrue(image.compress(Bitmap.CompressFormat.PNG, 100, stream));
-        } finally { image.recycle(); }
+        } finally {
+            image.recycle();
+        }
     }
 
     private void assertInstallDialogGeometry(Dialog dialog, boolean progressDialog) throws Exception {
@@ -603,7 +645,9 @@ public final class SdkInstallUiTest {
         onMain(() -> {
             Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
                 private int remaining = 3;
-                @Override public void doFrame(long frameTimeNanos) {
+
+                @Override
+                public void doFrame(long frameTimeNanos) {
                     if (--remaining == 0) frames.countDown();
                     else Choreographer.getInstance().postFrameCallback(this);
                 }
@@ -674,11 +718,17 @@ public final class SdkInstallUiTest {
     }
 
     private void resume(boolean promptIfMissing) {
-        onMain(() -> { controller.onResume(promptIfMissing); return null; });
+        onMain(() -> {
+            controller.onResume(promptIfMissing);
+            return null;
+        });
     }
 
     private void startDownload() {
-        onMain(() -> { controller.downloadAndInstall(); return null; });
+        onMain(() -> {
+            controller.downloadAndInstall();
+            return null;
+        });
     }
 
     private void retryPrompt() {
@@ -713,8 +763,13 @@ public final class SdkInstallUiTest {
                 & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0);
     }
 
-    private Dialog prompt() { return controller == null ? null : read(controller, "prompt"); }
-    private static boolean showing(Dialog dialog) { return dialog != null && dialog.isShowing(); }
+    private Dialog prompt() {
+        return controller == null ? null : read(controller, "prompt");
+    }
+
+    private static boolean showing(Dialog dialog) {
+        return dialog != null && dialog.isShowing();
+    }
 
     private File rememberPending() {
         File file = controller == null ? null : read(controller, "pendingApk");
@@ -726,8 +781,11 @@ public final class SdkInstallUiTest {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(action.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError("主线程测试操作失败", failure.get());
         return value.get();
@@ -735,16 +793,20 @@ public final class SdkInstallUiTest {
 
     private static void await(BooleanSupplier condition, String message) {
         long deadline = SystemClock.elapsedRealtime() + 10_000;
-        while (!condition.getAsBoolean() && SystemClock.elapsedRealtime() < deadline) SystemClock.sleep(20);
+        while (!condition.getAsBoolean() && SystemClock.elapsedRealtime() < deadline)
+            SystemClock.sleep(20);
         assertTrue(message, condition.getAsBoolean());
     }
 
-    @SuppressWarnings("unchecked") private static <T> T read(Object target, String name) {
+    @SuppressWarnings("unchecked")
+    private static <T> T read(Object target, String name) {
         try {
             Field field = target.getClass().getDeclaredField(name);
             field.setAccessible(true);
             return (T) field.get(target);
-        } catch (ReflectiveOperationException error) { throw new AssertionError("读取安装流程状态失败", error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("读取安装流程状态失败", error);
+        }
     }
 
     private static void write(Object target, String name, Object value) {
@@ -752,7 +814,9 @@ public final class SdkInstallUiTest {
             Field field = target.getClass().getDeclaredField(name);
             field.setAccessible(true);
             field.set(target, value);
-        } catch (ReflectiveOperationException error) { throw new AssertionError("注入安装流程夹具失败", error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("注入安装流程夹具失败", error);
+        }
     }
 
     private static byte[] readBytes(InputStream input) throws java.io.IOException {
@@ -784,7 +848,8 @@ public final class SdkInstallUiTest {
         for (Stage stage : Stage.values()) {
             if (stage == Stage.DESTROYED) continue;
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance()
-                    .getActivitiesInStage(stage))) activity.finish();
+                    .getActivitiesInStage(stage)))
+                activity.finish();
         }
     }
 
@@ -796,10 +861,23 @@ public final class SdkInstallUiTest {
         volatile boolean installed;
         volatile boolean allowPackages = true;
 
-        @Override public boolean isInstalled() { return installed; }
-        @Override public boolean canInstallPackages() { return allowPackages; }
-        @Override public void openPermission() { permissions.incrementAndGet(); }
-        @Override public void install(File apk) {
+        @Override
+        public boolean isInstalled() {
+            return installed;
+        }
+
+        @Override
+        public boolean canInstallPackages() {
+            return allowPackages;
+        }
+
+        @Override
+        public void openPermission() {
+            permissions.incrementAndGet();
+        }
+
+        @Override
+        public void install(File apk) {
             installedFiles.add(apk);
             installs.incrementAndGet();
         }

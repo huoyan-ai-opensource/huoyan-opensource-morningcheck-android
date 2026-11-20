@@ -8,7 +8,8 @@ public final class FacePresencePolicyTest {
     private static final long SECOND = 1_000_000_000L;
     private final FacePresencePolicy policy = new FacePresencePolicy();
 
-    @Test public void twoFacesAreMultipleAndNewSingleFaceClearsWarning() {
+    @Test
+    public void twoFacesAreMultipleAndNewSingleFaceClearsWarning() {
         assertTrue(policy.observeDetection(SECOND, 2, SECOND));
         assertTrue(policy.isMultiple(SECOND));
         assertTrue(policy.observeDetection(2 * SECOND, 1, 2 * SECOND));
@@ -18,7 +19,8 @@ public final class FacePresencePolicyTest {
         assertTrue(policy.isAbsent(3 * SECOND));
     }
 
-    @Test public void detectionReceiptHasShortGuidanceLifetimeAndBoundedSourceAge() {
+    @Test
+    public void detectionReceiptHasShortGuidanceLifetimeAndBoundedSourceAge() {
         assertTrue(policy.observeDetection(SECOND, 3, 3 * SECOND));
         assertTrue(policy.isMultiple(3 * SECOND));
         assertFalse(policy.isMultiple(3 * SECOND + FacePresencePolicy.MAX_AGE_NANOS));
@@ -28,7 +30,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isMultiple(7 * SECOND));
     }
 
-    @Test public void onlyAvailableFreshEmptyFramesCanStartAbsenceGuidance() {
+    @Test
+    public void onlyAvailableFreshEmptyFramesCanStartAbsenceGuidance() {
         assertFalse(policy.isAbsent(0));
         assertTrue(policy.observe(1_000, false, 2_000));
         assertTrue(policy.isAbsent(2_000));
@@ -37,7 +40,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.observe(5_000, false, 4_000));
     }
 
-    @Test public void sdkMatchedProofWinsAgainstSameFramePreviewEmptyOrFailure() {
+    @Test
+    public void sdkMatchedProofWinsAgainstSameFramePreviewEmptyOrFailure() {
         policy.observe(1_000, false, 2_000);
         assertTrue(policy.observe(1_000, true, 2_000));
         assertFalse(policy.observe(1_000, false, 3_000));
@@ -45,14 +49,16 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isAbsent(3_000));
     }
 
-    @Test public void olderAsyncResultCannotOverwriteNewFaceProof() {
+    @Test
+    public void olderAsyncResultCannotOverwriteNewFaceProof() {
         policy.observe(2_000, true, 3_000);
         assertFalse(policy.observe(1_000, false, 3_000));
         assertFalse(policy.unknown(1_000));
         assertFalse(policy.isAbsent(3_000));
     }
 
-    @Test public void newUnavailableResultCancelsAbsenceUntilFreshEmptyEvidenceArrives() {
+    @Test
+    public void newUnavailableResultCancelsAbsenceUntilFreshEmptyEvidenceArrives() {
         policy.observe(1_000, false, 2_000);
         assertTrue(policy.unknown(2_000));
         assertFalse(policy.isAbsent(3_000));
@@ -62,7 +68,8 @@ public final class FacePresencePolicyTest {
         assertEquals(3_000 + FacePresencePolicy.MAX_AGE_NANOS, policy.expiresAtNanos());
     }
 
-    @Test public void stageResetCannotCarryOldAbsenceIntoTheNextStage() {
+    @Test
+    public void stageResetCannotCarryOldAbsenceIntoTheNextStage() {
         policy.observe(1_000, false, 2_000);
         policy.reset();
         assertFalse(policy.isAbsent(2_000));
@@ -70,7 +77,8 @@ public final class FacePresencePolicyTest {
         assertTrue(policy.observe(500, true, 2_000));
     }
 
-    @Test public void unmatchedNeedsBothRealFacePresenceAndAnExplicitFreshNegativeMatch() {
+    @Test
+    public void unmatchedNeedsBothRealFacePresenceAndAnExplicitFreshNegativeMatch() {
         policy.match(1_000, false, 2_000);
         assertFalse(policy.isUnmatched(2_000));
         policy.observe(1_100, true, 2_000);
@@ -80,7 +88,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isUnmatched(1_100 + FacePresencePolicy.MAX_AGE_NANOS));
     }
 
-    @Test public void absentAndUnmatchedRemainSeparateWhenThePersonLeavesTheImage() {
+    @Test
+    public void absentAndUnmatchedRemainSeparateWhenThePersonLeavesTheImage() {
         policy.observe(1_000, true, 2_000);
         policy.match(1_000, false, 2_000);
         policy.observe(2_000, false, 3_000);
@@ -88,7 +97,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isUnmatched(3_000));
     }
 
-    @Test public void noMatchResponseOrFailedResponseCannotBecomeUnmatched() {
+    @Test
+    public void noMatchResponseOrFailedResponseCannotBecomeUnmatched() {
         policy.observe(1_000, true, 2_000);
         assertFalse(policy.isUnmatched(2_000));
         policy.match(1_000, false, 2_000);
@@ -96,7 +106,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isUnmatched(3_000));
     }
 
-    @Test public void validMatchCancelsUnmatchedAndOlderNegativeCannotRestoreIt() {
+    @Test
+    public void validMatchCancelsUnmatchedAndOlderNegativeCannotRestoreIt() {
         policy.observe(1_000, true, 2_000);
         policy.match(1_000, false, 2_000);
         assertTrue(policy.match(2_000, true, 3_000));
@@ -107,7 +118,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isUnmatched(3_000));
     }
 
-    @Test public void twoSecondNegativeReceiptUsesFreshPreviewInsteadOfOldSourcePresence() {
+    @Test
+    public void twoSecondNegativeReceiptUsesFreshPreviewInsteadOfOldSourcePresence() {
         long source = SECOND;
         long completed = 3 * SECOND;
         assertTrue("正常两秒推理延迟不能丢掉有效未匹配回执", policy.match(source, false, completed));
@@ -117,7 +129,8 @@ public final class FacePresencePolicyTest {
         assertEquals(completed + FacePresencePolicy.MAX_AGE_NANOS, policy.expiresAtNanos());
     }
 
-    @Test public void negativeSourceAtFiveSecondAgeOrFromFutureIsRejected() {
+    @Test
+    public void negativeSourceAtFiveSecondAgeOrFromFutureIsRejected() {
         long now = 6 * SECOND;
         policy.observe(now, true, now);
         assertFalse("五秒前的采集帧不能被新完成时间重新变成有效证据", policy.match(SECOND, false, now));
@@ -126,7 +139,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isUnmatched(now));
     }
 
-    @Test public void negativeExpiresFiveSecondsAfterReceiptEvenWithContinuingFreshFaces() {
+    @Test
+    public void negativeExpiresFiveSecondsAfterReceiptEvenWithContinuingFreshFaces() {
         long completed = 3 * SECOND;
         long expires = completed + 5 * SECOND;
         assertTrue(policy.match(SECOND, false, completed));
@@ -138,7 +152,8 @@ public final class FacePresencePolicyTest {
         assertFalse("更新预览不能续期已过期的负匹配", policy.isUnmatched(expires + SECOND / 10));
     }
 
-    @Test public void positiveMatchStillNeedsSourceWithinPreviewFreshnessLimit() {
+    @Test
+    public void positiveMatchStillNeedsSourceWithinPreviewFreshnessLimit() {
         long source = 10 * SECOND;
         long expires = source + FacePresencePolicy.MAX_AGE_NANOS;
         assertTrue(policy.match(source, true, expires - 1));
@@ -150,7 +165,8 @@ public final class FacePresencePolicyTest {
         assertFalse(stalePositive.isMatched(expires));
     }
 
-    @Test public void laterPositiveOrUnknownMatchCannotBeOverwrittenByLateOlderNegative() {
+    @Test
+    public void laterPositiveOrUnknownMatchCannotBeOverwrittenByLateOlderNegative() {
         policy.observe(3 * SECOND, true, 3 * SECOND);
         assertTrue(policy.match(SECOND, false, 3 * SECOND));
         assertTrue(policy.match(4 * SECOND, true, 4 * SECOND + SECOND / 10));
@@ -164,7 +180,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isUnmatched(5 * SECOND + SECOND / 10));
     }
 
-    @Test public void unavailablePreviewOnlySuspendsUnmatchedUntilRealFaceReturns() {
+    @Test
+    public void unavailablePreviewOnlySuspendsUnmatchedUntilRealFaceReturns() {
         long completed = 3 * SECOND;
         policy.match(SECOND, false, completed);
         policy.observe(completed, true, completed);
@@ -175,7 +192,8 @@ public final class FacePresencePolicyTest {
         assertTrue("预览暂不可用不能抹掉仍有效的未匹配回执", policy.isUnmatched(completed + SECOND / 5));
     }
 
-    @Test public void acceptedNegativeNeverMeansUnmatchedWhenCurrentPreviewHasNoFace() {
+    @Test
+    public void acceptedNegativeNeverMeansUnmatchedWhenCurrentPreviewHasNoFace() {
         long completed = 3 * SECOND;
         policy.observe(completed, false, completed);
         assertTrue(policy.match(SECOND, false, completed));
@@ -184,7 +202,8 @@ public final class FacePresencePolicyTest {
         assertEquals(completed + FacePresencePolicy.MAX_AGE_NANOS, policy.expiresAtNanos());
     }
 
-    @Test public void delayedPositiveCancelsOlderNegativeWithoutExtendingFaceBoxFreshness() {
+    @Test
+    public void delayedPositiveCancelsOlderNegativeWithoutExtendingFaceBoxFreshness() {
         policy.match(SECOND, false, 3 * SECOND);
         policy.observe(3 * SECOND, true, 3 * SECOND);
         assertTrue(policy.isUnmatched(3 * SECOND));
@@ -196,7 +215,8 @@ public final class FacePresencePolicyTest {
         assertFalse(policy.isUnmatched(5 * SECOND));
     }
 
-    @Test public void sameFrameNegativeCannotOverrideAcceptedPositive() {
+    @Test
+    public void sameFrameNegativeCannotOverrideAcceptedPositive() {
         long source = SECOND;
         assertTrue(policy.match(source, true, source + SECOND / 10));
         assertTrue(policy.isMatched(source + SECOND / 10));

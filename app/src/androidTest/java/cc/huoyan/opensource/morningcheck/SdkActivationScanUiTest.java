@@ -46,7 +46,9 @@ import okhttp3.mockwebserver.MockWebServer;
 
 import static org.junit.Assert.*;
 
-/** 扫码返回与生命周期在本机夹具验证；不使用真实相机、不访问真实 SDK 或门店。 */
+/**
+ * 扫码返回与生命周期在本机夹具验证；不使用真实相机、不访问真实 SDK 或门店。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class SdkActivationScanUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -58,7 +60,8 @@ public final class SdkActivationScanUiTest {
     private Application.ActivityLifecycleCallbacks cameraIsolation;
     private long sdkGeneration, activationId;
 
-    @Before public void isolateCameraAndEndpoint() throws Exception {
+    @Before
+    public void isolateCameraAndEndpoint() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         device = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         binding = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
@@ -77,30 +80,52 @@ public final class SdkActivationScanUiTest {
                 .putString("face_camera", "usb:ACTIVATION-TEST-NO-DEVICE").commit());
         scanDevice = device.getAll();
         cameraIsolation = new Application.ActivityLifecycleCallbacks() {
-            @Override public void onActivityCreated(Activity activity, Bundle state) {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle state) {
                 if (!(activity instanceof SdkActivationScanActivity)) return;
                 String orientation = InstrumentationRegistry.getArguments().getString("design_orientation", "");
-                if (!orientation.isEmpty()) activity.setRequestedOrientation("portrait".equals(orientation)
-                        ? android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                        : android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                if (!orientation.isEmpty())
+                    activity.setRequestedOrientation("portrait".equals(orientation)
+                            ? android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                            : android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 write(activity, "permissionRequested", true);
                 write(activity, "permissionRequestInFlight", false);
                 write(activity, "cameraFailure", "扫码测试不采集真实摄像头");
             }
-            @Override public void onActivityStarted(Activity activity) { }
-            @Override public void onActivityResumed(Activity activity) { }
-            @Override public void onActivityPaused(Activity activity) { }
-            @Override public void onActivityStopped(Activity activity) { }
-            @Override public void onActivitySaveInstanceState(Activity activity, Bundle state) { }
-            @Override public void onActivityDestroyed(Activity activity) { }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle state) {
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+            }
         };
         app.registerActivityLifecycleCallbacks(cameraIsolation);
     }
 
-    @After public void restoreConfiguration() throws Exception {
+    @After
+    public void restoreConfiguration() throws Exception {
         try {
             if (scenario != null) scenario.close();
-            if (app != null && cameraIsolation != null) app.unregisterActivityLifecycleCallbacks(cameraIsolation);
+            if (app != null && cameraIsolation != null)
+                app.unregisterActivityLifecycleCallbacks(cameraIsolation);
         } finally {
             if (device != null && oldDevice != null) restore(device, oldDevice);
             if (binding != null && oldBinding != null) restore(binding, oldBinding);
@@ -108,7 +133,8 @@ public final class SdkActivationScanUiTest {
         }
     }
 
-    @Test public void cancelReturnsCanceledWithoutChangingSdkOrShop() {
+    @Test
+    public void cancelReturnsCanceledWithoutChangingSdkOrShop() {
         launch();
         scenario.onActivity(activity -> activity.findViewById(R.id.sdk_activation_scan_back).performClick());
         assertEquals(Activity.RESULT_CANCELED, scenario.getResult().getResultCode());
@@ -116,7 +142,8 @@ public final class SdkActivationScanUiTest {
         assertExternalStateUnchanged();
     }
 
-    @Test public void generatedActivationQrDecodesAndReturnsWithoutSubmitting() throws Exception {
+    @Test
+    public void generatedActivationQrDecodesAndReturnsWithoutSubmitting() throws Exception {
         byte[] rgb = qr("{\"serial\":\"Z2FBW9L7M78R586H\"}");
         assertEquals("Z2FB-W9L7-M78R-586H", ActivationScanCode.parse(new QrFrameDecoder().decode(rgb, 320, 240)));
         launch();
@@ -128,7 +155,8 @@ public final class SdkActivationScanUiTest {
         assertExternalStateUnchanged();
     }
 
-    @Test public void shopQrIsRejectedWithoutReturningOrBinding() throws Exception {
+    @Test
+    public void shopQrIsRejectedWithoutReturningOrBinding() throws Exception {
         byte[] rgb = qr("{\"shop_id\":\"TEST-ONLY-SHOP\"}");
         assertThrows(IllegalArgumentException.class,
                 () -> ActivationScanCode.parse(new QrFrameDecoder().decode(rgb, 320, 240)));
@@ -137,8 +165,12 @@ public final class SdkActivationScanUiTest {
         // 解码由页面自己的后台线程执行；等同一队列收尾，避免测试和 UI 回写抢跑。
         scenario.onActivity(activity -> {
             java.util.concurrent.ExecutorService executor = read(activity, "decoderThread");
-            try { executor.submit(() -> { }).get(5, java.util.concurrent.TimeUnit.SECONDS); }
-            catch (Exception error) { throw new AssertionError("二维码解码未收尾", error); }
+            try {
+                executor.submit(() -> {
+                }).get(5, java.util.concurrent.TimeUnit.SECONDS);
+            } catch (Exception error) {
+                throw new AssertionError("二维码解码未收尾", error);
+            }
         });
         instrumentation.waitForIdleSync();
         scenario.onActivity(activity -> {
@@ -151,7 +183,8 @@ public final class SdkActivationScanUiTest {
         assertExternalStateUnchanged();
     }
 
-    @Test public void recreationPreservesTemporaryCameraWithoutSavingPreferences() {
+    @Test
+    public void recreationPreservesTemporaryCameraWithoutSavingPreferences() {
         launch();
         scenario.onActivity(activity -> write(activity, "selectedCamera", "usb:TEMPORARY-SCAN-ONLY"));
         scenario.recreate();
@@ -165,7 +198,8 @@ public final class SdkActivationScanUiTest {
         assertExternalStateUnchanged();
     }
 
-    @Test public void scannerFitsPhoneAndTabletInBothOrientationsWithoutScrolling() {
+    @Test
+    public void scannerFitsPhoneAndTabletInBothOrientationsWithoutScrolling() {
         instrumentation.runOnMainSync(() -> {
             assertFits(360, 640);
             assertFits(640, 360);
@@ -247,11 +281,14 @@ public final class SdkActivationScanUiTest {
         BitMatrix matrix = new QRCodeWriter().encode(value, BarcodeFormat.QR_CODE, 320, 240,
                 Collections.singletonMap(EncodeHintType.CHARACTER_SET, "UTF-8"));
         byte[] rgb = new byte[320 * 240 * 3];
-        for (int y = 0; y < 240; y++) for (int x = 0; x < 320; x++) {
-            int offset = (y * 320 + x) * 3;
-            byte pixel = matrix.get(x, y) ? 0 : (byte) 255;
-            rgb[offset] = pixel; rgb[offset + 1] = pixel; rgb[offset + 2] = pixel;
-        }
+        for (int y = 0; y < 240; y++)
+            for (int x = 0; x < 320; x++) {
+                int offset = (y * 320 + x) * 3;
+                byte pixel = matrix.get(x, y) ? 0 : (byte) 255;
+                rgb[offset] = pixel;
+                rgb[offset + 1] = pixel;
+                rgb[offset + 2] = pixel;
+            }
         return rgb;
     }
 
@@ -261,7 +298,9 @@ public final class SdkActivationScanUiTest {
             Method decode = SdkActivationScanActivity.class.getDeclaredMethod("decodeFrame", CameraSource.Frame.class);
             decode.setAccessible(true);
             decode.invoke(activity, new CameraSource.Frame(rgb, 320, 240));
-        } catch (ReflectiveOperationException error) { throw new AssertionError("无法注入二维码测试帧", error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("无法注入二维码测试帧", error);
+        }
     }
 
     private static void write(Object owner, String name, Object value) {
@@ -269,18 +308,24 @@ public final class SdkActivationScanUiTest {
             Field field = SdkActivationScanActivity.class.getDeclaredField(name);
             field.setAccessible(true);
             field.set(owner, value);
-        } catch (ReflectiveOperationException error) { throw new AssertionError("无法隔离扫码状态", error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("无法隔离扫码状态", error);
+        }
     }
 
-    @SuppressWarnings("unchecked") private static <T> T read(Object owner, String name) {
+    @SuppressWarnings("unchecked")
+    private static <T> T read(Object owner, String name) {
         try {
             Field field = SdkActivationScanActivity.class.getDeclaredField(name);
             field.setAccessible(true);
             return (T) field.get(owner);
-        } catch (ReflectiveOperationException error) { throw new AssertionError("无法读取扫码夹具状态", error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("无法读取扫码夹具状态", error);
+        }
     }
 
-    @SuppressWarnings("unchecked") private static void restore(SharedPreferences preferences, Map<String, ?> snapshot) {
+    @SuppressWarnings("unchecked")
+    private static void restore(SharedPreferences preferences, Map<String, ?> snapshot) {
         SharedPreferences.Editor edit = preferences.edit().clear();
         for (Map.Entry<String, ?> entry : snapshot.entrySet()) {
             Object value = entry.getValue();

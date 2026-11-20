@@ -69,23 +69,25 @@ public final class QrFrameDecoderTest {
         BitMatrix matrix = new QRCodeWriter().encode(raw, BarcodeFormat.QR_CODE, width, height,
                 Collections.singletonMap(EncodeHintType.CHARACTER_SET, "UTF-8"));
         byte[] rgb = new byte[width * height * 3];
-        for (int y = 0; y < height; y++) for (int x = 0; x < width; x++) {
-            int offset = (y * width + x) * 3;
-            byte value = matrix.get(x, y) ? 0 : (byte) 255;
-            rgb[offset] = value;
-            rgb[offset + 1] = value;
-            rgb[offset + 2] = value;
-        }
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++) {
+                int offset = (y * width + x) * 3;
+                byte value = matrix.get(x, y) ? 0 : (byte) 255;
+                rgb[offset] = value;
+                rgb[offset + 1] = value;
+                rgb[offset + 2] = value;
+            }
         return rgb;
     }
 
     private static byte[] rotateClockwise(byte[] source, int width, int height) {
         byte[] target = new byte[source.length];
-        for (int y = 0; y < height; y++) for (int x = 0; x < width; x++) {
-            int from = (y * width + x) * 3;
-            int to = (x * height + height - 1 - y) * 3;
-            System.arraycopy(source, from, target, to, 3);
-        }
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++) {
+                int from = (y * width + x) * 3;
+                int to = (x * height + height - 1 - y) * 3;
+                System.arraycopy(source, from, target, to, 3);
+            }
         return target;
     }
 }

@@ -14,13 +14,16 @@ import cc.huoyan.morningcheck.app.aidl.CapabilityParcel;
 import cc.huoyan.morningcheck.app.aidl.FaceListParcel;
 import cc.huoyan.morningcheck.app.aidl.McFaceParcel;
 
-/** 使用系统 Parcel 验证人脸框线序、关键点分组和能力尾字段，不连接真实 SDK。 */
+/**
+ * 使用系统 Parcel 验证人脸框线序、关键点分组和能力尾字段，不连接真实 SDK。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class FaceDetectionParcelCompatibilityTest {
     private static final int OUTER_SENTINEL = 0x1E2D3C4B;
     private static final String OUTER_TEXT = "外层字段：人脸检测";
 
-    @Test public void emptyFaceListRoundTripKeepsSuccessAndOuterFields() {
+    @Test
+    public void emptyFaceListRoundTripKeepsSuccessAndOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             FaceListParcel source = FaceListParcel.emptyOk();
@@ -37,10 +40,13 @@ public final class FaceDetectionParcelCompatibilityTest {
             assertEquals(0, restored.toItems().length);
             assertEquals(payloadEnd, parcel.dataPosition());
             assertOuterFields(parcel);
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
-    @Test public void threeFacesRoundTripKeepsEveryBoxAndItsOwnTenLandmarks() {
+    @Test
+    public void threeFacesRoundTripKeepsEveryBoxAndItsOwnTenLandmarks() {
         Parcel parcel = Parcel.obtain();
         try {
             float[] points = landmarks(30);
@@ -77,10 +83,13 @@ public final class FaceDetectionParcelCompatibilityTest {
             }
             assertEquals("人脸数组只能读取自己的字段", payloadEnd, parcel.dataPosition());
             assertOuterFields(parcel);
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
-    @Test public void malformedFaceArrayLengthIsRejectedBeforeAllocationAndOuterFields() {
+    @Test
+    public void malformedFaceArrayLengthIsRejectedBeforeAllocationAndOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             parcel.writeInt(0);
@@ -97,10 +106,13 @@ public final class FaceDetectionParcelCompatibilityTest {
                     () -> FaceListParcel.CREATOR.createFromParcel(parcel));
             assertEquals("拒绝长度后不能尝试分配或读取外层字段", invalidLengthEnd, parcel.dataPosition());
             assertOuterFields(parcel);
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
-    @Test public void impossibleFaceCountIsRejectedWithoutAllocatingArrays() {
+    @Test
+    public void impossibleFaceCountIsRejectedWithoutAllocatingArrays() {
         Parcel parcel = Parcel.obtain();
         try {
             parcel.writeInt(0);
@@ -109,10 +121,13 @@ public final class FaceDetectionParcelCompatibilityTest {
             parcel.setDataPosition(0);
             assertThrows(BadParcelableException.class,
                     () -> FaceListParcel.CREATOR.createFromParcel(parcel));
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
-    @Test public void singleFaceRoundTripKeepsLandmarksAndOuterFields() {
+    @Test
+    public void singleFaceRoundTripKeepsLandmarksAndOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             McFaceParcel source = new McFaceParcel(0.2f, 0.3f, 0.4f, 0.5f, 0.99f, landmarks(10));
@@ -131,10 +146,13 @@ public final class FaceDetectionParcelCompatibilityTest {
             assertArrayEquals(source.getLandmarks(), restored.getLandmarks(), 0f);
             assertEquals(payloadEnd, parcel.dataPosition());
             assertOuterFields(parcel);
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
-    @Test public void oldCapabilityPrefixWithoutVersionDefaultsToUnknownAndNoFaceDetection() {
+    @Test
+    public void oldCapabilityPrefixWithoutVersionDefaultsToUnknownAndNoFaceDetection() {
         Parcel parcel = Parcel.obtain();
         try {
             writeOldCapabilityPrefix(parcel);
@@ -146,10 +164,13 @@ public final class FaceDetectionParcelCompatibilityTest {
             assertEquals(CapabilityParcel.UNKNOWN_SDK_VERSION_CODE, restored.getSdkVersionCode());
             assertFalse("旧壳缺少此能力，不能据此调用新事务", restored.isDetectFace());
             assertEquals(parcel.dataSize(), parcel.dataPosition());
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
-    @Test public void capabilityVersionTailWithoutFaceFlagKeepsVersionAndDefaultsToFalse() {
+    @Test
+    public void capabilityVersionTailWithoutFaceFlagKeepsVersionAndDefaultsToFalse() {
         Parcel parcel = Parcel.obtain();
         try {
             writeOldCapabilityPrefix(parcel);
@@ -163,10 +184,13 @@ public final class FaceDetectionParcelCompatibilityTest {
             assertEquals(105, restored.getSdkVersionCode());
             assertFalse(restored.isDetectFace());
             assertEquals(parcel.dataSize(), parcel.dataPosition());
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
-    @Test public void currentCapabilityRoundTripKeepsVersionFaceFlagAndOuterFields() {
+    @Test
+    public void currentCapabilityRoundTripKeepsVersionFaceFlagAndOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             CapabilityParcel source = new CapabilityParcel(0, null, 3,
@@ -184,7 +208,9 @@ public final class FaceDetectionParcelCompatibilityTest {
             assertTrue(restored.isDetectFace());
             assertEquals("新能力位不能吞掉外层字段", payloadEnd, parcel.dataPosition());
             assertOuterFields(parcel);
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
     private static float[] landmarks(int count) {

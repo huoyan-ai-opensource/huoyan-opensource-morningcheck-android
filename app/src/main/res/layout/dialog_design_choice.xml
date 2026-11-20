@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ChoiceDialogPanel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/mc_panel"
-    android:orientation="vertical"
-    android:padding="@dimen/mc_choice_padding">
+    android:orientation="vertical">
 
     <TextView
+        style="@style/ChoiceTitle"
         android:id="@+id/department_filter_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,58 +15,55 @@
         android:fontFamily="sans-serif"
         android:gravity="center_vertical"
         android:includeFontPadding="false"
-        android:minHeight="@dimen/mc_choice_title_min_height"
+        android:minHeight="@dimen/dp_13"
         android:textColor="#293A51"
-        android:textSize="@dimen/mc_choice_title_text_size"
         android:textStyle="bold" />
 
     <TextView
+        style="@style/ChoiceSubtitle"
         android:id="@+id/choice_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mc_choice_subtitle_margin"
+        android:layout_marginTop="@dimen/dp_2"
         android:fontFamily="sans-serif"
         android:includeFontPadding="false"
         android:text="@string/ui_dialog_design_choice_choice_subtitle_text"
-        android:textColor="#6E7C90"
-        android:textSize="@dimen/mc_choice_subtitle_text_size" />
+        android:textColor="#6E7C90" />
 
     <ListView
+        style="@style/ChoiceList"
         android:id="@+id/department_filter_options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mc_choice_content_margin"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/mc_choice_option_spacing"
         android:scrollbars="vertical" />
 
     <TextView
         android:id="@+id/department_filter_empty"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/mc_choice_empty_height"
+        android:layout_height="@dimen/dp_36"
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="@string/ui_dialog_design_choice_department_filter_empty_text"
         android:textColor="#6E7C90"
-        android:textSize="@dimen/mc_choice_option_text_size"
+        android:textSize="@dimen/sp_8"
         android:visibility="gone" />
 
     <TextView
+        style="@style/ChoiceClose"
         android:id="@+id/department_filter_close"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mc_choice_content_margin"
         android:background="@drawable/mc_field_action"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:minHeight="@dimen/mc_choice_action_min_height"
-        android:paddingTop="@dimen/mc_choice_action_padding"
-        android:paddingBottom="@dimen/mc_choice_action_padding"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
         android:text="@string/activation_code_cancel"
         android:textColor="#293A51"
-        android:textSize="@dimen/mc_choice_option_text_size"
+        android:textSize="@dimen/sp_8"
         android:textStyle="bold" />
 </LinearLayout>

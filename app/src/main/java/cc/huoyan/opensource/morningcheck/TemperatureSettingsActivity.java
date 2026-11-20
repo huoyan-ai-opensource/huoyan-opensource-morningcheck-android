@@ -99,7 +99,8 @@ public final class TemperatureSettingsActivity extends BaseDeviceSettingsActivit
     }
 
     private void selectMeasurementMode() {
-        if (!uiReady() || switchingMode || measurementModeDialog != null && measurementModeDialog.isShowing()) return;
+        if (!uiReady() || switchingMode || measurementModeDialog != null && measurementModeDialog.isShowing())
+            return;
         View expectedForm = formView;
         int expectedView = viewGeneration;
         int expectedChange = modeChangeGeneration;
@@ -190,7 +191,8 @@ public final class TemperatureSettingsActivity extends BaseDeviceSettingsActivit
         }
         // 无本机确认记录时显示设备默认动态触发；仅展示，不补发指令或写入成功记录。
         if (!temperaturePath(formView).trim().equals(setting("temperature_measurement_path", ""))
-                || !baud.equals(setting("temperature_measurement_baud", ""))) return TemperatureMeasurementMode.TRIGGER;
+                || !baud.equals(setting("temperature_measurement_baud", "")))
+            return TemperatureMeasurementMode.TRIGGER;
         TemperatureMeasurementMode saved = TemperatureMeasurementMode.fromValue(setting("temperature_measurement_mode", ""));
         return saved == null ? TemperatureMeasurementMode.TRIGGER : saved;
     }

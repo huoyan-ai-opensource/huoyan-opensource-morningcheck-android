@@ -170,7 +170,8 @@ public final class StaffActivity extends BaseMorningActivity {
         }
         body.findViewById(R.id.staff_add).setOnClickListener(v -> openStaffPage(new Intent(this, StaffEditActivity.class)
                 .putExtra(StaffEditActivity.EXTRA_DIALOG, true)));
-        body.findViewById(R.id.staff_enroll).setOnClickListener(v -> openStaffPage(new Intent(this, FaceEnrollmentActivity.class)));
+        body.findViewById(R.id.staff_enroll).setOnClickListener(v ->
+                afterSdkPermissionCheck(() -> openStaffPage(new Intent(this, FaceEnrollmentActivity.class))));
         body.findViewById(R.id.staff_departments).setOnClickListener(v -> openStaffPage(new Intent(this, DepartmentsActivity.class)));
         body.findViewById(R.id.staff_load_more).setOnClickListener(v -> loadMore());
         staffList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -241,7 +242,8 @@ public final class StaffActivity extends BaseMorningActivity {
                     loadedDepartmentId = department;
                     // 只有读页成功才推进边界，重试失败页不会漏页；偏移分页重叠的 ID 只保留一份。
                     Map<String, JSONObject> merged = new LinkedHashMap<>();
-                    if (append) for (JSONObject item : staff) merged.put(item.optString("id"), item);
+                    if (append)
+                        for (JSONObject item : staff) merged.put(item.optString("id"), item);
                     for (JSONObject item : data.rows) merged.put(item.optString("id"), item);
                     staff = new ArrayList<>(merged.values());
                     staffPage = data.page;
@@ -323,7 +325,8 @@ public final class StaffActivity extends BaseMorningActivity {
 
     private void showStaffPage() {
         if (listLoading == null) listLoading = new LoadingDialog(this);
-        if (pageLoading && foreground) listLoading.showReadOnly(getString(R.string.i18n_b_reading_list));
+        if (pageLoading && foreground)
+            listLoading.showReadOnly(getString(R.string.i18n_b_reading_list));
         else listLoading.dismiss();
         if (content == null) return;
         List<JSONObject> values = staff;
@@ -340,7 +343,7 @@ public final class StaffActivity extends BaseMorningActivity {
         staffList.setEnabled(!values.isEmpty() || !pageLoading);
         TextView more = content.findViewById(R.id.staff_load_more);
         more.setText(pageLoading ? "" : pageError ? getString(R.string.i18n_b_retry_read)
-                                        : staffData == null || staffData.page >= staffData.totalPages ? getString(R.string.i18n_b_end_list) : getString(R.string.i18n_b_load_more));
+                : staffData == null || staffData.page >= staffData.totalPages ? getString(R.string.i18n_b_end_list) : getString(R.string.i18n_b_load_more));
         TextView empty = content.findViewById(R.id.staff_empty);
         empty.setText(staffData == null || staffData.totalRows == 0
                 ? R.string.business_staff_empty : R.string.business_staff_no_match);
@@ -412,8 +415,9 @@ public final class StaffActivity extends BaseMorningActivity {
             holder.edit.setContentDescription(getString(R.string.i18n_b_edit_staff_prefix) + name);
             holder.delete.setContentDescription(getString(R.string.i18n_b_delete_staff_prefix) + name);
             holder.enroll.setOnClickListener(v -> {
-                if (!pageLoading) openStaffPage(new Intent(StaffActivity.this,
-                        FaceEnrollmentActivity.class).putExtra(FaceEnrollmentActivity.EXTRA_STAFF_ID, staffId));
+                if (!pageLoading)
+                    afterSdkPermissionCheck(() -> openStaffPage(new Intent(StaffActivity.this,
+                            FaceEnrollmentActivity.class).putExtra(FaceEnrollmentActivity.EXTRA_STAFF_ID, staffId)));
             });
             holder.edit.setOnClickListener(v -> {
                 if (!pageLoading) openStaffPage(new Intent(StaffActivity.this,
@@ -424,9 +428,10 @@ public final class StaffActivity extends BaseMorningActivity {
                 if (!pageLoading) confirmDeleteStaff(item);
             });
             holder.itemView.setOnClickListener(v -> {
-                if (!pageLoading) openStaffPage(new Intent(StaffActivity.this, StaffEditActivity.class)
-                        .putExtra(StaffEditActivity.EXTRA_STAFF_ID, staffId)
-                        .putExtra(StaffEditActivity.EXTRA_DIALOG, true));
+                if (!pageLoading)
+                    openStaffPage(new Intent(StaffActivity.this, StaffEditActivity.class)
+                            .putExtra(StaffEditActivity.EXTRA_STAFF_ID, staffId)
+                            .putExtra(StaffEditActivity.EXTRA_DIALOG, true));
             });
         }
     }
@@ -496,7 +501,9 @@ public final class StaffActivity extends BaseMorningActivity {
             sdk.forget(personId, (code, message, data) -> {
                 if (sdkGeneration() != generation || !FaceResultPolicy.isAbsentOrDeleted(code)) {
                     finishStaffDelete(staffId);
-                    notice(sdkGeneration() != generation ? getString(R.string.i18n_b_delete_pending) : message);
+                    if (sdkGeneration() != generation)
+                        notice(getString(R.string.i18n_b_delete_pending));
+                    else if (!guideSdkPermissions(code, message)) notice(message);
                     return;
                 }
                 runIo(() -> {

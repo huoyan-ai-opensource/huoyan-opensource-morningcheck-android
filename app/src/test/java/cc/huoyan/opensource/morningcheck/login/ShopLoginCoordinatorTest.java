@@ -15,7 +15,8 @@ import static org.junit.Assert.*;
 public final class ShopLoginCoordinatorTest {
     private static final SdkConfig CONFIG = SdkConfig.webSocket("ws://192.168.1.2:18087/");
 
-    @Test public void blankQrIsRejectedWithoutConnecting() {
+    @Test
+    public void blankQrIsRejectedWithoutConnecting() {
         Fixture fixture = new Fixture();
         fixture.coordinator.login(" \n\t", CONFIG);
         assertEquals(ShopLoginCoordinator.Phase.ERROR, fixture.coordinator.getState().phase);
@@ -23,7 +24,8 @@ public final class ShopLoginCoordinatorTest {
         assertTrue(fixture.saved.isEmpty());
     }
 
-    @Test public void qrIsPassedUnmodifiedAndRepeatedScansOrConnectionEventsNeverReplayBinding() {
+    @Test
+    public void qrIsPassedUnmodifiedAndRepeatedScansOrConnectionEventsNeverReplayBinding() {
         Fixture fixture = new Fixture();
         fixture.coordinator.login("  0007/erp?token=raw  ", CONFIG);
         fixture.coordinator.login("other", SdkConfig.aidl());
@@ -40,7 +42,8 @@ public final class ShopLoginCoordinatorTest {
         assertTrue(fixture.timerCancelled);
     }
 
-    @Test public void connectionTimeoutDestroysClientAndLateConnectionDoesNotSubmit() {
+    @Test
+    public void connectionTimeoutDestroysClientAndLateConnectionDoesNotSubmit() {
         Fixture fixture = new Fixture();
         fixture.coordinator.login("external", CONFIG);
         FakeClient client = fixture.latest();
@@ -53,7 +56,8 @@ public final class ShopLoginCoordinatorTest {
         assertTrue(fixture.saved.isEmpty());
     }
 
-    @Test public void unknownResultDoesNotSaveOrRetryAndAllowsOnlyExplicitNewAttempt() throws Exception {
+    @Test
+    public void unknownResultDoesNotSaveOrRetryAndAllowsOnlyExplicitNewAttempt() throws Exception {
         Fixture fixture = new Fixture();
         fixture.loginAndConnect();
         FakeClient old = fixture.latest();
@@ -73,7 +77,8 @@ public final class ShopLoginCoordinatorTest {
         assertEquals(ShopLoginCoordinator.Phase.BINDING, fixture.coordinator.getState().phase);
     }
 
-    @Test public void failureCannotBeMaskedByCompleteResponse() throws Exception {
+    @Test
+    public void failureCannotBeMaskedByCompleteResponse() throws Exception {
         Fixture fixture = new Fixture();
         fixture.loginAndConnect();
         fixture.latest().result(-3, "设备尚未初始化", validReceipt());
@@ -82,7 +87,8 @@ public final class ShopLoginCoordinatorTest {
         assertTrue(fixture.saved.isEmpty());
     }
 
-    @Test public void successRequiresActualNonemptyStringScopeAndNeverUsesRequestEcho() throws Exception {
+    @Test
+    public void successRequiresActualNonemptyStringScopeAndNeverUsesRequestEcho() throws Exception {
         JSONObject[] malformed = {
                 null,
                 new JSONObject(),
@@ -102,7 +108,8 @@ public final class ShopLoginCoordinatorTest {
         }
     }
 
-    @Test public void detachedScreenReceivesNoLateUiButBindingStillSavesAndNewScreenGetsFinalState() throws Exception {
+    @Test
+    public void detachedScreenReceivesNoLateUiButBindingStillSavesAndNewScreenGetsFinalState() throws Exception {
         Fixture fixture = new Fixture();
         List<ShopLoginCoordinator.State> oldUi = new ArrayList<>();
         ShopLoginCoordinator.Listener oldListener = oldUi::add;
@@ -133,7 +140,8 @@ public final class ShopLoginCoordinatorTest {
         assertEquals("S001", saved.shopNo);
     }
 
-    @Test public void duplicateSuccessWhileSavingDoesNotScheduleAnotherCommit() throws Exception {
+    @Test
+    public void duplicateSuccessWhileSavingDoesNotScheduleAnotherCommit() throws Exception {
         Fixture fixture = new Fixture();
         fixture.loginAndConnect();
         fixture.latest().result(0, "ok", validReceipt());
@@ -148,7 +156,8 @@ public final class ShopLoginCoordinatorTest {
         assertEquals(1, fixture.saved.size());
     }
 
-    @Test public void failedCommitNeverReportsSuccessOrReturnsHome() throws Exception {
+    @Test
+    public void failedCommitNeverReportsSuccessOrReturnsHome() throws Exception {
         Fixture fixture = new Fixture();
         fixture.saveResult = false;
         fixture.loginAndConnect();
@@ -160,7 +169,8 @@ public final class ShopLoginCoordinatorTest {
         assertEquals(1, fixture.latest().destroyCount);
     }
 
-    @Test public void clientIsDestroyedBeforeSuccessListenerCanStartAnotherLogin() throws Exception {
+    @Test
+    public void clientIsDestroyedBeforeSuccessListenerCanStartAnotherLogin() throws Exception {
         Fixture fixture = new Fixture();
         fixture.loginAndConnect();
         FakeClient first = fixture.latest();
@@ -179,7 +189,8 @@ public final class ShopLoginCoordinatorTest {
         assertEquals(0, fixture.latest().destroyCount);
     }
 
-    @Test public void throwingStorageStillFinishesAsUncertainErrorAndDestroysClient() throws Exception {
+    @Test
+    public void throwingStorageStillFinishesAsUncertainErrorAndDestroysClient() throws Exception {
         Fixture fixture = new Fixture();
         fixture.throwOnSave = true;
         fixture.loginAndConnect();
@@ -190,7 +201,8 @@ public final class ShopLoginCoordinatorTest {
         assertEquals(1, fixture.latest().destroyCount);
     }
 
-    @Test public void scopeMatchesOnlyTheSameConnectionConfiguration() throws Exception {
+    @Test
+    public void scopeMatchesOnlyTheSameConnectionConfiguration() throws Exception {
         JSONObject stored = new JSONObject().put("endpoint", CONFIG.getWsEndpoint()).put("channel", "WS");
         assertTrue(ShopBindingStore.matchesConnection(stored, CONFIG));
         assertFalse(ShopBindingStore.matchesConnection(stored, SdkConfig.automatic(CONFIG.getWsEndpoint())));
@@ -207,8 +219,15 @@ public final class ShopLoginCoordinatorTest {
 
     private static final class QueueExecutor implements Executor {
         final List<Runnable> tasks = new ArrayList<>();
-        @Override public void execute(Runnable task) { tasks.add(task); }
-        void runNext() { tasks.remove(0).run(); }
+
+        @Override
+        public void execute(Runnable task) {
+            tasks.add(task);
+        }
+
+        void runNext() {
+            tasks.remove(0).run();
+        }
     }
 
     private static final class FakeClient implements ShopLoginCoordinator.Client {
@@ -218,16 +237,35 @@ public final class ShopLoginCoordinatorTest {
         String raw;
         int bindCount;
         int destroyCount;
-        FakeClient(ShopLoginCoordinator.ConnectionListener listener) { this.listener = listener; }
-        @Override public void connect(SdkConfig config) { this.config = config; }
-        @Override public void bind(String raw, ShopLoginCoordinator.ResultListener callback) {
+
+        FakeClient(ShopLoginCoordinator.ConnectionListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void connect(SdkConfig config) {
+            this.config = config;
+        }
+
+        @Override
+        public void bind(String raw, ShopLoginCoordinator.ResultListener callback) {
             this.raw = raw;
             this.callback = callback;
             bindCount++;
         }
-        @Override public void destroy() { destroyCount++; }
-        void connected() { listener.onConnection(true, "已连接"); }
-        void result(int code, String message, JSONObject data) { callback.onResult(code, message, data); }
+
+        @Override
+        public void destroy() {
+            destroyCount++;
+        }
+
+        void connected() {
+            listener.onConnection(true, "已连接");
+        }
+
+        void result(int code, String message, JSONObject data) {
+            callback.onResult(code, message, data);
+        }
     }
 
     private static final class Fixture {
@@ -253,7 +291,11 @@ public final class ShopLoginCoordinatorTest {
             saved.add(binding);
             return saveResult;
         }, worker, ui);
-        FakeClient latest() { return clients.get(clients.size() - 1); }
+
+        FakeClient latest() {
+            return clients.get(clients.size() - 1);
+        }
+
         void loginAndConnect() {
             coordinator.login("external", CONFIG);
             latest().connected();

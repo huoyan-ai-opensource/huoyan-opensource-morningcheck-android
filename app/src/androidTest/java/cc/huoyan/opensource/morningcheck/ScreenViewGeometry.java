@@ -3,9 +3,12 @@ package cc.huoyan.opensource.morningcheck;
 import android.graphics.Rect;
 import android.view.View;
 
-/** 真实触摸和裁切断言统一使用屏幕坐标，兼容居中的业务弹窗。 */
+/**
+ * 真实触摸和裁切断言统一使用屏幕坐标，兼容居中的业务弹窗。
+ */
 final class ScreenViewGeometry {
-    private ScreenViewGeometry() { }
+    private ScreenViewGeometry() {
+    }
 
     static boolean visibleOnScreen(View view, Rect result) {
         if (!view.getGlobalVisibleRect(result)) return false;

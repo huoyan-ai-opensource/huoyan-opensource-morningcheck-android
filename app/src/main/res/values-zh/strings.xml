@@ -1633,4 +1633,16 @@
     <string name="ui_view_temperature_design_config_label_text">测温配置</string>
     <string name="ui_view_temperature_design_reading_settings_temperature_reading_text">等待测温</string>
     <string name="ui_view_temperature_design_reading_label_text">实时采集温度</string>
+    <string name="sdk_permissions_maintenance">系统维护</string>
+    <string name="sdk_permissions_title">SDK 权限授权</string>
+    <string name="sdk_permissions_app_label">火眼晨检 SDK</string>
+    <string name="sdk_permissions_summary">在系统设置里选择「%1$s」完成授权，返回后重新操作。</string>
+    <string name="sdk_permissions_overlay_path">设置 → 应用 → 特殊应用权限 → 显示在其他应用上层</string>
+    <string name="sdk_permissions_install_path">设置 → 应用 → 特殊应用权限 → 安装未知应用</string>
+    <string name="sdk_permissions_open_overlay">打开悬浮窗权限</string>
+    <string name="sdk_permissions_open_install">打开安装未知应用权限</string>
+    <string name="sdk_permissions_settings_unavailable">系统未能打开授权页面，请按引导里的设置路径手动授权。</string>
+    <string name="sdk_permissions_remote">请到 SDK 所在设备的系统设置，在「应用 → 特殊应用权限」里选择火眼晨检 SDK，开启悬浮窗和安装未知应用权限。</string>
+    <string name="sdk_permissions_missing_sdk">请先安装本机的晨检 SDK，再回来授权。</string>
+    <string name="sdk_permissions_not_needed">当前 Android 版本无需单独开启这两项权限。</string>
 </resources>

@@ -8,9 +8,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/** 用可控回调队列验证跨通道切换，不需要真实壳或云端。 */
+/**
+ * 用可控回调队列验证跨通道切换，不需要真实壳或云端。
+ */
 public class HuoyanClientTest {
-    @Test public void switchingFailsOldWriteExactlyOnceAndDoesNotReplay() {
+    @Test
+    public void switchingFailsOldWriteExactlyOnceAndDoesNotReplay() {
         List<FakeTransport> transports = new ArrayList<>();
         HuoyanClient client = client(transports, Runnable::run, null);
         client.connect(SdkConfig.aidl());
@@ -26,7 +29,8 @@ public class HuoyanClientTest {
         client.destroy();
     }
 
-    @Test public void queuedOldSuccessCannotUpdateNewMachine() {
+    @Test
+    public void queuedOldSuccessCannotUpdateNewMachine() {
         List<FakeTransport> transports = new ArrayList<>();
         List<Runnable> deliveries = new ArrayList<>();
         List<Integer> codes = new ArrayList<>();
@@ -40,7 +44,8 @@ public class HuoyanClientTest {
         client.destroy();
     }
 
-    @Test public void configurationReuseCloseReopenAndDestroyHaveSeparateLifetimes() {
+    @Test
+    public void configurationReuseCloseReopenAndDestroyHaveSeparateLifetimes() {
         List<FakeTransport> transports = new ArrayList<>();
         HuoyanClient client = client(transports, Runnable::run, null);
         client.connect(SdkConfig.aidl());
@@ -57,7 +62,8 @@ public class HuoyanClientTest {
         assertThrows(IllegalStateException.class, () -> client.connect(SdkConfig.aidl()));
     }
 
-    @Test public void cancelledRequestTargetsOriginalTransportAndDeliversOnce() {
+    @Test
+    public void cancelledRequestTargetsOriginalTransportAndDeliversOnce() {
         List<FakeTransport> transports = new ArrayList<>();
         List<Integer> codes = new ArrayList<>();
         HuoyanClient client = client(transports, Runnable::run, null);
@@ -72,14 +78,22 @@ public class HuoyanClientTest {
         client.destroy();
     }
 
-    @Test public void destroyDropsQueuedResultsAndLateStatus() {
+    @Test
+    public void destroyDropsQueuedResultsAndLateStatus() {
         List<FakeTransport> transports = new ArrayList<>();
         List<Runnable> deliveries = new ArrayList<>();
         List<Integer> codes = new ArrayList<>();
         List<Boolean> states = new ArrayList<>();
         HuoyanClient client = client(transports, deliveries::add, new HuoyanClient.Listener() {
-            @Override public void onConnection(boolean connected, String message) { states.add(connected); }
-            @Override public void onStatus(JSONObject status) { fail("销毁后不得交付状态"); }
+            @Override
+            public void onConnection(boolean connected, String message) {
+                states.add(connected);
+            }
+
+            @Override
+            public void onStatus(JSONObject status) {
+                fail("销毁后不得交付状态");
+            }
         });
         client.connect(SdkConfig.aidl());
         client.request("userCount", null, null, (code, message, data) -> codes.add(code));
@@ -98,7 +112,9 @@ public class HuoyanClientTest {
             FakeTransport transport = new FakeTransport(observer);
             transports.add(transport);
             return transport;
-        }, (delay, action) -> { throw new AssertionError("本用例不应等待初始化"); });
+        }, (delay, action) -> {
+            throw new AssertionError("本用例不应等待初始化");
+        });
     }
 
     private static void drain(List<Runnable> deliveries) {
@@ -111,22 +127,67 @@ public class HuoyanClientTest {
         String cancelled;
         int calls;
         boolean destroyed;
-        FakeTransport(HuoyanClient.Listener listener) { this.listener = listener; }
-        @Override public void setInitializationListener(Runnable listener) { }
-        void reply(int code) { callback.onResult(code, "测试回执", new JSONObject()); }
-        @Override public void connect(String endpoint) { }
-        @Override public String request(String command, JSONObject params, byte[] image, HuoyanClient.Callback callback) {
+
+        FakeTransport(HuoyanClient.Listener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void setInitializationListener(Runnable listener) {
+        }
+
+        void reply(int code) {
+            callback.onResult(code, "测试回执", new JSONObject());
+        }
+
+        @Override
+        public void connect(String endpoint) {
+        }
+
+        @Override
+        public String request(String command, JSONObject params, byte[] image, HuoyanClient.Callback callback) {
             calls++;
             this.callback = callback;
             return "transport-request";
         }
-        @Override public void cancel(String id) { cancelled = id; }
-        @Override public void close() { }
-        @Override public void destroy() { destroyed = true; }
-        @Override public JSONObject getStatus() { return new JSONObject(); }
-        @Override public JSONObject getCapabilities() { return new JSONObject(); }
-        @Override public JSONObject getClassTable() { return new JSONObject(); }
-        @Override public boolean isConnected() { return !destroyed; }
-        @Override public boolean isReady() { return false; }
+
+        @Override
+        public void cancel(String id) {
+            cancelled = id;
+        }
+
+        @Override
+        public void close() {
+        }
+
+        @Override
+        public void destroy() {
+            destroyed = true;
+        }
+
+        @Override
+        public JSONObject getStatus() {
+            return new JSONObject();
+        }
+
+        @Override
+        public JSONObject getCapabilities() {
+            return new JSONObject();
+        }
+
+        @Override
+        public JSONObject getClassTable() {
+            return new JSONObject();
+        }
+
+        @Override
+        public boolean isConnected() {
+            return !destroyed;
+        }
+
+        @Override
+        public boolean isReady() {
+            return false;
+        }
     }
 }

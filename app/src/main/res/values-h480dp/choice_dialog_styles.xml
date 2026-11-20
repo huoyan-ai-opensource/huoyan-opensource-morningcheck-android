@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ChoiceDialogPanel" parent="">
+        <item name="android:padding">@dimen/dp_8</item>
+    </style>
+
+    <style name="FontChoiceList" parent="">
+        <item name="android:layout_marginStart">@dimen/dp_8</item>
+        <item name="android:dividerHeight">@dimen/dp_2</item>
+    </style>
+</resources>

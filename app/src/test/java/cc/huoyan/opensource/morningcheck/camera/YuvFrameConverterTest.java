@@ -8,7 +8,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class YuvFrameConverterTest {
-    @Test public void readsPaddedRowsInterleavedChromaAndBufferOffsets() {
+    @Test
+    public void readsPaddedRowsInterleavedChromaAndBufferOffsets() {
         ByteBuffer y = ByteBuffer.wrap(new byte[]{99, 16, 82, 99, 99, (byte) 145, (byte) 235});
         y.position(1);
         ByteBuffer u = ByteBuffer.wrap(new byte[]{99, (byte) 128});
@@ -21,7 +22,8 @@ public class YuvFrameConverterTest {
         assertEquals(1, u.position());
     }
 
-    @Test public void rotatesClockwiseAndPreservesRgbChannelOrder() {
+    @Test
+    public void rotatesClockwiseAndPreservesRgbChannelOrder() {
         ByteBuffer y = ByteBuffer.wrap(new byte[]{16, 82, (byte) 145, (byte) 235});
         ByteBuffer chroma = ByteBuffer.wrap(new byte[]{(byte) 128});
         byte[] rgb = YuvFrameConverter.toRgb(y, 2, 1, chroma, 1, 1, chroma, 1, 1, 0, 0, 2, 2, 90);
@@ -31,7 +33,8 @@ public class YuvFrameConverterTest {
         assertArrayEquals(new byte[]{(byte) 255, 1, 0}, red);
     }
 
-    @Test public void honorsCropAndChromaPixelStride() {
+    @Test
+    public void honorsCropAndChromaPixelStride() {
         ByteBuffer y = ByteBuffer.wrap(new byte[]{16, 16, 82, 82, 16, 16, 82, 82});
         ByteBuffer u = ByteBuffer.wrap(new byte[]{(byte) 128, 99, 90});
         ByteBuffer v = ByteBuffer.wrap(new byte[]{(byte) 128, 99, (byte) 240});
@@ -39,7 +42,8 @@ public class YuvFrameConverterTest {
         assertArrayEquals(new byte[]{(byte) 255, 1, 0, (byte) 255, 1, 0, (byte) 255, 1, 0, (byte) 255, 1, 0}, rgb);
     }
 
-    @Test public void frontAndBackUseDifferentDisplayRotationSigns() {
+    @Test
+    public void frontAndBackUseDifferentDisplayRotationSigns() {
         assertEquals(0, YuvFrameConverter.uprightRotation(90, 90, false));
         assertEquals(180, YuvFrameConverter.uprightRotation(90, 90, true));
         assertEquals(90, YuvFrameConverter.uprightRotation(90, 0, false));

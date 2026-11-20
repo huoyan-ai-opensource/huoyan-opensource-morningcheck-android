@@ -201,7 +201,8 @@ public final class SecurityPasswordDialog {
 
         private void select(EditText field) {
             selected = field;
-            for (EditText item : new EditText[]{original, replacement, confirmation}) item.setSelected(item == field);
+            for (EditText item : new EditText[]{original, replacement, confirmation})
+                item.setSelected(item == field);
             field.requestFocus();
             field.setSelection(field.length());
         }
@@ -297,9 +298,10 @@ public final class SecurityPasswordDialog {
             View decor = host.getWindow().getDecorView();
             int hostWidth = decor.getWidth() > 0 ? decor.getWidth() : host.getResources().getDisplayMetrics().widthPixels;
             int hostHeight = decor.getHeight() > 0 ? decor.getHeight() : host.getResources().getDisplayMetrics().heightPixels;
-            int margin = host.getResources().getDimensionPixelSize(R.dimen.security_password_outer_padding);
+            boolean tablet = host.getResources().getConfiguration().smallestScreenWidthDp >= 600;
+            int margin = host.getResources().getDimensionPixelSize(tablet ? R.dimen.dp_10 : R.dimen.dp_6);
             int width = Math.max(1, Math.min(hostWidth - margin * 2,
-                    host.getResources().getDimensionPixelSize(R.dimen.security_password_card_width)));
+                    host.getResources().getDimensionPixelSize(R.dimen.dp_380)));
             View card = body.findViewById(R.id.security_password_card);
             View scroll = body.findViewById(R.id.security_password_scroll);
             // 宿主处理 configChanges，旋转不会重建弹窗，按当前窗口尺寸切换同一组输入控件。
@@ -313,9 +315,9 @@ public final class SecurityPasswordDialog {
             LinearLayout.LayoutParams keypadParams = new LinearLayout.LayoutParams(landscape ? 0
                     : ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, landscape ? 1 : 0);
             if (landscape)
-                keypadParams.setMarginStart(host.getResources().getDimensionPixelSize(R.dimen.security_password_column_gap));
+                keypadParams.setMarginStart(host.getResources().getDimensionPixelSize(tablet ? R.dimen.dp_12 : R.dimen.dp_8));
             else
-                keypadParams.topMargin = host.getResources().getDimensionPixelSize(R.dimen.security_password_section_gap);
+                keypadParams.topMargin = host.getResources().getDimensionPixelSize(tablet ? R.dimen.dp_9 : R.dimen.dp_6);
             form.setLayoutParams(formParams);
             keypad.setLayoutParams(keypadParams);
             card.getLayoutParams().width = width;
@@ -325,7 +327,8 @@ public final class SecurityPasswordDialog {
             card.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
             int excess = card.getMeasuredHeight() - Math.max(1, hostHeight - margin * 2);
-            if (excess > 0) scroll.getLayoutParams().height = Math.max(1, scroll.getMeasuredHeight() - excess);
+            if (excess > 0)
+                scroll.getLayoutParams().height = Math.max(1, scroll.getMeasuredHeight() - excess);
             card.requestLayout();
         }
     }

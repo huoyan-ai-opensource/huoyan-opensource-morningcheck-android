@@ -200,7 +200,9 @@ public final class HuoyanClient implements AutoCloseable {
         return submit("queryLicenseModels", params("activation_code", activationCode), null, callback);
     }
 
-    /** 无参查询设备现有授权的模型。 */
+    /**
+     * 无参查询设备现有授权的模型。
+     */
     public String queryDeviceModels(Callback callback) {
         return submit("queryDeviceModels", null, null, callback);
     }

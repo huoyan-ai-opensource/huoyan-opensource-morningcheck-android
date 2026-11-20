@@ -69,8 +69,9 @@ final class CloudServiceUi {
             toggle.setEnabled(known && !operation.running);
         }
         TextView state = activity.findViewById(R.id.license_cloud_state);
-        if (state != null) state.setText(known ? enabled ? activity.getString(R.string.i18n_a_on) : activity.getString(R.string.i18n_a_off)
-                : connected ? activity.getString(R.string.i18n_a_tap_to_check) : activity.getString(R.string.i18n_a_disconnected));
+        if (state != null)
+            state.setText(known ? enabled ? activity.getString(R.string.i18n_a_on) : activity.getString(R.string.i18n_a_off)
+                    : connected ? activity.getString(R.string.i18n_a_tap_to_check) : activity.getString(R.string.i18n_a_disconnected));
         if (writing && toggle != null) showProgress(operation.label);
         else dismissProgress();
         if (connected && !writing && queriedGeneration != session.generation()) {
@@ -100,8 +101,10 @@ final class CloudServiceUi {
                     BaseMorningActivity page = host.get();
                     if (page == null || !active(page) || page.sdkSession.generation() != expected)
                         return;
-                    if (code == 0) page.toast(activity.getString(R.string.i18n_a_cloud_service_setting_submitted));
-                    else page.notice(message);
+                    if (code == 0)
+                        page.toast(activity.getString(R.string.i18n_a_cloud_service_setting_submitted));
+                    else if (!page.guideSdkPermissions(code, message))
+                        page.notice(session.operation().message);
                 });
         refresh();
     }

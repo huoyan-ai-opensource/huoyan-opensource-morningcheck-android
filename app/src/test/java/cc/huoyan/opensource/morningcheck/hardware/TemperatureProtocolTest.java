@@ -11,7 +11,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TemperatureProtocolTest {
-    @Test public void acceptsSplitAndJoinedAsciiPacketsAndRecoversFromNoise() {
+    @Test
+    public void acceptsSplitAndJoinedAsciiPacketsAndRecoversFromNoise() {
         TemperatureProtocol protocol = new TemperatureProtocol(false);
         List<Double> values = new ArrayList<>();
         feed(protocol, "OK\r\n{36.", values);
@@ -20,7 +21,8 @@ public class TemperatureProtocolTest {
         assertEquals(Arrays.asList(36.65, 37.2, 36.7), values);
     }
 
-    @Test public void waitsForEntireBinaryFrameAndRejectsInvalidFraction() {
+    @Test
+    public void waitsForEntireBinaryFrameAndRejectsInvalidFraction() {
         TemperatureProtocol protocol = new TemperatureProtocol(true);
         List<Double> values = new ArrayList<>();
         byte[] frame = new byte[]{'C', 'T', 36, 65, 0, 0, 0, 0, 0, 0};
@@ -33,7 +35,8 @@ public class TemperatureProtocolTest {
         assertEquals(1, values.size());
     }
 
-    @Test public void passiveModeDoesNotTreatCtBytesAsTemperature() {
+    @Test
+    public void passiveModeDoesNotTreatCtBytesAsTemperature() {
         TemperatureProtocol protocol = new TemperatureProtocol(false);
         List<Double> values = new ArrayList<>();
         byte[] frame = new byte[]{'C', 'T', 36, 65, 0, 0, 0, 0, 0, 0};
@@ -43,14 +46,16 @@ public class TemperatureProtocolTest {
         assertEquals(Arrays.asList(36.8), values);
     }
 
-    @Test public void boundedParserRecoversFromTruncatedAndNestedPackets() {
+    @Test
+    public void boundedParserRecoversFromTruncatedAndNestedPackets() {
         TemperatureProtocol protocol = new TemperatureProtocol(true);
         List<Double> values = new ArrayList<>();
         feed(protocol, "{" + "x".repeat(5000) + "{bad{36.9}", values);
         assertEquals(Arrays.asList(36.9), values);
     }
 
-    @Test public void separateSessionCannotReusePartialPreviousReading() {
+    @Test
+    public void separateSessionCannotReusePartialPreviousReading() {
         List<Double> values = new ArrayList<>();
         TemperatureProtocol old = new TemperatureProtocol(false);
         feed(old, "{39.", values);

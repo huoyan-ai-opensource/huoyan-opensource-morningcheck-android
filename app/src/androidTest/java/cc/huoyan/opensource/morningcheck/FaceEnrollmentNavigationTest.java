@@ -100,7 +100,9 @@ import okhttp3.mockwebserver.RecordedRequest;
 import okio.ByteString;
 import okio.Buffer;
 
-/** 同屏人脸工作台只使用 UUID 测试库、本机 SDK 夹具和不存在的镜头，不接触业务员工或真实学习。 */
+/**
+ * 同屏人脸工作台只使用 UUID 测试库、本机 SDK 夹具和不存在的镜头，不接触业务员工或真实学习。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class FaceEnrollmentNavigationTest {
     private static final long FIRST_ID = 91001;
@@ -151,7 +153,8 @@ public final class FaceEnrollmentNavigationTest {
     private LightController originalLightController;
     private boolean lightControllerInjected;
 
-    @Before public void isolateEmployeeStoreAndSdk() throws Exception {
+    @Before
+    public void isolateEmployeeStoreAndSdk() throws Exception {
         boolean x86 = false;
         for (String abi : Build.SUPPORTED_ABIS) x86 |= abi.startsWith("x86");
         String hardware = Build.HARDWARE.toLowerCase(Locale.ROOT);
@@ -161,18 +164,38 @@ public final class FaceEnrollmentNavigationTest {
                 "C106".equals(Build.MODEL) || "NB55".equals(Build.MODEL) || emulator);
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         deviceOrientation = new android.app.Application.ActivityLifecycleCallbacks() {
-            @Override public void onActivityCreated(Activity page, Bundle state) {
+            @Override
+            public void onActivityCreated(Activity page, Bundle state) {
                 String orientation = InstrumentationRegistry.getArguments().getString("design_orientation", "");
-                if (!orientation.isEmpty()) page.setRequestedOrientation("portrait".equals(orientation)
-                        ? android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                        : android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                if (!orientation.isEmpty())
+                    page.setRequestedOrientation("portrait".equals(orientation)
+                            ? android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                            : android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
-            @Override public void onActivityStarted(Activity page) { }
-            @Override public void onActivityResumed(Activity page) { }
-            @Override public void onActivityPaused(Activity page) { }
-            @Override public void onActivityStopped(Activity page) { }
-            @Override public void onActivitySaveInstanceState(Activity page, Bundle state) { }
-            @Override public void onActivityDestroyed(Activity page) { }
+
+            @Override
+            public void onActivityStarted(Activity page) {
+            }
+
+            @Override
+            public void onActivityResumed(Activity page) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity page) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity page) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity page, Bundle state) {
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity page) {
+            }
         };
         app.registerActivityLifecycleCallbacks(deviceOrientation);
         assertEquals("测试不申请或改变权限，设备须预先授予相机权限", PackageManager.PERMISSION_GRANTED,
@@ -194,10 +217,15 @@ public final class FaceEnrollmentNavigationTest {
         constructor.setAccessible(true);
         testStore = constructor.newInstance(app, databaseName);
         app.io.submit(() -> testStore.getWritableDatabase()).get(10, TimeUnit.SECONDS);
-        onMain(() -> { originalStore = app.store; app.store = testStore; return null; });
+        onMain(() -> {
+            originalStore = app.store;
+            app.store = testStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 String path = request.getPath();
                 if (path != null && path.matches("/[0-9]+\\.jpg")) {
                     long uid = Long.parseLong(path.substring(1, path.length() - 4));
@@ -248,12 +276,14 @@ public final class FaceEnrollmentNavigationTest {
         });
     }
 
-    @After public void restoreEmployeeStoreAndConfiguration() throws Exception {
+    @After
+    public void restoreEmployeeStoreAndConfiguration() throws Exception {
         try {
             PendingRegistration pending = pendingRegistration.getAndSet(null);
             if (pending != null) reply(pending.socket, pending.requestId, Jsons.obj("uid", 0));
             PendingRegistration delayed = pendingDetail.getAndSet(null);
-            if (delayed != null) reply(delayed.socket, delayed.requestId, sampleDetail(delayed.personId));
+            if (delayed != null)
+                reply(delayed.socket, delayed.requestId, sampleDetail(delayed.personId));
             PendingRegistration deletion = pendingDeletion.getAndSet(null);
             if (deletion != null) reply(deletion.socket, deletion.requestId, -1, new JSONObject());
             if (scenario != null) scenario.close();
@@ -285,17 +315,23 @@ public final class FaceEnrollmentNavigationTest {
                 }
             }
         } finally {
-            if (app != null && deviceOrientation != null) app.unregisterActivityLifecycleCallbacks(deviceOrientation);
+            if (app != null && deviceOrientation != null)
+                app.unregisterActivityLifecycleCallbacks(deviceOrientation);
             try {
                 if (lightControllerInjected) onMain(() -> {
                     lightControllerField().set(null, originalLightController);
                     return null;
                 });
                 if (lightWorker != null) lightWorker.shutdownNow();
-                if (originalStore != null) onMain(() -> { app.store = originalStore; return null; });
+                if (originalStore != null) onMain(() -> {
+                    app.store = originalStore;
+                    return null;
+                });
                 if (testStore != null) testStore.close();
-                if (databaseName != null) assertTrue("应删除本轮独立员工库", app.deleteDatabase(databaseName));
-                if (preferences != null && originalPreferences != null) restore(preferences, originalPreferences);
+                if (databaseName != null)
+                    assertTrue("应删除本轮独立员工库", app.deleteDatabase(databaseName));
+                if (preferences != null && originalPreferences != null)
+                    restore(preferences, originalPreferences);
             } finally {
                 for (WebSocket socket : sockets) socket.close(1001, "人脸录入导航测试结束");
                 if (endpoint != null) endpoint.shutdown();
@@ -307,7 +343,8 @@ public final class FaceEnrollmentNavigationTest {
         assertNull("隔离 SDK 不应收到未声明的命令或错误帧", serverFailure.get());
     }
 
-    @Test public void homeStaffEntryOpensUnifiedSelectionWithoutCamera() throws Exception {
+    @Test
+    public void homeStaffEntryOpensUnifiedSelectionWithoutCamera() throws Exception {
         seedStaff(3);
         launch(HomeActivity.class);
         awaitControl(HomeActivity.class, R.id.home_staff);
@@ -325,7 +362,8 @@ public final class FaceEnrollmentNavigationTest {
         holdForScreenshot("workspace-empty");
     }
 
-    @Test public void staffEntryOpensSameSelectionWithoutCamera() throws Exception {
+    @Test
+    public void staffEntryOpensSameSelectionWithoutCamera() throws Exception {
         seedStaff(3);
         launch(StaffActivity.class);
         awaitControl(StaffActivity.class, R.id.staff_enroll);
@@ -335,8 +373,8 @@ public final class FaceEnrollmentNavigationTest {
     }
 
 
-
-    @Test public void employeeSearchPagesAndRestoresSearchAndPageAfterRecreation() throws Exception {
+    @Test
+    public void employeeSearchPagesAndRestoresSearchAndPageAfterRecreation() throws Exception {
         seedStaff(55);
         launch(FaceEnrollmentActivity.class);
         awaitSelection("第 1 / 3 页 · 共 55 条", 24);
@@ -365,7 +403,8 @@ public final class FaceEnrollmentNavigationTest {
         assertSelectionWithoutCamera();
     }
 
-    @Test public void secondColumnTapKeepsScrolledEmployeeRowsAndSelectsTheirActualId() throws Exception {
+    @Test
+    public void secondColumnTapKeepsScrolledEmployeeRowsAndSelectsTheirActualId() throws Exception {
         seedStaff(55);
         launch(FaceEnrollmentActivity.class);
         awaitSelection("第 1 / 3 页 · 共 55 条", 24);
@@ -399,12 +438,16 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals("选择和状态刷新不得自动提交学习", 0, registerRequests.get());
     }
 
-    @Test public void phoneEmployeeChooserRestoresSelectionAndViewportWithoutUsingHiddenCamera() throws Exception {
+    @Test
+    public void phoneEmployeeChooserRestoresSelectionAndViewportWithoutUsingHiddenCamera() throws Exception {
         assumeTrue("手机采用展开员工选择区", app.getResources().getBoolean(R.bool.mc_phone));
         seedStaff(55);
         launch(FaceEnrollmentActivity.class);
         awaitSelection("第 1 / 3 页 · 共 55 条", 24);
-        onMain(() -> { scroll(resumed(FaceEnrollmentActivity.class).findViewById(R.id.enrollment_staff_list), 6, 0); return null; });
+        onMain(() -> {
+            scroll(resumed(FaceEnrollmentActivity.class).findViewById(R.id.enrollment_staff_list), 6, 0);
+            return null;
+        });
         await(() -> onMain(() -> {
             RecyclerView employees = resumed(FaceEnrollmentActivity.class).findViewById(R.id.enrollment_staff_list);
             return !employees.isLayoutRequested() && first(employees) > 0
@@ -444,7 +487,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals(0, deleteRequests.get());
     }
 
-    @Test public void employeeSearchLoadsMatchesAndClearsWithoutSelectingEmployee() throws Exception {
+    @Test
+    public void employeeSearchLoadsMatchesAndClearsWithoutSelectingEmployee() throws Exception {
         seedStaff(55);
         launch(FaceEnrollmentActivity.class);
         awaitSelection("第 1 / 3 页 · 共 55 条", 24);
@@ -457,8 +501,12 @@ public final class FaceEnrollmentNavigationTest {
         CountDownLatch storageEntered = new CountDownLatch(1), releaseStorage = new CountDownLatch(1);
         java.util.concurrent.Future<?> storageBarrier = app.io.submit(() -> {
             storageEntered.countDown();
-            try { assertTrue("输入验收结束后应释放读库屏障", releaseStorage.await(30, TimeUnit.SECONDS)); }
-            catch (InterruptedException error) { Thread.currentThread().interrupt(); throw new AssertionError(error); }
+            try {
+                assertTrue("输入验收结束后应释放读库屏障", releaseStorage.await(30, TimeUnit.SECONDS));
+            } catch (InterruptedException error) {
+                Thread.currentThread().interrupt();
+                throw new AssertionError(error);
+            }
         });
         try {
             assertTrue("搜索前应建立可控的读库屏障", storageEntered.await(10, TimeUnit.SECONDS));
@@ -495,13 +543,16 @@ public final class FaceEnrollmentNavigationTest {
                         loadingVisibleAt[0] = 0;
                         return false;
                     }
-                    if (loadingVisibleAt[0] == 0) loadingVisibleAt[0] = SystemClock.elapsedRealtime();
+                    if (loadingVisibleAt[0] == 0)
+                        loadingVisibleAt[0] = SystemClock.elapsedRealtime();
                     return SystemClock.elapsedRealtime() - loadingVisibleAt[0] >= 300;
                 }), "员工搜索 Loading 显示期间应持续保留原输入焦点和系统键盘");
             } catch (AssertionError error) {
                 throw new AssertionError(error.getMessage() + "；" + loadingInputState.get(), error);
             }
-        } finally { releaseStorage.countDown(); }
+        } finally {
+            releaseStorage.countDown();
+        }
         storageBarrier.get(10, TimeUnit.SECONDS);
         awaitSelection("第 1 / 1 页 · 共 1 条", 1);
         onMain(() -> {
@@ -539,7 +590,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals("仅实时搜索不能删除样本", 0, deleteRequests.get());
     }
 
-    @Test public void employeeSearchReleasesCameraAndReturnsToSelectedEmployee() throws Exception {
+    @Test
+    public void employeeSearchReleasesCameraAndReturnsToSelectedEmployee() throws Exception {
         seedStaff(55);
         launch(FaceEnrollmentActivity.class);
         awaitSelection("第 1 / 3 页 · 共 55 条", 24);
@@ -636,7 +688,7 @@ public final class FaceEnrollmentNavigationTest {
     }
 
     private void assertEmployeeSearchWorkspace(FaceEnrollmentActivity page,
-                                              boolean captureVisible, boolean samplesVisible) {
+                                               boolean captureVisible, boolean samplesVisible) {
         assertWorkspacePanels(page);
         assertEquals("搜索不能改变采集面板可见性", captureVisible,
                 page.findViewById(R.id.enrollment_capture_panel).isShown());
@@ -647,7 +699,8 @@ public final class FaceEnrollmentNavigationTest {
         assertNull("选择员工时不能持有旧采集帧", page.latestFrame);
     }
 
-    @Test public void chosenEmployeeAndSelectionContextSurviveRecreationAndChangingEmployee() throws Exception {
+    @Test
+    public void chosenEmployeeAndSelectionContextSurviveRecreationAndChangingEmployee() throws Exception {
         seedStaff(55);
         launch(FaceEnrollmentActivity.class);
         awaitSelection("第 1 / 3 页 · 共 55 条", 24);
@@ -697,7 +750,8 @@ public final class FaceEnrollmentNavigationTest {
         holdForScreenshot("workspace-selected");
     }
 
-    @Test public void emptyRosterAndMissingExplicitIdNeverSelectArbitraryEmployee() throws Exception {
+    @Test
+    public void emptyRosterAndMissingExplicitIdNeverSelectArbitraryEmployee() throws Exception {
         launch(FaceEnrollmentActivity.class);
         awaitSelection("第 1 / 1 页 · 共 0 条", 0);
         assertSelectionWithoutCamera();
@@ -838,7 +892,8 @@ public final class FaceEnrollmentNavigationTest {
         assertTrue("后台迟到状态不能重新开灯", enrollmentLightsClosed());
     }
 
-    @Test public void enrollmentRequiresExactlyOneFaceAndExpiresWithoutNewCameraFrames() throws Exception {
+    @Test
+    public void enrollmentRequiresExactlyOneFaceAndExpiresWithoutNewCameraFrames() throws Exception {
         assertTrue(preferences.edit().putInt(AppFontSettings.KEY, 3).commit());
         openSyntheticDetectionWorkspace();
         for (int count : new int[]{0, 2, 3, 1}) {
@@ -896,7 +951,8 @@ public final class FaceEnrollmentNavigationTest {
         assertFalse(employee(FIRST_ID).optBoolean("face_write_unknown"));
     }
 
-    @Test public void finalCaptureDetectionRejectsSecondPersonWithoutCreatingUnknownWrite() throws Exception {
+    @Test
+    public void finalCaptureDetectionRejectsSecondPersonWithoutCreatingUnknownWrite() throws Exception {
         openSyntheticDetectionWorkspace();
         injectSyntheticDetectionFrame(2, 2);
         awaitSingleFaceCapture();
@@ -914,7 +970,8 @@ public final class FaceEnrollmentNavigationTest {
         assertFalse("纯检测失败不能留下写入未知标记", employee(FIRST_ID).optBoolean("face_write_unknown"));
     }
 
-    @Test public void confirmedSingleFaceRemainsClickableDuringPreviewAndQueuesFrozenRegistrationOnce() throws Exception {
+    @Test
+    public void confirmedSingleFaceRemainsClickableDuringPreviewAndQueuesFrozenRegistrationOnce() throws Exception {
         openSyntheticDetectionWorkspace();
         allowSyntheticRegistration = true;
         beginDelayedPreviewAfterConfirmedSingleFace();
@@ -943,7 +1000,8 @@ public final class FaceEnrollmentNavigationTest {
         await(() -> !app.faceOperations.isWriting(FIRST_ID), "登记回执应释放原员工占用");
     }
 
-    @Test public void queuedCaptureStillRejectsMultipleFacesInFinalFrozenFrameDetection() throws Exception {
+    @Test
+    public void queuedCaptureStillRejectsMultipleFacesInFinalFrozenFrameDetection() throws Exception {
         openSyntheticDetectionWorkspace();
         beginDelayedPreviewAfterConfirmedSingleFace();
         pushSyntheticDetectionFrame(markedRgb(72));
@@ -964,7 +1022,8 @@ public final class FaceEnrollmentNavigationTest {
         assertFalse(employee(FIRST_ID).optBoolean("face_write_unknown"));
     }
 
-    @Test public void previewNoFaceOrMultipleFacesImmediatelyRevokesPriorSingleFacePermission() throws Exception {
+    @Test
+    public void previewNoFaceOrMultipleFacesImmediatelyRevokesPriorSingleFacePermission() throws Exception {
         openSyntheticDetectionWorkspace();
         for (int count : new int[]{0, 2}) {
             beginDelayedPreviewAfterConfirmedSingleFace();
@@ -985,7 +1044,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals(0, registerRequests.get());
     }
 
-    @Test public void queuedCaptureIsCancelledWhenPreviousPreviewFindsNoFaceOrMultipleFaces() throws Exception {
+    @Test
+    public void queuedCaptureIsCancelledWhenPreviousPreviewFindsNoFaceOrMultipleFaces() throws Exception {
         openSyntheticDetectionWorkspace();
         for (int count : new int[]{0, 2}) {
             beginDelayedPreviewAfterConfirmedSingleFace();
@@ -1007,12 +1067,16 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals(0, registerRequests.get());
     }
 
-    @Test public void pausingWhileCaptureWaitsForPreviewCancelsQueuedFinalDetection() throws Exception {
+    @Test
+    public void pausingWhileCaptureWaitsForPreviewCancelsQueuedFinalDetection() throws Exception {
         openSyntheticDetectionWorkspace();
         beginDelayedPreviewAfterConfirmedSingleFace();
         click(FaceEnrollmentActivity.class, R.id.enrollment_capture);
         FaceEnrollmentActivity page = onMain(() -> resumed(FaceEnrollmentActivity.class));
-        onMain(() -> { instrumentation.callActivityOnPause(page); return null; });
+        onMain(() -> {
+            instrumentation.callActivityOnPause(page);
+            return null;
+        });
         try {
             assertFalse("尚未发复检也必须在onPause释放员工", app.faceOperations.isWriting(FIRST_ID));
             PendingRegistration preview = pendingFaceDetection.getAndSet(null);
@@ -1028,11 +1092,15 @@ public final class FaceEnrollmentNavigationTest {
                 return null;
             });
         } finally {
-            onMain(() -> { instrumentation.callActivityOnResume(page); return null; });
+            onMain(() -> {
+                instrumentation.callActivityOnResume(page);
+                return null;
+            });
         }
     }
 
-    @Test public void captureButtonRemainsVisibleInFixedEnrollmentActions() throws Exception {
+    @Test
+    public void captureButtonRemainsVisibleInFixedEnrollmentActions() throws Exception {
         openSyntheticDetectionWorkspace();
         onMain(() -> {
             FaceEnrollmentActivity page = resumed(FaceEnrollmentActivity.class);
@@ -1075,7 +1143,8 @@ public final class FaceEnrollmentNavigationTest {
         return rgb;
     }
 
-    @Test public void delayedDetectionStaysSingleInFlightAndOldReplyCannotEnableCaptureAfterCameraChange() throws Exception {
+    @Test
+    public void delayedDetectionStaysSingleInFlightAndOldReplyCannotEnableCaptureAfterCameraChange() throws Exception {
         openSyntheticDetectionWorkspace();
         delayedFaceDetectionAt = 1;
         injectSyntheticDetectionFrame(2, 2);
@@ -1105,7 +1174,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals(0, registerRequests.get());
     }
 
-    @Test public void detectorFailureClearsPreviousSingleFacePermission() throws Exception {
+    @Test
+    public void detectorFailureClearsPreviousSingleFacePermission() throws Exception {
         openSyntheticDetectionWorkspace();
         injectSyntheticDetectionFrame(2, 2);
         awaitSingleFaceCapture();
@@ -1122,7 +1192,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals(0, registerRequests.get());
     }
 
-    @Test public void cancelledFinalDetectionNeverCreatesUnknownWriteOrSendsLateRegistration() throws Exception {
+    @Test
+    public void cancelledFinalDetectionNeverCreatesUnknownWriteOrSendsLateRegistration() throws Exception {
         openSyntheticDetectionWorkspace();
         injectSyntheticDetectionFrame(2, 2);
         awaitSingleFaceCapture();
@@ -1131,7 +1202,10 @@ public final class FaceEnrollmentNavigationTest {
         await(() -> pendingFaceDetection.get() != null, "保存前最终检测应正在等待回执");
         assertTrue("最终检测期间也要锁定员工防止切人", app.faceOperations.isWriting(FIRST_ID));
         assertFalse("尚未准备 register 时不能写入结果未知标记", employee(FIRST_ID).optBoolean("face_write_unknown"));
-        onMain(() -> { resumed(FaceEnrollmentActivity.class).stopCamera(); return null; });
+        onMain(() -> {
+            resumed(FaceEnrollmentActivity.class).stopCamera();
+            return null;
+        });
         assertFalse("相机切换应释放尚未发起写入的预检占用", app.faceOperations.isWriting(FIRST_ID));
         PendingRegistration pending = pendingFaceDetection.getAndSet(null);
         reply(pending.socket, pending.requestId, faceDetectionData(1));
@@ -1141,7 +1215,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals("取消后返回单脸也不能补发 register", 0, registerRequests.get());
     }
 
-    @Test public void pausedStartedPageCannotRegisterAfterLateFinalSingleFaceReply() throws Exception {
+    @Test
+    public void pausedStartedPageCannotRegisterAfterLateFinalSingleFaceReply() throws Exception {
         openSyntheticDetectionWorkspace();
         injectSyntheticDetectionFrame(2, 2);
         awaitSingleFaceCapture();
@@ -1150,7 +1225,10 @@ public final class FaceEnrollmentNavigationTest {
         await(() -> pendingFaceDetection.get() != null, "最终检测应正在等待回执");
         FaceEnrollmentActivity page = onMain(() -> resumed(FaceEnrollmentActivity.class));
         // 桌面自由窗口会主动恢复顶层 Activity，直接派发回调以固定 onPause→onStop 窗口。
-        onMain(() -> { instrumentation.callActivityOnPause(page); return null; });
+        onMain(() -> {
+            instrumentation.callActivityOnPause(page);
+            return null;
+        });
         try {
             onMain(() -> {
                 assertFalse((Boolean) readField(page, "resumed"));
@@ -1171,17 +1249,24 @@ public final class FaceEnrollmentNavigationTest {
             assertEquals("仅暂停尚未停止时也不能补发 register", 0, registerRequests.get());
             assertFalse(employee(FIRST_ID).optBoolean("face_write_unknown"));
         } finally {
-            onMain(() -> { instrumentation.callActivityOnResume(page); return null; });
+            onMain(() -> {
+                instrumentation.callActivityOnResume(page);
+                return null;
+            });
         }
     }
 
-    @Test public void pausedStartedPageCannotRestoreCaptureFromLatePreviewDetection() throws Exception {
+    @Test
+    public void pausedStartedPageCannotRestoreCaptureFromLatePreviewDetection() throws Exception {
         openSyntheticDetectionWorkspace();
         delayedFaceDetectionAt = 1;
         injectSyntheticDetectionFrame(2, 2);
         await(() -> pendingFaceDetection.get() != null, "实时检测应正在等待回执");
         FaceEnrollmentActivity page = onMain(() -> resumed(FaceEnrollmentActivity.class));
-        onMain(() -> { instrumentation.callActivityOnPause(page); return null; });
+        onMain(() -> {
+            instrumentation.callActivityOnPause(page);
+            return null;
+        });
         try {
             onMain(() -> {
                 assertFalse((Boolean) readField(page, "resumed"));
@@ -1203,7 +1288,10 @@ public final class FaceEnrollmentNavigationTest {
             assertEquals(1, faceDetectionRequests.get());
             assertEquals(0, registerRequests.get());
         } finally {
-            onMain(() -> { instrumentation.callActivityOnResume(page); return null; });
+            onMain(() -> {
+                instrumentation.callActivityOnResume(page);
+                return null;
+            });
         }
     }
 
@@ -1215,7 +1303,8 @@ public final class FaceEnrollmentNavigationTest {
         await(() -> onMain(() -> app.sdkSession().viewState().ready), "本机 SDK 应就绪");
     }
 
-    @Test public void delayedSyntheticRegistrationBlocksEmployeeChangeAndOnlyReleasesOriginalEmployee() throws Exception {
+    @Test
+    public void delayedSyntheticRegistrationBlocksEmployeeChangeAndOnlyReleasesOriginalEmployee() throws Exception {
         seedStaff(55);
         allowSyntheticRegistration = true;
         scenario = ActivityScenario.launch(new Intent(app, FaceEnrollmentActivity.class)
@@ -1253,7 +1342,8 @@ public final class FaceEnrollmentNavigationTest {
         awaitCapture(replacement);
     }
 
-    @Test public void standaloneRegistrationSuccessStaysOnUnifiedPageAndAllowsChoosingAnotherEmployee() throws Exception {
+    @Test
+    public void standaloneRegistrationSuccessStaysOnUnifiedPageAndAllowsChoosingAnotherEmployee() throws Exception {
         seedStaff(3);
         allowSyntheticRegistration = true;
         launch(FaceEnrollmentActivity.class);
@@ -1282,7 +1372,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals("成功后更换员工不能自动重放 register", 1, registerRequests.get());
     }
 
-    @Test public void recreationDuringRegistrationKeepsSharedWriteGuardUntilOriginalReplyCompletes() throws Exception {
+    @Test
+    public void recreationDuringRegistrationKeepsSharedWriteGuardUntilOriginalReplyCompletes() throws Exception {
         seedStaff(55);
         allowSyntheticRegistration = true;
         scenario = ActivityScenario.launch(new Intent(app, FaceEnrollmentActivity.class)
@@ -1336,8 +1427,8 @@ public final class FaceEnrollmentNavigationTest {
     }
 
 
-
-    @Test public void deletingOneSampleRemovesOnlyThatUidAndKeepsOtherEmployee() throws Exception {
+    @Test
+    public void deletingOneSampleRemovesOnlyThatUidAndKeepsOtherEmployee() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78001, 78002);
         seedSampleFixture(FIRST_ID + 1, 79001);
@@ -1368,8 +1459,8 @@ public final class FaceEnrollmentNavigationTest {
     }
 
 
-
-    @Test public void clearingCurrentEmployeeRemovesAllItsUidsAndKeepsOtherEmployee() throws Exception {
+    @Test
+    public void clearingCurrentEmployeeRemovesAllItsUidsAndKeepsOtherEmployee() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78101, 78102, 78103);
         seedSampleFixture(FIRST_ID + 1, 79101);
@@ -1401,7 +1492,8 @@ public final class FaceEnrollmentNavigationTest {
         });
     }
 
-    @Test public void deletionKeepsVisibleImagesAndOneLoadingUntilReplyAndRejectsRepeatedActions() throws Exception {
+    @Test
+    public void deletionKeepsVisibleImagesAndOneLoadingUntilReplyAndRejectsRepeatedActions() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78401, 78402);
         seedSampleFixture(FIRST_ID + 1, 79401);
@@ -1456,7 +1548,8 @@ public final class FaceEnrollmentNavigationTest {
         assertFalse("原 Loading 窗口应释放", loading.isShowing());
     }
 
-    @Test public void capturedSamplePersistsImmediatelyAndLeavingDoesNotRegisterItAgain() throws Exception {
+    @Test
+    public void capturedSamplePersistsImmediatelyAndLeavingDoesNotRegisterItAgain() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78401, 78402);
         allowSyntheticRegistration = true;
@@ -1490,14 +1583,18 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals("新拍照片不需要额外保存按钮", 78403L, saved.optLong("face_uid"));
         assertEquals(expectedLocalSamples.get(FIRST_ID), uidSet(saved.optJSONArray("face_uids")));
         FaceEnrollmentActivity page = onMain(() -> resumed(FaceEnrollmentActivity.class));
-        onMain(() -> { page.onBackPressed(); return null; });
+        onMain(() -> {
+            page.onBackPressed();
+            return null;
+        });
         await(() -> onMain(page::isFinishing), "录入已立即保存，返回即可退出工作台");
         assertEquals("拍照仅提交一次，离开工作台不能重放 register", 1, registerRequests.get());
         assertEquals(0, deleteRequests.get());
         assertEquals(saved.toString(), employee(FIRST_ID).toString());
     }
 
-    @Test public void registrationWithoutVerifiedSamplesUsesOneFollowUpQueryAndKeepsItsLoading() throws Exception {
+    @Test
+    public void registrationWithoutVerifiedSamplesUsesOneFollowUpQueryAndKeepsItsLoading() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78411);
         allowSyntheticRegistration = true;
@@ -1535,7 +1632,8 @@ public final class FaceEnrollmentNavigationTest {
         assertFalse(loading.isShowing());
     }
 
-    @Test public void registrationCompletesWhileStoppedAndRestoresSamplesWhenResumed() throws Exception {
+    @Test
+    public void registrationCompletesWhileStoppedAndRestoresSamplesWhenResumed() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78421);
         allowSyntheticRegistration = true;
@@ -1582,7 +1680,8 @@ public final class FaceEnrollmentNavigationTest {
         assertFalse(employee(FIRST_ID).optBoolean("face_write_unknown"));
     }
 
-    @Test public void allSamplesStayInOneScrollableListAndOnlyVisibleThumbnailsDownload() throws Exception {
+    @Test
+    public void allSamplesStayInOneScrollableListAndOnlyVisibleThumbnailsDownload() throws Exception {
         seedStaff(3);
         long[] uids = new long[AppStore.DEFAULT_PAGE_SIZE * 2 + 3];
         for (int index = 0; index < uids.length; index++) uids[index] = 78501 + index;
@@ -1633,7 +1732,8 @@ public final class FaceEnrollmentNavigationTest {
         }), "重建后应自动恢复同一员工、同一设备的首个样本 UID 和行内偏移，不能由测试补滚动");
     }
 
-    @Test public void staleSampleTileCannotDeleteAfterEmployeeChanges() throws Exception {
+    @Test
+    public void staleSampleTileCannotDeleteAfterEmployeeChanges() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78601);
         seedSampleFixture(FIRST_ID + 1, 79601);
@@ -1647,7 +1747,10 @@ public final class FaceEnrollmentNavigationTest {
         selectEmployeeById(FIRST_ID + 1);
         awaitCapture(FIRST_ID + 1);
         awaitSampleGrid(FIRST_ID + 1, new long[]{79601});
-        onMain(() -> { oldDelete.performClick(); return null; });
+        onMain(() -> {
+            oldDelete.performClick();
+            return null;
+        });
         instrumentation.waitForIdleSync();
         app.io.submit(() -> null).get(10, TimeUnit.SECONDS);
         assertEquals("旧员工图片遗留的点击回调不能删除当前员工样本", 0, deleteRequests.get());
@@ -1657,7 +1760,8 @@ public final class FaceEnrollmentNavigationTest {
         assertSampleImageShown(79601);
     }
 
-    @Test public void refreshInProgressRejectsSampleDeletionUsingPreviousVerification() throws Exception {
+    @Test
+    public void refreshInProgressRejectsSampleDeletionUsingPreviousVerification() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78701);
         allowSyntheticDelete = true;
@@ -1689,7 +1793,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals(expectedLocalSamples.get(FIRST_ID), uidSet(employee(FIRST_ID).optJSONArray("face_uids")));
     }
 
-    @Test public void busyToReadyStatusKeepsVerifiedSamplesWithoutQueryingOrDownloadingAgain() throws Exception {
+    @Test
+    public void busyToReadyStatusKeepsVerifiedSamplesWithoutQueryingOrDownloadingAgain() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78711, 78712);
         scenario = ActivityScenario.launch(new Intent(app, FaceEnrollmentActivity.class)
@@ -1720,7 +1825,8 @@ public final class FaceEnrollmentNavigationTest {
         assertNull("普通 SDK 状态回调不弹出读取 Loading", onMain(() -> operationLoadingDialog(resumed(FaceEnrollmentActivity.class))));
     }
 
-    @Test public void rejectedAndUnknownDeletionKeepUidAndImageUntilSdkConfirmsActualState() throws Exception {
+    @Test
+    public void rejectedAndUnknownDeletionKeepUidAndImageUntilSdkConfirmsActualState() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78201);
         seedSampleFixture(FIRST_ID + 1, 79201);
@@ -1791,7 +1897,8 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals(2, deleteRequests.get());
     }
 
-    @Test public void lateSampleQueryCannotReplaceImagesAfterSelectingAnotherEmployee() throws Exception {
+    @Test
+    public void lateSampleQueryCannotReplaceImagesAfterSelectingAnotherEmployee() throws Exception {
         seedStaff(3);
         seedSampleFixture(FIRST_ID, 78301);
         seedSampleFixture(FIRST_ID + 1, 79301);
@@ -1815,7 +1922,10 @@ public final class FaceEnrollmentNavigationTest {
                 "samples", new JSONArray().put(Jsons.obj("uid", 79999, "image_url", imageUrl(79999)))));
         // 同一 WS 上的状态回执作为屏障，旧 userDetail 已交给 App 主线程后再读取档案。
         CountDownLatch barrier = new CountDownLatch(1);
-        onMain(() -> { resumed(FaceEnrollmentActivity.class).sdk.refreshStatus((c, m, d) -> barrier.countDown()); return null; });
+        onMain(() -> {
+            resumed(FaceEnrollmentActivity.class).sdk.refreshStatus((c, m, d) -> barrier.countDown());
+            return null;
+        });
         assertTrue(barrier.await(10, TimeUnit.SECONDS));
         app.io.submit(() -> null).get(10, TimeUnit.SECONDS);
         instrumentation.waitForIdleSync();
@@ -1825,19 +1935,6 @@ public final class FaceEnrollmentNavigationTest {
         assertEquals(0, imageRequests.containsKey(79999L) ? imageRequests.get(79999L).get() : 0);
         assertEquals(expectedLocalSamples.get(FIRST_ID + 1), uidSet(employee(FIRST_ID + 1).optJSONArray("face_uids")));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void saveEnrollmentScreenshot(String name) throws Exception {
@@ -1862,9 +1959,10 @@ public final class FaceEnrollmentNavigationTest {
         assertTrue(folder.isDirectory() || folder.mkdirs());
         try (FileOutputStream output = new FileOutputStream(new File(folder, name + ".png"))) {
             assertTrue(screenshot.compress(Bitmap.CompressFormat.PNG, 100, output));
-        } finally { screenshot.recycle(); }
+        } finally {
+            screenshot.recycle();
+        }
     }
-
 
 
     private void collectVisibleDetailText(View view, List<String> texts) {
@@ -1872,7 +1970,8 @@ public final class FaceEnrollmentNavigationTest {
         if (view instanceof TextView) texts.add(((TextView) view).getText().toString());
         if (view instanceof android.view.ViewGroup) {
             android.view.ViewGroup group = (android.view.ViewGroup) view;
-            for (int i = 0; i < group.getChildCount(); i++) collectVisibleDetailText(group.getChildAt(i), texts);
+            for (int i = 0; i < group.getChildCount(); i++)
+                collectVisibleDetailText(group.getChildAt(i), texts);
         }
     }
 
@@ -1917,9 +2016,11 @@ public final class FaceEnrollmentNavigationTest {
             if (page == null || ((Number) readField(page, "staffId")).longValue() != staffId
                     || app.faceOperations.isWriting(staffId)) return false;
             GridView grid = page.findViewById(R.id.enrollment_faces);
-            if (grid == null || grid.getCount() != expected.length || !page.findViewById(R.id.enrollment_faces_refresh).isEnabled()) return false;
+            if (grid == null || grid.getCount() != expected.length || !page.findViewById(R.id.enrollment_faces_refresh).isEnabled())
+                return false;
             Set<Long> shown = new ConcurrentSkipListSet<>();
-            for (int position = 0; position < grid.getCount(); position++) shown.add(grid.getAdapter().getItemId(position));
+            for (int position = 0; position < grid.getCount(); position++)
+                shown.add(grid.getAdapter().getItemId(position));
             return uids.equals(shown) && !((TextView) page.findViewById(R.id.enrollment_faces_info))
                     .getText().toString().contains("核对");
         }), "样本区域应只展示当前员工经 SDK 确认的 UID：" + uids);
@@ -1961,11 +2062,12 @@ public final class FaceEnrollmentNavigationTest {
                         .append("，SDK代次=").append(app.sdkSession().generation());
                 Object batch = readField(page, "sampleImageBatch");
                 value.append("\n图片批次=").append(batch == null ? "无" : "存在");
-                if (batch != null) for (String field : new String[]{"employee", "selection", "generation", "device", "version"}) {
-                    Field reflected = batch.getClass().getDeclaredField(field);
-                    reflected.setAccessible(true);
-                    value.append(' ').append(field).append('=').append(reflected.get(batch));
-                }
+                if (batch != null)
+                    for (String field : new String[]{"employee", "selection", "generation", "device", "version"}) {
+                        Field reflected = batch.getClass().getDeclaredField(field);
+                        reflected.setAccessible(true);
+                        value.append(' ').append(field).append('=').append(reflected.get(batch));
+                    }
                 GridView grid = page.findViewById(R.id.enrollment_faces);
                 android.graphics.Rect visible = new android.graphics.Rect();
                 visibleOnScreen(grid, visible);
@@ -2053,7 +2155,9 @@ public final class FaceEnrollmentNavigationTest {
             Field field = LoadingDialog.class.getDeclaredField("dialog");
             field.setAccessible(true);
             return (Dialog) field.get(loading);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private void assertOperationFinishedWithToast(String message, boolean success) {
@@ -2230,11 +2334,11 @@ public final class FaceEnrollmentNavigationTest {
             for (int index = 1; index <= count; index++) {
                 long localId = FIRST_ID + index - 1;
                 testStore.saveStaff(Jsons.obj(
-                    "id", FIRST_ID + index - 1, "name", "测试员工 " + index,
-                    "staff_no", "S" + (FIRST_ID + index - 1),
-                    "department", index <= 45 ? "后厨" : "仓储", "enabled", true,
-                    "created_at", index, "face_registered", false,
-                    "face_write_unknown", false, "face_write_attempt", ""));
+                        "id", FIRST_ID + index - 1, "name", "测试员工 " + index,
+                        "staff_no", "S" + (FIRST_ID + index - 1),
+                        "department", index <= 45 ? "后厨" : "仓储", "enabled", true,
+                        "created_at", index, "face_registered", false,
+                        "face_write_unknown", false, "face_write_attempt", ""));
                 long sdkId = testStore.staff(localId).optLong("person_id");
                 assertTrue("存储层必须生成正数 SDK 标识", sdkId > 0);
                 assertNotEquals("测试需明确区分 SDK 标识与本地主键", localId, sdkId);
@@ -2249,7 +2353,9 @@ public final class FaceEnrollmentNavigationTest {
         return value;
     }
 
-    /** 默认不等待；主机显式要求时提供截图窗口，不在设备写照片。 */
+    /**
+     * 默认不等待；主机显式要求时提供截图窗口，不在设备写照片。
+     */
     private void holdForScreenshot(String scene) {
         long duration = Long.parseLong(InstrumentationRegistry.getArguments().getString("previewHoldMs", "0"));
         assertTrue("截图等待必须在 0 到 10000 毫秒之间", duration >= 0 && duration <= 10_000);
@@ -2283,8 +2389,11 @@ public final class FaceEnrollmentNavigationTest {
 
     private void search(String keyword) {
         showEmployeeChooser();
-        onMain(() -> { ((EditText) resumed(FaceEnrollmentActivity.class)
-                .findViewById(R.id.enrollment_search)).setText(keyword); return null; });
+        onMain(() -> {
+            ((EditText) resumed(FaceEnrollmentActivity.class)
+                    .findViewById(R.id.enrollment_search)).setText(keyword);
+            return null;
+        });
     }
 
     private void assertEmployeeColumns() {
@@ -2327,7 +2436,9 @@ public final class FaceEnrollmentNavigationTest {
         });
     }
 
-    /** 使用第二列卡片真实触点，验证屏幕位置与员工 ID 的对应关系。 */
+    /**
+     * 使用第二列卡片真实触点，验证屏幕位置与员工 ID 的对应关系。
+     */
     private long tapVisibleSecondColumnEmployee() {
         Rect target = new Rect();
         long id = onMain(() -> {
@@ -2499,7 +2610,9 @@ public final class FaceEnrollmentNavigationTest {
         }), "在途重建后的列表仍应读取并显示原页：" + expectedInfo);
     }
 
-    /** 禁用控件之外，程序回调也不能绕过在途员工写锁。 */
+    /**
+     * 禁用控件之外，程序回调也不能绕过在途员工写锁。
+     */
     private void assertInFlightWorkspaceGuard(FaceEnrollmentActivity page, long originalId) {
         assertWorkspacePanels(page);
         RecyclerView employees = page.findViewById(R.id.enrollment_staff_list);
@@ -2555,8 +2668,11 @@ public final class FaceEnrollmentNavigationTest {
         assertTrue("验收方向只允许 portrait 或 landscape", "portrait".equals(expected) || "landscape".equals(expected));
         boolean portrait = "portrait".equals(expected);
         await(() -> onMain(() -> resumed(type) != null), "指定方向前员工页面应已恢复");
-        onMain(() -> { resumed(type).setRequestedOrientation(portrait
-                ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); return null; });
+        onMain(() -> {
+            resumed(type).setRequestedOrientation(portrait
+                    ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            return null;
+        });
         await(() -> onMain(() -> {
             T page = resumed(type);
             if (page == null) return false;
@@ -2564,7 +2680,7 @@ public final class FaceEnrollmentNavigationTest {
             return root.getWidth() > 0 && root.getHeight() > 0 && !root.isLayoutRequested()
                     && (portrait ? root.getHeight() > root.getWidth() : root.getWidth() > root.getHeight())
                     && page.getResources().getConfiguration().orientation == (portrait
-                            ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE);
+                    ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE);
         }), "实际员工页面窗口应符合验收方向：" + expected);
     }
 
@@ -2593,10 +2709,14 @@ public final class FaceEnrollmentNavigationTest {
         AtomicReference<T> result = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { result.set(operation.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                result.set(operation.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
-        if (failure.get() != null) throw new AssertionError("人脸导航主线程验收失败", failure.get());
+        if (failure.get() != null)
+            throw new AssertionError("人脸导航主线程验收失败", failure.get());
         return result.get();
     }
 
@@ -2605,7 +2725,9 @@ public final class FaceEnrollmentNavigationTest {
             Field field = FaceEnrollmentActivity.class.getDeclaredField(name);
             field.setAccessible(true);
             return field.get(target);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -2647,6 +2769,7 @@ public final class FaceEnrollmentNavigationTest {
         final WebSocket socket;
         final String requestId;
         final long personId;
+
         PendingRegistration(WebSocket socket, String requestId, long personId) {
             this.socket = socket;
             this.requestId = requestId;
@@ -2657,8 +2780,14 @@ public final class FaceEnrollmentNavigationTest {
     private final class EnrollmentFixture extends WebSocketListener {
         private final Map<String, JSONObject> registrations = new ConcurrentHashMap<>();
         private final Map<String, JSONObject> detections = new ConcurrentHashMap<>();
-        @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-        @Override public void onMessage(WebSocket socket, String text) {
+
+        @Override
+        public void onOpen(WebSocket socket, Response response) {
+            sockets.add(socket);
+        }
+
+        @Override
+        public void onMessage(WebSocket socket, String text) {
             try {
                 JSONObject request = new JSONObject(text);
                 String command = request.getString("cmd");
@@ -2686,7 +2815,8 @@ public final class FaceEnrollmentNavigationTest {
                         assertTrue(pendingDetail.compareAndSet(null,
                                 new PendingRegistration(socket, request.getString("requestId"), personId)));
                         detailReceived.countDown();
-                    } else reply(socket, request.getString("requestId"), detailResponseCode, sampleDetail(personId));
+                    } else
+                        reply(socket, request.getString("requestId"), detailResponseCode, sampleDetail(personId));
                     return;
                 }
                 if ("forgetByUid".equals(command) || "forget".equals(command)) {
@@ -2706,8 +2836,10 @@ public final class FaceEnrollmentNavigationTest {
                         return;
                     }
                     if (deleteResponseCode == 0) {
-                        if ("forget".equals(command)) sdkSamples.remove(params.optLong("person_id"));
-                        else for (Set<Long> values : sdkSamples.values()) values.remove(params.optLong("uid"));
+                        if ("forget".equals(command))
+                            sdkSamples.remove(params.optLong("person_id"));
+                        else for (Set<Long> values : sdkSamples.values())
+                            values.remove(params.optLong("uid"));
                     }
                     reply(socket, request.getString("requestId"), deleteResponseCode, new JSONObject());
                     return;
@@ -2718,11 +2850,15 @@ public final class FaceEnrollmentNavigationTest {
                         || "getDownloadProgress".equals(command));
                 JSONObject data = "getStatus".equals(command)
                         ? Jsons.obj("sdk_state", "READY", "model_ready", true, "certificate_valid", true,
-                                "device_id", TEST_DEVICE) : new JSONObject();
+                        "device_id", TEST_DEVICE) : new JSONObject();
                 reply(socket, request.getString("requestId"), data);
-            } catch (Throwable error) { serverFailure.set(error); }
+            } catch (Throwable error) {
+                serverFailure.set(error);
+            }
         }
-        @Override public void onMessage(WebSocket socket, ByteString bytes) {
+
+        @Override
+        public void onMessage(WebSocket socket, ByteString bytes) {
             try {
                 ByteBuffer buffer = bytes.asByteBuffer();
                 int length = buffer.getInt();
@@ -2739,7 +2875,8 @@ public final class FaceEnrollmentNavigationTest {
                     int count = faceDetectionRequests.incrementAndGet();
                     if (count == delayedFaceDetectionAt) {
                         assertTrue(pendingFaceDetection.compareAndSet(null, new PendingRegistration(socket, requestId, 0)));
-                    } else reply(socket, requestId, faceDetectionCode, faceDetectionData(syntheticFaceCount));
+                    } else
+                        reply(socket, requestId, faceDetectionCode, faceDetectionData(syntheticFaceCount));
                     return;
                 }
                 JSONObject request = registrations.remove(requestId);
@@ -2756,15 +2893,18 @@ public final class FaceEnrollmentNavigationTest {
                 assertTrue(pendingRegistration.compareAndSet(null,
                         new PendingRegistration(socket, requestId, params.optLong("person_id"))));
                 registerReceived.countDown();
-            } catch (Throwable error) { serverFailure.set(error); }
+            } catch (Throwable error) {
+                serverFailure.set(error);
+            }
         }
     }
 
     private static JSONObject faceDetectionData(int count) {
         JSONArray faces = new JSONArray();
-        for (int i = 0; i < count; i++) faces.put(Jsons.obj("x", .1 + i * .25, "y", .2,
-                "w", .2, "h", .3, "score", .99,
-                "landmarks", new JSONArray(java.util.Arrays.asList(.1, .2, .2, .2, .15, .3, .1, .4, .2, .4))));
+        for (int i = 0; i < count; i++)
+            faces.put(Jsons.obj("x", .1 + i * .25, "y", .2,
+                    "w", .2, "h", .3, "score", .99,
+                    "landmarks", new JSONArray(java.util.Arrays.asList(.1, .2, .2, .2, .15, .3, .1, .4, .2, .4))));
         return Jsons.obj("faces", faces);
     }
 
@@ -2779,7 +2919,9 @@ public final class FaceEnrollmentNavigationTest {
         return detailItemsOnly ? Jsons.obj("items", details) : Jsons.obj("uids", values, "samples", details);
     }
 
-    private String imageUrl(long uid) { return endpoint.url("/" + uid + ".jpg").toString(); }
+    private String imageUrl(long uid) {
+        return endpoint.url("/" + uid + ".jpg").toString();
+    }
 
     private static byte[] jpegFixture() {
         return jpegFixture(96, 64);
@@ -2792,12 +2934,18 @@ public final class FaceEnrollmentNavigationTest {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             assertTrue("本机图片夹具必须为有效 JPEG", image.compress(Bitmap.CompressFormat.JPEG, 90, output));
             return output.toByteArray();
-        } finally { image.recycle(); }
+        } finally {
+            image.recycle();
+        }
     }
 
     private static byte[] rgbTestImage(int width, int height) {
         byte[] rgb = new byte[width * height * 3];
-        for (int i = 0; i < rgb.length; i += 3) { rgb[i] = 52; rgb[i + 1] = 104; rgb[i + 2] = (byte) 184; }
+        for (int i = 0; i < rgb.length; i += 3) {
+            rgb[i] = 52;
+            rgb[i + 1] = 104;
+            rgb[i + 2] = (byte) 184;
+        }
         return rgb;
     }
 

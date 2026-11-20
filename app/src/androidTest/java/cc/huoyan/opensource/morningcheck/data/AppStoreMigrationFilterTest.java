@@ -21,25 +21,30 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-/** 迁移和层级筛选仅使用独立数据库，不触碰真机业务库或云端接口。 */
+/**
+ * 迁移和层级筛选仅使用独立数据库，不触碰真机业务库或云端接口。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class AppStoreMigrationFilterTest {
     private Context context;
     private String databaseName;
     private AppStore store;
 
-    @Before public void createSeparateDatabase() {
+    @Before
+    public void createSeparateDatabase() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         databaseName = "department-filter-" + UUID.randomUUID() + ".db";
         store = new AppStore(context, databaseName);
     }
 
-    @After public void removeOwnDatabase() {
+    @After
+    public void removeOwnDatabase() {
         store.close();
         context.deleteDatabase(databaseName);
     }
 
-    @Test public void versionFourMigrationPreservesRawRowsAndUsesRecordDepartmentBeforeCurrentStaff() {
+    @Test
+    public void versionFourMigrationPreservesRawRowsAndUsesRecordDepartmentBeforeCurrentStaff() {
         JSONObject oldStaff = Jsons.obj("id", 42, "name", "新姓名", "staff_no", "N42", "department", "前厅",
                 "enabled", false, "face_uids", new JSONArray().put(90042L), "created_at", 123L);
         JSONObject snapshot = Jsons.obj("id", "snapshot", "staff_id", 42, "staff_name", "旧姓名", "staff_no", "OLD42",
@@ -77,7 +82,8 @@ public final class AppStoreMigrationFilterTest {
         assertEquals(snapshot.toString(), rawData("records", "snapshot"));
     }
 
-    @Test public void hierarchyAllowsSiblingNamesAcrossParentsAndRejectsCyclesAndOrphans() {
+    @Test
+    public void hierarchyAllowsSiblingNamesAcrossParentsAndRejectsCyclesAndOrphans() {
         long first = store.saveDepartment(0, "第一门店");
         long second = store.saveDepartment(0, "第二门店");
         long kitchen1 = saveDepartment("后厨", first);
@@ -92,7 +98,8 @@ public final class AppStoreMigrationFilterTest {
         expectFailure("不存在", () -> saveDepartment("无上级", 9999));
         expectFailure("下级部门", () -> store.removeDepartment(kitchen1));
         Set<Long> excluded = new HashSet<>();
-        for (JSONObject option : store.departmentOptions(kitchen1)) excluded.add(option.optLong("id"));
+        for (JSONObject option : store.departmentOptions(kitchen1))
+            excluded.add(option.optLong("id"));
         assertFalse(excluded.contains(kitchen1));
         assertFalse(excluded.contains(child));
         assertTrue(excluded.contains(kitchen2));
@@ -107,7 +114,8 @@ public final class AppStoreMigrationFilterTest {
         expectFailure("上级部门已变更", () -> store.removeDepartment(kitchen1, "厨房", first));
     }
 
-    @Test public void versionFourMigrationDoesNotAssignRemovedDepartmentSnapshotToCurrentDepartment() {
+    @Test
+    public void versionFourMigrationDoesNotAssignRemovedDepartmentSnapshotToCurrentDepartment() {
         JSONObject currentStaff = Jsons.obj("id", 42, "name", "已调部门员工", "staff_no", "N42", "department", "B部门");
         JSONObject former = Jsons.obj("id", "former", "staff_id", 42, "staff_name", "历史姓名", "staff_no", "OLD42",
                 "department", "已不存在的A部门", "status", 0, "created_at", 100L);
@@ -139,7 +147,8 @@ public final class AppStoreMigrationFilterTest {
         assertEquals("已不存在的A部门", store.record("former").optString("department"));
     }
 
-    @Test public void combinedFiltersCountAndPageSubtreesWithoutDuplicateRows() {
+    @Test
+    public void combinedFiltersCountAndPageSubtreesWithoutDuplicateRows() {
         long root = store.saveDepartment(0, "门店");
         long child = saveDepartment("后厨", root);
         long grandchild = saveDepartment("热厨", child);
@@ -166,7 +175,8 @@ public final class AppStoreMigrationFilterTest {
         assertEquals(0L, store.staffPage("%_", 0, root, 1, 20).total);
     }
 
-    @Test public void renameAndMoveUpdateStaffPathsButKeepRecordSnapshotsAndStableDepartmentFilter() {
+    @Test
+    public void renameAndMoveUpdateStaffPathsButKeepRecordSnapshotsAndStableDepartmentFilter() {
         long original = store.saveDepartment(0, "原门店");
         long destination = store.saveDepartment(0, "新门店");
         long kitchen = saveDepartment("后厨", original);
@@ -188,7 +198,8 @@ public final class AppStoreMigrationFilterTest {
         expectFailure("已被更新", () -> store.patchStaffProfile(1, before, Jsons.obj("department", "原门店 / 后厨", "department_id", kitchen)));
     }
 
-    @Test public void ambiguousCloudNamesStayUnassignedAndExplicitUnassignedRecordsNeverFollowStaff() {
+    @Test
+    public void ambiguousCloudNamesStayUnassignedAndExplicitUnassignedRecordsNeverFollowStaff() {
         long root1 = store.saveDepartment(0, "一店"), root2 = store.saveDepartment(0, "二店");
         long child1 = saveDepartment("后厨", root1), child2 = saveDepartment("后厨", root2);
         store.saveStaff(Jsons.obj("id", 1, "name", "云员工", "staff_no", "C001", "department", "后厨"));
@@ -218,19 +229,24 @@ public final class AppStoreMigrationFilterTest {
         assertEquals(child2, store.staff(2).optLong("department_id"));
     }
 
-    @Test public void subtreeFilterSupportsMoreThanSqliteBindLimit() {
+    @Test
+    public void subtreeFilterSupportsMoreThanSqliteBindLimit() {
         long root = store.saveDepartment(0, "大部门");
         SQLiteDatabase db = store.getWritableDatabase();
         db.beginTransaction();
         try {
             for (int i = 0; i < 1001; i++) {
                 ContentValues department = new ContentValues();
-                department.put("name", "子部门" + i); department.put("parent_id", root);
-                department.put("path", "大部门 / 子部门" + i); department.put("time", i);
+                department.put("name", "子部门" + i);
+                department.put("parent_id", root);
+                department.put("path", "大部门 / 子部门" + i);
+                department.put("time", i);
                 db.insertOrThrow("departments", null, department);
             }
             db.setTransactionSuccessful();
-        } finally { db.endTransaction(); }
+        } finally {
+            db.endTransaction();
+        }
         long last = store.departmentOptions(0).get(1000).optLong("id");
         store.saveStaff(person(1, last, true));
         store.saveRecord(record("one", store.staff(1), 1, 100));
@@ -238,7 +254,9 @@ public final class AppStoreMigrationFilterTest {
         assertEquals(1L, store.recordsPage("", 1, root, 1, 20).total);
     }
 
-    private long saveDepartment(String name, long parent) { return store.saveDepartment(0, name, parent, null, 0); }
+    private long saveDepartment(String name, long parent) {
+        return store.saveDepartment(0, name, parent, null, 0);
+    }
 
     private static JSONObject person(long id, long department, boolean enabled) {
         return Jsons.obj("id", id, "name", "筛选员工" + id, "staff_no", String.format(java.util.Locale.US, "S%03d", id),
@@ -259,7 +277,9 @@ public final class AppStoreMigrationFilterTest {
 
     private static void insertRaw(SQLiteDatabase db, String table, String id, String raw, long time) {
         ContentValues values = new ContentValues();
-        values.put("id", id); values.put("data", raw); values.put("time", time);
+        values.put("id", id);
+        values.put("data", raw);
+        values.put("time", time);
         db.insertOrThrow(table, null, values);
     }
 
@@ -278,7 +298,11 @@ public final class AppStoreMigrationFilterTest {
     }
 
     private static void expectFailure(String message, Runnable action) {
-        try { action.run(); fail("应拒绝：" + message); }
-        catch (IllegalArgumentException | IllegalStateException error) { assertTrue(error.getMessage(), error.getMessage().contains(message)); }
+        try {
+            action.run();
+            fail("应拒绝：" + message);
+        } catch (IllegalArgumentException | IllegalStateException error) {
+            assertTrue(error.getMessage(), error.getMessage().contains(message));
+        }
     }
 }

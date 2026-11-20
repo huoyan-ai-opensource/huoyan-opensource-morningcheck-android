@@ -93,6 +93,7 @@ public final class MorningSdkSession implements HuoyanClient.Listener {
     private final Set<String> queries = new LinkedHashSet<>();
     private SdkConfig config;
     private boolean connected;
+    private boolean permissionRequired;
     private volatile long generation;
     private String connectionMessage = "正在连接晨检 SDK", detailsSignature = "";
     private JSONObject status = new JSONObject(), certificate = new JSONObject();
@@ -155,6 +156,21 @@ public final class MorningSdkSession implements HuoyanClient.Listener {
 
     public long generation() {
         return generation;
+    }
+
+    /**
+     * 两种缺权回执共用未就绪码，其余初始化、连接异常继续走原业务流程。
+     */
+    public static boolean missingPermission(int code, String reason) {
+        return code == -3 && ("SDK 壳必需权限未齐备，请先调用 init 并完成悬浮窗和安装应用授权".equals(reason)
+                || "请先授予 SDK 壳悬浮窗和安装应用权限；全部授权后将继续本次初始化".equals(reason));
+    }
+
+    /**
+     * 当前连接最近一次证书查询是否被 SDK 权限门禁拒绝。
+     */
+    public boolean permissionRequired() {
+        return permissionRequired;
     }
 
     public boolean matchesConfiguration(SdkConfig value) {
@@ -300,6 +316,7 @@ public final class MorningSdkSession implements HuoyanClient.Listener {
 
     private void clearSnapshots() {
         connected = false;
+        permissionRequired = false;
         status = new JSONObject();
         certificate = new JSONObject();
         download = new JSONObject();
@@ -349,6 +366,12 @@ public final class MorningSdkSession implements HuoyanClient.Listener {
             }
             if ("getCloudStatus".equals(name) && expectedCloud != cloudReadVersion) return;
             if (tracked) queries.remove(name);
+            if ("getCertInfo".equals(name)) {
+                boolean denied = missingPermission(code, reason);
+                boolean changed = permissionRequired != denied;
+                permissionRequired = denied;
+                if (changed && code != 0) notifyDetails();
+            }
             if (code == 0) {
                 switch (name) {
                     case "getStatus":
@@ -414,7 +437,7 @@ public final class MorningSdkSession implements HuoyanClient.Listener {
             String message = result == HuoyanClient.ERROR_RESULT_UNKNOWN
                     ? label + "结果未知，请核对 SDK 当前状态后再操作"
                     : result == 0 ? label + "请求已处理，正在确认 SDK 状态"
-                      : label + "失败：" + reason + "（" + result + "）";
+                    : label + "失败：" + reason + "（" + result + "）";
             operation = new Operation(name, label, false, result, message);
             // 开关和配置即使失败也重新读取；不乐观显示已经启用，更不重放未知写入。
             if (!listeners.isEmpty()) refreshDetails();
@@ -422,7 +445,8 @@ public final class MorningSdkSession implements HuoyanClient.Listener {
                 read("getCloudStatus", null);
             notifyDetails();
             if (listeners.isEmpty()) stopPolling();
-            if (callback != null) callback.onResult(result, message, data);
+            if (callback != null)
+                callback.onResult(result, result == code && code != 0 ? reason : message, data);
         });
         return true;
     }

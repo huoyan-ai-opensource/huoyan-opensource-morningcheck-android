@@ -56,7 +56,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 显式启用的真实摄像头设置验收；SDK/业务云隔离，不写员工、晨检记录或系统显示参数。 */
+/**
+ * 显式启用的真实摄像头设置验收；SDK/业务云隔离，不写员工、晨检记录或系统显示参数。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class CameraSettingsUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -73,7 +75,8 @@ public final class CameraSettingsUiTest {
     private boolean completed;
     private boolean preferencesRestored;
 
-    @Before public void isolateConnectionsAndCheckHardware() throws Exception {
+    @Before
+    public void isolateConnectionsAndCheckHardware() throws Exception {
         assumeTrue("只有显式启用硬件验收才打开现场摄像头", "true".equals(
                 InstrumentationRegistry.getArguments().getString("enableUsbHardware")));
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
@@ -94,7 +97,8 @@ public final class CameraSettingsUiTest {
         instrumentation.runOnMainSync(() -> app.sdkSession().disconnect());
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (request.getPath() != null && request.getPath().startsWith("/cloud"))
                     cloudRequests.incrementAndGet();
                 return new MockResponse().setResponseCode(503).setBody("摄像头设置测试，不连接真实 SDK");
@@ -110,12 +114,14 @@ public final class CameraSettingsUiTest {
         CameraImageOptions.defaults().save(initial, "face");
         CameraImageOptions.defaults().save(initial, "hand");
         assertTrue(initial.commit());
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         output = new File(app.getCacheDir(), "camera-settings-evidence");
         assertTrue(output.isDirectory() || output.mkdirs());
     }
 
-    @After public void closeSourcesAndRestoreEveryDevicePreference() throws Exception {
+    @After
+    public void closeSourcesAndRestoreEveryDevicePreference() throws Exception {
         try {
             closeProbe();
         } finally {
@@ -123,7 +129,8 @@ public final class CameraSettingsUiTest {
                 if (scenario != null) scenario.close();
             } finally {
                 try {
-                    if (app != null) instrumentation.runOnMainSync(() -> app.sdkSession().disconnect());
+                    if (app != null)
+                        instrumentation.runOnMainSync(() -> app.sdkSession().disconnect());
                     if (preferences != null && originalPreferences != null) {
                         SharedPreferences.Editor restore = preferences.edit().clear();
                         for (Map.Entry<String, Object> entry : originalPreferences.entrySet())
@@ -152,7 +159,8 @@ public final class CameraSettingsUiTest {
         assertEquals("预览测试不得触发业务云请求", 0, cloudRequests.get());
     }
 
-    @Test public void cameraSelectionsApplyImmediatelySurviveRecreationAndReleaseBothUsbDevices() throws Exception {
+    @Test
+    public void cameraSelectionsApplyImmediatelySurviveRecreationAndReleaseBothUsbDevices() throws Exception {
         scenario = ActivityScenario.launch(new Intent(app, CameraSettingsActivity.class));
         await(() -> {
             AtomicReference<Boolean> ready = new AtomicReference<>(false);
@@ -260,11 +268,15 @@ public final class CameraSettingsUiTest {
                 if (!expected.id.equals(actualId) || roles.getCheckedRadioButtonId() != roleId
                         || !label.isShown() || !label.getText().toString().contains(expected.label)
                         || !label.getText().toString().contains(selected.getText())
-                        || message.getVisibility() != View.GONE || !texture.isShown() || !texture.isAvailable()) return;
+                        || message.getVisibility() != View.GONE || !texture.isShown() || !texture.isAvailable())
+                    return;
                 Bitmap image = texture.getBitmap(96, 72);
                 if (image == null) return;
-                try { ready.set(hasPicture(image)); }
-                finally { image.recycle(); }
+                try {
+                    ready.set(hasPicture(image));
+                } finally {
+                    image.recycle();
+                }
             });
             return ready.get();
         }, 45_000, () -> "所选角色应显示实际镜头的非纯色画面：" + expected.label + "；" + lastState.get());
@@ -282,7 +294,9 @@ public final class CameraSettingsUiTest {
                         .put("camera_label", expected.label).put("preview_label", label.getText())
                         .put("role", roleId == R.id.settings_preview_face ? "face" : "hand")
                         .put("width", texture.getWidth()).put("height", texture.getHeight()));
-            } catch (org.json.JSONException error) { throw new AssertionError(error); }
+            } catch (org.json.JSONException error) {
+                throw new AssertionError(error);
+            }
         });
         saveBitmap(name + "-preview", image.get());
         saveBitmap(name + "-screen", instrumentation.getUiAutomation().takeScreenshot());
@@ -300,10 +314,18 @@ public final class CameraSettingsUiTest {
             instrumentation.runOnMainSync(() -> {
                 CameraProbeActivity activity = probe;
                 activity.source = new CameraSource(activity, activity.preview, new CameraSource.Listener() {
-                    @Override public void onFrame(CameraSource.Frame frame) {
-                        if (!frames.offer(frame)) { frames.poll(); frames.offer(frame); }
+                    @Override
+                    public void onFrame(CameraSource.Frame frame) {
+                        if (!frames.offer(frame)) {
+                            frames.poll();
+                            frames.offer(frame);
+                        }
                     }
-                    @Override public void onError(String message) { error.set(message); }
+
+                    @Override
+                    public void onError(String message) {
+                        error.set(message);
+                    }
                 });
                 activity.source.start(expected.id);
             });
@@ -346,7 +368,9 @@ public final class CameraSettingsUiTest {
             try (FileOutputStream stream = new FileOutputStream(new File(output, name + ".png"))) {
                 assertTrue(image.compress(Bitmap.CompressFormat.PNG, 100, stream));
             }
-        } finally { image.recycle(); }
+        } finally {
+            image.recycle();
+        }
     }
 
     private static boolean hasPicture(Bitmap image) {

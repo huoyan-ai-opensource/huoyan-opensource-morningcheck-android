@@ -82,7 +82,7 @@ public final class RecordDateRange {
         Calendar end = (Calendar) start.clone();
         end.add(Calendar.DAY_OF_MONTH, 1);
         int days = preset == Preset.LAST_7_DAYS ? 7 : preset == Preset.LAST_14_DAYS ? 14
-                                                      : preset == Preset.LAST_30_DAYS ? 30 : 1;
+                : preset == Preset.LAST_30_DAYS ? 30 : 1;
         // 近 N 天包含今天，按自然日计算；使用日历加减以兼容夏令时切换。
         start.add(Calendar.DAY_OF_MONTH, 1 - days);
         return Bounds.between(start.getTimeInMillis(), end.getTimeInMillis());

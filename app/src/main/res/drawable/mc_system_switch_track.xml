@@ -3,19 +3,15 @@
     <item android:state_checked="true">
         <shape android:shape="rectangle">
             <solid android:color="#3F3EED" />
-            <corners android:radius="@dimen/mc_system_voice_switch_height" />
-            <size
-                android:width="@dimen/mc_system_voice_switch_width"
-                android:height="@dimen/mc_system_voice_switch_height" />
+            <corners android:radius="@dimen/dp_20" />
+            <size android:width="@dimen/dp_34" android:height="@dimen/dp_20" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <solid android:color="#CBD2DF" />
-            <corners android:radius="@dimen/mc_system_voice_switch_height" />
-            <size
-                android:width="@dimen/mc_system_voice_switch_width"
-                android:height="@dimen/mc_system_voice_switch_height" />
+            <corners android:radius="@dimen/dp_20" />
+            <size android:width="@dimen/dp_34" android:height="@dimen/dp_20" />
         </shape>
     </item>
 </selector>

@@ -49,7 +49,8 @@ public final class ResultActivity extends RecordSupportActivity {
         @Override
         public void run() {
             nextScheduled = false;
-            if (!foreground || !resumed || paused || exitRequested || currentRecord == null || navigating || isFinishing()) return;
+            if (!foreground || !resumed || paused || exitRequested || currentRecord == null || navigating || isFinishing())
+                return;
             long remaining = nextPersonAt - SystemClock.uptimeMillis();
             updateFlowState();
             if (remaining > 0) {
@@ -204,7 +205,8 @@ public final class ResultActivity extends RecordSupportActivity {
 
     private void nextEmployee() {
         main.removeCallbacks(nextAfterSpeech);
-        if (!foreground || !resumed || exitRequested || currentRecord == null || navigating || isFinishing()) return;
+        if (!foreground || !resumed || exitRequested || currentRecord == null || navigating || isFinishing())
+            return;
         if (!sdkReady()) {
             notice(getString(R.string.i18n_b_continue_unavailable));
             speech.clearStatus();
@@ -323,7 +325,8 @@ public final class ResultActivity extends RecordSupportActivity {
         headHandView.setText(!headHandKnown ? getString(R.string.i18n_b_not_recorded) : headHandOk ? getString(R.string.i18n_b_normal) : getString(R.string.i18n_b_has_findings));
         headHandView.setTextColor(ContextCompat.getColor(this, !headHandKnown ? R.color.mc_muted : headHandOk ? R.color.mc_green : R.color.mc_orange));
         TextView findingTitle = view.findViewById(R.id.result_findings_title);
-        if (findingTitle != null) findingTitle.setText(ok ? getString(R.string.i18n_b_check_notes) : getString(R.string.i18n_b_finding_details));
+        if (findingTitle != null)
+            findingTitle.setText(ok ? getString(R.string.i18n_b_check_notes) : getString(R.string.i18n_b_finding_details));
         findingTitle.setVisibility(ok ? View.GONE : View.VISIBLE);
         view.findViewById(R.id.result_findings_scroll).setVisibility(ok ? View.GONE : View.VISIBLE);
         JSONArray issues = record.optJSONArray("findings");
@@ -374,11 +377,13 @@ public final class ResultActivity extends RecordSupportActivity {
             else state.setText(R.string.mc_result_auto_next);
         }
         TextView stay = content.findViewById(R.id.result_stay);
-        if (stay != null) stay.setText(paused ? getString(R.string.i18n_b_paused) : getString(R.string.mc_result_stay_here));
+        if (stay != null)
+            stay.setText(paused ? getString(R.string.i18n_b_paused) : getString(R.string.mc_result_stay_here));
     }
 
     private void scheduleAutomaticNext() {
-        if (!foreground || !resumed || paused || exitRequested || currentRecord == null || nextScheduled) return;
+        if (!foreground || !resumed || paused || exitRequested || currentRecord == null || nextScheduled)
+            return;
         long delay = currentRecord.optInt("status") == 1 ? 5000 : 15000;
         // 刷新文案和自动跳转共用一个截止时间，重排视图不重新开始计时。
         nextPersonAt = SystemClock.uptimeMillis() + delay;
@@ -522,7 +527,8 @@ public final class ResultActivity extends RecordSupportActivity {
                     expected.empty.setVisibility(result == null ? View.VISIBLE : View.GONE);
                     View.OnClickListener open = result == null ? null : v -> {
                         int currentPosition = expected.getBindingAdapterPosition();
-                        if (currentPosition != RecyclerView.NO_POSITION) showPhoto(record, currentPosition);
+                        if (currentPosition != RecyclerView.NO_POSITION)
+                            showPhoto(record, currentPosition);
                     };
                     expected.row.setOnClickListener(open);
                     expected.image.setOnClickListener(open);

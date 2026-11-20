@@ -342,7 +342,9 @@ public final class AppStore extends SQLiteOpenHelper {
         return departmentsPageInternal(query, parentId, page, size);
     }
 
-    /** 完整目录只读取一次，树排序与深度计算由调用方在 IO 队列中完成。 */
+    /**
+     * 完整目录只读取一次，树排序与深度计算由调用方在 IO 队列中完成。
+     */
     public List<JSONObject> departmentTreeRows(String query) {
         String keyword = query == null ? "" : query.trim();
         List<JSONObject> rows = new ArrayList<>();
@@ -921,8 +923,8 @@ public final class AppStore extends SQLiteOpenHelper {
                 boolean same = "department_id".equals(key)
                         ? current.optLong(key) == expectedProfile.optLong(key)
                         : "enabled".equals(key)
-                          ? current.optBoolean(key, true) == expectedProfile.optBoolean(key, true)
-                          : current.optString(key).equals(expectedProfile.optString(key));
+                        ? current.optBoolean(key, true) == expectedProfile.optBoolean(key, true)
+                        : current.optString(key).equals(expectedProfile.optString(key));
                 if (!same) throw new IllegalStateException("员工资料已被更新，请重新打开详情后修改");
             }
             JSONObject updated = Jsons.patch(current, changes);

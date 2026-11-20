@@ -105,6 +105,10 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
     private String lightingConfigError = "";
     private int detectionScope, detectionRequest, detectedFaces = -1;
     private boolean detecting;
+    /**
+     * 预览帧连续缺权时仅提示一次，检测恢复后可提示下一次撤权。
+     */
+    private boolean previewPermissionGuideShown;
     private String observedDetectionScope = "", detectionMessage = "";
     private long nextDetectionAt;
     private CameraSource.Frame detectedFrame;
@@ -364,7 +368,8 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
             return;
         }
         RecyclerView employees = content.findViewById(R.id.enrollment_staff_list);
-        if (!employees.isShown() || enrollmentRows == null || enrollmentRows.getItemCount() == 0) return;
+        if (!employees.isShown() || enrollmentRows == null || enrollmentRows.getItemCount() == 0)
+            return;
         GridLayoutManager layout = (GridLayoutManager) employees.getLayoutManager();
         if (layout == null) return;
         int position = Math.min(employeeScrollPosition, enrollmentRows.getItemCount() - 1);
@@ -638,7 +643,8 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                     pageError = true;
                     failedStaffAppend = append;
                     showStaffPage();
-                    if (foreground) notice(getString(R.string.i18n_a_employee_read_failed, failure(error)));
+                    if (foreground)
+                        notice(getString(R.string.i18n_a_employee_read_failed, failure(error)));
                 });
             }
         });
@@ -671,13 +677,13 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         TextView info = content.findViewById(R.id.enrollment_page_info);
         info.setText(pageError ? getString(R.string.i18n_a_tap_to_retry)
                 : pageLoading || staffData == null ? ""
-                  : getString(R.string.business_page_info, staffData.page, staffData.totalPages, staffData.total));
+                : getString(R.string.business_page_info, staffData.page, staffData.totalPages, staffData.total));
         View previous = content.findViewById(R.id.enrollment_previous);
         previous.setEnabled(!pageLoading && !writeInProgress() && staffPage > 1);
         previous.setAlpha(previous.isEnabled() ? 1f : .45f);
         View next = content.findViewById(R.id.enrollment_next);
         ((TextView) next).setText(pageError ? getString(R.string.i18n_a_tap_to_retry) : pageLoading ? ""
-                                                               : staffData != null && staffPage >= staffData.totalPages ? getString(R.string.i18n_a_all_staff_shown) : getString(R.string.i18n_a_scroll_for_more_staff));
+                : staffData != null && staffPage >= staffData.totalPages ? getString(R.string.i18n_a_all_staff_shown) : getString(R.string.i18n_a_scroll_for_more_staff));
         next.setEnabled(!pageLoading && !writeInProgress()
                 && (pageError || staffData != null && staffPage < staffData.totalPages));
         next.setAlpha(next.isEnabled() ? 1f : .45f);
@@ -793,7 +799,8 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
     }
 
     private void rememberSampleScroll() {
-        if (sampleScrollPending || content == null || sampleImageBatch == null || faceImages.isEmpty()) return;
+        if (sampleScrollPending || content == null || sampleImageBatch == null || faceImages.isEmpty())
+            return;
         GridView grid = content.findViewById(R.id.enrollment_faces);
         if (grid == null || grid.getChildCount() == 0) return;
         int position = grid.getFirstVisiblePosition();
@@ -1237,7 +1244,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         empty.setVisibility(faceImages.isEmpty() ? View.VISIBLE : View.GONE);
         empty.setText(person == null ? getString(R.string.i18n_a_select_a_staff_member_first)
                 : sampleUids.length() == 0 && samplesVerified()
-                  ? getString(R.string.i18n_a_no_face_samples_for_this_staff_member) : getString(R.string.i18n_a_connect_to_this_device_then_refresh_samples));
+                ? getString(R.string.i18n_a_no_face_samples_for_this_staff_member) : getString(R.string.i18n_a_connect_to_this_device_then_refresh_samples));
         GridView grid = content.findViewById(R.id.enrollment_faces);
         if (grid != null && sampleRows != null) {
             // 状态和缩略图变化不改变 UID 列表；整表通知会用旧视口覆盖尚未布局的滚动位置。
@@ -1325,7 +1332,8 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
             final int selection = selectionVersion;
             final String device = sampleDevice;
             delete.setOnClickListener(view -> {
-                if (sampleScope(employee, personId, selection, generation, device)) requestDeleteSample(uid);
+                if (sampleScope(employee, personId, selection, generation, device))
+                    requestDeleteSample(uid);
             });
         }
     }
@@ -1371,6 +1379,8 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                             completeFailure(write, false, getString(R.string.i18n_a_connection_changed_deletion_result_is_unknown_check_samples_on_the_original));
                         } else if (FaceResultPolicy.isAbsentOrDeleted(code)) {
                             completeSampleDeletion(write, uid);
+                        } else if (matchesSelection(write) && guideSdkPermissions(code, message)) {
+                            completeFailure(write, true, null);
                         } else completeFailure(write, code != HuoyanClient.ERROR_RESULT_UNKNOWN
                                         && code != HuoyanClient.ERROR_CANCELLED,
                                 code == HuoyanClient.ERROR_RESULT_UNKNOWN || code == HuoyanClient.ERROR_CANCELLED
@@ -1516,9 +1526,10 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
             return;
         }
         lightingConfigError = "";
-        if (lighting == null) lighting = LightController.getInstance().acquire((enabled, success, message) -> {
-            if (resumed && foreground && !destroyed && !success) notice(message);
-        });
+        if (lighting == null)
+            lighting = LightController.getInstance().acquire((enabled, success, message) -> {
+                if (resumed && foreground && !destroyed && !success) notice(message);
+            });
         if (config.equals(requestedLightConfig)) return;
         // 预览开始就补光，不等待首帧或检测到人脸；学习回执和列表更新不重复开关灯。
         requestedLightConfig = config;
@@ -1583,9 +1594,10 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                     return;
                 }
                 if (code != 0) {
-                    failFaceDetection(getString(R.string.i18n_a_face_detection_incomplete, UiMessages.text(this, message)));
+                    handleFaceDetectionError(code, message);
                     return;
                 }
+                previewPermissionGuideShown = false;
                 try {
                     FaceDetectionResult result = FaceDetectionResult.parse(data);
                     long age = System.nanoTime() - frame.receivedAtNanos;
@@ -1622,7 +1634,8 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
     }
 
     private void updateDetectionVoice(int count) {
-        if (count > 1) speech.update("enrollment-multiple", getString(R.string.i18n_a_multiple_people_detected), 0, 5000);
+        if (count > 1)
+            speech.update("enrollment-multiple", getString(R.string.i18n_a_multiple_people_detected), 0, 5000);
         else speech.clearStatus();
     }
 
@@ -1634,8 +1647,20 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
         updateUi();
     }
 
+    private void handleFaceDetectionError(int code, String reason) {
+        if (cc.huoyan.opensource.morningcheck.sdk.MorningSdkSession.missingPermission(code, reason)) {
+            if (!previewPermissionGuideShown)
+                previewPermissionGuideShown = guideSdkPermissions(code, reason);
+            if (previewPermissionGuideShown) {
+                failFaceDetection("");
+                return;
+            }
+        }
+        failFaceDetection(getString(R.string.i18n_a_face_detection_incomplete, UiMessages.text(this, reason)));
+    }
+
     private void reportDetectionFailure(String message) {
-        if (resumed && foreground && !destroyed && !message.equals(detectionMessage))
+        if (resumed && foreground && !destroyed && !message.isEmpty() && !message.equals(detectionMessage))
             notice(message);
         detectionMessage = message;
     }
@@ -1791,8 +1816,7 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                     return;
                 }
                 if (code != 0) {
-                    cancelPreflight(getString(R.string.i18n_a_face_detection_incomplete, UiMessages.text(this, message)));
-                    failFaceDetection(getString(R.string.i18n_a_face_detection_incomplete, UiMessages.text(this, message)));
+                    handleFaceDetectionError(code, message);
                     return;
                 }
                 try {
@@ -1870,6 +1894,9 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                             if (outcome == FaceResultPolicy.Registration.SAVED
                                     || outcome == FaceResultPolicy.Registration.NO_FACE)
                                 completeLearning(write, data.optLong("uid"), data.optString("image_url"));
+                            else if (outcome == FaceResultPolicy.Registration.REJECTED
+                                    && matchesSelection(write) && guideSdkPermissions(code, message))
+                                completeFailure(write, true, null);
                             else
                                 completeFailure(write, outcome == FaceResultPolicy.Registration.REJECTED,
                                         outcome == FaceResultPolicy.Registration.UNKNOWN
@@ -1982,11 +2009,13 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
                     loadSampleImages();
                     setResult(RESULT_OK);
                 }
-                if (foreground) writeFeedback = new WriteFeedback(write, message, success);
+                if (foreground && message != null)
+                    writeFeedback = new WriteFeedback(write, message, success);
                 if (updated != null) {
                     visibleStaff = new ArrayList<>(visibleStaff);
                     for (int index = 0; index < visibleStaff.size(); index++)
-                        if (visibleStaff.get(index).optLong("id") == write.staffId) visibleStaff.set(index, updated);
+                        if (visibleStaff.get(index).optLong("id") == write.staffId)
+                            visibleStaff.set(index, updated);
                     refreshVisibleEmployees();
                 }
                 observeSampleScope();
@@ -2009,7 +2038,8 @@ public final class FaceEnrollmentActivity extends CameraMorningActivity {
 
     private boolean hasMissingSampleUrls() {
         for (int index = 0; index < sampleUids.length(); index++)
-            if (HttpUrl.parse(sampleUrls.getOrDefault(sampleUids.optLong(index), "")) == null) return true;
+            if (HttpUrl.parse(sampleUrls.getOrDefault(sampleUids.optLong(index), "")) == null)
+                return true;
         return false;
     }
 

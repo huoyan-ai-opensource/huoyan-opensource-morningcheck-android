@@ -220,7 +220,8 @@ public final class DepartmentEditorDialog extends DialogFragment {
         if (panel == null || !isAdded()) return;
         if (editor.completed) {
             if (loading != null) loading.dismiss();
-            if (isResumed()) ToastEx.showSuccessToast(requireContext(), getString(R.string.i18n_a_department_saved));
+            if (isResumed())
+                ToastEx.showSuccessToast(requireContext(), getString(R.string.i18n_a_department_saved));
             if (isResumed() && !getParentFragmentManager().isStateSaved()) dismiss();
             return;
         }

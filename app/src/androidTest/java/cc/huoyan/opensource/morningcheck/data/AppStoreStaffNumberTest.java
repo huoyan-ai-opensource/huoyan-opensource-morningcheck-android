@@ -17,22 +17,30 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-/** 只使用独立测试库验证自动主键、工号唯一和旧库保留，不触碰设备名册。 */
+/**
+ * 只使用独立测试库验证自动主键、工号唯一和旧库保留，不触碰设备名册。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class AppStoreStaffNumberTest {
     private Context context;
     private AppStore store;
     private String databaseName;
 
-    @Before public void openStore() {
+    @Before
+    public void openStore() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         databaseName = "staff-number-test-" + UUID.randomUUID() + ".db";
         store = new AppStore(context, databaseName);
     }
 
-    @After public void closeStore() { store.close(); context.deleteDatabase(databaseName); }
+    @After
+    public void closeStore() {
+        store.close();
+        context.deleteDatabase(databaseName);
+    }
 
-    @Test public void automaticIdsAdvancePastExistingIdsAndNeverReuseDeletedIds() {
+    @Test
+    public void automaticIdsAdvancePastExistingIdsAndNeverReuseDeletedIds() {
         store.saveStaff(Jsons.obj("id", 80, "name", "已有员工", "staff_no", "S080"));
         long first = store.createStaffProfile(profile("0001"));
         assertEquals(81, first);
@@ -45,7 +53,8 @@ public final class AppStoreStaffNumberTest {
         assertEquals("0002", store.staff(second).optString("staff_no"));
     }
 
-    @Test public void blankAndDuplicateStaffNumbersAreRejectedButOwnNumberCanBeSaved() {
+    @Test
+    public void blankAndDuplicateStaffNumbersAreRejectedButOwnNumberCanBeSaved() {
         expectFailure(() -> store.createStaffProfile(profile("  \t ")));
         long first = store.createStaffProfile(profile("  A01  "));
         assertEquals("A01", store.staff(first).optString("staff_no"));
@@ -59,13 +68,15 @@ public final class AppStoreStaffNumberTest {
         assertEquals(1, store.staffPage("A01", 1, 20).total);
     }
 
-    @Test public void failedSaveDoesNotConsumeEmployeeId() {
+    @Test
+    public void failedSaveDoesNotConsumeEmployeeId() {
         long first = store.createStaffProfile(profile("A01"));
         expectFailure(() -> store.createStaffProfile(profile("A01")));
         assertEquals(first + 1, store.createStaffProfile(profile("B01")));
     }
 
-    @Test public void supplementalSchemaKeepsRecordsDepartmentsAndFaceMapping() {
+    @Test
+    public void supplementalSchemaKeepsRecordsDepartmentsAndFaceMapping() {
         long id = store.createStaffProfile(profile("A01"));
         store.patchStaff(id, Jsons.obj("face_registered", true, "face_uid", 901L));
         long department = store.saveDepartment(0, "后厨");
@@ -78,7 +89,8 @@ public final class AppStoreStaffNumberTest {
         assertEquals(6, store.getReadableDatabase().getVersion());
     }
 
-    @Test public void existingVersionFourRowsKeepIdsAndAcceptFacePatchesWithLegacyDuplicateNumbers() {
+    @Test
+    public void existingVersionFourRowsKeepIdsAndAcceptFacePatchesWithLegacyDuplicateNumbers() {
         store.close();
         try (SQLiteDatabase previous = context.openOrCreateDatabase(databaseName, Context.MODE_PRIVATE, null)) {
             previous.execSQL("CREATE TABLE staff (id TEXT PRIMARY KEY,data TEXT NOT NULL,time INTEGER NOT NULL,name TEXT NOT NULL DEFAULT '',department TEXT NOT NULL DEFAULT '')");
@@ -103,9 +115,16 @@ public final class AppStoreStaffNumberTest {
         assertEquals(6, store.getReadableDatabase().getVersion());
     }
 
-    private static JSONObject profile(String number) { return Jsons.obj("name", "测试员工", "staff_no", number, "department", ""); }
+    private static JSONObject profile(String number) {
+        return Jsons.obj("name", "测试员工", "staff_no", number, "department", "");
+    }
+
     private static void expectFailure(Runnable operation) {
-        try { operation.run(); fail("无效或重复工号不能保存"); }
-        catch (IllegalArgumentException expected) { assertTrue(expected.getMessage().contains("工号")); }
+        try {
+            operation.run();
+            fail("无效或重复工号不能保存");
+        } catch (IllegalArgumentException expected) {
+            assertTrue(expected.getMessage().contains("工号"));
+        }
     }
 }

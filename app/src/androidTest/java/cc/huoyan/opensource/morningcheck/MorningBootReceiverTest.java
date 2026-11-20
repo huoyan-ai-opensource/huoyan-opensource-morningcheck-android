@@ -15,7 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/** 使用独立配置并截获启动请求，不打开现场晨检或修改真实设备设置。 */
+/**
+ * 使用独立配置并截获启动请求，不打开现场晨检或修改真实设备设置。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class MorningBootReceiverTest {
     private SharedPreferences preferences;

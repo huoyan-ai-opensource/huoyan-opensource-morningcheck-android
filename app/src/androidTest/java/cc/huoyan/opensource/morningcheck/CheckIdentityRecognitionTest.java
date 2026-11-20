@@ -55,7 +55,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.ByteString;
 
-/** 身份读取使用独立测试库、本机 SDK 夹具和人工帧，不打开相机或测温硬件。 */
+/**
+ * 身份读取使用独立测试库、本机 SDK 夹具和人工帧，不打开相机或测温硬件。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class CheckIdentityRecognitionTest {
     private static final long STAFF_ID = 42;
@@ -84,7 +86,8 @@ public final class CheckIdentityRecognitionTest {
     private CheckActivity checkActivity;
     private CheckPipeline pipeline;
 
-    @Before public void prepareIsolatedIdentityFlow() throws Exception {
+    @Before
+    public void prepareIsolatedIdentityFlow() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         assumeTrue("测试不弹权限窗口；设备需已授予相机权限",
                 ContextCompat.checkSelfPermission(app, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
@@ -116,12 +119,19 @@ public final class CheckIdentityRecognitionTest {
                 assertNotEquals(SECOND_STAFF_ID, secondSdkPersonId);
                 assertNotEquals(8L, disabledSdkPersonId);
                 fixturePerson.set(sdkPersonId);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         }).get(10, TimeUnit.SECONDS);
-        onMain(() -> { originalStore = app.store; app.store = testStore; return null; });
+        onMain(() -> {
+            originalStore = app.store;
+            app.store = testStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 assertEquals("所有请求必须只进入本机 SDK 夹具", "/sdk", request.getPath());
                 return new MockResponse().withWebSocketUpgrade(new IdentityFixture());
             }
@@ -156,28 +166,38 @@ public final class CheckIdentityRecognitionTest {
         });
     }
 
-    @After public void restoreOriginalStoreAndDeviceConfiguration() throws Exception {
+    @After
+    public void restoreOriginalStoreAndDeviceConfiguration() throws Exception {
         try {
             if (scenario != null) scenario.close();
             if (app != null && originalStore != null) {
-                onMain(() -> { app.sdkSession().disconnect(); return null; });
+                onMain(() -> {
+                    app.sdkSession().disconnect();
+                    return null;
+                });
                 app.io.submit(() -> null).get(10, TimeUnit.SECONDS);
                 instrumentation.waitForIdleSync();
                 assertEquals("测试不得生成晨检完成记录", 0L,
                         app.io.submit(() -> testStore.recordsPage(0, 1, 20).totalRows).get(10, TimeUnit.SECONDS).longValue());
             }
         } finally {
-            if (app != null && originalStore != null) onMain(() -> { app.store = originalStore; return null; });
+            if (app != null && originalStore != null) onMain(() -> {
+                app.store = originalStore;
+                return null;
+            });
             if (testStore != null) testStore.close();
-            if (databaseName != null) assertTrue("应清理本用例的独立数据库", app.deleteDatabase(databaseName));
-            if (preferences != null && originalPreferences != null) restore(preferences, originalPreferences);
+            if (databaseName != null)
+                assertTrue("应清理本用例的独立数据库", app.deleteDatabase(databaseName));
+            if (preferences != null && originalPreferences != null)
+                restore(preferences, originalPreferences);
             for (WebSocket socket : sockets) socket.close(1001, "测试结束");
             if (endpoint != null) endpoint.shutdown();
         }
         assertNull("本机 SDK 夹具不应出现协议错误", serverFailure.get());
     }
 
-    @Test public void actualIdentityRequiresFourSamplesAndSelectsSdkPerson() throws Exception {
+    @Test
+    public void actualIdentityRequiresFourSamplesAndSelectsSdkPerson() throws Exception {
         CameraSource.Frame last = collectIdentity();
         assertEquals(4, identityRequests.get());
         assertEquals(CheckPipeline.Stage.IDENTITY, onMain(pipeline::getStage));
@@ -199,14 +219,16 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(36.6, onMain(pipeline::getTemperature), .001);
     }
 
-    @Test public void unknownSdkPersonCannotUseFirstLocalEmployee() throws Exception {
+    @Test
+    public void unknownSdkPersonCannotUseFirstLocalEmployee() throws Exception {
         fixturePerson.set(999L);
         for (int sample = 0; sample < 4; sample++) feedFrame();
         assertUnconfirmed();
         assertEquals(4L, app.io.submit(testStore::staffCount).get(10, TimeUnit.SECONDS).longValue());
     }
 
-    @Test public void unassignedSdkPersonMatchingExistingLocalKeyCannotFallbackToThatEmployee() throws Exception {
+    @Test
+    public void unassignedSdkPersonMatchingExistingLocalKeyCannotFallbackToThatEmployee() throws Exception {
         assertNotNull("碰撞数字必须确实是一个已有本地主键",
                 app.io.submit(() -> testStore.staff(STAFF_ID)).get(10, TimeUnit.SECONDS));
         assertNull("该数字尚未分配为任何员工的SDK标识",
@@ -218,14 +240,17 @@ public final class CheckIdentityRecognitionTest {
                 app.io.submit(testStore::staffCount).get(10, TimeUnit.SECONDS).longValue());
     }
 
-    @Test public void assignedSdkPersonMatchingAnotherLocalKeyResolvesItsOwnEmployee() throws Exception {
+    @Test
+    public void assignedSdkPersonMatchingAnotherLocalKeyResolvesItsOwnEmployee() throws Exception {
         app.io.submit(() -> {
             try {
                 // 只通过真实保存接口新增数字碰撞的业务员工，不注入任何person_id映射。
                 testStore.saveStaff(new JSONObject().put("id", sdkPersonId).put("staff_no", "COLLISION-LOCAL")
                         .put("name", "与SDK编号同号的另一名员工").put("enabled", true));
                 assertNotEquals(sdkPersonId, testStore.staff(sdkPersonId).getLong("person_id"));
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         }).get(10, TimeUnit.SECONDS);
         fixturePerson.set(sdkPersonId);
         collectIdentity();
@@ -239,13 +264,15 @@ public final class CheckIdentityRecognitionTest {
         });
     }
 
-    @Test public void disabledSdkEmployeeCannotConfirmIdentity() {
+    @Test
+    public void disabledSdkEmployeeCannotConfirmIdentity() {
         fixturePerson.set(disabledSdkPersonId);
         for (int sample = 0; sample < 4; sample++) feedFrame();
         assertUnconfirmed();
     }
 
-    @Test public void softDeletedSdkEmployeeCannotConfirmIdentityOrBorrowAnotherLocalEmployee() throws Exception {
+    @Test
+    public void softDeletedSdkEmployeeCannotConfirmIdentityOrBorrowAnotherLocalEmployee() throws Exception {
         app.io.submit(() -> testStore.removeStaff(STAFF_ID)).get(10, TimeUnit.SECONDS);
         assertNull("软删除的本地主键不能再查到在职员工", app.io.submit(() -> testStore.staff(STAFF_ID)).get(10, TimeUnit.SECONDS));
         assertNull("已删除SDK标识也必须从识别反查中排除",
@@ -257,7 +284,8 @@ public final class CheckIdentityRecognitionTest {
                 app.io.submit(testStore::staffCount).get(10, TimeUnit.SECONDS).longValue());
     }
 
-    @Test public void idleTemperatureCannotBecomeNextEmployeesMeasurement() {
+    @Test
+    public void idleTemperatureCannotBecomeNextEmployeesMeasurement() {
         feedTemperature(36.6);
         assertFalse(onMain(pipeline::isIdentityConfirmed));
         assertTrue(onMain(() -> Double.isNaN(pipeline.getTemperature())));
@@ -269,7 +297,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(36.7, onMain(pipeline::getTemperature), .001);
     }
 
-    @Test public void noFaceKeepsThermometerStoppedAndIgnoresUnsolicitedReadings() {
+    @Test
+    public void noFaceKeepsThermometerStoppedAndIgnoresUnsolicitedReadings() {
         fixtureMatched.set(false);
         feedTemperature(36.6);
         AtomicReference<Object> thermometer = new AtomicReference<>();
@@ -296,7 +325,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(36.7, onMain(pipeline::getTemperature), .001);
     }
 
-    @Test public void facePresenceStartsMeasurementAndAbsenceRejectsQueuedTemperature() {
+    @Test
+    public void facePresenceStartsMeasurementAndAbsenceRejectsQueuedTemperature() {
         scenario.onActivity(activity -> {
             assertFalse("进入页面不能直接启动测温", (Boolean) readField(activity, "temperatureRequested"));
             observeFace(activity, new CameraSource.Frame(new byte[12], 2, 2), true);
@@ -314,7 +344,8 @@ public final class CheckIdentityRecognitionTest {
         });
     }
 
-    @Test public void faceEvidenceExpiryStopsMeasurementWithoutAnotherCameraFrame() {
+    @Test
+    public void faceEvidenceExpiryStopsMeasurementWithoutAnotherCameraFrame() {
         scenario.onActivity(activity -> observeFace(activity, new CameraSource.Frame(new byte[12], 2, 2), true));
         await(() -> onMain(() -> !(Boolean) readField(checkActivity, "temperatureRequested")),
                 "没有新的人脸帧时必须自动停止测温");
@@ -333,7 +364,8 @@ public final class CheckIdentityRecognitionTest {
         }
     }
 
-    @Test public void previousEmployeeMustLeaveBeforeNewSamples() {
+    @Test
+    public void previousEmployeeMustLeaveBeforeNewSamples() {
         scenario.onActivity(activity -> {
             writeField(activity, "lastPerson", STAFF_ID);
             writeField(activity, "waitingDeparture", true);
@@ -351,7 +383,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(CheckPipeline.Stage.IDENTITY, onMain(pipeline::getStage));
     }
 
-    @Test public void differentSdkPersonDuringDepartureWaitStartsNewEmployeesLocalSamples() {
+    @Test
+    public void differentSdkPersonDuringDepartureWaitStartsNewEmployeesLocalSamples() {
         scenario.onActivity(activity -> {
             writeField(activity, "lastPerson", STAFF_ID);
             writeField(activity, "waitingDeparture", true);
@@ -378,7 +411,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(36.8, onMain(pipeline::getTemperature), .001);
     }
 
-    @Test public void maskedEmployeeUsesFacePresenceWithoutRepeatingIdentityRecognition() {
+    @Test
+    public void maskedEmployeeUsesFacePresenceWithoutRepeatingIdentityRecognition() {
         enterHead();
         // 口罩可能使身份匹配失败；头检只接受已锁定身份后的同帧在场结果。
         fixtureMatched.set(false);
@@ -394,7 +428,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(36.6, onMain(pipeline::getTemperature), .001);
     }
 
-    @Test public void singlePersonHeadRequiresClothingAndRestartsFourCompliantSamplesAfterMissingItem() {
+    @Test
+    public void singlePersonHeadRequiresClothingAndRestartsFourCompliantSamplesAfterMissingItem() {
         enterHead();
         for (boolean missingHat : new boolean[]{false, true}) {
             fixtureHat = !missingHat;
@@ -436,7 +471,8 @@ public final class CheckIdentityRecognitionTest {
         assertTrue("已修正着装不应污染最终检测结果", onMain(() -> pipeline.getFindings().isEmpty()));
     }
 
-    @Test public void zeroOrMultipleFacesInterruptHeadSamplesWithoutLosingLockedPerson() {
+    @Test
+    public void zeroOrMultipleFacesInterruptHeadSamplesWithoutLosingLockedPerson() {
         enterHead();
         feedFrame();
         assertEquals(1, onMain(pipeline::getProgress).intValue());
@@ -455,7 +491,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals("重新单人入镜后从第一帧重新采样", 1, onMain(pipeline::getProgress).intValue());
     }
 
-    @Test public void failedFaceDetectionCannotBeTreatedAsSingleFace() {
+    @Test
+    public void failedFaceDetectionCannotBeTreatedAsSingleFace() {
         enterHead();
         feedFrame();
         fixtureFaceCode.set(40010);
@@ -465,7 +502,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(CheckPipeline.Stage.HEAD, onMain(pipeline::getStage));
     }
 
-    @Test public void missingFaceArrayCannotBeTreatedAsAnEmptySuccessfulDetection() {
+    @Test
+    public void missingFaceArrayCannotBeTreatedAsAnEmptySuccessfulDetection() {
         enterHead();
         fixtureMissingFaces.set(true);
         feedFrame();
@@ -475,14 +513,16 @@ public final class CheckIdentityRecognitionTest {
                 ((TextView) activity.findViewById(R.id.check_hint)).getText().toString().contains("未检测到人脸")));
     }
 
-    @Test public void headDetectionReceivesExactlyTheSamePixelsAsFaceDetection() {
+    @Test
+    public void headDetectionReceivesExactlyTheSamePixelsAsFaceDetection() {
         enterHead();
         CameraSource.Frame frame = feedFrame();
         assertArrayEquals(frame.rgb, faceInput);
         assertArrayEquals("禁止把上一帧在场结果套到下一张头检图片", faceInput, headInput);
     }
 
-    @Test public void headChainKeepsOneFrameInFlightUntilBothRepliesReturn() {
+    @Test
+    public void headChainKeepsOneFrameInFlightUntilBothRepliesReturn() {
         enterHead();
         holdCommand.set("detectFace");
         scenario.onActivity(activity -> activity.onCameraFrame(frame()));
@@ -511,7 +551,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(2, faceRequests.get());
     }
 
-    @Test public void pausedFaceReplyCannotStartHeadDetection() {
+    @Test
+    public void pausedFaceReplyCannotStartHeadDetection() {
         enterHead();
         holdCommand.set("detectFace");
         scenario.onActivity(activity -> activity.onCameraFrame(frame()));
@@ -525,7 +566,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(CheckPipeline.Stage.HEAD, onMain(pipeline::getStage));
     }
 
-    @Test public void pausedHeadReplyCannotAdvanceSamples() {
+    @Test
+    public void pausedHeadReplyCannotAdvanceSamples() {
         enterHead();
         holdCommand.set("checkHead");
         scenario.onActivity(activity -> activity.onCameraFrame(frame()));
@@ -538,11 +580,13 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(CheckPipeline.Stage.HEAD, onMain(pipeline::getStage));
     }
 
-    @Test public void lifecyclePauseCancelsFaceReplyBeforeOnStop() {
+    @Test
+    public void lifecyclePauseCancelsFaceReplyBeforeOnStop() {
         assertLifecyclePauseDropsReply("detectFace");
     }
 
-    @Test public void lifecyclePauseCancelsHeadReplyBeforeOnStop() {
+    @Test
+    public void lifecyclePauseCancelsHeadReplyBeforeOnStop() {
         assertLifecyclePauseDropsReply("checkHead");
     }
 
@@ -575,7 +619,8 @@ public final class CheckIdentityRecognitionTest {
         }
     }
 
-    @Test public void expiredFaceReplyCannotStartHeadDetection() throws Exception {
+    @Test
+    public void expiredFaceReplyCannotStartHeadDetection() throws Exception {
         enterHead();
         holdCommand.set("detectFace");
         CameraSource.Frame old = frame();
@@ -590,7 +635,8 @@ public final class CheckIdentityRecognitionTest {
         assertEquals(0, onMain(pipeline::getProgress).intValue());
     }
 
-    @Test public void expiredHeadReplyCannotAdvanceSamples() throws Exception {
+    @Test
+    public void expiredHeadReplyCannotAdvanceSamples() throws Exception {
         enterHead();
         holdCommand.set("checkHead");
         CameraSource.Frame old = frame();
@@ -639,7 +685,7 @@ public final class CheckIdentityRecognitionTest {
         CameraSource.Frame frame = frame();
         scenario.onActivity(activity -> activity.onCameraFrame(frame));
         await(() -> binaryReplies.get() >= expected
-                && onMain(() -> !(Boolean) readField(checkActivity, "frameBusy")),
+                        && onMain(() -> !(Boolean) readField(checkActivity, "frameBusy")),
                 "身份回执与档案读库或完整人脸检测/头检链必须处理完成");
         return frame;
     }
@@ -651,9 +697,13 @@ public final class CheckIdentityRecognitionTest {
     private final class IdentityFixture extends WebSocketListener {
         private final Map<String, JSONObject> images = new ConcurrentHashMap<>();
 
-        @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
+        @Override
+        public void onOpen(WebSocket socket, Response response) {
+            sockets.add(socket);
+        }
 
-        @Override public void onMessage(WebSocket socket, String text) {
+        @Override
+        public void onMessage(WebSocket socket, String text) {
             try {
                 JSONObject request = new JSONObject(text);
                 String command = request.getString("cmd");
@@ -678,13 +728,17 @@ public final class CheckIdentityRecognitionTest {
                         || "get_class_table".equals(command) || "getCertInfo".equals(command)
                         || "getDownloadProgress".equals(command) || "getCloudStatus".equals(command));
                 JSONObject data = new JSONObject();
-                if ("getStatus".equals(command)) data.put("sdk_state", "READY").put("model_ready", true)
-                        .put("certificate_valid", true).put("device_id", "IDENTITY-READ-TEST");
+                if ("getStatus".equals(command))
+                    data.put("sdk_state", "READY").put("model_ready", true)
+                            .put("certificate_valid", true).put("device_id", "IDENTITY-READ-TEST");
                 reply(socket, request.getString("requestId"), data);
-            } catch (Throwable error) { serverFailure.set(error); }
+            } catch (Throwable error) {
+                serverFailure.set(error);
+            }
         }
 
-        @Override public void onMessage(WebSocket socket, ByteString bytes) {
+        @Override
+        public void onMessage(WebSocket socket, ByteString bytes) {
             try {
                 ByteBuffer buffer = bytes.asByteBuffer();
                 int length = buffer.getInt();
@@ -707,25 +761,30 @@ public final class CheckIdentityRecognitionTest {
                     data = new JSONObject();
                     if (!fixtureMissingFaces.get()) {
                         JSONArray faces = new JSONArray();
-                        for (int i = 0; i < fixtureFaceCount.get(); i++) faces.put(new JSONObject()
-                                .put("x", .1 + i * .2).put("y", .1).put("w", .15).put("h", .5)
-                                .put("score", .95).put("landmarks", new JSONArray(new double[]{
-                                        .12, .2, .2, .2, .16, .3, .12, .4, .2, .4})));
+                        for (int i = 0; i < fixtureFaceCount.get(); i++)
+                            faces.put(new JSONObject()
+                                    .put("x", .1 + i * .2).put("y", .1).put("w", .15).put("h", .5)
+                                    .put("score", .95).put("landmarks", new JSONArray(new double[]{
+                                            .12, .2, .2, .2, .16, .3, .12, .4, .2, .4})));
                         data.put("faces", faces);
                     }
                     code = fixtureFaceCode.get();
                 } else {
                     headInput = pixels;
                     JSONArray boxes = new JSONArray();
-                    if (fixtureHat) boxes.put(new JSONObject().put("class_id", DetectionClasses.HEAD_HAT).put("score", .95));
-                    if (fixtureMask) boxes.put(new JSONObject().put("class_id", DetectionClasses.HEAD_MASK).put("score", .95));
+                    if (fixtureHat)
+                        boxes.put(new JSONObject().put("class_id", DetectionClasses.HEAD_HAT).put("score", .95));
+                    if (fixtureMask)
+                        boxes.put(new JSONObject().put("class_id", DetectionClasses.HEAD_MASK).put("score", .95));
                     data = new JSONObject().put("boxes", boxes);
                 }
                 PendingReply reply = new PendingReply(socket, requestId, command, code, data);
                 if (command.equals(holdCommand.get())) assertTrue("同时最多一张请求等待回执",
                         pendingReply.compareAndSet(null, reply));
                 else reply.send();
-            } catch (Throwable error) { serverFailure.set(error); }
+            } catch (Throwable error) {
+                serverFailure.set(error);
+            }
         }
 
         private void reply(WebSocket socket, String id, JSONObject data) throws Exception {
@@ -737,8 +796,11 @@ public final class CheckIdentityRecognitionTest {
     private void releasePending() {
         PendingReply reply = pendingReply.getAndSet(null);
         assertNotNull("必须有一张已抵达夹具的请求可释放", reply);
-        try { reply.send(); }
-        catch (Exception error) { throw new AssertionError("释放隔离 SDK 回执失败", error); }
+        try {
+            reply.send();
+        } catch (Exception error) {
+            throw new AssertionError("释放隔离 SDK 回执失败", error);
+        }
     }
 
     private void drainReplies() {
@@ -775,16 +837,23 @@ public final class CheckIdentityRecognitionTest {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(operation.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(operation.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
-        if (failure.get() != null) throw new AssertionError("主线程身份读取验收失败", failure.get());
+        if (failure.get() != null)
+            throw new AssertionError("主线程身份读取验收失败", failure.get());
         return value.get();
     }
 
     private static Object readField(Object target, String name) {
-        try { return field(target, name).get(target); }
-        catch (IllegalAccessException error) { throw new AssertionError(error); }
+        try {
+            return field(target, name).get(target);
+        } catch (IllegalAccessException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private void feedTemperature(double value) {
@@ -800,8 +869,11 @@ public final class CheckIdentityRecognitionTest {
     }
 
     private static void writeField(Object target, String name, Object value) {
-        try { field(target, name).set(target, value); }
-        catch (IllegalAccessException error) { throw new AssertionError(error); }
+        try {
+            field(target, name).set(target, value);
+        } catch (IllegalAccessException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static Field field(Object target, String name) {
@@ -810,7 +882,8 @@ public final class CheckIdentityRecognitionTest {
                 Field result = type.getDeclaredField(name);
                 result.setAccessible(true);
                 return result;
-            } catch (NoSuchFieldException ignored) { }
+            } catch (NoSuchFieldException ignored) {
+            }
         }
         throw new AssertionError("缺少测试状态：" + name);
     }

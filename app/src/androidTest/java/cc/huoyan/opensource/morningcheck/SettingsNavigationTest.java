@@ -55,7 +55,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 仅使用本机 WS 夹具及不可用镜头 ID 验证设置导航，不打开现场设备或访问业务云。 */
+/**
+ * 仅使用本机 WS 夹具及不可用镜头 ID 验证设置导航，不打开现场设备或访问业务云。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class SettingsNavigationTest {
     private static final String FACE_CAMERA = "usb:SETTINGS-NAVIGATION-NO-DEVICE-FACE";
@@ -80,7 +82,8 @@ public final class SettingsNavigationTest {
     private HomeActivity originalHome;
     private Application.ActivityLifecycleCallbacks cameraIsolation;
 
-    @Before public void prepareIsolatedEndpoints() throws Exception {
+    @Before
+    public void prepareIsolatedEndpoints() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         device = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         binding = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
@@ -93,20 +96,28 @@ public final class SettingsNavigationTest {
         });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
                 String path = request.getPath();
                 if (path == null || !path.startsWith("/sdk")) {
                     businessRequests.incrementAndGet();
                     return new MockResponse().setResponseCode(503);
                 }
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject request = new JSONObject(text);
                             String command = request.getString("cmd");
-                            if ("getCloudStatus".equals(command)) cloudStatusReads.incrementAndGet();
-                            if ("setCloudStatus".equals(command)) cloudStatusWrites.incrementAndGet();
+                            if ("getCloudStatus".equals(command))
+                                cloudStatusReads.incrementAndGet();
+                            if ("setCloudStatus".equals(command))
+                                cloudStatusWrites.incrementAndGet();
                             JSONObject data = new JSONObject();
                             if ("init".equals(command)) initCount.incrementAndGet();
                             if ("getStatus".equals(command)) {
@@ -116,7 +127,9 @@ public final class SettingsNavigationTest {
                             socket.send(new JSONObject().put("requestId", request.getString("requestId"))
                                     .put("code", 0).put("reason", "本机测试夹具")
                                     .put("data", data).toString());
-                        } catch (Throwable failure) { serverFailure.set(failure); }
+                        } catch (Throwable failure) {
+                            serverFailure.set(failure);
+                        }
                     }
                 });
             }
@@ -131,35 +144,57 @@ public final class SettingsNavigationTest {
                 .putString("cloud_token", "").putBoolean("voice", false)
                 .putString("face_camera", FACE_CAMERA).putString("hand_camera", HAND_CAMERA).commit());
         cameraIsolation = new Application.ActivityLifecycleCallbacks() {
-            @Override public void onActivityCreated(Activity activity, Bundle state) {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle state) {
                 if (activity instanceof CameraSettingsActivity) {
                     // 无权限的设备模拟“已问过权限”；已授权设备因指定无效 USB ID 只进入断开提示。
                     writeField(activity, "cameraPermissionRequested", true);
                     ((BaseDeviceSettingsActivity) activity).formState.putBoolean("camera.permission_requested", true);
                 }
             }
-            @Override public void onActivityStarted(Activity activity) { }
-            @Override public void onActivityResumed(Activity activity) { }
-            @Override public void onActivityPaused(Activity activity) { }
-            @Override public void onActivityStopped(Activity activity) { }
-            @Override public void onActivitySaveInstanceState(Activity activity, Bundle state) { }
-            @Override public void onActivityDestroyed(Activity activity) { }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle state) {
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+            }
         };
         app.registerActivityLifecycleCallbacks(cameraIsolation);
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         homeScenario = ActivityScenario.launch(new Intent(app, HomeActivity.class));
         homeScenario.onActivity(activity -> originalHome = activity);
         await(() -> onMain(() -> app.sdkSession().viewState().ready), "首页应连接隔离 SDK 夹具");
         assertEquals(1, initCount.get());
     }
 
-    @After public void finishPagesAndRestoreConfiguration() throws Exception {
+    @After
+    public void finishPagesAndRestoreConfiguration() throws Exception {
         try {
             if (homeScenario != null) homeScenario.close();
         } finally {
             try {
                 if (app != null) onMain(() -> {
-                    if (cameraIsolation != null) app.unregisterActivityLifecycleCallbacks(cameraIsolation);
+                    if (cameraIsolation != null)
+                        app.unregisterActivityLifecycleCallbacks(cameraIsolation);
                     for (Stage stage : Stage.values())
                         for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance()
                                 .getActivitiesInStage(stage)))
@@ -169,7 +204,8 @@ public final class SettingsNavigationTest {
                     return null;
                 });
                 instrumentation.waitForIdleSync();
-                if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+                if (app != null) app.io.submit(() -> {
+                }).get(10, TimeUnit.SECONDS);
             } finally {
                 try {
                     if (originalDevice != null) restore(device, originalDevice);
@@ -187,7 +223,8 @@ public final class SettingsNavigationTest {
         assertNull(serverFailure.get());
     }
 
-    @Test public void homeShortcutsOpenTheirOwnActivitiesAndReturnToExistingHome() {
+    @Test
+    public void homeShortcutsOpenTheirOwnActivitiesAndReturnToExistingHome() {
         onMain(() -> {
             assertAbsentOrHidden(originalHome, "home_cloud");
             assertShopShortcutUnavailable(originalHome);
@@ -208,10 +245,19 @@ public final class SettingsNavigationTest {
                 return null;
             });
             BaseDeviceSettingsActivity page = awaitPage(sections[index]);
-            onMain(() -> { assertShopHeaderUnavailable(page); return null; });
-            if (sections[index] == 3) onMain(() -> { assertCloudHostingUnavailable((LicenseSettingsActivity) page); return null; });
+            onMain(() -> {
+                assertShopHeaderUnavailable(page);
+                return null;
+            });
+            if (sections[index] == 3) onMain(() -> {
+                assertCloudHostingUnavailable((LicenseSettingsActivity) page);
+                return null;
+            });
             assertFalse("进入设置不应销毁首页", originalHome.isDestroyed());
-            onMain(() -> { page.findViewById(R.id.header_home).performClick(); return null; });
+            onMain(() -> {
+                page.findViewById(R.id.header_home).performClick();
+                return null;
+            });
             await(() -> resumed(HomeActivity.class) != null, "设置页应回到首页");
             assertSame("返回应复用原首页实例", originalHome, resumed(HomeActivity.class));
         }
@@ -219,14 +265,18 @@ public final class SettingsNavigationTest {
         assertCameraPreferencesUnchanged();
     }
 
-    @Test public void hiddenShopHeaderKeepsBlankSpaceInertAndAboutTouchableAcrossOrientationsAndRearrangement() {
+    @Test
+    public void hiddenShopHeaderKeepsBlankSpaceInertAndAboutTouchableAcrossOrientationsAndRearrangement() {
         String longName = "新海智控晨检设备测试门店名称特别长用于验证右上角关于设备始终可见"
                 + "且隐藏门店信息不会留下占位或覆盖关于设备按钮";
         int originalOrientation = onMain(originalHome::getRequestedOrientation);
         try {
             for (int orientation : new int[]{ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}) {
-                onMain(() -> { originalHome.setRequestedOrientation(orientation); return null; });
+                onMain(() -> {
+                    originalHome.setRequestedOrientation(orientation);
+                    return null;
+                });
                 int expected = orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                         ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE;
                 await(() -> onMain(() -> originalHome.getResources().getConfiguration().orientation == expected
@@ -288,12 +338,16 @@ public final class SettingsNavigationTest {
                 }
             }
         } finally {
-            onMain(() -> { originalHome.setRequestedOrientation(originalOrientation); return null; });
+            onMain(() -> {
+                originalHome.setRequestedOrientation(originalOrientation);
+                return null;
+            });
         }
         assertEquals("页头实际触控及授权页重建不能重复初始化共享 SDK", 1, initCount.get());
     }
 
-    @Test public void visibleSettingsUseSeparateActivitiesAndKeepUnsavedConnectionDraft() {
+    @Test
+    public void visibleSettingsUseSeparateActivitiesAndKeepUnsavedConnectionDraft() {
         clickSettingsEntry(0);
         BaseDeviceSettingsActivity[] instances = new BaseDeviceSettingsActivity[8];
         instances[0] = awaitPage(0);
@@ -344,7 +398,8 @@ public final class SettingsNavigationTest {
         assertCameraPreferencesUnchanged();
     }
 
-    @Test public void cameraRoleSurvivesBackgroundRearrangementAndActivityRecreation() {
+    @Test
+    public void cameraRoleSurvivesBackgroundRearrangementAndActivityRecreation() {
         onMain(() -> {
             revealHomeEntry(R.id.home_camera);
             View entry = originalHome.findViewById(R.id.home_camera);
@@ -353,7 +408,10 @@ public final class SettingsNavigationTest {
         });
         CameraSettingsActivity camera = (CameraSettingsActivity) awaitPage(4);
         CameraSource originalSource = onMain(() -> (CameraSource) readField(camera, "cameraPreviewSource"));
-        onMain(() -> { camera.findViewById(R.id.settings_preview_hand).performClick(); return null; });
+        onMain(() -> {
+            camera.findViewById(R.id.settings_preview_hand).performClick();
+            return null;
+        });
         selectSection(camera, 5);
         BaseDeviceSettingsActivity rules = awaitPage(5);
         onMain(() -> {
@@ -379,12 +437,16 @@ public final class SettingsNavigationTest {
             CameraSettingsActivity current = resumed(CameraSettingsActivity.class);
             return current != null && current != camera;
         }, "摄像头设置应支持系统重建");
-        onMain(() -> { assertHandRole(resumedOnMain(CameraSettingsActivity.class)); return null; });
+        onMain(() -> {
+            assertHandRole(resumedOnMain(CameraSettingsActivity.class));
+            return null;
+        });
         assertEquals("恢复草稿不得重新初始化 SDK", 1, initCount.get());
         assertCameraPreferencesUnchanged();
     }
 
-    @Test public void systemSettingsKeepsVoiceAndHidesSdkCapabilitiesWithoutAppUpdateRequests() {
+    @Test
+    public void systemSettingsKeepsVoiceAndHidesSdkCapabilitiesWithoutAppUpdateRequests() {
         clickSettingsEntry(7);
         SystemSettingsActivity system = (SystemSettingsActivity) awaitPage(7);
         onMain(() -> {
@@ -399,7 +461,10 @@ public final class SettingsNavigationTest {
         BaseDeviceSettingsActivity connection = awaitPage(0);
         selectSection(connection, 7);
         assertSame("系统设置应复用原实例", system, awaitPage(7));
-        onMain(() -> { system.recreate(); return null; });
+        onMain(() -> {
+            system.recreate();
+            return null;
+        });
         await(() -> {
             SystemSettingsActivity current = resumed(SystemSettingsActivity.class);
             return current != null && current != system;
@@ -537,7 +602,8 @@ public final class SettingsNavigationTest {
     private void revealHomeEntry(int entryId) {
         if (entryId == R.id.home_settings || entryId == R.id.header_shop) return;
         View entry = originalHome.findViewById(entryId);
-        if (entry != null) entry.requestRectangleOnScreen(new Rect(0, 0, entry.getWidth(), entry.getHeight()), true);
+        if (entry != null)
+            entry.requestRectangleOnScreen(new Rect(0, 0, entry.getWidth(), entry.getHeight()), true);
     }
 
     private BaseDeviceSettingsActivity awaitPage(int section) {
@@ -570,8 +636,11 @@ public final class SettingsNavigationTest {
         AtomicReference<T> result = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { result.set(work.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                result.set(work.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError("主线程设置验收失败", failure.get());
         return result.get();
@@ -583,18 +652,25 @@ public final class SettingsNavigationTest {
                 Field result = type.getDeclaredField(name);
                 result.setAccessible(true);
                 return result;
-            } catch (NoSuchFieldException ignored) { }
+            } catch (NoSuchFieldException ignored) {
+            }
         throw new AssertionError("缺少验收状态：" + name);
     }
 
     private static Object readField(Object target, String name) {
-        try { return field(target, name).get(target); }
-        catch (IllegalAccessException error) { throw new AssertionError(error); }
+        try {
+            return field(target, name).get(target);
+        } catch (IllegalAccessException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static void writeField(Object target, String name, Object value) {
-        try { field(target, name).set(target, value); }
-        catch (IllegalAccessException error) { throw new AssertionError(error); }
+        try {
+            field(target, name).set(target, value);
+        } catch (IllegalAccessException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static Map<String, Object> snapshot(SharedPreferences preferences) {

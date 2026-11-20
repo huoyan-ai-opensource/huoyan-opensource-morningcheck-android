@@ -10,9 +10,12 @@ import java.util.Arrays;
 
 import cc.huoyan.opensource.morningcheck.domain.DetectionClasses;
 
-/** 验证跨帧异常的照片归属，不能把旧坐标画到最后一张正常图。 */
+/**
+ * 验证跨帧异常的照片归属，不能把旧坐标画到最后一张正常图。
+ */
 public final class HandEvidenceCaptureTest {
-    @Test public void earlyAbnormalityKeepsItsOwnFrameAfterNormalSamples() throws Exception {
+    @Test
+    public void earlyAbnormalityKeepsItsOwnFrameAfterNormalSamples() throws Exception {
         HandEvidenceCapture capture = new HandEvidenceCapture();
         CameraSource.Frame ring = frame(10), normal = frame(20);
         JSONArray boxes = new JSONArray().put(box(DetectionClasses.HAND_RING, .2, .3, .1, .2));
@@ -26,7 +29,8 @@ public final class HandEvidenceCaptureTest {
         assertTrue(saved.extras.isEmpty());
     }
 
-    @Test public void separateAbnormalitiesKeepSeparatePhotosAndSnapshotsSurviveReset() throws Exception {
+    @Test
+    public void separateAbnormalitiesKeepSeparatePhotosAndSnapshotsSurviveReset() throws Exception {
         HandEvidenceCapture capture = new HandEvidenceCapture();
         CameraSource.Frame ring = frame(10), wound = frame(20);
         capture.accept(ring, new JSONArray().put(box(DetectionClasses.HAND_RING, .2, .3, .1, .2)));
@@ -41,7 +45,8 @@ public final class HandEvidenceCaptureTest {
         assertEquals(Arrays.asList(DetectionClasses.HAND_RING), saved.extras.get(0).classIds());
     }
 
-    @Test public void mostCompleteFrameIsPrimaryAndNormalGroupUsesLastFrame() throws Exception {
+    @Test
+    public void mostCompleteFrameIsPrimaryAndNormalGroupUsesLastFrame() throws Exception {
         HandEvidenceCapture capture = new HandEvidenceCapture();
         CameraSource.Frame complete = frame(30), ringOnly = frame(40), normal = frame(50);
         capture.accept(complete, new JSONArray().put(box(DetectionClasses.HAND_RING, .2, .3, .1, .2))
@@ -56,7 +61,8 @@ public final class HandEvidenceCaptureTest {
         assertSame(normal, capture.evidence().primary.frame);
     }
 
-    @Test public void invalidBoxesCannotInventLocationsAndEdgesAreClipped() throws Exception {
+    @Test
+    public void invalidBoxesCannotInventLocationsAndEdgesAreClipped() throws Exception {
         HandEvidenceCapture capture = new HandEvidenceCapture();
         JSONArray boxes = new JSONArray().put(box(DetectionClasses.HAND_BACK, .1, .1, .2, .2))
                 .put(box(DetectionClasses.HAND_RING, .1, .1, .2, .2).put("score", 0))

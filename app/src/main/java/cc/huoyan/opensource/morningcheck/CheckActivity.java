@@ -95,6 +95,10 @@ public final class CheckActivity extends CameraMorningActivity {
     };
     private String inferenceIssue = "", identityIssue = "";
     private boolean storageError, identityReadError;
+    /**
+     * 每轮晨检至多弹出一次授权引导，避免相机帧反复弹窗。
+     */
+    private boolean permissionGuideShown;
     private String shownPromptError = "";
     private JSONObject activeStaff;
     private CameraSource.Frame identityPhoto, facePhoto, backPhoto, palmPhoto;
@@ -161,7 +165,8 @@ public final class CheckActivity extends CameraMorningActivity {
             openResult();
             return;
         }
-        if (!exitRequested && pipeline == null && hasEmployeeForCheck() && sdkReady()) startCheck(false);
+        if (!exitRequested && pipeline == null && hasEmployeeForCheck() && sdkReady())
+            startCheck(false);
         else if (pipeline == null) render();
     }
 
@@ -348,7 +353,8 @@ public final class CheckActivity extends CameraMorningActivity {
     }
 
     private void openResult() {
-        if (!foreground || !resumed || destroyed || dialogCapturePaused || currentRecord == null || resultOpened) return;
+        if (!foreground || !resumed || destroyed || dialogCapturePaused || currentRecord == null || resultOpened)
+            return;
         resultOpened = true;
         startActivity(new Intent(this, ResultActivity.class).putExtra("record_id", currentRecord.optString("id")));
         finish();
@@ -372,6 +378,7 @@ public final class CheckActivity extends CameraMorningActivity {
             return;
         }
         session++;
+        permissionGuideShown = false;
         captureSession.begin(sdkGeneration(), sdk.getStatus().optString("device_id"));
         saving = false;
         paused = false;
@@ -558,7 +565,8 @@ public final class CheckActivity extends CameraMorningActivity {
         if (exitRequested) return;
         dialogCapturePaused = false;
         // 重排和离页关闭窗口时，不能先重开即将释放的旧预览。
-        if (!foreground || !resumed || destroyed || isFinishing() || exitApproved || rebuildingPreview) return;
+        if (!foreground || !resumed || destroyed || isFinishing() || exitApproved || rebuildingPreview)
+            return;
         speech.resume();
         onSdkStateChanged();
         if (currentRecord != null) openResult();
@@ -624,7 +632,7 @@ public final class CheckActivity extends CameraMorningActivity {
                     return;
                 if (code != 0) {
                     frameBusy = false;
-                    inferenceFailure(code);
+                    inferenceFailure(code, message);
                     return;
                 }
                 long personId = data.optLong("person_id");
@@ -672,7 +680,7 @@ public final class CheckActivity extends CameraMorningActivity {
                         frameBusy = false;
                         clearFacePresence();
                         clearFaceOverlay(frame);
-                        inferenceFailure(code);
+                        inferenceFailure(code, message);
                         return;
                     }
                     final FaceDetectionResult faces;
@@ -792,7 +800,7 @@ public final class CheckActivity extends CameraMorningActivity {
                     clearFacePresence();
                     clearFaceOverlay(frame);
                 }
-                inferenceFailure(code);
+                inferenceFailure(code, message);
                 return;
             }
             if (stage == CheckPipeline.Stage.HEAD) {
@@ -943,9 +951,16 @@ public final class CheckActivity extends CameraMorningActivity {
     }
 
     private void inferenceFailure(int code) {
+        inferenceFailure(code, null);
+    }
+
+    private void inferenceFailure(int code, String reason) {
         interruptSamples();
         nextFrameAt = SystemClock.elapsedRealtime() + (code == 40010 ? 1000 : 2000);
         inferenceIssue = code == 40010 ? getString(R.string.i18n_a_check_busy_please_wait) : getString(R.string.i18n_a_check_failed_recovering);
+        if (!permissionGuideShown) {
+            permissionGuideShown = guideSdkPermissions(code, reason);
+        }
         updateVoice();
         if (code != 40010) sdk.refreshStatus(null);
     }
@@ -1184,7 +1199,8 @@ public final class CheckActivity extends CameraMorningActivity {
             checkPromptLabel.setVisibility(showGuidance ? View.VISIBLE : View.GONE);
         if (!showGuidance) return;
         CheckGuidance.Prompt prompt;
-        if (paused) prompt = new CheckGuidance.Prompt(getString(R.string.i18n_a_capture_paused_tap_resume_to_continue), false);
+        if (paused)
+            prompt = new CheckGuidance.Prompt(getString(R.string.i18n_a_capture_paused_tap_resume_to_continue), false);
         else if (waitingDeparture)
             prompt = new CheckGuidance.Prompt(getString(R.string.i18n_a_check_complete_leave_the_camera_view_before_checking_again), false);
         else if (!identityIssue.isEmpty()) prompt = new CheckGuidance.Prompt(identityIssue, true);

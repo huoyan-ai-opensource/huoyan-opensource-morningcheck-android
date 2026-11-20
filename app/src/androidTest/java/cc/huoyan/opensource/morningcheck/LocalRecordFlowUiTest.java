@@ -55,7 +55,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 本机结果、记录筛选和采集证据的完整浏览回归，数据库与 SDK 均使用隔离夹具。 */
+/**
+ * 本机结果、记录筛选和采集证据的完整浏览回归，数据库与 SDK 均使用隔离夹具。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class LocalRecordFlowUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -72,7 +74,8 @@ public final class LocalRecordFlowUiTest {
     private ActivityScenario<ResultActivity> resultScenario;
     private ActivityScenario<RecordsActivity> recordsScenario;
 
-    @Before public void isolateDatabaseAndSdk() throws Exception {
+    @Before
+    public void isolateDatabaseAndSdk() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         originalPreferences = snapshot(preferences);
@@ -87,26 +90,42 @@ public final class LocalRecordFlowUiTest {
         originalStore = app.store;
         databaseName = "local-record-flow-ui-" + UUID.randomUUID() + ".db";
         isolatedStore = new AppStore(new ContextWrapper(app) {
-            @Override public File getDatabasePath(String name) { return app.getDatabasePath(databaseName); }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
+            @Override
+            public File getDatabasePath(String name) {
+                return app.getDatabasePath(databaseName);
+            }
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
                 return app.openOrCreateDatabase(databaseName, mode, factory);
             }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode,
-                    SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode,
+                                                       SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
                 return app.openOrCreateDatabase(databaseName, mode, factory, handler);
             }
         });
-        onMain(() -> { app.store = isolatedStore; return null; });
+        onMain(() -> {
+            app.store = isolatedStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
                 if (!"/sdk".equals(request.getPath())) {
                     unexpectedRequests.incrementAndGet();
                     return new MockResponse().setResponseCode(503);
                 }
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject request = new JSONObject(text);
                             JSONObject data = new JSONObject();
@@ -115,7 +134,9 @@ public final class LocalRecordFlowUiTest {
                                         .put("certificate_valid", true).put("device_id", "LOCAL-RECORD-FLOW-TEST");
                             socket.send(new JSONObject().put("requestId", request.getString("requestId"))
                                     .put("code", 0).put("reason", "本机记录浏览夹具").put("data", data).toString());
-                        } catch (Throwable error) { serverFailure.set(error); }
+                        } catch (Throwable error) {
+                            serverFailure.set(error);
+                        }
                     }
                 });
             }
@@ -135,11 +156,16 @@ public final class LocalRecordFlowUiTest {
         app.io.submit(() -> isolatedStore.saveRecord(value)).get(10, TimeUnit.SECONDS);
     }
 
-    @After public void restoreOriginalStore() throws Exception {
+    @After
+    public void restoreOriginalStore() throws Exception {
         try {
             if (resultScenario != null) resultScenario.close();
             if (recordsScenario != null) recordsScenario.close();
-            if (app != null) onMain(() -> { finishPages(); app.sdkSession().disconnect(); return null; });
+            if (app != null) onMain(() -> {
+                finishPages();
+                app.sdkSession().disconnect();
+                return null;
+            });
             instrumentation.waitForIdleSync();
             if (app != null && originalStore != null) {
                 // 队列清空后再关闭夹具数据库，避免页面读取落到已关闭的库。
@@ -165,7 +191,8 @@ public final class LocalRecordFlowUiTest {
         assertNull(serverFailure.get());
     }
 
-    @Test public void resultAndRecordsKeepLocalDataFiltersAndAllCapturedPhotos() throws Exception {
+    @Test
+    public void resultAndRecordsKeepLocalDataFiltersAndAllCapturedPhotos() throws Exception {
         resultScenario = ActivityScenario.launch(new Intent(app, ResultActivity.class)
                 .putExtra("record_id", recordId));
         AtomicReference<ResultActivity> source = new AtomicReference<>();
@@ -293,21 +320,27 @@ public final class LocalRecordFlowUiTest {
             Field value = RecordsActivity.class.getDeclaredField("loadedFilter");
             value.setAccessible(true);
             return value.getInt(activity);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private <T> T onMain(Callable<T> action) {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(action.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError(failure.get());
         return value.get();

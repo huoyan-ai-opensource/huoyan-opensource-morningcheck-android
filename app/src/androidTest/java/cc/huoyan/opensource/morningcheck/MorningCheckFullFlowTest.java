@@ -20,6 +20,7 @@ import android.os.Build;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.widget.Spinner;
 
 import androidx.core.content.ContextCompat;
@@ -110,7 +111,8 @@ public final class MorningCheckFullFlowTest {
     private volatile JSONArray nextBoxes = new JSONArray();
     private volatile long sdkPersonId;
 
-    @Before public void prepareIsolatedRosterAndSdk() throws Exception {
+    @Before
+    public void prepareIsolatedRosterAndSdk() throws Exception {
         boolean x86 = false;
         for (String abi : Build.SUPPORTED_ABIS) x86 |= abi.startsWith("x86");
         String hardware = Build.HARDWARE.toLowerCase(Locale.ROOT), device = Build.DEVICE.toLowerCase(Locale.ROOT);
@@ -134,15 +136,23 @@ public final class MorningCheckFullFlowTest {
         ownedFileRoot = new File(app.getFilesDir(), "morning-full-flow-qa/20261013/photos-" + UUID.randomUUID());
         assertFalse("照片夹具必须使用新的独占目录", ownedFileRoot.exists());
         Context photoContext = new ContextWrapper(app) {
-            @Override public File getFilesDir() { return ownedFileRoot; }
+            @Override
+            public File getFilesDir() {
+                return ownedFileRoot;
+            }
         };
         Constructor<AppStore> constructor = AppStore.class.getDeclaredConstructor(Context.class, String.class);
         constructor.setAccessible(true);
         testStore = constructor.newInstance(photoContext, databaseName);
-        onMain(() -> { originalStore = app.store; app.store = testStore; return null; });
+        onMain(() -> {
+            originalStore = app.store;
+            app.store = testStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 try {
                     assertEquals("仅允许隔离 SDK WS，不允许业务云请求", "/sdk", request.getPath());
                     return new MockResponse().withWebSocketUpgrade(new SdkFixture());
@@ -180,33 +190,69 @@ public final class MorningCheckFullFlowTest {
         recordsMonitor = instrumentation.addMonitor(RecordsActivity.class.getName(), null, false);
     }
 
-    @After public void restorePreferencesStoreAndOnlyOwnedPhotos() throws Exception {
+    @After
+    public void restorePreferencesStoreAndOnlyOwnedPhotos() throws Exception {
         List<Throwable> errors = new ArrayList<>();
         if (isolationStarted) {
-            cleanup(errors, "关闭测试页面", () -> onMain(() -> { finishPages(); return null; }));
-            if (scenario != null) cleanup(errors, "释放页面夹具", () -> { scenario.close(); return null; });
-            cleanup(errors, "断开测试 SDK 会话", () -> onMain(() -> { app.sdkSession().disconnect(); return null; }));
+            cleanup(errors, "关闭测试页面", () -> onMain(() -> {
+                finishPages();
+                return null;
+            }));
+            if (scenario != null) cleanup(errors, "释放页面夹具", () -> {
+                scenario.close();
+                return null;
+            });
+            cleanup(errors, "断开测试 SDK 会话", () -> onMain(() -> {
+                app.sdkSession().disconnect();
+                return null;
+            }));
             cleanup(errors, "等待本轮 IO 完成", () -> onIo(() -> null));
-            cleanup(errors, "等待页面销毁完成", () -> { instrumentation.waitForIdleSync(); return null; });
+            cleanup(errors, "等待页面销毁完成", () -> {
+                instrumentation.waitForIdleSync();
+                return null;
+            });
         }
         for (Instrumentation.ActivityMonitor monitor : new Instrumentation.ActivityMonitor[]{checkMonitor, resultMonitor, recordsMonitor})
-            if (monitor != null) cleanup(errors, "移除 ActivityMonitor", () -> { instrumentation.removeMonitor(monitor); return null; });
+            if (monitor != null) cleanup(errors, "移除 ActivityMonitor", () -> {
+                instrumentation.removeMonitor(monitor);
+                return null;
+            });
         if (app != null && originalStore != null)
-            cleanup(errors, "恢复原数据库实例", () -> onMain(() -> { app.store = originalStore; return null; }));
+            cleanup(errors, "恢复原数据库实例", () -> onMain(() -> {
+                app.store = originalStore;
+                return null;
+            }));
         if (prefs != null && originalPreferences != null)
-            cleanup(errors, "恢复原设备配置", () -> { restore(prefs, originalPreferences); return null; });
+            cleanup(errors, "恢复原设备配置", () -> {
+                restore(prefs, originalPreferences);
+                return null;
+            });
         if (ownedFileRoot != null)
-            cleanup(errors, "清理本用例独占照片目录", () -> onIo(() -> { cleanOwnedPhotos(); return null; }));
-        if (testStore != null) cleanup(errors, "关闭隔离数据库", () -> { testStore.close(); return null; });
+            cleanup(errors, "清理本用例独占照片目录", () -> onIo(() -> {
+                cleanOwnedPhotos();
+                return null;
+            }));
+        if (testStore != null) cleanup(errors, "关闭隔离数据库", () -> {
+            testStore.close();
+            return null;
+        });
         if (databaseName != null) cleanup(errors, "删除隔离数据库", () -> {
             assertTrue(databaseName.startsWith("morning-full-flow-"));
-            if (app.getDatabasePath(databaseName).exists()) assertTrue(app.deleteDatabase(databaseName));
+            if (app.getDatabasePath(databaseName).exists())
+                assertTrue(app.deleteDatabase(databaseName));
             return null;
         });
         for (WebSocket socket : sockets)
-            cleanup(errors, "关闭测试 WS", () -> { socket.close(1001, "全流程测试结束"); return null; });
-        if (endpoint != null) cleanup(errors, "释放本机 SDK 夹具", () -> { endpoint.shutdown(); return null; });
-        if (serverFailure.get() != null) errors.add(new AssertionError("SDK 夹具不能出现协议错误", serverFailure.get()));
+            cleanup(errors, "关闭测试 WS", () -> {
+                socket.close(1001, "全流程测试结束");
+                return null;
+            });
+        if (endpoint != null) cleanup(errors, "释放本机 SDK 夹具", () -> {
+            endpoint.shutdown();
+            return null;
+        });
+        if (serverFailure.get() != null)
+            errors.add(new AssertionError("SDK 夹具不能出现协议错误", serverFailure.get()));
         throwCleanupErrors(errors);
     }
 
@@ -221,25 +267,37 @@ public final class MorningCheckFullFlowTest {
         if (photos.exists()) {
             File[] files = photos.listFiles();
             assertNotNull("独占照片目录必须可枚举", files);
-            for (File file : files) cleanup(errors, "删除本用例 JPEG", () -> {
-                assertEquals(photos.getCanonicalFile(), file.getCanonicalFile().getParentFile());
-                String name = file.getName();
-                assertTrue("只清理生产流程生成的 UUID JPEG", file.isFile() && name.length() > 40
-                        && name.charAt(36) == '-' && name.endsWith(".jpg"));
-                UUID.fromString(name.substring(0, 36));
-                assertTrue(file.delete());
+            for (File file : files)
+                cleanup(errors, "删除本用例 JPEG", () -> {
+                    assertEquals(photos.getCanonicalFile(), file.getCanonicalFile().getParentFile());
+                    String name = file.getName();
+                    assertTrue("只清理生产流程生成的 UUID JPEG", file.isFile() && name.length() > 40
+                            && name.charAt(36) == '-' && name.endsWith(".jpg"));
+                    UUID.fromString(name.substring(0, 36));
+                    assertTrue(file.delete());
+                    return null;
+                });
+            cleanup(errors, "删除空照片夹具目录", () -> {
+                assertTrue(photos.delete());
                 return null;
             });
-            cleanup(errors, "删除空照片夹具目录", () -> { assertTrue(photos.delete()); return null; });
         }
-        cleanup(errors, "删除空文件夹具目录", () -> { assertTrue(ownedFileRoot.delete()); return null; });
+        cleanup(errors, "删除空文件夹具目录", () -> {
+            assertTrue(ownedFileRoot.delete());
+            return null;
+        });
         throwCleanupErrors(errors);
     }
 
-    /** 任一清理断言失败也必须继续还原配置、数据库及连接，最后统一报告。 */
+    /**
+     * 任一清理断言失败也必须继续还原配置、数据库及连接，最后统一报告。
+     */
     private static void cleanup(List<Throwable> errors, String step, Callable<?> action) {
-        try { action.call(); }
-        catch (Throwable error) { errors.add(new AssertionError(step + "失败", error)); }
+        try {
+            action.call();
+        } catch (Throwable error) {
+            errors.add(new AssertionError(step + "失败", error));
+        }
     }
 
     private static void throwCleanupErrors(List<Throwable> errors) {
@@ -249,11 +307,13 @@ public final class MorningCheckFullFlowTest {
         throw failure;
     }
 
-    @Test public void normalCheckPersistsAndHomeCountsOnlyCompletedEmployee() throws Exception {
+    @Test
+    public void normalCheckPersistsAndHomeCountsOnlyCompletedEmployee() throws Exception {
         runFullFlow(false);
     }
 
-    @Test public void abnormalCheckPersistsAndRecordFiltersReadSavedResult() throws Exception {
+    @Test
+    public void abnormalCheckPersistsAndRecordFiltersReadSavedResult() throws Exception {
         runFullFlow(true);
     }
 
@@ -264,7 +324,10 @@ public final class MorningCheckFullFlowTest {
         await(() -> onMain(() -> home.loaded && app.sdkSession().viewState().ready), "首页应连接隔离 SDK 并读取名册");
         assertHomeCounts(3, 0, 0, 0);
         screenshot(home, label + "-home-before");
-        onMain(() -> { assertTrue(home.findViewById(R.id.home_start).performClick()); return null; });
+        onMain(() -> {
+            assertTrue(home.findViewById(R.id.home_start).performClick());
+            return null;
+        });
         check = (CheckActivity) instrumentation.waitForMonitorWithTimeout(checkMonitor, 10_000);
         assertNotNull("首页晨检入口应打开独立现场页", check);
         await(() -> onMain(() -> check.foreground && (Boolean) field(check, "resumed")
@@ -279,7 +342,10 @@ public final class MorningCheckFullFlowTest {
         });
         for (int sample = 1; sample <= 4; sample++) {
             int expected = sample;
-            onMain(() -> { check.onCameraFrame(frame(Color.rgb(70, 100, 120))); return null; });
+            onMain(() -> {
+                check.onCameraFrame(frame(Color.rgb(70, 100, 120)));
+                return null;
+            });
             await(() -> identifyRequests.get() >= expected && onMain(() -> !(Boolean) field(check, "frameBusy")),
                     "真实客户端应完成第 " + sample + " 次身份回执及档案读取");
             assertEquals(sample == 4, onMain(pipeline::isIdentityConfirmed));
@@ -307,7 +373,10 @@ public final class MorningCheckFullFlowTest {
         assertNotNull("真实保存成功后应自动打开结果 Activity", result);
         await(() -> onMain(() -> result.loaded && result.currentRecord != null
                 && result.findViewById(R.id.result_stay) != null), "结果页应读取本轮完成记录");
-        onMain(() -> { assertTrue(result.findViewById(R.id.result_stay).performClick()); return null; });
+        onMain(() -> {
+            assertTrue(result.findViewById(R.id.result_stay).performClick());
+            return null;
+        });
         JSONObject saved = onIo(() -> {
             AppStore.DataPage page = testStore.recordsPage(0, 1, 20);
             assertEquals("未完成身份采样不能另存记录", 1, page.totalRows);
@@ -325,15 +394,25 @@ public final class MorningCheckFullFlowTest {
         assertEquals(abnormal, saved.getJSONArray("findings").toString().contains("手背：戒指"));
         assertFalse("不应跳过员工身份", saved.has("identity_skipped"));
         assertEquals("未上传", saved.getString("upload"));
-        onMain(() -> { assertEquals(saved.getString("id"), result.currentRecord.getString("id")); return null; });
+        onMain(() -> {
+            assertEquals(saved.getString("id"), result.currentRecord.getString("id"));
+            return null;
+        });
         for (RecordPhotos.Photo photo : RecordPhotos.read(saved)) {
             Bitmap image = onIo(() -> BitmapFactory.decodeFile(testStore.photo(photo.file).getAbsolutePath()));
             assertNotNull("生产流程应保存可解码的 JPEG：" + photo.label, image);
-            try { assertEquals(WIDTH, image.getWidth()); assertEquals(HEIGHT, image.getHeight()); }
-            finally { image.recycle(); }
+            try {
+                assertEquals(WIDTH, image.getWidth());
+                assertEquals(HEIGHT, image.getHeight());
+            } finally {
+                image.recycle();
+            }
         }
         screenshot(result, label + "-result");
-        onMain(() -> { assertTrue(result.findViewById(R.id.header_home).performClick()); return null; });
+        onMain(() -> {
+            assertTrue(result.findViewById(R.id.header_home).performClick());
+            return null;
+        });
         await(() -> onMain(() -> home.foreground && home.loaded), "结果页返回应恢复原首页实例");
         assertHomeCounts(2, 1, abnormal ? 0 : 1, abnormal ? 1 : 0);
         screenshot(home, label + "-home-after");
@@ -363,8 +442,8 @@ public final class MorningCheckFullFlowTest {
                 return null;
             });
             await(() -> onMain(() -> !(Boolean) field(records, "pageLoading")
-                    && ((Number) field(records, "loadedFilter")).intValue() == 2
-                    && RecordDateRange.today().equals(field(records, "dateRange"))),
+                            && ((Number) field(records, "loadedFilter")).intValue() == 2
+                            && RecordDateRange.today().equals(field(records, "dateRange"))),
                     "实际异常和今天条件应完成分页查询");
         }
         onMain(() -> {
@@ -382,10 +461,10 @@ public final class MorningCheckFullFlowTest {
 
     private void assertHomeCounts(long unchecked, long checked, long normal, long abnormal) throws Exception {
         await(() -> onMain(() -> home.loaded
-                && ((Number) field(home, "staffCount")).longValue() == unchecked + checked
-                && ((Number) field(home, "checkedTodayCount")).longValue() == checked
-                && ((Number) field(home, "normalTodayCount")).longValue() == normal
-                && ((Number) field(home, "abnormalTodayCount")).longValue() == abnormal),
+                        && ((Number) field(home, "staffCount")).longValue() == unchecked + checked
+                        && ((Number) field(home, "checkedTodayCount")).longValue() == checked
+                        && ((Number) field(home, "normalTodayCount")).longValue() == normal
+                        && ((Number) field(home, "abnormalTodayCount")).longValue() == abnormal),
                 "首页必须由真实落库记录计算未检、已检、正常、异常人数");
         LocalDate today = LocalDate.now();
         ZoneId zone = ZoneId.systemDefault();
@@ -401,9 +480,12 @@ public final class MorningCheckFullFlowTest {
     private void feed(JSONArray boxes) {
         int expected = detectionsReplied.get() + 1;
         nextBoxes = boxes;
-        onMain(() -> { check.onCameraFrame(frame(Color.rgb(130, 155, 180))); return null; });
+        onMain(() -> {
+            check.onCameraFrame(frame(Color.rgb(130, 155, 180)));
+            return null;
+        });
         await(() -> detectionsReplied.get() >= expected && onMain(() ->
-                pipeline.getStage() == CheckPipeline.Stage.RESULT || !(Boolean) field(check, "frameBusy")),
+                        pipeline.getStage() == CheckPipeline.Stage.RESULT || !(Boolean) field(check, "frameBusy")),
                 "真实 WS 检测回执应驱动下一采样或阶段");
     }
 
@@ -420,7 +502,9 @@ public final class MorningCheckFullFlowTest {
                     label + "-" + root.getWidth() + "x" + root.getHeight() + ".png"))) {
                 root.draw(new Canvas(bitmap));
                 assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output));
-            } finally { bitmap.recycle(); }
+            } finally {
+                bitmap.recycle();
+            }
             return null;
         });
     }
@@ -428,7 +512,8 @@ public final class MorningCheckFullFlowTest {
     private static CameraSource.Frame frame(int color) {
         byte[] rgb = new byte[WIDTH * HEIGHT * 3];
         for (int offset = 0; offset < rgb.length; offset += 3) {
-            rgb[offset] = (byte) Color.red(color); rgb[offset + 1] = (byte) Color.green(color);
+            rgb[offset] = (byte) Color.red(color);
+            rgb[offset + 1] = (byte) Color.green(color);
             rgb[offset + 2] = (byte) Color.blue(color);
         }
         return new CameraSource.Frame(rgb, WIDTH, HEIGHT);
@@ -448,8 +533,14 @@ public final class MorningCheckFullFlowTest {
 
     private final class SdkFixture extends WebSocketListener {
         private final Map<String, JSONObject> images = new ConcurrentHashMap<>();
-        @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-        @Override public void onMessage(WebSocket socket, String text) {
+
+        @Override
+        public void onOpen(WebSocket socket, Response response) {
+            sockets.add(socket);
+        }
+
+        @Override
+        public void onMessage(WebSocket socket, String text) {
             try {
                 JSONObject request = new JSONObject(text);
                 String command = request.getString("cmd");
@@ -468,22 +559,29 @@ public final class MorningCheckFullFlowTest {
                         || "get_class_table".equals(command) || "getCertInfo".equals(command)
                         || "getDownloadProgress".equals(command) || "getCloudStatus".equals(command));
                 JSONObject data = new JSONObject();
-                if ("getStatus".equals(command)) data.put("sdk_state", "READY").put("model_ready", true)
-                        .put("certificate_valid", true).put("device_id", "FULL-FLOW-TEST");
+                if ("getStatus".equals(command))
+                    data.put("sdk_state", "READY").put("model_ready", true)
+                            .put("certificate_valid", true).put("device_id", "FULL-FLOW-TEST");
                 reply(socket, request.getString("requestId"), data);
-            } catch (Throwable error) { serverFailure.compareAndSet(null, error); }
+            } catch (Throwable error) {
+                serverFailure.compareAndSet(null, error);
+            }
         }
-        @Override public void onMessage(WebSocket socket, ByteString bytes) {
+
+        @Override
+        public void onMessage(WebSocket socket, ByteString bytes) {
             try {
                 ByteBuffer buffer = bytes.asByteBuffer();
                 int length = buffer.getInt();
                 assertTrue(length > 0 && length < buffer.remaining());
-                byte[] rawId = new byte[length]; buffer.get(rawId);
+                byte[] rawId = new byte[length];
+                buffer.get(rawId);
                 String id = new String(rawId, StandardCharsets.UTF_8);
                 JSONObject request = images.remove(id);
                 assertNotNull("图帧必须对应实际客户端请求", request);
                 JSONObject params = request.getJSONObject("params");
-                assertEquals(WIDTH, params.getInt("width")); assertEquals(HEIGHT, params.getInt("height"));
+                assertEquals(WIDTH, params.getInt("width"));
+                assertEquals(HEIGHT, params.getInt("height"));
                 assertEquals(WIDTH * HEIGHT * 3, buffer.remaining());
                 if ("identify".equals(request.getString("cmd")))
                     reply(socket, id, new JSONObject().put("matched", true).put("person_id", sdkPersonId));
@@ -496,8 +594,11 @@ public final class MorningCheckFullFlowTest {
                     reply(socket, id, new JSONObject().put("boxes", new JSONArray(nextBoxes.toString())));
                     detectionsReplied.incrementAndGet();
                 }
-            } catch (Throwable error) { serverFailure.compareAndSet(null, error); }
+            } catch (Throwable error) {
+                serverFailure.compareAndSet(null, error);
+            }
         }
+
         private void reply(WebSocket socket, String id, JSONObject data) throws Exception {
             assertTrue(socket.send(new JSONObject().put("requestId", id).put("code", 0)
                     .put("reason", "隔离晨检全流程验收").put("data", data).toString()));
@@ -508,14 +609,20 @@ public final class MorningCheckFullFlowTest {
         Set<Activity> pages = new HashSet<>();
         for (Stage stage : new Stage[]{Stage.RESUMED, Stage.STARTED, Stage.CREATED, Stage.PAUSED, Stage.STOPPED})
             pages.addAll(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage));
-        for (Activity activity : new ArrayList<>(pages)) if (activity instanceof BaseMorningActivity) activity.finish();
+        for (Activity activity : new ArrayList<>(pages))
+            if (activity instanceof BaseMorningActivity) activity.finish();
     }
 
     private static Object field(Object target, String name) {
         for (Class<?> type = target.getClass(); type != null; type = type.getSuperclass()) {
-            try { Field field = type.getDeclaredField(name); field.setAccessible(true); return field.get(target); }
-            catch (NoSuchFieldException ignored) {}
-            catch (IllegalAccessException error) { throw new AssertionError(error); }
+            try {
+                Field field = type.getDeclaredField(name);
+                field.setAccessible(true);
+                return field.get(target);
+            } catch (NoSuchFieldException ignored) {
+            } catch (IllegalAccessException error) {
+                throw new AssertionError(error);
+            }
         }
         throw new AssertionError("不存在的测试状态：" + name);
     }
@@ -524,25 +631,33 @@ public final class MorningCheckFullFlowTest {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(action.call()); } catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError("主线程全流程验收失败", failure.get());
         return value.get();
     }
 
-    private <T> T onIo(Callable<T> action) throws Exception { return app.io.submit(action).get(10, TimeUnit.SECONDS); }
+    private <T> T onIo(Callable<T> action) throws Exception {
+        return app.io.submit(action).get(10, TimeUnit.SECONDS);
+    }
 
     private void await(BooleanSupplier condition, String message) {
         long deadline = SystemClock.elapsedRealtime() + 15_000;
         do {
-            if (serverFailure.get() != null) throw new AssertionError("隔离 SDK 夹具失败", serverFailure.get());
+            if (serverFailure.get() != null)
+                throw new AssertionError("隔离 SDK 夹具失败", serverFailure.get());
             if (condition.getAsBoolean()) return;
             SystemClock.sleep(25);
         } while (SystemClock.elapsedRealtime() < deadline);
         fail(message);
     }
 
-    @SuppressWarnings("unchecked") private static void restore(SharedPreferences prefs, Map<String, Object> original) {
+    @SuppressWarnings("unchecked")
+    private static void restore(SharedPreferences prefs, Map<String, Object> original) {
         SharedPreferences.Editor editor = prefs.edit().clear();
         for (Map.Entry<String, Object> entry : original.entrySet()) {
             Object value = entry.getValue();

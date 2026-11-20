@@ -29,12 +29,15 @@ import java.util.function.BooleanSupplier;
 
 import cc.huoyan.opensource.morningcheck.sdk.MorningSdkSession;
 
-/** 用户指定的真机轮换验收；显式开启后才提交真实同模型激活。 */
+/**
+ * 用户指定的真机轮换验收；显式开启后才提交真实同模型激活。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class RealModelReactivationDeviceTest {
     private final Instrumentation ins = InstrumentationRegistry.getInstrumentation();
 
-    @Test public void rotatedDeviceCanSelectCurrentThenReactivateSameModel() throws Exception {
+    @Test
+    public void rotatedDeviceCanSelectCurrentThenReactivateSameModel() throws Exception {
         assumeTrue("true".equals(InstrumentationRegistry.getArguments().getString("realModelTest")));
         MorningApplication app = (MorningApplication) ins.getTargetContext().getApplicationContext();
         File credential = new File(app.getFilesDir(), "model-test-license");
@@ -76,7 +79,8 @@ public final class RealModelReactivationDeviceTest {
             scenario.onActivity(a -> {
                 View root = input(a).getDialog().getWindow().getDecorView();
                 root.findViewById(R.id.activation_code_clear).performClick();
-                for (char c : code.toCharArray()) root.findViewWithTag("activation-key-" + c).performClick();
+                for (char c : code.toCharArray())
+                    root.findViewWithTag("activation-key-" + c).performClick();
                 assertTrue(root.findViewById(R.id.activation_code_activate).isEnabled());
                 root.findViewById(R.id.activation_code_activate).performClick();
             });

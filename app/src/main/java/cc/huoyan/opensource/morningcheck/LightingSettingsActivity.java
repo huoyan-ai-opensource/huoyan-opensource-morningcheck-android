@@ -165,7 +165,8 @@ public final class LightingSettingsActivity extends BaseMorningActivity {
     }
 
     private String convertCommandText(String text, int format) {
-        if (text.isEmpty() || commandFormat != LightConfig.ASCII && text.trim().isEmpty()) return "";
+        if (text.isEmpty() || commandFormat != LightConfig.ASCII && text.trim().isEmpty())
+            return "";
         return displayCommand(commandPrefix() + text, format);
     }
 

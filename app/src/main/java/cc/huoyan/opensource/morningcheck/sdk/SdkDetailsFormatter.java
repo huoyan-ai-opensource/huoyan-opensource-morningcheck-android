@@ -38,7 +38,8 @@ public final class SdkDetailsFormatter {
             return MorningSdkState.from(true, status, null).title;
         Object lost = status == null ? null : status.opt("key_lost");
         if (Boolean.TRUE.equals(lost) || "KEY_LOST".equals(state)) return "需要恢复";
-        if (Boolean.FALSE.equals(lost) && ("READY".equals(state) || "OFFLINE".equals(state))) return "可用";
+        if (Boolean.FALSE.equals(lost) && ("READY".equals(state) || "OFFLINE".equals(state)))
+            return "可用";
         return "待确认";
     }
 

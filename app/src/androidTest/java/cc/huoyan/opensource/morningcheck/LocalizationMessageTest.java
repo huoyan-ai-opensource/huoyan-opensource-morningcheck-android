@@ -24,12 +24,15 @@ import cc.huoyan.opensource.morningcheck.domain.CheckVoiceText;
 import cc.huoyan.opensource.morningcheck.sdk.MorningSdkState;
 import cc.huoyan.opensource.morningcheck.sdk.SdkDetailsFormatter;
 
-/** 旧数据与领域文案只在显示边界翻译，不能改变历史记录、设备回执或用户数据。 */
+/**
+ * 旧数据与领域文案只在显示边界翻译，不能改变历史记录、设备回执或用户数据。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class LocalizationMessageTest {
     private static final Pattern HAN = Pattern.compile("[\\p{IsHan}]");
 
-    @Test public void checkStagesAndCombinedFindingsTranslateWithoutChangingOriginalValues() {
+    @Test
+    public void checkStagesAndCombinedFindingsTranslateWithoutChangingOriginalValues() {
         Context english = context(Locale.ENGLISH);
         Context chinese = context(Locale.SIMPLIFIED_CHINESE);
         for (CheckPipeline.Stage stage : CheckPipeline.Stage.values()) {
@@ -53,7 +56,8 @@ public final class LocalizationMessageTest {
         assertEnglish(UiMessages.text(english, CheckVoiceText.result(false)));
     }
 
-    @Test public void sdkPhasesAndDownloadProgressUseEnglishAtTheBoundary() throws Exception {
+    @Test
+    public void sdkPhasesAndDownloadProgressUseEnglishAtTheBoundary() throws Exception {
         Context english = context(Locale.ENGLISH);
         for (MorningSdkState.Phase phase : MorningSdkState.Phase.values()) {
             JSONObject status = new JSONObject().put("sdk_state", phase.name())
@@ -71,7 +75,8 @@ public final class LocalizationMessageTest {
         assertTrue(displayed, displayed.contains("73%"));
     }
 
-    @Test public void certificateLabelsTranslateWhileIdentifiersRemainIntact() throws Exception {
+    @Test
+    public void certificateLabelsTranslateWhileIdentifiersRemainIntact() throws Exception {
         JSONObject certificate = new JSONObject().put("activation_serial", "DEMO123456789XYZ")
                 .put("license_type", "TRIAL").put("model_code", "MODEL_ABC")
                 .put("model_channel", "stable").put("sdk_version", "2.0.0")
@@ -102,13 +107,15 @@ public final class LocalizationMessageTest {
                 .put("has_renewed_at", false).put("has_next_renew_at", false))));
     }
 
-    @Test public void unknownUserTextIsNotRewrittenByMessageFragments() {
+    @Test
+    public void unknownUserTextIsNotRewrittenByMessageFragments() {
         Context english = context(Locale.ENGLISH);
         for (String value : new String[]{"正常餐饮有限公司", "研发部", "张三", "手背：研发部", "研发部等3项", "张三 · 正常餐饮有限公司"})
             assertEquals(value, UiMessages.text(english, value));
     }
 
-    @Test public void systemLanguagePreferencesKeepResourcesAndPromptsInTheSameLanguage() {
+    @Test
+    public void systemLanguagePreferencesKeepResourcesAndPromptsInTheSameLanguage() {
         Assume.assumeTrue(Build.VERSION.SDK_INT >= 24);
         Context target = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Configuration configuration = new Configuration(target.getResources().getConfiguration());

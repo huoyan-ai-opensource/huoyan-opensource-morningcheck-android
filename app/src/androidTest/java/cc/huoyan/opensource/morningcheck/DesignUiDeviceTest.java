@@ -59,7 +59,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 在指定真机窗口验证 UI；使用独立数据库、回环端点和结束后恢复的配置。 */
+/**
+ * 在指定真机窗口验证 UI；使用独立数据库、回环端点和结束后恢复的配置。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class DesignUiDeviceTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -73,7 +75,8 @@ public final class DesignUiDeviceTest {
     private long emptyDepartment;
     private final java.util.Set<String> textFailures = new java.util.LinkedHashSet<>();
 
-    @Before public void isolate() throws Exception {
+    @Before
+    public void isolate() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         main(() -> {
             assertFalse(app.shopLogin().getState().isRunning());
@@ -81,24 +84,36 @@ public final class DesignUiDeviceTest {
             app.sdkSession().disconnect();
             return null;
         });
-        app.io.submit(() -> {}).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         originalPreferences = new HashMap<>(preferences.getAll());
         originalStore = app.store;
         databaseName = "design-ui-" + UUID.randomUUID() + ".db";
         fixture = new AppStore(new ContextWrapper(app) {
-            @Override public File getDatabasePath(String name) { return app.getDatabasePath(databaseName); }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
+            @Override
+            public File getDatabasePath(String name) {
+                return app.getDatabasePath(databaseName);
+            }
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
                 return app.openOrCreateDatabase(databaseName, mode, factory);
             }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
                 return app.openOrCreateDatabase(databaseName, mode, factory, handler);
             }
         });
-        main(() -> { app.store = fixture; return null; });
+        main(() -> {
+            app.store = fixture;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 return new MockResponse().setResponseCode(503).setBody("UI fixture: SDK offline");
             }
         });
@@ -130,26 +145,39 @@ public final class DesignUiDeviceTest {
                             .put("health_expiry", "2027-10-14").put("temperature_source", "UI 测试夹具"));
                 }
                 database.setTransactionSuccessful();
-            } catch (Exception error) { throw new RuntimeException(error); }
-            finally { database.endTransaction(); }
+            } catch (Exception error) {
+                throw new RuntimeException(error);
+            } finally {
+                database.endTransaction();
+            }
         }).get(10, TimeUnit.SECONDS);
     }
 
-    @After public void restore() throws Exception {
+    @After
+    public void restore() throws Exception {
         if (app == null || originalStore == null) return;
         try {
             if (scenario != null) scenario.close();
-            main(() -> { finishPages(); app.sdkSession().disconnect(); return null; });
-            app.io.submit(() -> {}).get(10, TimeUnit.SECONDS);
+            main(() -> {
+                finishPages();
+                app.sdkSession().disconnect();
+                return null;
+            });
+            app.io.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
             assertNotNull(app.io.submit(() -> fixture.staff(1)).get(10, TimeUnit.SECONDS));
             assertNotNull(app.io.submit(() -> fixture.department(emptyDepartment)).get(10, TimeUnit.SECONDS));
         } finally {
-            main(() -> { app.store = originalStore; return null; });
+            main(() -> {
+                app.store = originalStore;
+                return null;
+            });
             fixture.close();
             assertTrue(app.deleteDatabase(databaseName));
             SharedPreferences.Editor edit = preferences.edit().clear();
             for (Map.Entry<String, ?> entry : originalPreferences.entrySet()) {
-                Object value = entry.getValue(); String key = entry.getKey();
+                Object value = entry.getValue();
+                String key = entry.getKey();
                 if (value instanceof String) edit.putString(key, (String) value);
                 else if (value instanceof Boolean) edit.putBoolean(key, (Boolean) value);
                 else if (value instanceof Integer) edit.putInt(key, (Integer) value);
@@ -163,11 +191,12 @@ public final class DesignUiDeviceTest {
     }
 
 
-
-    @Test public void supplementaryPhotosKeepCaptureOrderAndOpenTheirOriginalPosition() throws Exception {
+    @Test
+    public void supplementaryPhotosKeepCaptureOrderAndOpenTheirOriginalPosition() throws Exception {
         org.json.JSONArray photos = new org.json.JSONArray();
-        for (int i = 1; i <= 5; i++) photos.put(new JSONObject()
-                .put("file", "").put("label", "采集顺序 " + i));
+        for (int i = 1; i <= 5; i++)
+            photos.put(new JSONObject()
+                    .put("file", "").put("label", "采集顺序 " + i));
         app.io.submit(() -> fixture.patchRecord("ui-1", new JSONObject()
                 .put("captured_photos", photos))).get(10, TimeUnit.SECONDS);
         RecordDetailActivity detail = launch(RecordDetailActivity.class);
@@ -179,20 +208,25 @@ public final class DesignUiDeviceTest {
             return null;
         });
         await(() -> row(detail.findViewById(R.id.record_detail_photos), 4) != null);
-        main(() -> { click(detail.findViewById(R.id.record_detail_photos), 4); return null; });
+        main(() -> {
+            click(detail.findViewById(R.id.record_detail_photos), 4);
+            return null;
+        });
         await(() -> resumed() instanceof RecordPhotoActivity);
         RecordPhotoActivity photo = main(() -> (RecordPhotoActivity) resumed());
         orient(photo);
         await(() -> "采集顺序 5".contentEquals(photo.<TextView>findViewById(R.id.photo_caption).getText()));
         main(() -> {
             assertFalse(photo.findViewById(R.id.photo_next).isEnabled());
-            photo.findViewById(R.id.photo_previous).performClick(); return null;
+            photo.findViewById(R.id.photo_previous).performClick();
+            return null;
         });
         await(() -> "采集顺序 4".contentEquals(photo.<TextView>findViewById(R.id.photo_caption).getText()));
         screenshot("record-supplementary-photo");
     }
 
-    @Test public void departmentDeleteStillRequiresConfirmationAndCanBeCancelled() throws Exception {
+    @Test
+    public void departmentDeleteStillRequiresConfirmationAndCanBeCancelled() throws Exception {
         assertTrue(preferences.edit().putInt(AppFontSettings.KEY, 3).commit());
         DepartmentsActivity departments = launch(DepartmentsActivity.class);
         await(() -> {
@@ -200,23 +234,38 @@ public final class DesignUiDeviceTest {
             return list.isEnabled() && list.getChildCount() > 0
                     && count(list) > 0 && item(list, 0).optLong("parent_id") == 0;
         });
-        main(() -> { assertDepartmentColumnsAligned(departments); return null; });
+        main(() -> {
+            assertDepartmentColumnsAligned(departments);
+            return null;
+        });
         screenshot("departments");
-        main(() -> { departments.<EditText>findViewById(R.id.department_search).setText("热菜"); return null; });
+        main(() -> {
+            departments.<EditText>findViewById(R.id.department_search).setText("热菜");
+            return null;
+        });
         await(() -> {
             RecyclerView list = departments.findViewById(R.id.department_list);
             return list.isEnabled() && list.getChildCount() > 0
                     && count(list) > 0 && "热菜组".equals(item(list, 0).optString("name"));
         });
-        main(() -> { assertDepartmentColumnsAligned(departments); return null; });
+        main(() -> {
+            assertDepartmentColumnsAligned(departments);
+            return null;
+        });
         screenshot("departments-child");
-        main(() -> { departments.<EditText>findViewById(R.id.department_search).setText(""); return null; });
+        main(() -> {
+            departments.<EditText>findViewById(R.id.department_search).setText("");
+            return null;
+        });
         await(() -> {
             RecyclerView list = departments.findViewById(R.id.department_list);
             return list.isEnabled() && list.getChildCount() > 0
                     && count(list) > 0 && item(list, 0).optLong("parent_id") == 0;
         });
-        main(() -> { departments.findViewById(R.id.department_add).performClick(); return null; });
+        main(() -> {
+            departments.findViewById(R.id.department_add).performClick();
+            return null;
+        });
         await(() -> departmentEditor(departments) != null
                 && departmentEditor(departments).findViewById(R.id.department_edit_name).isEnabled());
         screenshot("department-editor");
@@ -239,7 +288,8 @@ public final class DesignUiDeviceTest {
             for (int i = 0; i < list.getChildCount(); i++) {
                 JSONObject value = item(list, list.getChildAdapterPosition(list.getChildAt(i)));
                 if (value.optLong("id") == emptyDepartment) {
-                    list.getChildAt(i).findViewById(R.id.department_row_delete).performClick(); return null;
+                    list.getChildAt(i).findViewById(R.id.department_row_delete).performClick();
+                    return null;
                 }
             }
             throw new AssertionError("Empty department row missing");
@@ -247,32 +297,52 @@ public final class DesignUiDeviceTest {
         await(() -> confirmation(departments) != null && confirmation(departments).isShowing());
         assertNull("删除不能打开编辑弹窗", main(() -> departmentEditor(departments)));
         screenshot("department-delete-confirmation");
-        main(() -> { confirmation(departments).getButton(AlertDialog.BUTTON_NEGATIVE).performClick(); return null; });
+        main(() -> {
+            confirmation(departments).getButton(AlertDialog.BUTTON_NEGATIVE).performClick();
+            return null;
+        });
         assertNotNull(app.io.submit(() -> fixture.department(emptyDepartment)).get(10, TimeUnit.SECONDS));
     }
 
-    @Test public void lightingTabsKeepDraftsAndFixedSaveVisible() throws Exception {
+    @Test
+    public void lightingTabsKeepDraftsAndFixedSaveVisible() throws Exception {
         LightingSettingsActivity page = launch(LightingSettingsActivity.class);
-        main(() -> { visible(page, page.findViewById(R.id.lighting_save)); return null; });
+        main(() -> {
+            visible(page, page.findViewById(R.id.lighting_save));
+            return null;
+        });
         screenshot("lighting-serial");
         String path = main(() -> page.<TextView>findViewById(R.id.lighting_path).getText().toString());
-        main(() -> { page.findViewById(R.id.lighting_gpio_mode).performClick(); return null; });
+        main(() -> {
+            page.findViewById(R.id.lighting_gpio_mode).performClick();
+            return null;
+        });
         instrumentation.waitForIdleSync();
         main(() -> {
             assertTrue(page.findViewById(R.id.lighting_gpio_mode).isSelected());
             assertFalse(page.findViewById(R.id.lighting_serial_fields).isShown());
             visible(page, page.findViewById(R.id.lighting_gpio));
-            visible(page, page.findViewById(R.id.lighting_save)); return null;
+            visible(page, page.findViewById(R.id.lighting_save));
+            return null;
         });
         screenshot("lighting-gpio");
-        main(() -> { visible(page, page.findViewById(R.id.lighting_test_off));
-            visible(page, page.findViewById(R.id.lighting_save)); return null; });
+        main(() -> {
+            visible(page, page.findViewById(R.id.lighting_test_off));
+            visible(page, page.findViewById(R.id.lighting_save));
+            return null;
+        });
         screenshot("lighting-gpio-actions");
-        main(() -> { page.findViewById(R.id.lighting_serial_mode).performClick();
-            assertEquals(path, page.<TextView>findViewById(R.id.lighting_path).getText().toString()); return null; });
+        main(() -> {
+            page.findViewById(R.id.lighting_serial_mode).performClick();
+            assertEquals(path, page.<TextView>findViewById(R.id.lighting_path).getText().toString());
+            return null;
+        });
         assertEquals("serial", preferences.getString("light_mode", ""));
         CameraSettingsActivity camera = launch(CameraSettingsActivity.class);
-        main(() -> { camera.findViewById(R.id.settings_preview_hand).performClick(); return null; });
+        main(() -> {
+            camera.findViewById(R.id.settings_preview_hand).performClick();
+            return null;
+        });
         instrumentation.waitForIdleSync();
         main(() -> {
             assertTrue(camera.<android.widget.RadioButton>findViewById(R.id.settings_preview_hand).isChecked());
@@ -280,21 +350,31 @@ public final class DesignUiDeviceTest {
             return null;
         });
         screenshot("camera-hand");
-        main(() -> { camera.findViewById(R.id.settings_preview_face).performClick(); return null; });
+        main(() -> {
+            camera.findViewById(R.id.settings_preview_face).performClick();
+            return null;
+        });
         instrumentation.waitForIdleSync();
         screenshot("camera-face");
         FaceEnrollmentActivity enrollment = launch(FaceEnrollmentActivity.class);
         screenshot("face-selection");
-        main(() -> { enrollment.findViewById(R.id.enrollment_selection_close).performClick(); return null; });
+        main(() -> {
+            enrollment.findViewById(R.id.enrollment_selection_close).performClick();
+            return null;
+        });
         instrumentation.waitForIdleSync();
         screenshot("face-workspace");
-        main(() -> { visible(enrollment, enrollment.findViewById(R.id.enrollment_capture));
-            visible(enrollment, enrollment.findViewById(R.id.enrollment_faces_clear)); return null; });
+        main(() -> {
+            visible(enrollment, enrollment.findViewById(R.id.enrollment_capture));
+            visible(enrollment, enrollment.findViewById(R.id.enrollment_faces_clear));
+            return null;
+        });
         launch(CheckActivity.class);
         screenshot("check-ready");
     }
 
-    @Test public void listsAccumulateBeyondOneHundredAndResetSearch() throws Exception {
+    @Test
+    public void listsAccumulateBeyondOneHundredAndResetSearch() throws Exception {
         StaffActivity staff = launch(StaffActivity.class);
         loadAll(staff, R.id.staff_list, R.id.staff_load_more, 124);
         main(() -> {
@@ -329,7 +409,7 @@ public final class DesignUiDeviceTest {
             java.util.Set<Long> ids = new java.util.HashSet<>();
             RecyclerView grid = enrollment.findViewById(R.id.enrollment_staff_list);
             assertEquals(enrollment.getResources().getConfiguration().orientation
-                    == android.content.res.Configuration.ORIENTATION_LANDSCAPE ? 3 : 2,
+                            == android.content.res.Configuration.ORIENTATION_LANDSCAPE ? 3 : 2,
                     ((GridLayoutManager) grid.getLayoutManager()).getSpanCount());
             for (int i = 0; i < count(grid); i++)
                 assertTrue(ids.add(item(grid, i).optLong("id")));
@@ -348,8 +428,8 @@ public final class DesignUiDeviceTest {
     }
 
 
-
-    @Test public void cameraCropAndMirrorApplyImmediatelyAndKeepRoleSettings() throws Exception {
+    @Test
+    public void cameraCropAndMirrorApplyImmediatelyAndKeepRoleSettings() throws Exception {
         CameraImageOptions savedFace = new CameraImageOptions("640x480", false, 0, 0, 1, 1);
         CameraImageOptions savedHand = new CameraImageOptions("800x600", false, 0, 0, 1, 1);
         saveCameraFixtureOptions(savedFace, savedHand);
@@ -381,7 +461,10 @@ public final class DesignUiDeviceTest {
             return null;
         });
         awaitCameraFixturePreview(page, savedHand);
-        main(() -> { page.findViewById(R.id.settings_preview_face).performClick(); return null; });
+        main(() -> {
+            page.findViewById(R.id.settings_preview_face).performClick();
+            return null;
+        });
         awaitCameraFixturePreview(page, appliedFace);
         main(() -> {
             assertTrue(page.<android.widget.Switch>findViewById(R.id.settings_camera_mirror).isChecked());
@@ -390,7 +473,8 @@ public final class DesignUiDeviceTest {
         });
     }
 
-    @Test public void cameraImageChangesPersistBothRolesAndSurviveRecreation() throws Exception {
+    @Test
+    public void cameraImageChangesPersistBothRolesAndSurviveRecreation() throws Exception {
         CameraImageOptions savedFace = new CameraImageOptions("640x480", false, 0, 0, 1, 1);
         CameraImageOptions savedHand = new CameraImageOptions("800x600", true, 0, 0, 1, 1);
         saveCameraFixtureOptions(savedFace, savedHand);
@@ -508,7 +592,8 @@ public final class DesignUiDeviceTest {
         });
     }
 
-    @Test public void cameraImageChangesSurviveFinishWithoutSave() throws Exception {
+    @Test
+    public void cameraImageChangesSurviveFinishWithoutSave() throws Exception {
         CameraImageOptions savedFace = new CameraImageOptions("640x480", false, .1f, .12f, .92f, .94f);
         CameraImageOptions savedHand = new CameraImageOptions("800x600", true, .04f, .08f, .9f, .88f);
         saveCameraFixtureOptions(savedFace, savedHand);
@@ -546,7 +631,8 @@ public final class DesignUiDeviceTest {
         });
     }
 
-    @Test public void selectingAnotherCameraForSameRoleImmediatelySavesAndStartsPreview() throws Exception {
+    @Test
+    public void selectingAnotherCameraForSameRoleImmediatelySavesAndStartsPreview() throws Exception {
         String faceId = "usb:UI-DESIGN-NO-FACE-CAMERA", handId = "usb:UI-DESIGN-NO-HAND-CAMERA";
         assertTrue(preferences.edit().putString("face_camera", faceId).putString("hand_camera", handId).commit());
         CameraImageOptions savedFace = new CameraImageOptions("640x480", false, .1f, .12f, .92f, .94f);
@@ -605,7 +691,8 @@ public final class DesignUiDeviceTest {
             if (source == null || (Integer) field(page, "cameraPreviewGeneration") <= 0
                     || (Boolean) field(page, "cameraPreviewRunning")) return false;
             String role = page.<android.widget.RadioButton>findViewById(R.id.settings_preview_hand).isChecked() ? "hand" : "face";
-            if (!preferences.getString(role + "_camera", "").equals(field(source, "preferredId"))) return false;
+            if (!preferences.getString(role + "_camera", "").equals(field(source, "preferredId")))
+                return false;
             CameraImageOptions actual = (CameraImageOptions) field(source, "options");
             return applied.resolution.equals(actual.resolution) && applied.mirror == actual.mirror
                     && !(Boolean) field(source, "wanted");
@@ -633,7 +720,10 @@ public final class DesignUiDeviceTest {
             return null;
         });
         selectCameraChoiceRow(page, sizes.indexOf(resolution));
-        main(() -> { assertCameraResolutionLabel(page, resolution); return null; });
+        main(() -> {
+            assertCameraResolutionLabel(page, resolution);
+            return null;
+        });
     }
 
     private void selectCameraChoiceRow(CameraSettingsActivity page, int position) throws Exception {
@@ -671,7 +761,11 @@ public final class DesignUiDeviceTest {
         for (int i = 0; i < actions.length; i++) {
             android.view.MotionEvent event = android.view.MotionEvent.obtain(time, time + i * 30L, actions[i],
                     crop.getWidth() * (i == 0 ? fromX : x), crop.getHeight() * (i == 0 ? fromY : y), 0);
-            try { assertTrue(crop.onTouchEvent(event)); } finally { event.recycle(); }
+            try {
+                assertTrue(crop.onTouchEvent(event));
+            } finally {
+                event.recycle();
+            }
         }
     }
 
@@ -702,7 +796,8 @@ public final class DesignUiDeviceTest {
         if (saveId != 0) assertNull("相机配置即时生效，不再保留保存按钮", page.findViewById(saveId));
     }
 
-    @Test public void employeeSearchUsesSystemInputAndClearsWithoutSelecting() throws Exception {
+    @Test
+    public void employeeSearchUsesSystemInputAndClearsWithoutSelecting() throws Exception {
         FaceEnrollmentActivity page = launch(FaceEnrollmentActivity.class);
         await(() -> count(page.findViewById(R.id.enrollment_staff_list)) > 0);
         main(() -> {
@@ -717,27 +812,36 @@ public final class DesignUiDeviceTest {
         screenshot("face-selection");
     }
 
-    @Test public void cloudSwitchWaitsForConfirmedStateAndDoesNotRepeatAfterRecreation() throws Exception {
+    @Test
+    public void cloudSwitchWaitsForConfirmedStateAndDoesNotRepeatAfterRecreation() throws Exception {
         java.util.concurrent.atomic.AtomicBoolean enabled = new java.util.concurrent.atomic.AtomicBoolean(false);
         java.util.concurrent.atomic.AtomicInteger writes = new java.util.concurrent.atomic.AtomicInteger();
         AtomicReference<JSONObject> pending = new AtomicReference<>();
         AtomicReference<okhttp3.WebSocket> socket = new AtomicReference<>();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 return new MockResponse().withWebSocketUpgrade(new okhttp3.WebSocketListener() {
-                    @Override public void onMessage(okhttp3.WebSocket connection, String text) {
+                    @Override
+                    public void onMessage(okhttp3.WebSocket connection, String text) {
                         try {
                             JSONObject query = new JSONObject(text), data = new JSONObject();
                             String command = query.getString("cmd");
                             if ("setCloudStatus".equals(command)) {
-                                writes.incrementAndGet(); pending.set(query); socket.set(connection); return;
+                                writes.incrementAndGet();
+                                pending.set(query);
+                                socket.set(connection);
+                                return;
                             }
-                            if ("getCloudStatus".equals(command)) data.put("enabled", enabled.get());
+                            if ("getCloudStatus".equals(command))
+                                data.put("enabled", enabled.get());
                             if ("getStatus".equals(command)) data.put("sdk_state", "READY")
                                     .put("model_ready", true).put("certificate_valid", true).put("device_id", "UI-CLOUD-FIXTURE");
                             connection.send(new JSONObject().put("requestId", query.getString("requestId"))
                                     .put("code", 0).put("data", data).toString());
-                        } catch (Exception error) { throw new AssertionError(error); }
+                        } catch (Exception error) {
+                            throw new AssertionError(error);
+                        }
                     }
                 });
             }
@@ -774,7 +878,8 @@ public final class DesignUiDeviceTest {
         screenshot("cloud-service-enabled");
     }
 
-    @Test public void actualCameraReportsSizesAndRepeatedSelectionKeepsPreview() throws Exception {
+    @Test
+    public void actualCameraReportsSizesAndRepeatedSelectionKeepsPreview() throws Exception {
         org.junit.Assume.assumeTrue("显式启用实际镜头预览验收", "true".equals(
                 InstrumentationRegistry.getArguments().getString("enableCameraHardware")));
         preferences.edit().putString("face_camera", "0").commit();
@@ -818,8 +923,8 @@ public final class DesignUiDeviceTest {
     }
 
 
-
-    @Test public void sdkDraftSelectionAndCancelledProbeDoNotSaveConnection() throws Exception {
+    @Test
+    public void sdkDraftSelectionAndCancelledProbeDoNotSaveConnection() throws Exception {
         DevicesActivity page = launch(DevicesActivity.class);
         String savedEndpoint = preferences.getString(MorningSdkSettings.ENDPOINT_KEY, "");
         main(() -> {
@@ -850,14 +955,16 @@ public final class DesignUiDeviceTest {
     }
 
 
-
-
-    @Test public void dateDialogKeepsDraftsAndAppliesWholeCalendarDays() throws Exception {
+    @Test
+    public void dateDialogKeepsDraftsAndAppliesWholeCalendarDays() throws Exception {
         RecordsActivity records = launch(RecordsActivity.class);
         await(() -> count(records.findViewById(R.id.records_list)) > 0);
         Object filter = field(records, "dateFilter");
         Object original = field(filter, "range");
-        main(() -> { records.findViewById(R.id.records_date_filter).performClick(); return null; });
+        main(() -> {
+            records.findViewById(R.id.records_date_filter).performClick();
+            return null;
+        });
         RecordDateFilterDialog dialog = (RecordDateFilterDialog) field(filter, "dialog");
         main(() -> {
             visible(records, dialog.findViewById(R.id.record_date_confirm));
@@ -873,9 +980,15 @@ public final class DesignUiDeviceTest {
             return null;
         });
         screenshot("record-date-filter");
-        main(() -> { dialog.findViewById(R.id.record_date_cancel).performClick(); return null; });
+        main(() -> {
+            dialog.findViewById(R.id.record_date_cancel).performClick();
+            return null;
+        });
         assertEquals(original, main(() -> field(filter, "range")));
-        main(() -> { records.findViewById(R.id.records_date_filter).performClick(); return null; });
+        main(() -> {
+            records.findViewById(R.id.records_date_filter).performClick();
+            return null;
+        });
         RecordDateFilterDialog yesterday = (RecordDateFilterDialog) field(filter, "dialog");
         main(() -> {
             yesterday.findViewById(R.id.record_date_yesterday).performClick();
@@ -924,11 +1037,14 @@ public final class DesignUiDeviceTest {
     }
 
 
-
-    @Test public void thresholdKeypadValidatesAndCancelKeepsSavedValue() throws Exception {
+    @Test
+    public void thresholdKeypadValidatesAndCancelKeepsSavedValue() throws Exception {
         CheckRulesSettingsActivity rules = launch(CheckRulesSettingsActivity.class);
         String original = preferences.getString("temperature_limit", "37.3");
-        main(() -> { rules.findViewById(R.id.settings_temperature_limit).performClick(); return null; });
+        main(() -> {
+            rules.findViewById(R.id.settings_temperature_limit).performClick();
+            return null;
+        });
         await(() -> rules.formDialog != null && rules.formDialog.isShowing());
         screenshot("temperature-threshold");
         main(() -> {
@@ -950,7 +1066,8 @@ public final class DesignUiDeviceTest {
         });
     }
 
-    @Test public void readmeScreensFollowSystemLanguage() throws Exception {
+    @Test
+    public void readmeScreensFollowSystemLanguage() throws Exception {
         boolean english = "en".equals(app.getResources().getConfiguration().locale.getLanguage());
         AtomicReference<Throwable> serverFailure = prepareCheckReadySdk();
         assertTrue(preferences.edit().putInt(AppFontSettings.KEY, AppFontSettings.DEFAULT_INDEX)
@@ -1006,7 +1123,8 @@ public final class DesignUiDeviceTest {
                 (int) app.io.submit(() -> fixture.records().size()).get(10, TimeUnit.SECONDS));
     }
 
-    @Test public void checkAnimationPlaysInCardAndReleasesImagesOnRedraw() throws Exception {
+    @Test
+    public void checkAnimationPlaysInCardAndReleasesImagesOnRedraw() throws Exception {
         AtomicReference<Throwable> serverFailure = prepareCheckReadySdk();
         assertTrue(preferences.edit().putInt(AppFontSettings.KEY, 3).putBoolean("temperature", true)
                 .putString("shop_name", "安和食堂 · 后厨").commit());
@@ -1065,7 +1183,8 @@ public final class DesignUiDeviceTest {
         assertNull("页面动画不发送识别请求", serverFailure.get());
     }
 
-    @Test public void checkExitPasswordKeepsPreviewSuspendedAcrossRedrawAndPreservesManualPause() throws Exception {
+    @Test
+    public void checkExitPasswordKeepsPreviewSuspendedAcrossRedrawAndPreservesManualPause() throws Exception {
         AtomicReference<Throwable> serverFailure = prepareCheckReadySdk();
         CheckActivity check = launch(CheckActivity.class);
         awaitCheckCaptureReady(check);
@@ -1135,8 +1254,13 @@ public final class DesignUiDeviceTest {
             dismiss.call();
             // Dialog 的关闭监听在主线程队列中执行；紧随其后观测恢复，早于无效 USB 的异步失败回调。
             check.main.post(() -> {
-                try { restored.call(); } catch (Throwable error) { failure.set(error); }
-                finally { complete.set(true); }
+                try {
+                    restored.call();
+                } catch (Throwable error) {
+                    failure.set(error);
+                } finally {
+                    complete.set(true);
+                }
             });
             return null;
         });
@@ -1151,22 +1275,28 @@ public final class DesignUiDeviceTest {
                 .putString("serial_path", "/dev/CODEX-TUTORIAL-NO-DEVICE")
                 .putString("light_serial_path", "/dev/CODEX-TUTORIAL-NO-DEVICE").commit());
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 return new MockResponse().withWebSocketUpgrade(new okhttp3.WebSocketListener() {
-                    @Override public void onMessage(okhttp3.WebSocket connection, String text) {
+                    @Override
+                    public void onMessage(okhttp3.WebSocket connection, String text) {
                         try {
                             JSONObject query = new JSONObject(text), data = new JSONObject();
                             String command = query.getString("cmd");
                             assertTrue("晨检页面测试只允许本机 SDK 状态查询", java.util.Arrays.asList("init", "getStatus",
                                     "getCertInfo", "getDownloadProgress", "getCapabilities", "get_class_table", "getCloudStatus").contains(command));
-                            if ("getStatus".equals(command)) data.put("sdk_state", "READY").put("model_ready", true)
-                                    .put("certificate_valid", true).put("device_id", "UI-TUTORIAL-FIXTURE");
+                            if ("getStatus".equals(command))
+                                data.put("sdk_state", "READY").put("model_ready", true)
+                                        .put("certificate_valid", true).put("device_id", "UI-TUTORIAL-FIXTURE");
                             connection.send(new JSONObject().put("requestId", query.getString("requestId"))
                                     .put("code", 0).put("data", data).toString());
-                        } catch (Throwable error) { serverFailure.compareAndSet(null, error); }
+                        } catch (Throwable error) {
+                            serverFailure.compareAndSet(null, error);
+                        }
                     }
 
-                    @Override public void onMessage(okhttp3.WebSocket connection, okio.ByteString bytes) {
+                    @Override
+                    public void onMessage(okhttp3.WebSocket connection, okio.ByteString bytes) {
                         serverFailure.compareAndSet(null, new AssertionError("晨检页面测试不得向 SDK 发送真实图像"));
                     }
                 });
@@ -1181,7 +1311,8 @@ public final class DesignUiDeviceTest {
         await(() -> !(Boolean) field(check.camera, "wanted"));
     }
 
-    @Test public void homeStateColorsAndDisconnectedActionsMatchDesign() throws Exception {
+    @Test
+    public void homeStateColorsAndDisconnectedActionsMatchDesign() throws Exception {
         HomeActivity home = launch(HomeActivity.class);
         java.lang.reflect.Method show = HomeActivity.class.getDeclaredMethod("showHomeStatus",
                 cc.huoyan.opensource.morningcheck.sdk.MorningSdkState.class, boolean.class);
@@ -1199,7 +1330,8 @@ public final class DesignUiDeviceTest {
         CheckActivity check = launch(CheckActivity.class);
         main(() -> {
             java.lang.reflect.Field lost = CheckActivity.class.getDeclaredField("connectionLost");
-            lost.setAccessible(true); lost.setBoolean(check, true);
+            lost.setAccessible(true);
+            lost.setBoolean(check, true);
             check.render();
             return null;
         });
@@ -1211,15 +1343,22 @@ public final class DesignUiDeviceTest {
         });
     }
 
-    @Test public void newNavigationAndSelectionsFitLargestFont() throws Exception {
+    @Test
+    public void newNavigationAndSelectionsFitLargestFont() throws Exception {
         preferences.edit().putInt(AppFontSettings.KEY, 3).commit();
         HomeActivity home = launch(HomeActivity.class);
-        main(() -> { visible(home, home.findViewById(R.id.home_lighting));
-            assertEquals(0, home.getResources().getIdentifier("home_shop_settings", "id", home.getPackageName())); return null; });
+        main(() -> {
+            visible(home, home.findViewById(R.id.home_lighting));
+            assertEquals(0, home.getResources().getIdentifier("home_shop_settings", "id", home.getPackageName()));
+            return null;
+        });
         screenshot("revision-home-130");
         SystemSettingsActivity system = launch(SystemSettingsActivity.class);
-        main(() -> { visible(system, system.findViewById(R.id.settings_shop_name));
-            system.findViewById(R.id.settings_font_current).performClick(); return null; });
+        main(() -> {
+            visible(system, system.findViewById(R.id.settings_shop_name));
+            system.findViewById(R.id.settings_font_current).performClick();
+            return null;
+        });
         await(() -> system.formDialog != null && system.formDialog.isShowing());
         screenshot("revision-font-choice-130");
         main(() -> {
@@ -1230,55 +1369,75 @@ public final class DesignUiDeviceTest {
             ListView options = dialog.findViewById(R.id.settings_font_options);
             assertEquals(4, options.getCount());
             dialog.findViewById(R.id.settings_font_cancel).performClick();
-            assertEquals(3, AppFontSettings.readIndex(system)); return null;
+            assertEquals(3, AppFontSettings.readIndex(system));
+            return null;
         });
         TemperatureSettingsActivity temperature = launch(TemperatureSettingsActivity.class);
         main(() -> {
             assertFalse(temperature.findViewById(R.id.settings_serial_path) instanceof EditText);
             assertFalse(temperature.findViewById(R.id.settings_baud) instanceof EditText);
-            temperature.findViewById(R.id.settings_baud).performClick(); return null;
+            temperature.findViewById(R.id.settings_baud).performClick();
+            return null;
         });
         screenshot("revision-baud-choice-130");
-        main(() -> { temperature.onBackPressed(); return null; });
+        main(() -> {
+            temperature.onBackPressed();
+            return null;
+        });
         LightingSettingsActivity light = launch(LightingSettingsActivity.class);
         main(() -> {
             assertFalse(light.findViewById(R.id.lighting_path) instanceof EditText);
             assertFalse(light.findViewById(R.id.lighting_baud) instanceof EditText);
-            visible(light, light.findViewById(R.id.lighting_save)); return null;
+            visible(light, light.findViewById(R.id.lighting_save));
+            return null;
         });
         screenshot("revision-lighting-130");
     }
 
-    @Test public void staffDeleteAndDepartmentChoiceStayOnTheirCurrentPages() throws Exception {
+    @Test
+    public void staffDeleteAndDepartmentChoiceStayOnTheirCurrentPages() throws Exception {
         preferences.edit().putInt(AppFontSettings.KEY, 3).commit();
         StaffActivity staff = launch(StaffActivity.class);
         await(() -> staff.<RecyclerView>findViewById(R.id.staff_list).getChildCount() > 0);
-        main(() -> { staff.<RecyclerView>findViewById(R.id.staff_list).getChildAt(0).findViewById(R.id.staff_row_delete).performClick(); return null; });
+        main(() -> {
+            staff.<RecyclerView>findViewById(R.id.staff_list).getChildAt(0).findViewById(R.id.staff_row_delete).performClick();
+            return null;
+        });
         await(() -> field(staff, "deleteConfirmation") != null);
         assertSame(staff, main(this::resumed));
         screenshot("revision-staff-delete-130");
-        main(() -> { AlertDialog dialog = (AlertDialog) field(staff, "deleteConfirmation");
+        main(() -> {
+            AlertDialog dialog = (AlertDialog) field(staff, "deleteConfirmation");
             visible(staff, dialog.getButton(AlertDialog.BUTTON_POSITIVE));
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).performClick();
-            staff.<RecyclerView>findViewById(R.id.staff_list).getChildAt(0).findViewById(R.id.staff_row_edit).performClick(); return null; });
+            staff.<RecyclerView>findViewById(R.id.staff_list).getChildAt(0).findViewById(R.id.staff_row_edit).performClick();
+            return null;
+        });
         await(() -> resumed() instanceof StaffEditActivity);
         StaffEditActivity edit = main(() -> (StaffEditActivity) resumed());
         await(() -> edit.findViewById(R.id.staff_edit_department_value).isEnabled());
-        main(() -> { edit.findViewById(R.id.staff_edit_department_value).performClick(); return null; });
+        main(() -> {
+            edit.findViewById(R.id.staff_edit_department_value).performClick();
+            return null;
+        });
         Object editor = field(edit, "editor");
         await(() -> field(editor, "departmentDialog") != null);
         assertSame(edit, main(this::resumed));
         screenshot("revision-staff-department-130");
-        main(() -> { DepartmentFilterDialog selector = (DepartmentFilterDialog) field(editor, "departmentDialog");
+        main(() -> {
+            DepartmentFilterDialog selector = (DepartmentFilterDialog) field(editor, "departmentDialog");
             AlertDialog dialog = (AlertDialog) field(selector, "dialog");
             visible(edit, dialog.findViewById(R.id.department_filter_close));
             ListView list = dialog.findViewById(R.id.department_filter_options);
             assertEquals(4, list.getCount());
-            list.setSelection(list.getCount()-1); return null; });
+            list.setSelection(list.getCount() - 1);
+            return null;
+        });
         screenshot("revision-department-list-end-130");
     }
 
-    @Test public void loadingBeforeFirstLayoutHasValidWidthAndClosesWithPage() throws Exception {
+    @Test
+    public void loadingBeforeFirstLayoutHasValidWidthAndClosesWithPage() throws Exception {
         preferences.edit().putInt(AppFontSettings.KEY, 3).commit();
         AtomicReference<LoadingDialog> loading = new AtomicReference<>();
         AtomicReference<android.app.Dialog> shown = new AtomicReference<>();
@@ -1290,12 +1449,18 @@ public final class DesignUiDeviceTest {
             value.show(activity.getString(R.string.login_camera_starting));
             loading.set(value);
             android.app.Dialog dialog;
-            try { dialog = (android.app.Dialog) field(value, "dialog"); }
-            catch (Exception error) { throw new AssertionError(error); }
+            try {
+                dialog = (android.app.Dialog) field(value, "dialog");
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
             shown.set(dialog);
             assertTrue("First frame must have a finite positive width", dialog.getWindow().getAttributes().width > 0);
         };
-        main(() -> { ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(callback); return null; });
+        main(() -> {
+            ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(callback);
+            return null;
+        });
         try {
             Activity page = launch(SystemSettingsActivity.class);
             assertNotNull(loading.get());
@@ -1308,7 +1473,8 @@ public final class DesignUiDeviceTest {
                 return null;
             });
             screenshot("revision-loading-first-layout-130");
-            scenario.close(); scenario = null;
+            scenario.close();
+            scenario = null;
             assertFalse("Page exit must close loading", main(() -> shown.get().isShowing()));
         } finally {
             main(() -> {
@@ -1319,7 +1485,8 @@ public final class DesignUiDeviceTest {
         }
     }
 
-    @Test public void currentPagesKeepTextAndFixedActionsAtLargestFont() throws Exception {
+    @Test
+    public void currentPagesKeepTextAndFixedActionsAtLargestFont() throws Exception {
         preferences.edit().putInt(AppFontSettings.KEY, 3).commit();
         Class<?>[] pages = {StaffActivity.class, RecordsActivity.class, DepartmentsActivity.class,
                 SystemSettingsActivity.class, LicenseSettingsActivity.class, TemperatureSettingsActivity.class,
@@ -1329,25 +1496,52 @@ public final class DesignUiDeviceTest {
                 LoginActivity.class, SdkActivationScanActivity.class, StaffEditActivity.class};
         for (Class<?> type : pages) {
             Activity page = launch((Class<? extends Activity>) type);
-            main(() -> { assertEquals(1.3f, page.getResources().getConfiguration().fontScale, .01f);
+            main(() -> {
+                assertEquals(1.3f, page.getResources().getConfiguration().fontScale, .01f);
                 TextView back = page.findViewById(R.id.header_back_label);
-                if (back != null && back.isShown()) { visible(page, back); assertEquals(4, back.getText().length()); }
+                if (back != null && back.isShown()) {
+                    visible(page, back);
+                    assertEquals(4, back.getText().length());
+                }
                 assertTextFits(page.getWindow().getDecorView());
-                return null; });
+                return null;
+            });
             screenshot("revision-" + type.getSimpleName() + "-130");
-            main(() -> { scrollToEnd(page.getWindow().getDecorView()); return null; });
+            main(() -> {
+                scrollToEnd(page.getWindow().getDecorView());
+                return null;
+            });
             instrumentation.waitForIdleSync();
-            main(() -> { assertTextFits(page.getWindow().getDecorView()); return null; });
+            main(() -> {
+                assertTextFits(page.getWindow().getDecorView());
+                return null;
+            });
             if (page instanceof SystemSettingsActivity) {
                 SdkInstallController install = main(() -> new SdkInstallController((SystemSettingsActivity) page,
-                        null, () -> {}, () -> {}, "http://127.0.0.2/unused-layout-only", new SdkInstallController.Platform() {
-                    public boolean isInstalled() { return false; }
-                    public boolean canInstallPackages() { return false; }
-                    public void openPermission() { throw new AssertionError("Layout inspection must not install"); }
-                    public void install(File apk) { throw new AssertionError("Layout inspection must not install"); }
+                        null, () -> {
+                }, () -> {
+                }, "http://127.0.0.2/unused-layout-only", new SdkInstallController.Platform() {
+                    public boolean isInstalled() {
+                        return false;
+                    }
+
+                    public boolean canInstallPackages() {
+                        return false;
+                    }
+
+                    public void openPermission() {
+                        throw new AssertionError("Layout inspection must not install");
+                    }
+
+                    public void install(File apk) {
+                        throw new AssertionError("Layout inspection must not install");
+                    }
                 }));
                 try {
-                    main(() -> { install.onResume(true); return null; });
+                    main(() -> {
+                        install.onResume(true);
+                        return null;
+                    });
                     instrumentation.waitForIdleSync();
                     main(() -> {
                         android.app.Dialog dialog = (android.app.Dialog) field(install, "prompt");
@@ -1359,13 +1553,19 @@ public final class DesignUiDeviceTest {
                         return null;
                     });
                     screenshot("revision-sdk-install-prompt-130");
-                } finally { main(() -> { install.onDestroy(); return null; }); }
+                } finally {
+                    main(() -> {
+                        install.onDestroy();
+                        return null;
+                    });
+                }
             }
         }
         assertTrue("130% text overflow:\n" + android.text.TextUtils.join("\n", textFailures), textFailures.isEmpty());
     }
 
-    @Test public void choiceWindowIsReadyBeforeFirstFrameAndStableOnReopen() throws Exception {
+    @Test
+    public void choiceWindowIsReadyBeforeFirstFrameAndStableOnReopen() throws Exception {
         preferences.edit().putInt(AppFontSettings.KEY, 3).commit();
         Activity page = launch(SystemSettingsActivity.class);
         for (int count : new int[]{0, 3, 30}) {
@@ -1377,8 +1577,11 @@ public final class DesignUiDeviceTest {
                     AlertDialog choice = DesignChoiceDialog.create(page, "选择部门", "点选后关闭",
                             labels, count - 1, value -> fail("取消和重选不能提交"));
                     ImmersiveUi.show(choice);
-                    int margin = page.getResources().getDimensionPixelSize(R.dimen.mc_choice_window_margin);
-                    int maxWidth = page.getResources().getDimensionPixelSize(R.dimen.mc_choice_window_max_width);
+                    android.content.res.Configuration configuration = page.getResources().getConfiguration();
+                    int margin = page.getResources().getDimensionPixelSize(R.dimen.dp_10);
+                    int maxWidth = page.getResources().getDimensionPixelSize(
+                            configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+                                    && configuration.screenHeightDp >= 480 ? R.dimen.dp_240 : R.dimen.dp_200);
                     int width = Math.max(1, Math.min(page.getWindow().getDecorView().getWidth() - margin * 2,
                             maxWidth));
                     // 此处仍在 show 的同一次主线程调用中，异步 OnShowListener 尚未执行。
@@ -1401,14 +1604,16 @@ public final class DesignUiDeviceTest {
                 try {
                     await(() -> frames.size() == 4);
                     main(() -> {
-                        for (Rect frame : frames) assertEquals("首帧后不得改变弹窗尺寸", frames.get(0), frame);
+                        for (Rect frame : frames)
+                            assertEquals("首帧后不得改变弹窗尺寸", frames.get(0), frame);
                         visible(page, dialog.findViewById(R.id.department_filter_close));
                         assertTextFits(dialog.getWindow().getDecorView());
                         ListView list = dialog.findViewById(R.id.department_filter_options);
                         if (count > 0) {
                             assertEquals("打开即定位当前选项", count - 1, list.getLastVisiblePosition());
                             assertEquals(labels.get(count - 1), list.getAdapter().getItem(count - 1));
-                        } else assertTrue(dialog.findViewById(R.id.department_filter_empty).isShown());
+                        } else
+                            assertTrue(dialog.findViewById(R.id.department_filter_empty).isShown());
                         return null;
                     });
                     if (attempt == 1) screenshot("choice-stable-" + count + "-130");
@@ -1416,7 +1621,11 @@ public final class DesignUiDeviceTest {
                         if (count == 0) {
                             android.view.MotionEvent outside = android.view.MotionEvent.obtain(0, 0,
                                     android.view.MotionEvent.ACTION_OUTSIDE, -1, -1, 0);
-                            try { dialog.onTouchEvent(outside); } finally { outside.recycle(); }
+                            try {
+                                dialog.onTouchEvent(outside);
+                            } finally {
+                                outside.recycle();
+                            }
                         } else {
                             ListView list = dialog.findViewById(R.id.department_filter_options);
                             list.performItemClick(list.getChildAt(list.getChildCount() - 1), count - 1, count - 1);
@@ -1424,7 +1633,12 @@ public final class DesignUiDeviceTest {
                         assertFalse("重选与点击遮罩均应关闭且不提交", dialog.isShowing());
                         return null;
                     });
-                } finally { main(() -> { dialog.dismiss(); return null; }); }
+                } finally {
+                    main(() -> {
+                        dialog.dismiss();
+                        return null;
+                    });
+                }
             }
         }
         assertTrue(textFailures.toString(), textFailures.isEmpty());
@@ -1504,7 +1718,10 @@ public final class DesignUiDeviceTest {
                     return null;
                 });
             } finally {
-                main(() -> { dialog.dismiss(); return null; });
+                main(() -> {
+                    dialog.dismiss();
+                    return null;
+                });
             }
 
             AlertDialog repeated = openStaffStatusDialog(spinner);
@@ -1523,7 +1740,10 @@ public final class DesignUiDeviceTest {
                     return null;
                 });
             } finally {
-                main(() -> { repeated.dismiss(); return null; });
+                main(() -> {
+                    repeated.dismiss();
+                    return null;
+                });
             }
 
             AlertDialog cancelled = openStaffStatusDialog(spinner);
@@ -1541,14 +1761,20 @@ public final class DesignUiDeviceTest {
                     return null;
                 });
             } finally {
-                main(() -> { cancelled.dismiss(); return null; });
+                main(() -> {
+                    cancelled.dismiss();
+                    return null;
+                });
             }
         }
         assertTrue(textFailures.toString(), textFailures.isEmpty());
     }
 
     private AlertDialog openStaffStatusDialog(ChoiceSpinner spinner) throws Exception {
-        main(() -> { assertTrue(spinner.performClick()); return null; });
+        main(() -> {
+            assertTrue(spinner.performClick());
+            return null;
+        });
         AlertDialog dialog = main(() -> (AlertDialog) field(spinner, "choiceDialog"));
         await(() -> dialog.isShowing()
                 && dialog.<ListView>findViewById(R.id.department_filter_options).getChildCount() > 0);
@@ -1596,7 +1822,8 @@ public final class DesignUiDeviceTest {
         assertTextFits(dialog.getWindow().getDecorView());
     }
 
-    @Test public void listChoicesUseSharedDialogAndKeepSelection() throws Exception {
+    @Test
+    public void listChoicesUseSharedDialogAndKeepSelection() throws Exception {
         preferences.edit().putInt(AppFontSettings.KEY, 3).commit();
         Class<?>[] pages = {StaffActivity.class, RecordsActivity.class, TemperatureSettingsActivity.class};
         int[] ids = {R.id.staff_enabled_filter, R.id.records_filter, R.id.settings_temperature_mode};
@@ -1604,7 +1831,10 @@ public final class DesignUiDeviceTest {
             Activity page = launch((Class<? extends Activity>) pages[i]);
             final int id = ids[i];
             ChoiceSpinner spinner = main(() -> page.findViewById(id));
-            main(() -> { spinner.performClick(); return null; });
+            main(() -> {
+                spinner.performClick();
+                return null;
+            });
             AlertDialog dialog = main(() -> (AlertDialog) field(spinner, "choiceDialog"));
             await(() -> dialog.isShowing() && dialog.<ListView>findViewById(R.id.department_filter_options).getChildCount() > 0);
             main(() -> {
@@ -1618,7 +1848,8 @@ public final class DesignUiDeviceTest {
         }
     }
 
-    @Test public void confirmedDepartmentDeleteRemovesOnlySelectedEmptyRow() throws Exception {
+    @Test
+    public void confirmedDepartmentDeleteRemovesOnlySelectedEmptyRow() throws Exception {
         long disposable = app.io.submit(() -> fixture.saveDepartment(0, "删除回归专用部门")).get(10, TimeUnit.SECONDS);
         DepartmentsActivity page = launch(DepartmentsActivity.class);
         await(() -> page.<RecyclerView>findViewById(R.id.department_list).getChildCount() > 0);
@@ -1634,14 +1865,18 @@ public final class DesignUiDeviceTest {
             }
             throw new AssertionError("Delete target missing");
         });
-        main(() -> { confirmation(page).getButton(AlertDialog.BUTTON_POSITIVE).performClick(); return null; });
+        main(() -> {
+            confirmation(page).getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+            return null;
+        });
         await(() -> !(Boolean) field(page, "deletingDepartment"));
         assertNull(app.io.submit(() -> fixture.department(disposable)).get(10, TimeUnit.SECONDS));
         assertNotNull(app.io.submit(() -> fixture.department(emptyDepartment)).get(10, TimeUnit.SECONDS));
         assertNotNull(app.io.submit(() -> fixture.staff(1)).get(10, TimeUnit.SECONDS));
     }
 
-    @Test public void staffDeletePreservesLocalRowUntilSdkConfirms() throws Exception {
+    @Test
+    public void staffDeletePreservesLocalRowUntilSdkConfirms() throws Exception {
         final long target = 10_001;
         final String recordId = "ui-delete-person";
         long personId = app.io.submit(() -> {
@@ -1657,9 +1892,11 @@ public final class DesignUiDeviceTest {
         java.util.concurrent.atomic.AtomicLong forgottenPerson = new java.util.concurrent.atomic.AtomicLong();
         AtomicReference<Throwable> serverFailure = new AtomicReference<>();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 return new MockResponse().withWebSocketUpgrade(new okhttp3.WebSocketListener() {
-                    @Override public void onMessage(okhttp3.WebSocket connection, String text) {
+                    @Override
+                    public void onMessage(okhttp3.WebSocket connection, String text) {
                         try {
                             JSONObject query = new JSONObject(text), data = new JSONObject();
                             String command = query.getString("cmd");
@@ -1673,14 +1910,19 @@ public final class DesignUiDeviceTest {
                                     .put("model_ready", true).put("certificate_valid", true).put("device_id", "UI-DELETE-FIXTURE");
                             connection.send(new JSONObject().put("requestId", query.getString("requestId"))
                                     .put("code", code).put("message", code == 0 ? "" : "fixture rejection").put("data", data).toString());
-                        } catch (Throwable error) { serverFailure.compareAndSet(null, error); }
+                        } catch (Throwable error) {
+                            serverFailure.compareAndSet(null, error);
+                        }
                     }
                 });
             }
         });
         StaffActivity page = launch(StaffActivity.class);
         await(() -> page.sdk.isConnected() && page.<RecyclerView>findViewById(R.id.staff_list).getChildCount() > 0);
-        main(() -> { page.<EditText>findViewById(R.id.staff_search).setText("DELETE-PERSON-10001"); return null; });
+        main(() -> {
+            page.<EditText>findViewById(R.id.staff_search).setText("DELETE-PERSON-10001");
+            return null;
+        });
         await(() -> count(page.findViewById(R.id.staff_list)) == 1
                 && page.<RecyclerView>findViewById(R.id.staff_list).isEnabled()
                 && page.<RecyclerView>findViewById(R.id.staff_list).getChildCount() == 1);
@@ -1736,12 +1978,18 @@ public final class DesignUiDeviceTest {
         for (int attempts = 0; attempts < 10; attempts++) {
             int before = main(() -> count(page.findViewById(listId)));
             if (before == total) break;
-            main(() -> { page.findViewById(footerId).performClick(); return null; });
+            main(() -> {
+                page.findViewById(footerId).performClick();
+                return null;
+            });
             await(() -> count(page.findViewById(listId)) > before
                     && page.<RecyclerView>findViewById(listId).isEnabled());
         }
         assertEquals(total, (int) main(() -> count(page.findViewById(listId))));
-        main(() -> { page.findViewById(footerId).performClick(); return null; });
+        main(() -> {
+            page.findViewById(footerId).performClick();
+            return null;
+        });
         instrumentation.waitForIdleSync();
         assertEquals(total, (int) main(() -> count(page.findViewById(listId))));
     }
@@ -1805,7 +2053,10 @@ public final class DesignUiDeviceTest {
 
     private <T extends Activity> T launch(Class<T> type) throws Exception {
         if (scenario != null) scenario.close();
-        main(() -> { finishPages(); return null; });
+        main(() -> {
+            finishPages();
+            return null;
+        });
         Intent intent = new Intent(app, type);
         if (type == ResultActivity.class || type == RecordPhotoActivity.class || type == RecordDetailActivity.class)
             intent.putExtra("record_id", "ui-1");
@@ -1819,8 +2070,11 @@ public final class DesignUiDeviceTest {
 
     private void orient(Activity page) throws Exception {
         boolean portrait = "portrait".equals(InstrumentationRegistry.getArguments().getString("design_orientation"));
-        main(() -> { page.setRequestedOrientation(portrait ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); return null; });
+        main(() -> {
+            page.setRequestedOrientation(portrait ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            return null;
+        });
         await(() -> page.getResources().getConfiguration().orientation == (portrait ? 1 : 2));
         instrumentation.waitForIdleSync();
         SystemClock.sleep(300);
@@ -1835,12 +2089,16 @@ public final class DesignUiDeviceTest {
         assertNotNull(image);
         try (FileOutputStream out = new FileOutputStream(new File(directory, name + ".png"))) {
             assertTrue(image.compress(Bitmap.CompressFormat.PNG, 100, out));
-        } finally { image.recycle(); }
+        } finally {
+            image.recycle();
+        }
     }
 
     private void visible(Activity page, View view) {
-        assertNotNull(view); assertTrue(view.isShown());
-        Rect bounds = new Rect(); assertTrue(view.getGlobalVisibleRect(bounds));
+        assertNotNull(view);
+        assertTrue(view.isShown());
+        Rect bounds = new Rect();
+        assertTrue(view.getGlobalVisibleRect(bounds));
         assertEquals("Control must not be vertically clipped", view.getHeight(), bounds.height());
         if (view instanceof TextView) {
             TextView text = (TextView) view;
@@ -1878,7 +2136,8 @@ public final class DesignUiDeviceTest {
 
     private void scrollToEnd(View view) {
         if (!view.isShown()) return;
-        if (view instanceof android.widget.ScrollView) ((android.widget.ScrollView) view).fullScroll(View.FOCUS_DOWN);
+        if (view instanceof android.widget.ScrollView)
+            ((android.widget.ScrollView) view).fullScroll(View.FOCUS_DOWN);
         if (view instanceof ListView) {
             ListView list = (ListView) view;
             if (list.getCount() > 0) list.setSelection(list.getCount() - 1);
@@ -1894,27 +2153,42 @@ public final class DesignUiDeviceTest {
     }
 
     private Rect screenBounds(View view) {
-        int[] origin = new int[2]; view.getLocationOnScreen(origin);
+        int[] origin = new int[2];
+        view.getLocationOnScreen(origin);
         return new Rect(origin[0], origin[1], origin[0] + view.getWidth(), origin[1] + view.getHeight());
     }
 
     private Activity resumed() {
-        for (Activity page : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)) return page;
+        for (Activity page : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
+            return page;
         return null;
     }
+
     private void finishPages() {
         for (Stage stage : new Stage[]{Stage.RESUMED, Stage.STARTED, Stage.CREATED, Stage.PAUSED, Stage.STOPPED})
-            for (Activity page : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage))) page.finish();
+            for (Activity page : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
+                page.finish();
     }
+
     private void await(Callable<Boolean> condition) throws Exception {
         long deadline = SystemClock.uptimeMillis() + 10000;
-        while (SystemClock.uptimeMillis() < deadline) { if (main(condition)) return; SystemClock.sleep(50); }
+        while (SystemClock.uptimeMillis() < deadline) {
+            if (main(condition)) return;
+            SystemClock.sleep(50);
+        }
         fail("Timed out waiting for UI state");
     }
+
     private <T> T main(Callable<T> action) throws Exception {
         AtomicReference<T> result = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
-        instrumentation.runOnMainSync(() -> { try { result.set(action.call()); } catch (Throwable error) { failure.set(error); } });
+        instrumentation.runOnMainSync(() -> {
+            try {
+                result.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
+        });
         if (failure.get() != null) throw new AssertionError(failure.get());
         return result.get();
     }

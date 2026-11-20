@@ -50,7 +50,8 @@ public final class ActivationFlowFragment extends Fragment {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     String code = result.getData().getStringExtra(SdkActivationScanActivity.EXTRA_CODE);
                     pendingScanCode = code == null ? "" : code;
-                    if (pendingScanCode.isEmpty()) notice(getString(R.string.i18n_a_no_valid_activation_code_found_scan_again));
+                    if (pendingScanCode.isEmpty())
+                        notice(getString(R.string.i18n_a_no_valid_activation_code_found_scan_again));
                 }
                 postRender();
             });
@@ -208,6 +209,13 @@ public final class ActivationFlowFragment extends Fragment {
             if (input != null && (stage == ModelSelectionSession.Stage.IDLE || session.submitted || session.switching))
                 input.dismiss();
             if (stage == ModelSelectionSession.Stage.FINISHED) {
+                if (requireActivity() instanceof BaseMorningActivity
+                        && ((BaseMorningActivity) requireActivity())
+                        .guideSdkPermissions(session.resultCode, session.resultMessage)) {
+                    if (input != null && !input.isRemoving()) input.dismiss();
+                    session.consumedForPermission();
+                    return;
+                }
                 if (session.resultCode == 0)
                     ToastEx.showSuccessToast(requireContext(), session.switching ? getString(R.string.i18n_a_model_switched) : getString(R.string.i18n_a_activation_successful));
                 else notice(session.resultMessage);
@@ -250,7 +258,8 @@ public final class ActivationFlowFragment extends Fragment {
     }
 
     private void notice(String message) {
-        if (isAdded()) ToastEx.createToast(requireContext(), message == null || message.trim().isEmpty()
-                ? getString(R.string.i18n_a_operation_failed_try_again) : UiMessages.text(requireContext(), message));
+        if (isAdded())
+            ToastEx.createToast(requireContext(), message == null || message.trim().isEmpty()
+                    ? getString(R.string.i18n_a_operation_failed_try_again) : UiMessages.text(requireContext(), message));
     }
 }

@@ -17,14 +17,17 @@ import cc.huoyan.morningcheck.app.aidl.RegisterResultParcel;
 import cc.huoyan.morningcheck.app.aidl.UserDetailParcel;
 import cc.huoyan.morningcheck.app.aidl.UserImageParcel;
 
-/** 使用系统 Parcel 验证图片尾块与旧回执的边界，不启动页面、不连接 SDK 或业务网络。 */
+/**
+ * 使用系统 Parcel 验证图片尾块与旧回执的边界，不启动页面、不连接 SDK 或业务网络。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class FaceImageParcelCompatibilityTest {
     private static final int OUTER_SENTINEL = 0x1E2D3C4B;
     private static final String OUTER_TEXT = "外层字段：员工资料";
     private static final long FIRST_UID = 77001L, SECOND_UID = 77002L;
 
-    @Test public void registerImageUrlRoundTripKeepsOuterFields() {
+    @Test
+    public void registerImageUrlRoundTripKeepsOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             RegisterResultParcel source = RegisterResultParcel.ok(FIRST_UID,
@@ -43,7 +46,8 @@ public final class FaceImageParcelCompatibilityTest {
         }
     }
 
-    @Test public void userImageItemsRoundTripKeepsUidPhotoBindingAndOuterFields() {
+    @Test
+    public void userImageItemsRoundTripKeepsUidPhotoBindingAndOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             UserDetailParcel source = UserDetailParcel.ok(Arrays.asList(
@@ -72,7 +76,8 @@ public final class FaceImageParcelCompatibilityTest {
         }
     }
 
-    @Test public void singleImageParcelRoundTripKeepsExactLongIdentityAndOuterFields() {
+    @Test
+    public void singleImageParcelRoundTripKeepsExactLongIdentityAndOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             UserImageParcel source = new UserImageParcel(2097500510197125121L, "http://127.0.0.1/actual.jpg");
@@ -88,10 +93,13 @@ public final class FaceImageParcelCompatibilityTest {
             assertEquals("image/jpeg", restored.getMimeType());
             assertEquals(payloadEnd, parcel.dataPosition());
             assertOuterFields(parcel);
-        } finally { parcel.recycle(); }
+        } finally {
+            parcel.recycle();
+        }
     }
 
-    @Test public void oldRegisterPrefixWithoutImageTailKeepsOuterFields() {
+    @Test
+    public void oldRegisterPrefixWithoutImageTailKeepsOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             writeOldRegisterPrefix(parcel, FIRST_UID);
@@ -111,7 +119,8 @@ public final class FaceImageParcelCompatibilityTest {
         }
     }
 
-    @Test public void oldUserPrefixWithoutImageTailKeepsOuterFields() {
+    @Test
+    public void oldUserPrefixWithoutImageTailKeepsOuterFields() {
         Parcel parcel = Parcel.obtain();
         try {
             writeOldUserPrefix(parcel, new long[]{FIRST_UID, SECOND_UID});
@@ -136,7 +145,8 @@ public final class FaceImageParcelCompatibilityTest {
         }
     }
 
-    @Test public void oldRegisterReaderSeesOriginalUidInNewReply() {
+    @Test
+    public void oldRegisterReaderSeesOriginalUidInNewReply() {
         Parcel parcel = Parcel.obtain();
         try {
             RegisterResultParcel.ok(FIRST_UID, "http://127.0.0.1:18087/77001.jpg").writeToParcel(parcel, 0);
@@ -150,7 +160,8 @@ public final class FaceImageParcelCompatibilityTest {
         }
     }
 
-    @Test public void oldUserReaderSeesOriginalUidArrayInNewReply() {
+    @Test
+    public void oldUserReaderSeesOriginalUidArrayInNewReply() {
         Parcel parcel = Parcel.obtain();
         try {
             UserDetailParcel.ok(new long[]{FIRST_UID, SECOND_UID}, new String[]{"http://127.0.0.1/1.jpg", ""})
@@ -166,13 +177,15 @@ public final class FaceImageParcelCompatibilityTest {
         }
     }
 
-    @Test public void misalignedImageUrlArrayIsRejectedAtConstruction() {
+    @Test
+    public void misalignedImageUrlArrayIsRejectedAtConstruction() {
         assertThrows("一个地址不能静默配给两个 UID", IllegalArgumentException.class,
                 () -> UserDetailParcel.ok(new long[]{FIRST_UID, SECOND_UID},
                         new String[]{"http://127.0.0.1/1.jpg"}));
     }
 
-    @Test public void misalignedImageTailIsRejectedDuringRead() throws Exception {
+    @Test
+    public void misalignedImageTailIsRejectedDuringRead() throws Exception {
         Parcel parcel = Parcel.obtain();
         try {
             writeOldUserPrefix(parcel, new long[]{FIRST_UID, SECOND_UID});

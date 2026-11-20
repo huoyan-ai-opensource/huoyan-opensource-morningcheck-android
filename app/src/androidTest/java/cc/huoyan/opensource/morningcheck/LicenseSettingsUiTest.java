@@ -57,7 +57,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 用本机只读 SDK 夹具验证授权信息内联及前台五秒刷新，不修改人员或门店数据。 */
+/**
+ * 用本机只读 SDK 夹具验证授权信息内联及前台五秒刷新，不修改人员或门店数据。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class LicenseSettingsUiTest {
     private static final int[][] WINDOWS = {{360, 640}, {640, 360}, {800, 1280},
@@ -90,7 +92,8 @@ public final class LicenseSettingsUiTest {
     private MockWebServer endpoint;
     private ActivityScenario<LicenseSettingsActivity> scenario;
 
-    @Before public void isolateSdkAndBusinessEndpoints() throws Exception {
+    @Before
+    public void isolateSdkAndBusinessEndpoints() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         device = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         binding = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
@@ -103,17 +106,24 @@ public final class LicenseSettingsUiTest {
             return null;
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (!"/sdk".equals(request.getPath())) {
                     businessRequests.incrementAndGet();
                     return new MockResponse().setResponseCode(503);
                 }
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject request = new JSONObject(text);
                             String command = request.getString("cmd");
@@ -122,7 +132,8 @@ public final class LicenseSettingsUiTest {
                             switch (command) {
                                 case "init":
                                     initCount.incrementAndGet();
-                                    if (activationWrites.get() > 0) activationInitCount.incrementAndGet();
+                                    if (activationWrites.get() > 0)
+                                        activationInitCount.incrementAndGet();
                                     break;
                                 case "queryLicenseModels":
                                 case "queryDeviceModels":
@@ -132,12 +143,14 @@ public final class LicenseSettingsUiTest {
                                         assertNotNull(modelParams);
                                         assertFalse(modelParams.getString("activation_code").isEmpty());
                                         inputModelQueries.incrementAndGet();
-                                    } else assertTrue(modelParams == null || !modelParams.has("activation_code"));
+                                    } else
+                                        assertTrue(modelParams == null || !modelParams.has("activation_code"));
                                     org.json.JSONArray models = new org.json.JSONArray();
-                                    for (int i = 0; i < modelCount; i++) models.put(new JSONObject()
-                                            .put("model_code", "morning-model-" + i)
-                                            .put("model_name", i == 1 ? "晨检模型 B · 长名称换行与列表滚动验收" : "晨检模型 " + (i + 1))
-                                            .put("chip", "rk3576").put("current", i == 0));
+                                    for (int i = 0; i < modelCount; i++)
+                                        models.put(new JSONObject()
+                                                .put("model_code", "morning-model-" + i)
+                                                .put("model_name", i == 1 ? "晨检模型 B · 长名称换行与列表滚动验收" : "晨检模型 " + (i + 1))
+                                                .put("chip", "rk3576").put("current", i == 0));
                                     socket.send(new JSONObject().put("requestId", request.getString("requestId"))
                                             .put("code", modelReplyCode).put("reason", modelReplyCode == 0 ? "" : "测试授权无效")
                                             .put("data", new JSONObject().put("models", models)).toString());
@@ -160,17 +173,21 @@ public final class LicenseSettingsUiTest {
                                     data = certificateFixture();
                                     break;
                                 case "getDownloadProgress":
-                                    if (activationWrites.get() > 0) activationProgressReads.incrementAndGet();
+                                    if (activationWrites.get() > 0)
+                                        activationProgressReads.incrementAndGet();
                                     data.put("downloaded", 100).put("total", 100);
                                     break;
                                 default:
                                     // 观察授权不应隐式激活、续期、改配置或变更门店。
-                                    if (!command.startsWith("get")) managementWrites.incrementAndGet();
+                                    if (!command.startsWith("get"))
+                                        managementWrites.incrementAndGet();
                                     break;
                             }
                             socket.send(new JSONObject().put("requestId", request.getString("requestId"))
                                     .put("code", 0).put("reason", "授权页面隔离夹具").put("data", data).toString());
-                        } catch (Throwable error) { serverFailure.set(error); }
+                        } catch (Throwable error) {
+                            serverFailure.set(error);
+                        }
                     }
                 });
             }
@@ -182,7 +199,8 @@ public final class LicenseSettingsUiTest {
                 .putString("cloud_token", "").putBoolean("voice", false).commit());
     }
 
-    @After public void closePagesAndRestorePreferences() throws Exception {
+    @After
+    public void closePagesAndRestorePreferences() throws Exception {
         Map<String, Object> bindingAfter = null;
         try {
             if (scenario != null) scenario.close();
@@ -194,7 +212,8 @@ public final class LicenseSettingsUiTest {
                     return null;
                 });
                 instrumentation.waitForIdleSync();
-                if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+                if (app != null) app.io.submit(() -> {
+                }).get(10, TimeUnit.SECONDS);
             } finally {
                 try {
                     if (originalDevice != null) restore(device, originalDevice);
@@ -216,8 +235,8 @@ public final class LicenseSettingsUiTest {
     }
 
 
-
-    @Test public void regularAndCompactFormsBindAndValidateActivationWithoutWritingToSdk() throws Exception {
+    @Test
+    public void regularAndCompactFormsBindAndValidateActivationWithoutWritingToSdk() throws Exception {
         launchPage();
         capture("license-overview");
         LicenseSettingsActivity activity = onMain(this::currentLicense);
@@ -277,8 +296,8 @@ public final class LicenseSettingsUiTest {
     }
 
 
-
-    @Test public void activationDraftAndSelectionSurviveActivityRecreationAndInPlaceRearrangement() {
+    @Test
+    public void activationDraftAndSelectionSurviveActivityRecreationAndInPlaceRearrangement() {
         launchPage();
         openActivationInput();
         onMain(() -> {
@@ -308,7 +327,8 @@ public final class LicenseSettingsUiTest {
         assertEquals("重建和原地重排应订阅原会话", 1, initCount.get());
     }
 
-    @Test public void changedConnectionRejectsSubmissionAndKeepsEditableDraft() {
+    @Test
+    public void changedConnectionRejectsSubmissionAndKeepsEditableDraft() {
         launchPage();
         openActivationInput();
         onMain(() -> {
@@ -331,14 +351,16 @@ public final class LicenseSettingsUiTest {
         assertEquals("旧连接不能收到激活写入", 0, activationWrites.get());
     }
 
-    @Test public void cancellingRealScanActivityRestoresTheSameEditableInputDraft() {
+    @Test
+    public void cancellingRealScanActivityRestoresTheSameEditableInputDraft() {
         launchPage();
         openActivationInput();
         onMain(() -> {
             LicenseSettingsActivity activity = currentLicense();
             SdkActivationCodeDialog dialog = currentInput(activity);
             EditText editor = dialog.getDialog().findViewById(R.id.activation_code_editor);
-            editor.setText("Z2FBW9L7"); editor.setSelection(2, 6);
+            editor.setText("Z2FBW9L7");
+            editor.setSelection(2, 6);
             dialog.getDialog().findViewById(R.id.activation_code_scan).performClick();
             return null;
         });
@@ -350,9 +372,9 @@ public final class LicenseSettingsUiTest {
             return null;
         });
         await(() -> onMain(() -> currentLicense() != null && currentLicense().uiReady()
-                && currentInput(currentLicense()) != null
-                && currentInput(currentLicense()).getDialog() != null
-                && currentInput(currentLicense()).getDialog().<EditText>findViewById(R.id.activation_code_editor).isEnabled()),
+                        && currentInput(currentLicense()) != null
+                        && currentInput(currentLicense()).getDialog() != null
+                        && currentInput(currentLicense()).getDialog().<EditText>findViewById(R.id.activation_code_editor).isEnabled()),
                 "扫码取消后应返回可编辑的激活输入窗");
         onMain(() -> {
             LicenseSettingsActivity activity = currentLicense();
@@ -367,7 +389,8 @@ public final class LicenseSettingsUiTest {
         assertEquals("扫码页往返沿用原有 SDK 会话", 1, initCount.get());
     }
 
-    @Test public void doubleClickAndRecreationSubmitOneGroupedCodeAndFinishOnReceiptWithoutInit() throws Exception {
+    @Test
+    public void doubleClickAndRecreationSubmitOneGroupedCodeAndFinishOnReceiptWithoutInit() throws Exception {
         launchPage();
         expectedActivationWrites = 1;
         int initializationsBefore = initCount.get();
@@ -426,13 +449,20 @@ public final class LicenseSettingsUiTest {
                 observedCommands.subList(activateAt + 1, observedCommands.size()).contains("getStatus"));
     }
 
-    @Test public void missingCodeSelectsBeforeInputAndRecreationDoesNotRequeryOrWriteTwice() throws Exception {
+    @Test
+    public void missingCodeSelectsBeforeInputAndRecreationDoesNotRequeryOrWriteTwice() throws Exception {
         activationSerial = "";
         launchPage();
         expectedActivationWrites = 1;
-        onMain(() -> { ActivationFlowFragment.switchModel(currentLicense()); return null; });
+        onMain(() -> {
+            ActivationFlowFragment.switchModel(currentLicense());
+            return null;
+        });
         await(() -> onMain(() -> modelDialog(currentLicense()) != null), "缺码时先展示模型列表");
-        onMain(() -> { assertNull(currentInput(currentLicense())); return null; });
+        onMain(() -> {
+            assertNull(currentInput(currentLicense()));
+            return null;
+        });
         assertEquals(0, activationWrites.get());
         chooseModel(1);
         awaitInput(onMain(this::currentLicense));
@@ -460,16 +490,20 @@ public final class LicenseSettingsUiTest {
         assertTrue(activationSocket.get().send(new JSONObject().put("requestId", activationRequestId.get())
                 .put("code", 0).put("reason", "").put("data", new JSONObject()).toString()));
         await(() -> onMain(() -> !app.sdkSession().operation().running
-                && !activationLoadingShowing(currentLicense()) && currentInput(currentLicense()) == null),
+                        && !activationLoadingShowing(currentLicense()) && currentInput(currentLicense()) == null),
                 "成功回执关闭补码和等待弹窗");
         assertEquals(1, activationWrites.get());
         assertEquals(0, activationInitCount.get());
     }
 
-    @Test public void missingCodeCurrentModelAndCancelledInputDoNotActivate() {
+    @Test
+    public void missingCodeCurrentModelAndCancelledInputDoNotActivate() {
         activationSerial = "";
         launchPage();
-        onMain(() -> { ActivationFlowFragment.switchModel(currentLicense()); return null; });
+        onMain(() -> {
+            ActivationFlowFragment.switchModel(currentLicense());
+            return null;
+        });
         await(() -> onMain(() -> modelDialog(currentLicense()) != null), "应展示当前设备模型");
         chooseModel(0);
         await(() -> onMain(() -> modelDialog(currentLicense()) == null), "当前模型只关闭列表");
@@ -492,7 +526,8 @@ public final class LicenseSettingsUiTest {
         assertEquals(0, activationWrites.get());
     }
 
-    @Test public void fiveSecondRefreshStopsOffPageAndImmediatelyReloadsWhenReturning() {
+    @Test
+    public void fiveSecondRefreshStopsOffPageAndImmediatelyReloadsWhenReturning() {
         launchPage();
         // 首次预约可能早于建链完成；从稳定轮询周期开始测量，不把建链耗时算入间隔。
         int initialReads = certificateReads.size();
@@ -530,7 +565,8 @@ public final class LicenseSettingsUiTest {
         assertEquals("后台和返回不能重新初始化 SDK", 1, initCount.get());
     }
 
-    @Test public void recreationAndLayoutRearrangementKeepOneCertificatePollingChain() {
+    @Test
+    public void recreationAndLayoutRearrangementKeepOneCertificatePollingChain() {
         launchPage();
         scenario.recreate();
         await(() -> onMain(() -> app.sdkSession().certificate().optString("activation_serial").equals(activationSerial)), "重建应恢复授权详情");
@@ -547,12 +583,15 @@ public final class LicenseSettingsUiTest {
     }
 
 
-
-    @Test public void modelListCancelFailureAndEmptyKeepDraftWithoutActivation() throws Exception {
+    @Test
+    public void modelListCancelFailureAndEmptyKeepDraftWithoutActivation() throws Exception {
         launchPage();
         submitCode();
         await(() -> onMain(() -> modelDialog(currentLicense()) != null), "模型列表应显示");
-        onMain(() -> { modelDialog(currentLicense()).cancel(); return null; });
+        onMain(() -> {
+            modelDialog(currentLicense()).cancel();
+            return null;
+        });
         awaitEditableDraft();
         assertEquals(0, activationWrites.get());
         for (int failure : new int[]{-44, 0}) {
@@ -569,7 +608,8 @@ public final class LicenseSettingsUiTest {
         }
     }
 
-    @Test public void modelListSupportsNativeOrientationAnd130PercentFont() throws Exception {
+    @Test
+    public void modelListSupportsNativeOrientationAnd130PercentFont() throws Exception {
         device.edit().putInt(AppFontSettings.KEY, 3).commit();
         modelCount = 12;
         launchPage();
@@ -601,77 +641,83 @@ public final class LicenseSettingsUiTest {
             return null;
         });
         capture("model-selection-130-native-bottom");
-        onMain(() -> { modelDialog(currentLicense()).cancel(); return null; });
+        onMain(() -> {
+            modelDialog(currentLicense()).cancel();
+            return null;
+        });
         awaitEditableDraft();
     }
 
-    @Test public void everyScreenAndFontKeepsModelSwitchAndActivationInsideLicensePage() {
+    @Test
+    public void everyScreenAndFontKeepsModelSwitchAndActivationInsideLicensePage() {
         onMain(() -> {
-            for (int[] window : WINDOWS) for (int font = 0; font < 4; font++) {
-                Configuration configuration = new Configuration(app.getResources().getConfiguration());
-                configuration.screenWidthDp = window[0];
-                configuration.screenHeightDp = window[1];
-                configuration.smallestScreenWidthDp = Math.min(window[0], window[1]);
-                configuration.orientation = window[0] > window[1]
-                        ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
-                configuration.fontScale = AppFontSettings.scaleFor(font);
-                Context context = new ContextThemeWrapper(app.createConfigurationContext(configuration), R.style.AppTheme);
-                boolean compact = context.getResources().getBoolean(R.bool.mc_compact);
-                String label = window[0] + "×" + window[1] + "，字号 " + Math.round(configuration.fontScale * 100) + "%";
-                LayoutInflater inflater = LayoutInflater.from(context);
-                ViewGroup root = (ViewGroup) inflater.inflate(compact
-                        ? R.layout.activity_devices_compact : R.layout.activity_devices, null);
-                ((TextView) root.findViewById(R.id.header_page_title)).setText("授权与密钥");
-                FrameLayout body = root.findViewById(R.id.settings_body);
-                int inset = context.getResources().getDimensionPixelSize(R.dimen.dp_12);
-                root.findViewById(R.id.page_content).setPadding(inset, inset, inset, inset);
-                body.setPadding(0, 0, 0, 0);
-                body.setBackground(null);
-                body.addView(inflater.inflate(R.layout.view_license_design, body, false));
-                ((TextView) root.findViewById(R.id.settings_current_model)).setText("晨检合成包·头部手部检测模型");
-                ((TextView) root.findViewById(R.id.settings_model_version)).setText("2026.10.21");
-                ((TextView) root.findViewById(R.id.settings_license_state)).setText("已激活");
-                ListView fields = root.findViewById(R.id.settings_license_fields);
-                fields.setAdapter(new android.widget.ArrayAdapter<String>(context, R.layout.item_license_design,
-                        new String[]{"激活时间", "过期时间", "授权版本"}) {
-                    @Override public View getView(int position, View reusable, ViewGroup parent) {
-                        View row = reusable == null
-                                ? inflater.inflate(R.layout.item_license_design, parent, false) : reusable;
-                        ((TextView) row.findViewById(R.id.record_detail_field_label)).setText(getItem(position));
-                        ((TextView) row.findViewById(R.id.record_detail_field_value)).setText(
-                                position == 2 ? "quarterly" : "2026-10-21 13:55");
-                        return row;
+            for (int[] window : WINDOWS)
+                for (int font = 0; font < 4; font++) {
+                    Configuration configuration = new Configuration(app.getResources().getConfiguration());
+                    configuration.screenWidthDp = window[0];
+                    configuration.screenHeightDp = window[1];
+                    configuration.smallestScreenWidthDp = Math.min(window[0], window[1]);
+                    configuration.orientation = window[0] > window[1]
+                            ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
+                    configuration.fontScale = AppFontSettings.scaleFor(font);
+                    Context context = new ContextThemeWrapper(app.createConfigurationContext(configuration), R.style.AppTheme);
+                    boolean compact = context.getResources().getBoolean(R.bool.mc_compact);
+                    String label = window[0] + "×" + window[1] + "，字号 " + Math.round(configuration.fontScale * 100) + "%";
+                    LayoutInflater inflater = LayoutInflater.from(context);
+                    ViewGroup root = (ViewGroup) inflater.inflate(compact
+                            ? R.layout.activity_devices_compact : R.layout.activity_devices, null);
+                    ((TextView) root.findViewById(R.id.header_page_title)).setText("授权与密钥");
+                    FrameLayout body = root.findViewById(R.id.settings_body);
+                    int inset = context.getResources().getDimensionPixelSize(R.dimen.dp_12);
+                    root.findViewById(R.id.page_content).setPadding(inset, inset, inset, inset);
+                    body.setPadding(0, 0, 0, 0);
+                    body.setBackground(null);
+                    body.addView(inflater.inflate(R.layout.view_license_design, body, false));
+                    ((TextView) root.findViewById(R.id.settings_current_model)).setText("晨检合成包·头部手部检测模型");
+                    ((TextView) root.findViewById(R.id.settings_model_version)).setText("2026.10.21");
+                    ((TextView) root.findViewById(R.id.settings_license_state)).setText("已激活");
+                    ListView fields = root.findViewById(R.id.settings_license_fields);
+                    fields.setAdapter(new android.widget.ArrayAdapter<String>(context, R.layout.item_license_design,
+                            new String[]{"激活时间", "过期时间", "授权版本"}) {
+                        @Override
+                        public View getView(int position, View reusable, ViewGroup parent) {
+                            View row = reusable == null
+                                    ? inflater.inflate(R.layout.item_license_design, parent, false) : reusable;
+                            ((TextView) row.findViewById(R.id.record_detail_field_label)).setText(getItem(position));
+                            ((TextView) row.findViewById(R.id.record_detail_field_value)).setText(
+                                    position == 2 ? "quarterly" : "2026-10-21 13:55");
+                            return row;
+                        }
+                    });
+                    float density = context.getResources().getDisplayMetrics().density;
+                    int width = Math.round(window[0] * density), height = Math.round(window[1] * density);
+                    root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                            View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+                    root.layout(0, 0, width, height);
+                    assertNoPageScroll(root);
+                    assertEquals(label + "：模型切换入口应隐藏", View.GONE,
+                            root.findViewById(R.id.settings_switch_model).getVisibility());
+                    for (int id : new int[]{R.id.settings_current_model, R.id.settings_model_version, R.id.settings_activate}) {
+                        View view = root.findViewById(id);
+                        assertNotNull(label + "：授权页必须展示模型和操作入口", view);
+                        assertEquals(label + "：模型与操作控件应保持可见", View.VISIBLE, view.getVisibility());
+                        assertContained(root, view);
+                        assertContained(body, view);
                     }
-                });
-                float density = context.getResources().getDisplayMetrics().density;
-                int width = Math.round(window[0] * density), height = Math.round(window[1] * density);
-                root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
-                root.layout(0, 0, width, height);
-                assertNoPageScroll(root);
-                assertEquals(label + "：模型切换入口应隐藏", View.GONE,
-                        root.findViewById(R.id.settings_switch_model).getVisibility());
-                for (int id : new int[]{R.id.settings_current_model, R.id.settings_model_version, R.id.settings_activate}) {
-                    View view = root.findViewById(id);
-                    assertNotNull(label + "：授权页必须展示模型和操作入口", view);
-                    assertEquals(label + "：模型与操作控件应保持可见", View.VISIBLE, view.getVisibility());
-                    assertContained(root, view);
-                    assertContained(body, view);
+                    Rect activate = boundsInAncestor(root, root.findViewById(R.id.settings_activate));
+                    for (int id : new int[]{R.id.settings_current_model, R.id.settings_model_version})
+                        assertFalse(label + "：模型与切换入口不能覆盖激活按钮",
+                                Rect.intersects(activate, boundsInAncestor(root, root.findViewById(id))));
+                    assertTrue(label + "：授权列表必须保留可见行", fields.getChildCount() > 0);
+                    assertTrue(label + "：授权列表至少容纳一行", fields.getHeight() >= fields.getChildAt(0).getHeight());
+                    for (int id : new int[]{R.id.settings_current_model, R.id.settings_model_version, R.id.settings_activate}) {
+                        TextView text = root.findViewById(id);
+                        assertNotNull(label + "：文字必须完成排版", text.getLayout());
+                        int available = text.getHeight() - text.getCompoundPaddingTop() - text.getCompoundPaddingBottom();
+                        assertTrue(label + "：模型信息和按钮文字不能被截断", text.getLayout().getHeight() <= available + 1);
+                        assertContained((ViewGroup) text.getParent(), text);
+                    }
                 }
-                Rect activate = boundsInAncestor(root, root.findViewById(R.id.settings_activate));
-                for (int id : new int[]{R.id.settings_current_model, R.id.settings_model_version})
-                    assertFalse(label + "：模型与切换入口不能覆盖激活按钮",
-                            Rect.intersects(activate, boundsInAncestor(root, root.findViewById(id))));
-                assertTrue(label + "：授权列表必须保留可见行", fields.getChildCount() > 0);
-                assertTrue(label + "：授权列表至少容纳一行", fields.getHeight() >= fields.getChildAt(0).getHeight());
-                for (int id : new int[]{R.id.settings_current_model, R.id.settings_model_version, R.id.settings_activate}) {
-                    TextView text = root.findViewById(id);
-                    assertNotNull(label + "：文字必须完成排版", text.getLayout());
-                    int available = text.getHeight() - text.getCompoundPaddingTop() - text.getCompoundPaddingBottom();
-                    assertTrue(label + "：模型信息和按钮文字不能被截断", text.getLayout().getHeight() <= available + 1);
-                    assertContained((ViewGroup) text.getParent(), text);
-                }
-            }
             return null;
         });
     }
@@ -722,7 +768,9 @@ public final class LicenseSettingsUiTest {
             java.lang.reflect.Field field = ActivationFlowFragment.class.getDeclaredField("modelDialog");
             field.setAccessible(true);
             return (AlertDialog) field.get(flow);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private void capture(String name) throws Exception {
@@ -734,7 +782,9 @@ public final class LicenseSettingsUiTest {
         android.graphics.Bitmap screenshot = instrumentation.getUiAutomation().takeScreenshot();
         try (java.io.FileOutputStream out = new java.io.FileOutputStream(new java.io.File(directory, name + ".png"))) {
             assertTrue(screenshot.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out));
-        } finally { screenshot.recycle(); }
+        } finally {
+            screenshot.recycle();
+        }
     }
 
     private JSONObject certificateFixture() throws Exception {
@@ -781,7 +831,6 @@ public final class LicenseSettingsUiTest {
     }
 
 
-
     private static void assertContained(ViewGroup root, View view) {
         assertNotNull(view);
         Rect bounds = new Rect();
@@ -803,18 +852,21 @@ public final class LicenseSettingsUiTest {
         int id = activity.getResources().getIdentifier(resourceName, "id", activity.getPackageName());
         View view = id == 0 ? null : activity.findViewById(id);
         assertTrue("已合并的入口不应继续展示：" + resourceName, view == null || view.getVisibility() == View.GONE);
-        if (view != null) assertFalse("旧入口不能残留路由：" + resourceName, view.hasOnClickListeners());
+        if (view != null)
+            assertFalse("旧入口不能残留路由：" + resourceName, view.hasOnClickListeners());
     }
 
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private LicenseSettingsActivity currentLicense() {
         for (Activity activity : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
-            if (activity instanceof LicenseSettingsActivity) return (LicenseSettingsActivity) activity;
+            if (activity instanceof LicenseSettingsActivity)
+                return (LicenseSettingsActivity) activity;
         return null;
     }
 
@@ -858,7 +910,9 @@ public final class LicenseSettingsUiTest {
             dialogField.setAccessible(true);
             android.app.Dialog dialog = (android.app.Dialog) dialogField.get(loading);
             return dialog != null && dialog.isShowing();
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static void assertDraft(LicenseSettingsActivity activity, String text, int start, int end) {
@@ -881,7 +935,8 @@ public final class LicenseSettingsUiTest {
 
     private SdkActivationScanActivity currentScanner() {
         for (Activity activity : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
-            if (activity instanceof SdkActivationScanActivity) return (SdkActivationScanActivity) activity;
+            if (activity instanceof SdkActivationScanActivity)
+                return (SdkActivationScanActivity) activity;
         return null;
     }
 
@@ -889,7 +944,11 @@ public final class LicenseSettingsUiTest {
         AtomicReference<T> result = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { result.set(work.call()); } catch (Throwable error) { failure.set(error); }
+            try {
+                result.set(work.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError("授权界面回归失败", failure.get());
         return result.get();

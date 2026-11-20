@@ -9,16 +9,19 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public final class RecordPhotosTest {
-    @Test public void capturedArrayKeepsEveryPhotoAndItsOrderInsteadOfLimitingToThree() throws Exception {
+    @Test
+    public void capturedArrayKeepsEveryPhotoAndItsOrderInsteadOfLimitingToThree() throws Exception {
         JSONArray captured = new JSONArray();
-        for (int i = 0; i < 8; i++) captured.put(new JSONObject().put("file", "photo-" + i + ".jpg").put("label", "照片 " + i));
+        for (int i = 0; i < 8; i++)
+            captured.put(new JSONObject().put("file", "photo-" + i + ".jpg").put("label", "照片 " + i));
         List<RecordPhotos.Photo> result = RecordPhotos.read(new JSONObject().put("captured_photos", captured).put("face_img_file", "legacy.jpg"));
         assertEquals(8, result.size());
         assertEquals("photo-7.jpg", result.get(7).file);
         assertEquals("照片 7", result.get(7).label);
     }
 
-    @Test public void missingArrayAndEmptyArrayReadLegacyEvidence() throws Exception {
+    @Test
+    public void missingArrayAndEmptyArrayReadLegacyEvidence() throws Exception {
         JSONObject record = new JSONObject().put("face_img_file", "face.jpg").put("back_hand_img_file", "back.jpg");
         for (int run = 0; run < 2; run++) {
             List<RecordPhotos.Photo> result = RecordPhotos.read(record);
@@ -30,7 +33,8 @@ public final class RecordPhotosTest {
         }
     }
 
-    @Test public void malformedPhotoKeepsPositionAndUsesReadableLabel() throws Exception {
+    @Test
+    public void malformedPhotoKeepsPositionAndUsesReadableLabel() throws Exception {
         JSONArray captured = new JSONArray().put(new JSONObject().put("file", "first.jpg"))
                 .put(JSONObject.NULL).put(new JSONObject().put("file", " last.jpg "));
         List<RecordPhotos.Photo> result = RecordPhotos.read(new JSONObject().put("captured_photos", captured));

@@ -1,6 +1,7 @@
 package cc.huoyan.opensource.morningcheck;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,9 +91,10 @@ final class AppFontSizeDialog extends AlertDialog {
         android.util.DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
         int hostWidth = host.getWidth() > 0 ? host.getWidth() : metrics.widthPixels;
         int hostHeight = host.getHeight() > 0 ? host.getHeight() : metrics.heightPixels;
-        int margin = activity.getResources().getDimensionPixelSize(R.dimen.mc_choice_window_margin);
+        int margin = activity.getResources().getDimensionPixelSize(R.dimen.dp_10);
+        boolean landscape = activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         int width = Math.max(1, Math.min(hostWidth - margin * 2,
-                activity.getResources().getDimensionPixelSize(R.dimen.mc_font_window_max_width)));
+                activity.getResources().getDimensionPixelSize(landscape ? R.dimen.dp_320 : R.dimen.dp_200)));
         getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
         options.getLayoutParams().height = 0;
         body.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),

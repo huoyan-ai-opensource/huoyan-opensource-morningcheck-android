@@ -95,10 +95,10 @@ final class StaffProfileEditor {
         boolean changed = expectedProfile == null
                 ? !nameDraft.isEmpty() || !numberDraft.isEmpty() || !departmentDraft.isEmpty() || !healthDraft.isEmpty()
                 : !nameDraft.equals(expectedProfile.optString("name"))
-                  || !numberDraft.equals(expectedProfile.optString("staff_no"))
-                  || !departmentDraft.equals(expectedProfile.optString("department"))
-                  || departmentIdDraft != expectedProfile.optLong("department_id", 0)
-                  || !healthDraft.equals(expectedProfile.optString("health_expiry"));
+                || !numberDraft.equals(expectedProfile.optString("staff_no"))
+                || !departmentDraft.equals(expectedProfile.optString("department"))
+                || departmentIdDraft != expectedProfile.optLong("department_id", 0)
+                || !healthDraft.equals(expectedProfile.optString("health_expiry"));
         if (!changed) {
             cancelled.run();
             return;
@@ -232,7 +232,8 @@ final class StaffProfileEditor {
         {
             ((TextView) host.findViewById(R.id.header_page_title)).setText(staffId > 0 ? host.getString(R.string.i18n_b_edit_staff) : host.getString(R.string.i18n_b_add_staff));
             TextView dialogTitle = host.findViewById(R.id.staff_edit_dialog_title);
-            if (dialogTitle != null) dialogTitle.setText(staffId > 0 ? host.getString(R.string.i18n_b_edit_staff) : host.getString(R.string.i18n_b_add_staff));
+            if (dialogTitle != null)
+                dialogTitle.setText(staffId > 0 ? host.getString(R.string.i18n_b_edit_staff) : host.getString(R.string.i18n_b_add_staff));
             host.findViewById(R.id.header_home).setOnClickListener(view -> requestCancel());
             ((TextView) host.findViewById(R.id.header_back_label)).setText(host.getString(R.string.i18n_b_back_staff));
             host.findViewById(R.id.header_home).setContentDescription(host.getString(R.string.i18n_b_back_staff));
@@ -566,7 +567,8 @@ final class StaffProfileEditor {
                     if (!host.foreground) return;
                     // 字段定位依据原始错误，不能依赖翻译后的提示文案。
                     String rawMessage = error.getMessage();
-                    if (rawMessage != null && rawMessage.contains("工号")) invalidField(1, numberInput, message);
+                    if (rawMessage != null && rawMessage.contains("工号"))
+                        invalidField(1, numberInput, message);
                     else notice(message);
                     updateUi();
                 });

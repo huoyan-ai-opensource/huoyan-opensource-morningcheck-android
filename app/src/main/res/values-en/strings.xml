@@ -521,4 +521,16 @@
     <string name="ui_view_temperature_design_config_label_text">Temperature settings</string>
     <string name="ui_view_temperature_design_reading_settings_temperature_reading_text">Waiting for reading</string>
     <string name="ui_view_temperature_design_reading_label_text">Live temperature</string>
+    <string name="sdk_permissions_maintenance">System maintenance</string>
+    <string name="sdk_permissions_title">SDK permissions</string>
+    <string name="sdk_permissions_app_label">Morning Check SDK</string>
+    <string name="sdk_permissions_summary">Choose %1$s in Android settings, grant the permissions, then return and try again.</string>
+    <string name="sdk_permissions_overlay_path">Settings → Apps → Special app access → Display over other apps</string>
+    <string name="sdk_permissions_install_path">Settings → Apps → Special app access → Install unknown apps</string>
+    <string name="sdk_permissions_open_overlay">Open overlay settings</string>
+    <string name="sdk_permissions_open_install">Open install unknown apps settings</string>
+    <string name="sdk_permissions_settings_unavailable">Android could not open the permission page. Follow the settings path in this guide.</string>
+    <string name="sdk_permissions_remote">On the device running the SDK, go to Settings → Apps → Special app access. Choose Morning Check SDK (火眼晨检 SDK) and allow it to display over other apps and install unknown apps.</string>
+    <string name="sdk_permissions_missing_sdk">Install Morning Check SDK on this device, then return to grant permissions.</string>
+    <string name="sdk_permissions_not_needed">This Android version requires no separate access for these permissions.</string>
 </resources>

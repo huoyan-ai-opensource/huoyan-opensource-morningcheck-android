@@ -200,11 +200,13 @@ public final class DevicesActivity extends BaseDeviceSettingsActivity {
                         discovered.addAll(matches);
                         discoveryAdapter.notifyDataSetChanged();
                         refreshStatus();
-                        if (matches.isEmpty()) notice(getString(R.string.i18n_a_no_morning_check_sdk_found_check_the_device_and_network));
+                        if (matches.isEmpty())
+                            notice(getString(R.string.i18n_a_no_morning_check_sdk_found_check_the_device_and_network));
                         else toast(getString(R.string.i18n_a_devices_found, matches.size()));
                     } else {
                         if (connected) toast(getString(R.string.i18n_a_connection_test_passed));
-                        else notice(getString(R.string.i18n_a_no_sdk_response_check_the_ip_address_and_network));
+                        else
+                            notice(getString(R.string.i18n_a_no_sdk_response_check_the_ip_address_and_network));
                     }
                 });
             } catch (Exception error) {

@@ -1,10 +1,12 @@
 package cc.huoyan.opensource.morningcheck.hardware;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public final class LightConfigTest {
-    @Test public void editableCommandsKeepLegacyAsciiAndAcceptBinaryProtocols() {
+    @Test
+    public void editableCommandsKeepLegacyAsciiAndAcceptBinaryProtocols() {
         assertArrayEquals("A00101A0".getBytes(java.nio.charset.StandardCharsets.US_ASCII),
                 LightConfig.commandBytes(LightConfig.DEFAULT_ON_COMMAND));
         assertArrayEquals("A00100A0".getBytes(java.nio.charset.StandardCharsets.US_ASCII),
@@ -80,26 +82,37 @@ public final class LightConfigTest {
         assertThrows(IllegalArgumentException.class, () -> LightConfig.commandBytes(text + "A"));
     }
 
-    @Test public void serialRejectsNonDeviceAndNestedPath() {
+    @Test
+    public void serialRejectsNonDeviceAndNestedPath() {
         assertThrows(IllegalArgumentException.class, () -> serial("/sdcard/light"));
         assertThrows(IllegalArgumentException.class, () -> serial("/dev/../other"));
-        assertEquals("/dev/ttyUSB0", serial(" /dev/ttyUSB0 " ).path);
+        assertEquals("/dev/ttyUSB0", serial(" /dev/ttyUSB0 ").path);
     }
-    @Test public void gpioDeduplicatesPinsAndAcceptsChineseComma() {
+
+    @Test
+    public void gpioDeduplicatesPinsAndAcceptsChineseComma() {
         LightConfig config = gpio("122，148,122", 0, 1);
-        assertArrayEquals(new int[]{122,148}, config.gpioIndexes());
+        assertArrayEquals(new int[]{122, 148}, config.gpioIndexes());
         assertEquals("122,148", config.gpioSelections());
         int[] exposed = config.gpioIndexes();
         exposed[0] = 100;
         assertEquals(122, config.gpioIndexes()[0]);
     }
-    @Test public void gpioRejectsInvalidPinsAndEqualLevels() {
+
+    @Test
+    public void gpioRejectsInvalidPinsAndEqualLevels() {
         assertThrows(IllegalArgumentException.class, () -> gpio("", 0, 1));
         assertThrows(IllegalArgumentException.class, () -> gpio("122,", 0, 1));
         assertThrows(IllegalArgumentException.class, () -> gpio("-1", 0, 1));
         assertThrows(IllegalArgumentException.class, () -> gpio("65536", 0, 1));
         assertThrows(IllegalArgumentException.class, () -> gpio("122", 1, 1));
     }
-    private LightConfig serial(String path) { return new LightConfig(LightConfig.SERIAL, path, 115200, "", 0, 1); }
-    private LightConfig gpio(String pins, int on, int off) { return new LightConfig(LightConfig.GPIO, "", 115200, pins, on, off); }
+
+    private LightConfig serial(String path) {
+        return new LightConfig(LightConfig.SERIAL, path, 115200, "", 0, 1);
+    }
+
+    private LightConfig gpio(String pins, int on, int off) {
+        return new LightConfig(LightConfig.GPIO, "", 115200, pins, on, off);
+    }
 }

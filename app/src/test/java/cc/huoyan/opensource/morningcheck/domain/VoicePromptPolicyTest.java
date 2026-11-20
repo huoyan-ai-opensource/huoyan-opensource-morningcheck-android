@@ -5,7 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public final class VoicePromptPolicyTest {
-    @Test public void renewedAbsenceStillNeedsFiveSecondsOfContinuousEvidence() {
+    @Test
+    public void renewedAbsenceStillNeedsFiveSecondsOfContinuousEvidence() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("face_absent:IDENTITY", "请入镜摄像头", 5000, 5000, 0);
         assertEquals("请入镜摄像头", policy.poll(5000));
@@ -17,7 +18,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("请入镜摄像头", policy.poll(17000));
     }
 
-    @Test public void repeatedFramesDoNotRestartStableWindowOrRepeatSpeech() {
+    @Test
+    public void repeatedFramesDoNotRestartStableWindowOrRepeatSpeech() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         for (int now = 0; now < 1200; now += 20) {
             policy.offer("posture", "请摘下手套", 1200, 10000, now);
@@ -31,7 +33,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("请摘下手套", policy.poll(11200));
     }
 
-    @Test public void changingPoseDropsOldPendingPromptAndRequiresNewStablePeriod() {
+    @Test
+    public void changingPoseDropsOldPendingPromptAndRequiresNewStablePeriod() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("glove", "请摘下手套", 1200, 10000, 0);
         policy.offer("palm", "请将手心朝向镜头", 1200, 10000, 600);
@@ -39,7 +42,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("请将手心朝向镜头", policy.poll(1800));
     }
 
-    @Test public void phaseTransitionReplacesUnspokenFailureAndDoesNotQueueHistory() {
+    @Test
+    public void phaseTransitionReplacesUnspokenFailureAndDoesNotQueueHistory() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("failure", "SDK 正忙", 1200, 15000, 0);
         policy.offer("head", "检查头部", 0, 0, 800);
@@ -48,7 +52,8 @@ public final class VoicePromptPolicyTest {
         assertEquals(Long.MAX_VALUE, policy.nextAt());
     }
 
-    @Test public void transientPoseErrorReturningToSameStageDoesNotRestartAlreadySpokenStage() {
+    @Test
+    public void transientPoseErrorReturningToSameStageDoesNotRestartAlreadySpokenStage() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("head", "检查头部", 0, 15000, 0);
         assertEquals("检查头部", policy.poll(0));
@@ -69,7 +74,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("检查头部", policy.poll(30000));
     }
 
-    @Test public void pendingInitializationKeepsOnlyLatestPhaseUntilActuallyPolled() {
+    @Test
+    public void pendingInitializationKeepsOnlyLatestPhaseUntilActuallyPolled() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("identity", "正视镜头", 0, 0, 0);
         policy.offer("head", "检查头部", 0, 0, 500);
@@ -79,7 +85,8 @@ public final class VoicePromptPolicyTest {
         assertNull(policy.poll(2001));
     }
 
-    @Test public void pauseResetDiscardsPendingPromptAndReturnCanReannounceCurrentStep() {
+    @Test
+    public void pauseResetDiscardsPendingPromptAndReturnCanReannounceCurrentStep() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("back", "检查手背", 0, 0, 0);
         assertEquals("检查手背", policy.poll(0));
@@ -90,7 +97,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("继续检查手背", policy.poll(3000));
     }
 
-    @Test public void stageEventsAreOrderedAndEachKeyIsAnnouncedOncePerRound() {
+    @Test
+    public void stageEventsAreOrderedAndEachKeyIsAnnouncedOncePerRound() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offerOnce("face", "请正视镜头。");
         policy.offerOnce("head", "检查头部。");
@@ -110,7 +118,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("新一轮晨检重新播第一步", "请正视镜头。", policy.poll(30001));
     }
 
-    @Test public void cancelPendingPreservesAcceptedStagesAndAllowsUnspokenResultAgain() {
+    @Test
+    public void cancelPendingPreservesAcceptedStagesAndAllowsUnspokenResultAgain() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offerOnce("back", "请伸出手背。");
         assertNotNull(policy.poll(0));
@@ -124,7 +133,8 @@ public final class VoicePromptPolicyTest {
         assertNull(policy.poll(2));
     }
 
-    @Test public void restoredResultIsNotAnnouncedAgainButRejectedSpeechCanBeRequestedAgain() {
+    @Test
+    public void restoredResultIsNotAnnouncedAgainButRejectedSpeechCanBeRequestedAgain() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.restoreAnnounced("saved");
         policy.offerOnce("saved", "旧结论");
@@ -137,7 +147,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("新结论", policy.poll(2));
     }
 
-    @Test public void oneTimeStatusDoesNotRepeatAfterOtherStatusWasSpoken() {
+    @Test
+    public void oneTimeStatusDoesNotRepeatAfterOtherStatusWasSpoken() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("head", "头部检查", 0, 0, 0);
         assertEquals("头部检查", policy.poll(0));
@@ -147,7 +158,8 @@ public final class VoicePromptPolicyTest {
         assertNull(policy.poll(2));
     }
 
-    @Test public void rejectedStatusOnlyRetriesAfterNextOfferAndNewStableWindow() {
+    @Test
+    public void rejectedStatusOnlyRetriesAfterNextOfferAndNewStableWindow() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("camera", "请检查摄像头。", 1200, 0, 0);
         assertNotNull(policy.poll(1200));
@@ -159,7 +171,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("请检查摄像头。", policy.poll(2500));
     }
 
-    @Test public void unmatchedEmployeeStartsImmediatelyWithoutAStableDelay() {
+    @Test
+    public void unmatchedEmployeeStartsImmediatelyWithoutAStableDelay() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("face_unmatched:IDENTITY", "未匹配员工", 0, 5000, 0);
         assertEquals("未匹配员工", policy.poll(0));
@@ -170,7 +183,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("未匹配员工", policy.poll(5000));
     }
 
-    @Test public void temporaryUnknownFrameCannotClearTheUnmatchedRepeatCooldown() {
+    @Test
+    public void temporaryUnknownFrameCannotClearTheUnmatchedRepeatCooldown() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("face_unmatched:IDENTITY", "未匹配员工", 0, 5000, 0);
         assertEquals("未匹配员工", policy.poll(0));
@@ -185,7 +199,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("未匹配员工", policy.poll(5000));
     }
 
-    @Test public void absentAndUnmatchedKeepTheirOwnCooldownWhenTheStatusAlternates() {
+    @Test
+    public void absentAndUnmatchedKeepTheirOwnCooldownWhenTheStatusAlternates() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("face_unmatched:HEAD", "未匹配员工", 0, 5000, 0);
         assertEquals("未匹配员工", policy.poll(0));
@@ -204,7 +219,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("请入镜摄像头", policy.poll(6000));
     }
 
-    @Test public void rejectedUnmatchedSpeechDoesNotConsumeTheFiveSecondCooldown() {
+    @Test
+    public void rejectedUnmatchedSpeechDoesNotConsumeTheFiveSecondCooldown() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("face_unmatched:IDENTITY", "未匹配员工", 0, 5000, 0);
         assertEquals("未匹配员工", policy.poll(0));
@@ -217,7 +233,8 @@ public final class VoicePromptPolicyTest {
         assertEquals("未匹配员工", policy.poll(5100));
     }
 
-    @Test public void newCheckRoundClearsStatusCooldownAndCanAnnounceItsFirstMismatch() {
+    @Test
+    public void newCheckRoundClearsStatusCooldownAndCanAnnounceItsFirstMismatch() {
         VoicePromptPolicy policy = new VoicePromptPolicy();
         policy.offer("face_unmatched:IDENTITY", "未匹配员工", 0, 5000, 1000);
         assertEquals("未匹配员工", policy.poll(1000));

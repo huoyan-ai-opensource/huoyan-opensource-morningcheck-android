@@ -16,19 +16,26 @@ import java.util.concurrent.atomic.AtomicReference;
 import cc.huoyan.morningcheck.sdk.client.HuoyanClient;
 import cc.huoyan.morningcheck.sdk.client.SdkConfig;
 
-/** 真实晨检壳双通道只读验证，不提交激活或变更人员底库。 */
+/**
+ * 真实晨检壳双通道只读验证，不提交激活或变更人员底库。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class RealLicenseModelsDeviceTest {
-    @Test public void currentDeviceModelsCanBeQueriedWithoutActivationCodeOnBothChannels() throws Exception {
+    @Test
+    public void currentDeviceModelsCanBeQueriedWithoutActivationCodeOnBothChannels() throws Exception {
         String expectedCode = null;
         for (SdkConfig config : new SdkConfig[]{SdkConfig.aidl(), SdkConfig.webSocket(SdkConfig.DEFAULT_WS_ENDPOINT)}) {
             CountDownLatch connected = new CountDownLatch(1);
             HuoyanClient client = new HuoyanClient(InstrumentationRegistry.getInstrumentation().getTargetContext(),
                     new HuoyanClient.Listener() {
-                        @Override public void onConnection(boolean online, String message) {
+                        @Override
+                        public void onConnection(boolean online, String message) {
                             if (online) connected.countDown();
                         }
-                        @Override public void onStatus(JSONObject status) { }
+
+                        @Override
+                        public void onStatus(JSONObject status) {
+                        }
                     });
             try {
                 client.connect(config);
@@ -51,11 +58,15 @@ public final class RealLicenseModelsDeviceTest {
                     assertTrue(model.has("chip"));
                     assertTrue(model.has("current"));
                 }
-            } finally { client.destroy(); }
+            } finally {
+                client.destroy();
+            }
         }
     }
 
-    private interface Query { String run(HuoyanClient.Callback callback); }
+    private interface Query {
+        String run(HuoyanClient.Callback callback);
+    }
 
     private static JSONObject await(Query query) throws Exception {
         CountDownLatch done = new CountDownLatch(1);

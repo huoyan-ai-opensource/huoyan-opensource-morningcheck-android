@@ -21,25 +21,30 @@ import java.util.UUID;
 
 import cc.huoyan.opensource.morningcheck.domain.RecordDateRange;
 
-/** 日期、结果、部门、搜索与分页使用隔离数据库，并验证结构化时间边界。 */
+/**
+ * 日期、结果、部门、搜索与分页使用隔离数据库，并验证结构化时间边界。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class AppStoreRecordDateTest {
     private Context context;
     private String databaseName;
     private AppStore store;
 
-    @Before public void createStore() {
+    @Before
+    public void createStore() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         databaseName = "record-date-" + UUID.randomUUID() + ".db";
         store = new AppStore(context, databaseName);
     }
 
-    @After public void removeStore() {
+    @After
+    public void removeStore() {
         store.close();
         context.deleteDatabase(databaseName);
     }
 
-    @Test public void dateResultDepartmentAndLiteralSearchFilterBeforeCountingAndPaging() {
+    @Test
+    public void dateResultDepartmentAndLiteralSearchFilterBeforeCountingAndPaging() {
         long root = store.saveDepartment(0, "门店");
         long child = store.saveDepartment(0, "后厨", root, "", 0);
         long outside = store.saveDepartment(0, "其他门店");
@@ -65,7 +70,8 @@ public final class AppStoreRecordDateTest {
         assertEquals(1L, store.recordsPage("%_", 1, root, dates, 1, 20).total);
     }
 
-    @Test public void rangeIncludesStartAndEndingMinuteSecondsButExcludesFollowingMinute() {
+    @Test
+    public void rangeIncludesStartAndEndingMinuteSecondsButExcludesFollowingMinute() {
         long start = 1_000_020_000L;
         RecordDateRange range = RecordDateRange.custom(start, start, false);
         RecordDateRange.Bounds dates = range.resolvedAt(start, TimeZone.getTimeZone("Asia/Shanghai"));
@@ -79,7 +85,8 @@ public final class AppStoreRecordDateTest {
         assertEquals("start", result.rows.get(1).optString("id"));
     }
 
-    @Test public void timestampColumnsAvoidParsingExcludedJsonAndAllPreservesOldQueryContract() {
+    @Test
+    public void timestampColumnsAvoidParsingExcludedJsonAndAllPreservesOldQueryContract() {
         save("match", 1000, 0, 0, "员工");
         ContentValues damaged = new ContentValues();
         damaged.put("id", "old-damaged");

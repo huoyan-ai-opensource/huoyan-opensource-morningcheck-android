@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** 授权模型查询回执；code 为 0 时 models 有效。 */
+/**
+ * 授权模型查询回执；code 为 0 时 models 有效。
+ */
 public final class LicenseModelsParcel implements Parcelable {
     private final int code;
     private final String reason;

@@ -139,9 +139,11 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
 
     private PhotoBatch readBatch(int maxPixels, int request) throws Exception {
         JSONObject record = store.record(recordId);
-        if (record == null) throw new IllegalStateException(getString(R.string.i18n_b_record_removed));
+        if (record == null)
+            throw new IllegalStateException(getString(R.string.i18n_b_record_removed));
         List<RecordPhotos.Photo> photos = RecordPhotos.read(record);
-        if (photos.isEmpty()) throw new IllegalStateException(getString(R.string.i18n_b_no_record_photos));
+        if (photos.isEmpty())
+            throw new IllegalStateException(getString(R.string.i18n_b_no_record_photos));
         long createdAt = record.optLong("created_at");
         String recordInfo = record.optString("staff_name", getString(R.string.i18n_b_name_missing)) + " · " + (createdAt > 0
                 ? new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(createdAt)) : getString(R.string.i18n_b_time_missing));
@@ -156,8 +158,9 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
                 Bitmap decoded = null;
                 String error = "";
                 try {
-                    if (photo.file.isEmpty()) throw new IllegalStateException(getString(R.string.i18n_b_photo_not_saved_prefix)
-                            + UiMessages.text(this, photo.label));
+                    if (photo.file.isEmpty())
+                        throw new IllegalStateException(getString(R.string.i18n_b_photo_not_saved_prefix)
+                                + UiMessages.text(this, photo.label));
                     String path = store.photo(photo.file).getAbsolutePath();
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inJustDecodeBounds = true;
@@ -172,8 +175,9 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
                     options.inJustDecodeBounds = false;
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                     decoded = BitmapFactory.decodeFile(path, options);
-                    if (decoded == null) throw new IllegalStateException(UiMessages.text(this, photo.label)
-                            + getString(R.string.i18n_b_photo_unreadable_suffix));
+                    if (decoded == null)
+                        throw new IllegalStateException(UiMessages.text(this, photo.label)
+                                + getString(R.string.i18n_b_photo_unreadable_suffix));
                 } catch (Exception failure) {
                     error = failure(failure);
                 } catch (OutOfMemoryError exhausted) {
@@ -359,7 +363,8 @@ public final class RecordPhotoActivity extends BaseMorningActivity {
             image.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (batch == null || position == RecyclerView.NO_POSITION
-                        || pager.getScrollState() != RecyclerView.SCROLL_STATE_IDLE || batch.images.get(position) == null) return;
+                        || pager.getScrollState() != RecyclerView.SCROLL_STATE_IDLE || batch.images.get(position) == null)
+                    return;
                 selected = position;
                 fullscreenRequested = true;
                 updatePhoto();

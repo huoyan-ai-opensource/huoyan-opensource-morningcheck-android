@@ -17,9 +17,12 @@ import java.util.concurrent.Executor;
 
 import static org.junit.Assert.*;
 
-/** 用可控串口字节流和时钟验证真实采集源，不依赖 Android 主线程或真实设备。 */
+/**
+ * 用可控串口字节流和时钟验证真实采集源，不依赖 Android 主线程或真实设备。
+ */
 public class TemperatureSourceTest {
-    @Test public void onceDiscardsOldBytesAndReturnsFirstFreshValidReadingAfterRelease() {
+    @Test
+    public void onceDiscardsOldBytesAndReturnsFirstFreshValidReadingAfterRelease() {
         Fixture f = new Fixture();
         FakePort port = f.ports.prepare();
         port.input.feed("{39.9}");
@@ -43,7 +46,8 @@ public class TemperatureSourceTest {
         assertEquals(1, port.closes);
     }
 
-    @Test public void activeOnceUsesLegacyCommandsAndWaitsForCompleteCtFrame() {
+    @Test
+    public void activeOnceUsesLegacyCommandsAndWaitsForCompleteCtFrame() {
         Fixture f = new Fixture();
         FakePort port = f.ports.prepare();
         f.once(true);
@@ -63,7 +67,8 @@ public class TemperatureSourceTest {
         assertEquals("结束后不能继续向已关闭串口查询", "ConfigT\r\nCalcT\r\n", port.commands());
     }
 
-    @Test public void onceTimesOutAtTenSecondsAndReportsErrorAfterRelease() {
+    @Test
+    public void onceTimesOutAtTenSecondsAndReportsErrorAfterRelease() {
         Fixture f = new Fixture();
         FakePort port = f.ports.prepare();
         f.once(true);
@@ -88,7 +93,8 @@ public class TemperatureSourceTest {
         assertEquals(1, f.errors.size());
     }
 
-    @Test public void continuousTimeoutReportsOnceAndKeepsWaitingForHardware() {
+    @Test
+    public void continuousTimeoutReportsOnceAndKeepsWaitingForHardware() {
         Fixture f = new Fixture();
         FakePort port = f.ports.prepare();
         f.start(false);
@@ -113,7 +119,8 @@ public class TemperatureSourceTest {
         assertEquals(1, port.closes);
     }
 
-    @Test public void continuousReadingKeepsLatestFramesAndStopsQueryingWhenPageStops() {
+    @Test
+    public void continuousReadingKeepsLatestFramesAndStopsQueryingWhenPageStops() {
         Fixture f = new Fixture();
         FakePort port = f.ports.prepare();
         f.start(true);
@@ -144,7 +151,8 @@ public class TemperatureSourceTest {
         assertEquals("关闭后不能继续发送查询指令", commands, port.commands());
     }
 
-    @Test public void readFailureReleasesPortAndReportsMatchingStateAndError() {
+    @Test
+    public void readFailureReleasesPortAndReportsMatchingStateAndError() {
         Fixture f = new Fixture();
         FakePort port = f.ports.prepare();
         f.start(false);
@@ -159,7 +167,8 @@ public class TemperatureSourceTest {
         assertTrue(f.values.isEmpty());
     }
 
-    @Test public void openFailureHasExplicitErrorAndNextRequestCanRecover() {
+    @Test
+    public void openFailureHasExplicitErrorAndNextRequestCanRecover() {
         Fixture f = new Fixture();
         f.ports.error = new IOException("设备不存在");
         f.once(false);
@@ -180,7 +189,8 @@ public class TemperatureSourceTest {
         assertEquals(1, next.closes);
     }
 
-    @Test public void rapidReplacementClosesOldPortBeforeOpeningLastRequestOnly() {
+    @Test
+    public void rapidReplacementClosesOldPortBeforeOpeningLastRequestOnly() {
         Fixture f = new Fixture();
         FakePort old = f.ports.prepare();
         f.start(false);
@@ -203,11 +213,13 @@ public class TemperatureSourceTest {
         assertEquals(1, next.closes);
     }
 
-    @Test public void queuedOldReadingCannotCompleteReplacementRequest() {
+    @Test
+    public void queuedOldReadingCannotCompleteReplacementRequest() {
         for (boolean once : new boolean[]{false, true}) {
             Fixture f = new Fixture();
             FakePort old = f.ports.prepare();
-            if (once) f.once(false); else f.start(false);
+            if (once) f.once(false);
+            else f.start(false);
             f.worker.runReady();
             old.input.feed("{39.5}");
             f.worker.advance(100);
@@ -226,7 +238,8 @@ public class TemperatureSourceTest {
         }
     }
 
-    @Test public void stopDropsQueuedCompletionAndAllowsFreshSession() {
+    @Test
+    public void stopDropsQueuedCompletionAndAllowsFreshSession() {
         Fixture f = new Fixture();
         FakePort old = f.ports.prepare();
         f.once(false);
@@ -247,7 +260,8 @@ public class TemperatureSourceTest {
         assertEquals(Arrays.asList(36.3), f.values);
     }
 
-    @Test public void closeCancelsPendingOpenAndCannotBeRestarted() {
+    @Test
+    public void closeCancelsPendingOpenAndCannotBeRestarted() {
         Fixture f = new Fixture();
         f.ports.prepare();
         f.once(false);
@@ -266,7 +280,8 @@ public class TemperatureSourceTest {
         assertTrue(f.errors.isEmpty());
     }
 
-    @Test public void invalidConfigurationStopsOldSessionWithoutOpeningAnotherPort() {
+    @Test
+    public void invalidConfigurationStopsOldSessionWithoutOpeningAnotherPort() {
         Fixture f = new Fixture();
         FakePort old = f.ports.prepare();
         f.start(false);
@@ -280,7 +295,8 @@ public class TemperatureSourceTest {
         assertEquals(f.errors.get(0), f.states.get(f.states.size() - 1));
     }
 
-    @Test public void pageClosingFromCompletionStateSuppressesTemperatureCallback() {
+    @Test
+    public void pageClosingFromCompletionStateSuppressesTemperatureCallback() {
         Fixture f = new Fixture();
         FakePort port = f.ports.prepare();
         f.closeOnCompletedState = true;
@@ -600,17 +616,22 @@ public class TemperatureSourceTest {
         final List<Integer> liveAtModeResult = new ArrayList<>();
         boolean closeOnCompletedState;
         final TemperatureSource source = new TemperatureSource(new TemperatureSource.Listener() {
-            @Override public void onTemperature(double temperature) {
+            @Override
+            public void onTemperature(double temperature) {
                 assertTrue("温度回调必须在主线程", main.dispatching);
                 values.add(temperature);
                 liveAtTemperature.add(ports.live);
             }
-            @Override public void onState(String message) {
+
+            @Override
+            public void onState(String message) {
                 assertTrue("状态回调必须在主线程", main.dispatching);
                 states.add(message);
                 if (closeOnCompletedState && "已获取真实体温".equals(message)) source.close();
             }
-            @Override public void onError(String message) {
+
+            @Override
+            public void onError(String message) {
                 assertTrue("错误回调必须在主线程", main.dispatching);
                 errors.add(message);
                 liveAtError.add(ports.live);
@@ -620,9 +641,11 @@ public class TemperatureSourceTest {
         void once(boolean active) {
             main.runOnMain(() -> source.readOnce("/dev/ttyS0", 115200, active));
         }
+
         void start(boolean active) {
             main.runOnMain(() -> source.start("/dev/ttyS0", 115200, active));
         }
+
         void mode(TemperatureMeasurementMode mode) {
             main.runOnMain(() -> source.setMeasurementMode("/dev/ttyS0", 115200, mode,
                     new TemperatureSource.ModeChangeListener() {
@@ -646,15 +669,23 @@ public class TemperatureSourceTest {
     private static final class MainQueue implements Executor {
         final ArrayDeque<Runnable> pending = new ArrayDeque<>();
         boolean dispatching;
-        @Override public void execute(Runnable action) {
+
+        @Override
+        public void execute(Runnable action) {
             if (dispatching) action.run();
             else pending.addLast(action);
         }
+
         void runOnMain(Runnable action) {
             boolean previous = dispatching;
             dispatching = true;
-            try { action.run(); } finally { dispatching = previous; }
+            try {
+                action.run();
+            } finally {
+                dispatching = previous;
+            }
         }
+
         void drain() {
             while (!pending.isEmpty()) runOnMain(pending.removeFirst());
         }
@@ -666,12 +697,27 @@ public class TemperatureSourceTest {
         long now;
         long order;
         int shutdowns;
-        @Override public void post(Runnable action) { postDelayed(action, 0); }
-        @Override public void postDelayed(Runnable action, long delayMs) {
+
+        @Override
+        public void post(Runnable action) {
+            postDelayed(action, 0);
+        }
+
+        @Override
+        public void postDelayed(Runnable action, long delayMs) {
             if (shutdowns == 0) pending.add(new Task(now + delayMs, order++, action));
         }
-        @Override public void shutdown() { shutdowns++; pending.clear(); }
-        void runReady() { advance(0); }
+
+        @Override
+        public void shutdown() {
+            shutdowns++;
+            pending.clear();
+        }
+
+        void runReady() {
+            advance(0);
+        }
+
         void advance(long elapsed) {
             long target = now + elapsed;
             while (!pending.isEmpty() && pending.peek().due <= target) {
@@ -687,8 +733,11 @@ public class TemperatureSourceTest {
         final long due;
         final long order;
         final Runnable action;
+
         Task(long due, long order, Runnable action) {
-            this.due = due; this.order = order; this.action = action;
+            this.due = due;
+            this.order = order;
+            this.action = action;
         }
     }
 
@@ -698,12 +747,15 @@ public class TemperatureSourceTest {
         int live;
         int maxLive;
         IOException error;
+
         FakePort prepare() {
             FakePort port = new FakePort(this);
             prepared.addLast(port);
             return port;
         }
-        @Override public TemperatureSource.Port open(String path, int baud) throws IOException {
+
+        @Override
+        public TemperatureSource.Port open(String path, int baud) throws IOException {
             if (error != null) throw error;
             FakePort port = prepared.removeFirst();
             port.path = path;
@@ -721,9 +773,18 @@ public class TemperatureSourceTest {
         String path;
         int closes;
         IOException writeError;
-        FakePort(FakePorts owner) { this.owner = owner; }
-        @Override public InputStream input() { return input; }
-        @Override public OutputStream output() {
+
+        FakePort(FakePorts owner) {
+            this.owner = owner;
+        }
+
+        @Override
+        public InputStream input() {
+            return input;
+        }
+
+        @Override
+        public OutputStream output() {
             return new OutputStream() {
                 @Override
                 public void write(int value) throws IOException {
@@ -738,25 +799,44 @@ public class TemperatureSourceTest {
                 }
             };
         }
-        @Override public void close() {
+
+        @Override
+        public void close() {
             closes++;
             owner.live--;
             owner.events.add("关闭:" + path);
         }
-        String commands() { return new String(output.toByteArray(), StandardCharsets.US_ASCII); }
+
+        String commands() {
+            return new String(output.toByteArray(), StandardCharsets.US_ASCII);
+        }
     }
 
     private static final class FakeInput extends InputStream {
         final ArrayDeque<Integer> bytes = new ArrayDeque<>();
         IOException error;
-        void feed(String value) { feed(value.getBytes(StandardCharsets.US_ASCII)); }
-        void feed(byte[] value) { for (byte b : value) bytes.addLast(b & 255); }
-        @Override public int available() throws IOException {
+
+        void feed(String value) {
+            feed(value.getBytes(StandardCharsets.US_ASCII));
+        }
+
+        void feed(byte[] value) {
+            for (byte b : value) bytes.addLast(b & 255);
+        }
+
+        @Override
+        public int available() throws IOException {
             if (error != null) throw error;
             return bytes.size();
         }
-        @Override public int read() { return bytes.isEmpty() ? -1 : bytes.removeFirst(); }
-        @Override public int read(byte[] target, int offset, int length) {
+
+        @Override
+        public int read() {
+            return bytes.isEmpty() ? -1 : bytes.removeFirst();
+        }
+
+        @Override
+        public int read(byte[] target, int offset, int length) {
             int count = Math.min(length, bytes.size());
             for (int i = 0; i < count; i++) target[offset + i] = (byte) read();
             return count;

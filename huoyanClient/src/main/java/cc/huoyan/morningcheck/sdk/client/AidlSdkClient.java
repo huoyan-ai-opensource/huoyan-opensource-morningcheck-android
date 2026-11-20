@@ -38,7 +38,9 @@ final class AidlSdkClient implements ClientTransport {
     private static final String SDK_PACKAGE = "cc.huoyan.morningcheck";
     private static final String SDK_SERVICE = "cc.huoyan.morningcheck.app.comm.SdkCommService";
     private final Context context;
-    /** 宿主 APK 版本，自动初始化与显式重试共用。 */
+    /**
+     * 宿主 APK 版本，自动初始化与显式重试共用。
+     */
     private final String appVersion;
     private final HuoyanClient.Listener listener;
     private final Handler main = new Handler(Looper.getMainLooper());
@@ -239,7 +241,7 @@ final class AidlSdkClient implements ClientTransport {
             if (operation.image != null) {
                 carrier = "uploadPhoto".equals(operation.command)
                         ? AidlImage.photo(operation.image, "png".equals(operation.params.optString("format"))
-                                                           ? ImageRequestParcel.FORMAT_PNG : ImageRequestParcel.FORMAT_JPEG)
+                        ? ImageRequestParcel.FORMAT_PNG : ImageRequestParcel.FORMAT_JPEG)
                         : AidlImage.rgb(context.getCacheDir(), operation.image,
                         operation.params.optInt("width"), operation.params.optInt("height"));
             }

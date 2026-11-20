@@ -24,7 +24,8 @@ final class RequestParameters {
                 requiredString(p, "activation_code");
                 break;
             case "queryDeviceModels":
-                if (p.length() != 0) throw new IllegalArgumentException("queryDeviceModels 不接受参数");
+                if (p.length() != 0)
+                    throw new IllegalArgumentException("queryDeviceModels 不接受参数");
                 break;
             case "setBaseUrl":
                 requiredString(p, "url");

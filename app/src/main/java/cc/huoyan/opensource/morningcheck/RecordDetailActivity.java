@@ -250,7 +250,8 @@ public final class RecordDetailActivity extends RecordSupportActivity {
         }
         photos = new Photos(values, photoGeneration, content, list);
         list.setAdapter(photos);
-        if (photoScrollState != null) list.getLayoutManager().onRestoreInstanceState(photoScrollState);
+        if (photoScrollState != null)
+            list.getLayoutManager().onRestoreInstanceState(photoScrollState);
     }
 
     private void releasePhotos() {
@@ -423,7 +424,8 @@ public final class RecordDetailActivity extends RecordSupportActivity {
                     expected.empty.setText(R.string.record_detail_photo_unreadable);
                     View.OnClickListener openPhoto = v -> {
                         int currentPosition = expected.getBindingAdapterPosition();
-                        if (currentPosition != RecyclerView.NO_POSITION) showPhoto(currentRecord, currentPosition);
+                        if (currentPosition != RecyclerView.NO_POSITION)
+                            showPhoto(currentRecord, currentPosition);
                     };
                     expected.image.setOnClickListener(result == null ? null : openPhoto);
                     expected.itemView.setOnClickListener(result == null ? null : openPhoto);

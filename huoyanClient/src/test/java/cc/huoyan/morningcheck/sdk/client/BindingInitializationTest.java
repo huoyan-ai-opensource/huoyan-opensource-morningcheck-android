@@ -8,9 +8,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/** 两种通道共用同一待绑定门禁；不依赖真实设备或云端。 */
+/**
+ * 两种通道共用同一待绑定门禁；不依赖真实设备或云端。
+ */
 public class BindingInitializationTest {
-    @Test public void bothChannelsWaitForInitializationThenSendOnlyOnceWithoutReadyRequirement() {
+    @Test
+    public void bothChannelsWaitForInitializationThenSendOnlyOnceWithoutReadyRequirement() {
         for (SdkConfig config : new SdkConfig[]{SdkConfig.aidl(), SdkConfig.webSocket("ws://192.168.1.2:18087/")}) {
             Fixture fixture = new Fixture(config);
             fixture.client.bindDevice("0007", fixture::result);
@@ -32,7 +35,8 @@ public class BindingInitializationTest {
         }
     }
 
-    @Test public void parametersAreSnapshottedWhileWaitingAndLaterBindingBypassesTheWait() throws Exception {
+    @Test
+    public void parametersAreSnapshottedWhileWaitingAndLaterBindingBypassesTheWait() throws Exception {
         Fixture fixture = new Fixture(SdkConfig.aidl());
         JSONObject params = ShopBindingRequest.create("0007");
         fixture.client.request("bindDevice", params, null, fixture::result);
@@ -46,7 +50,8 @@ public class BindingInitializationTest {
         fixture.client.destroy();
     }
 
-    @Test public void cancellingBeforeInitializationNeverReachesEitherTransport() {
+    @Test
+    public void cancellingBeforeInitializationNeverReachesEitherTransport() {
         Fixture fixture = new Fixture(SdkConfig.aidl());
         String id = fixture.client.bindDevice("0007", fixture::result);
         fixture.client.cancel(id);
@@ -59,7 +64,8 @@ public class BindingInitializationTest {
         fixture.client.destroy();
     }
 
-    @Test public void waitingTimeoutPreventsLateInitializationFromSending() {
+    @Test
+    public void waitingTimeoutPreventsLateInitializationFromSending() {
         Fixture fixture = new Fixture(SdkConfig.aidl());
         fixture.client.bindDevice("0007", fixture::result);
         fixture.timers.get(0).action.run();
@@ -70,7 +76,8 @@ public class BindingInitializationTest {
         fixture.client.destroy();
     }
 
-    @Test public void disconnectEndsWaitingRequestAndReconnectDoesNotReplayIt() {
+    @Test
+    public void disconnectEndsWaitingRequestAndReconnectDoesNotReplayIt() {
         Fixture fixture = new Fixture(SdkConfig.aidl());
         fixture.client.bindDevice("0007", fixture::result);
         FakeTransport transport = fixture.latest();
@@ -84,7 +91,8 @@ public class BindingInitializationTest {
         fixture.client.destroy();
     }
 
-    @Test public void switchingRejectsOldUnsentRequestAndOldInitCannotReleaseNewConnection() {
+    @Test
+    public void switchingRejectsOldUnsentRequestAndOldInitCannotReleaseNewConnection() {
         Fixture fixture = new Fixture(SdkConfig.aidl());
         fixture.client.bindDevice("0007", fixture::result);
         FakeTransport old = fixture.latest();
@@ -99,7 +107,8 @@ public class BindingInitializationTest {
         fixture.client.destroy();
     }
 
-    @Test public void queuedUnsentCancellationKeepsItsMeaningAfterConnectionChanges() {
+    @Test
+    public void queuedUnsentCancellationKeepsItsMeaningAfterConnectionChanges() {
         List<Runnable> deliveries = new ArrayList<>();
         Fixture fixture = new Fixture(SdkConfig.aidl(), deliveries::add);
         String id = fixture.client.bindDevice("0007", fixture::result);
@@ -114,7 +123,11 @@ public class BindingInitializationTest {
         final long delay;
         final Runnable action;
         boolean cancelled;
-        Timer(long delay, Runnable action) { this.delay = delay; this.action = action; }
+
+        Timer(long delay, Runnable action) {
+            this.delay = delay;
+            this.action = action;
+        }
     }
 
     private static final class Fixture {
@@ -123,7 +136,11 @@ public class BindingInitializationTest {
         final List<Integer> codes = new ArrayList<>();
         final List<String> messages = new ArrayList<>();
         final HuoyanClient client;
-        Fixture(SdkConfig config) { this(config, Runnable::run); }
+
+        Fixture(SdkConfig config) {
+            this(config, Runnable::run);
+        }
+
         Fixture(SdkConfig config, java.util.concurrent.Executor deliveries) {
             client = new HuoyanClient(30, null, deliveries, (channel, listener) -> {
                 FakeTransport transport = new FakeTransport(listener);
@@ -136,8 +153,15 @@ public class BindingInitializationTest {
             });
             client.connect(config);
         }
-        FakeTransport latest() { return transports.get(transports.size() - 1); }
-        void result(int code, String message, JSONObject data) { codes.add(code); messages.add(message); }
+
+        FakeTransport latest() {
+            return transports.get(transports.size() - 1);
+        }
+
+        void result(int code, String message, JSONObject data) {
+            codes.add(code);
+            messages.add(message);
+        }
     }
 
     private static final class FakeTransport implements ClientTransport {
@@ -149,21 +173,70 @@ public class BindingInitializationTest {
         String command;
         JSONObject params;
         HuoyanClient.Callback callback;
-        FakeTransport(HuoyanClient.Listener listener) { this.listener = listener; }
-        @Override public void setInitializationListener(Runnable listener) { initialized = listener; }
-        @Override public void connect(String endpoint) { }
-        @Override public String request(String command, JSONObject params, byte[] image, HuoyanClient.Callback callback) {
-            this.command = command; this.params = params; this.callback = callback;
+
+        FakeTransport(HuoyanClient.Listener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void setInitializationListener(Runnable listener) {
+            initialized = listener;
+        }
+
+        @Override
+        public void connect(String endpoint) {
+        }
+
+        @Override
+        public String request(String command, JSONObject params, byte[] image, HuoyanClient.Callback callback) {
+            this.command = command;
+            this.params = params;
+            this.callback = callback;
             return "request-" + ++calls;
         }
-        void reply(int code) { callback.onResult(code, "壳真实回执", new JSONObject()); }
-        @Override public void cancel(String requestId) { cancels++; }
-        @Override public void close() { connected = false; }
-        @Override public void destroy() { connected = false; }
-        @Override public JSONObject getStatus() { return new JSONObject(); }
-        @Override public JSONObject getCapabilities() { return new JSONObject(); }
-        @Override public JSONObject getClassTable() { return new JSONObject(); }
-        @Override public boolean isConnected() { return connected; }
-        @Override public boolean isReady() { return false; }
+
+        void reply(int code) {
+            callback.onResult(code, "壳真实回执", new JSONObject());
+        }
+
+        @Override
+        public void cancel(String requestId) {
+            cancels++;
+        }
+
+        @Override
+        public void close() {
+            connected = false;
+        }
+
+        @Override
+        public void destroy() {
+            connected = false;
+        }
+
+        @Override
+        public JSONObject getStatus() {
+            return new JSONObject();
+        }
+
+        @Override
+        public JSONObject getCapabilities() {
+            return new JSONObject();
+        }
+
+        @Override
+        public JSONObject getClassTable() {
+            return new JSONObject();
+        }
+
+        @Override
+        public boolean isConnected() {
+            return connected;
+        }
+
+        @Override
+        public boolean isReady() {
+            return false;
+        }
     }
 }

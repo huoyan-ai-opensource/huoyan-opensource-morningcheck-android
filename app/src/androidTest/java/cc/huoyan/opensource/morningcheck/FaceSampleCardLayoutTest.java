@@ -25,7 +25,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/** 绘制真实照片卡片与录入预览，检查照片比例、整卡圆角及预览铺满；不启动相机或访问业务数据。 */
+/**
+ * 绘制真实照片卡片与录入预览，检查照片比例、整卡圆角及预览铺满；不启动相机或访问业务数据。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class FaceSampleCardLayoutTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -163,7 +165,8 @@ public final class FaceSampleCardLayoutTest {
     }
 
     private static void exportIfRequested(Context context, Bitmap rendered) {
-        if (!"true".equals(InstrumentationRegistry.getArguments().getString("captureSampleCard"))) return;
+        if (!"true".equals(InstrumentationRegistry.getArguments().getString("captureSampleCard")))
+            return;
         File folder = context.getExternalCacheDir();
         assertNotNull("截图导出目录必须可用", folder);
         assertTrue("截图导出目录必须存在", folder.isDirectory() || folder.mkdirs());

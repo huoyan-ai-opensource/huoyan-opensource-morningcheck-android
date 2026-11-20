@@ -22,7 +22,8 @@ public class CheckGuidanceTest {
 
     private CheckPipeline head(CheckPipeline.Rules rules, double temperature) {
         CheckPipeline pipeline = new CheckPipeline(rules);
-        for (int sample = 0; sample < rules.identitySamples; sample++) pipeline.onIdentity(21, true);
+        for (int sample = 0; sample < rules.identitySamples; sample++)
+            pipeline.onIdentity(21, true);
         pipeline.onTemperature(temperature);
         return pipeline;
     }
@@ -44,19 +45,22 @@ public class CheckGuidanceTest {
         }
     }
 
-    @Test public void identityGuidanceKeepsMeasurementInternalAndPreservesItsGate() {
+    @Test
+    public void identityGuidanceKeepsMeasurementInternalAndPreservesItsGate() {
         CheckPipeline pipeline = new CheckPipeline(rules);
         assertEquals("请正视摄像头", CheckGuidance.from(pipeline, rules).text);
         pipeline.onTemperature(36.6);
         assertEquals("请正视摄像头", CheckGuidance.from(pipeline, rules).text);
         pipeline.reset();
-        for (int sample = 0; sample < rules.identitySamples; sample++) pipeline.onIdentity(21, true);
+        for (int sample = 0; sample < rules.identitySamples; sample++)
+            pipeline.onIdentity(21, true);
         assertEquals(CheckPipeline.Stage.IDENTITY, pipeline.getStage());
         assertEquals("身份已确认，请保持正视摄像头", CheckGuidance.from(pipeline, rules).text);
         assertFalse(CheckGuidance.from(pipeline, rules).warning);
     }
 
-    @Test public void missingAttireAppearsOnFirstFrameWithoutPrematureFinalFinding() {
+    @Test
+    public void missingAttireAppearsOnFirstFrameWithoutPrematureFinalFinding() {
         CheckPipeline pipeline = head(rules, 36.6);
         pipeline.onHeadDetections(Collections.emptyList(), true);
         assertEquals(0, pipeline.getProgress());
@@ -78,7 +82,8 @@ public class CheckGuidanceTest {
         }
     }
 
-    @Test public void correctedAttireClearsWarningAndNeedsFullConsecutiveSamples() {
+    @Test
+    public void correctedAttireClearsWarningAndNeedsFullConsecutiveSamples() {
         CheckPipeline pipeline = head(rules, 36.6);
         pipeline.onHeadDetections(Collections.emptyList(), true);
         for (int sample = 1; sample <= rules.headSamples; sample++) {
@@ -94,7 +99,8 @@ public class CheckGuidanceTest {
         assertFalse(CheckGuidance.from(pipeline, rules).warning);
     }
 
-    @Test public void headWarningClearsWhenCurrentEmployeeLeavesOrSamplingIsInterrupted() {
+    @Test
+    public void headWarningClearsWhenCurrentEmployeeLeavesOrSamplingIsInterrupted() {
         CheckPipeline pipeline = head(rules, 36.6);
         pipeline.onHeadDetections(Collections.emptyList(), true);
         pipeline.onHeadDetections(Collections.emptyList(), false);
@@ -107,7 +113,8 @@ public class CheckGuidanceTest {
         assertTrue(pipeline.getDisplayFindings().isEmpty());
     }
 
-    @Test public void headRulesTreatDisabledAttireAsUnexpectedRatherThanIgnoringIt() {
+    @Test
+    public void headRulesTreatDisabledAttireAsUnexpectedRatherThanIgnoringIt() {
         CheckPipeline.Rules noAttire = new CheckPipeline.Rules(4, 4, 5,
                 true, false, false, 37.3);
         CheckPipeline pipeline = head(noAttire, 36.6);
@@ -131,7 +138,8 @@ public class CheckGuidanceTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void headWarningsBlockHandsUntilCorrectedAndNeverCarryIntoHands() {
+    @Test
+    public void headWarningsBlockHandsUntilCorrectedAndNeverCarryIntoHands() {
         CheckPipeline pipeline = head(rules, 36.6);
         for (int sample = 0; sample < rules.headSamples; sample++) {
             pipeline.onHeadDetections(boxes(HEAD_HAT), true);
@@ -158,7 +166,8 @@ public class CheckGuidanceTest {
         assertTrue(pipeline.getDisplayFindings().isEmpty());
     }
 
-    @Test public void qualifiedHandAbnormalitiesAppearImmediatelyButAreNotYetFinal() {
+    @Test
+    public void qualifiedHandAbnormalitiesAppearImmediatelyButAreNotYetFinal() {
         CheckPipeline pipeline = hands();
         pipeline.onDetections(boxes(HAND_BACK, HAND_BACK, HAND_RING, HAND_WOUND));
         assertEquals(1, pipeline.getProgress());
@@ -170,7 +179,8 @@ public class CheckGuidanceTest {
         assertEquals(Arrays.asList("手背：戒指", "手背：伤口"), pipeline.getDisplayFindings());
     }
 
-    @Test public void rejectedHandFrameDropsPendingWarningsAndNeverReportsRejectedAbnormality() {
+    @Test
+    public void rejectedHandFrameDropsPendingWarningsAndNeverReportsRejectedAbnormality() {
         CheckPipeline pipeline = hands();
         pipeline.onDetections(boxes(HAND_BACK, HAND_BACK, HAND_RING));
         pipeline.onDetections(boxes(HAND_BACK, HAND_RING, HAND_WOUND));
@@ -184,7 +194,8 @@ public class CheckGuidanceTest {
         assertFalse(CheckGuidance.from(pipeline, rules).warning);
     }
 
-    @Test public void gloveAndPoseCorrectionsTakePriorityAndClearAfterAcceptedFrame() {
+    @Test
+    public void gloveAndPoseCorrectionsTakePriorityAndClearAfterAcceptedFrame() {
         CheckPipeline pipeline = hands();
         pipeline.onDetections(boxes(HAND_GLOVE, HAND_PALM, HAND_RING));
         assertEquals(Collections.singletonList(CheckPipeline.Issue.GLOVES), pipeline.getCurrentIssues());
@@ -202,7 +213,8 @@ public class CheckGuidanceTest {
         assertEquals("请将双手手心朝向摄像头", CheckGuidance.from(pipeline, rules).text);
     }
 
-    @Test public void interruptDropsPendingHandAbnormalitiesAndTypedCorrections() {
+    @Test
+    public void interruptDropsPendingHandAbnormalitiesAndTypedCorrections() {
         CheckPipeline pipeline = hands();
         pipeline.onDetections(boxes(HAND_BACK, HAND_BACK, HAND_NAIL));
         pipeline.interruptSamples();
@@ -213,7 +225,8 @@ public class CheckGuidanceTest {
         assertFalse(CheckGuidance.from(pipeline, rules).warning);
     }
 
-    @Test public void committedHandAbnormalitiesPersistAcrossStageAndStopOnReset() {
+    @Test
+    public void committedHandAbnormalitiesPersistAcrossStageAndStopOnReset() {
         CheckPipeline pipeline = hands();
         for (int sample = 0; sample < rules.handSamples; sample++) {
             pipeline.onDetections(boxes(HAND_BACK, HAND_BACK, HAND_RING));
@@ -233,7 +246,8 @@ public class CheckGuidanceTest {
         assertEquals("请正视摄像头", CheckGuidance.from(pipeline, rules).text);
     }
 
-    @Test public void invalidConfidenceNeverCreatesDisplayedHandAbnormality() {
+    @Test
+    public void invalidConfidenceNeverCreatesDisplayedHandAbnormality() {
         CheckPipeline pipeline = hands();
         pipeline.onDetections(Arrays.asList(
                 new CheckPipeline.Detection(HAND_BACK, 0.9f),
@@ -247,7 +261,8 @@ public class CheckGuidanceTest {
         assertFalse(CheckGuidance.from(pipeline, rules).warning);
     }
 
-    @Test public void displaySnapshotsAreDetachedAndCannotModifyPipeline() {
+    @Test
+    public void displaySnapshotsAreDetachedAndCannotModifyPipeline() {
         CheckPipeline pipeline = head(rules, 36.6);
         pipeline.onHeadDetections(Collections.emptyList(), true);
         List<String> display = pipeline.getDisplayFindings();
@@ -268,7 +283,8 @@ public class CheckGuidanceTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void temperatureFindingsRemainInResultButNotInOperatorGuidance() {
+    @Test
+    public void temperatureFindingsRemainInResultButNotInOperatorGuidance() {
         CheckPipeline pipeline = head(rules, 38.1);
         assertEquals(Collections.singletonList("体温偏高：38.1°C"), pipeline.getFindings());
         assertTrue(pipeline.getDisplayFindings().isEmpty());
@@ -283,7 +299,8 @@ public class CheckGuidanceTest {
         assertEquals(38.1, pipeline.getTemperature(), 0.001);
     }
 
-    @Test public void manyAbnormalitiesUseTwoItemSummaryWithoutDiscardingEvidence() {
+    @Test
+    public void manyAbnormalitiesUseTwoItemSummaryWithoutDiscardingEvidence() {
         CheckPipeline pipeline = head(rules, 38.1);
         for (int sample = 0; sample < rules.headSamples; sample++) {
             pipeline.onHeadDetections(boxes(HEAD_HAT, HEAD_MASK), true);
@@ -309,7 +326,8 @@ public class CheckGuidanceTest {
         assertTrue(pipeline.getFindings().contains("手背：创可贴"));
     }
 
-    @Test public void currentPalmFindingsAppearBeforePreviouslyConfirmedBackFindings() {
+    @Test
+    public void currentPalmFindingsAppearBeforePreviouslyConfirmedBackFindings() {
         CheckPipeline pipeline = hands();
         for (int sample = 0; sample < rules.handSamples; sample++) {
             pipeline.onDetections(boxes(HAND_BACK, HAND_BACK, HAND_RING, HAND_WOUND));

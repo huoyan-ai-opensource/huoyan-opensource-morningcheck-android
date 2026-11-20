@@ -97,8 +97,11 @@ public final class HomeActivity extends BaseMorningActivity {
         view.findViewById(R.id.home_start).setOnClickListener(v -> {
             updateInstallationState();
             if (localSdkMissing) sdkInstall.downloadAndInstall();
-            else if (sdkSession.viewState().needsActivation) ActivationFlowFragment.open(this);
-            else navigate("check");
+            else afterSdkPermissionCheck(() -> {
+                MorningSdkState state = sdkSession.viewState();
+                if (state.needsActivation) ActivationFlowFragment.open(this);
+                else if (state.ready) navigate("check");
+            });
         });
         view.findViewById(R.id.home_staff).setOnClickListener(v -> navigate("staff"));
         view.findViewById(R.id.home_records).setOnClickListener(v -> navigate("records"));
@@ -192,7 +195,8 @@ public final class HomeActivity extends BaseMorningActivity {
                 });
             } catch (Exception error) {
                 main.post(() -> {
-                    if (request == summaryRequest) notice(getString(R.string.i18n_a_home_stats_failed, failure(error)));
+                    if (request == summaryRequest)
+                        notice(getString(R.string.i18n_a_home_stats_failed, failure(error)));
                 });
             }
         });
@@ -329,9 +333,9 @@ public final class HomeActivity extends BaseMorningActivity {
         String title = missing ? getString(R.string.sdk_install_missing_title) : UiMessages.text(this, state.title);
         String detail = missing ? getString(R.string.i18n_a_install_the_sdk_to_start_checking)
                 : state.needsActivation ? getString(R.string.i18n_a_activate_this_device_to_start)
-                  : ready ? getString(R.string.i18n_a_identity_temperature_head_hands) : UiMessages.text(this, state.detail);
+                : ready ? getString(R.string.i18n_a_identity_temperature_head_hands) : UiMessages.text(this, state.detail);
         int background = Color.parseColor(missing ? "#C93535" : state.needsActivation ? "#F5C842"
-                                                                : ready ? "#3F3EED" : "#64748B");
+                : ready ? "#3F3EED" : "#64748B");
         content.findViewById(R.id.home_hero_panel).setBackgroundTintList(
                 android.content.res.ColorStateList.valueOf(background));
         ((TextView) content.findViewById(R.id.home_hero_detail)).setText(detail);
@@ -350,13 +354,15 @@ public final class HomeActivity extends BaseMorningActivity {
                                 : getString(R.string.i18n_a_local)));
         TextView start = content.findViewById(R.id.home_start);
         boolean blocked = !ready && !missing && !state.needsActivation;
-        start.setEnabled(!blocked);
-        start.setText(missing ? getString(R.string.i18n_a_install_now) : state.needsActivation ? getString(R.string.i18n_a_activate_now)
-                                                : blocked ? getString(R.string.i18n_a_loading_sdk) : getString(R.string.i18n_a_start_check));
+        boolean needsPermission = sdkSession.permissionRequired() && !missing;
+        start.setEnabled(!blocked || needsPermission);
+        start.setText(needsPermission ? getString(R.string.sdk_permissions_title)
+                : missing ? getString(R.string.i18n_a_install_now) : state.needsActivation ? getString(R.string.i18n_a_activate_now)
+                : blocked ? getString(R.string.i18n_a_loading_sdk) : getString(R.string.i18n_a_start_check));
         start.setTextColor(ready ? Ui.BLUE : Color.WHITE);
         start.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
                 Color.parseColor(missing ? "#AA2626" : state.needsActivation ? "#AF7D13"
-                                                       : ready ? "#EBEEFF" : "#4F5D73")));
+                        : ready ? "#EBEEFF" : "#4F5D73")));
         start.setContentDescription(start.getText() + "，" + title + "，" + detail);
     }
 }

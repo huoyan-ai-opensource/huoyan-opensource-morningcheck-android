@@ -68,7 +68,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 日期选择草稿与列表条件分离，覆盖范围确认、分钟编辑、重排以及窗口内的完整日历。 */
+/**
+ * 日期选择草稿与列表条件分离，覆盖范围确认、分钟编辑、重排以及窗口内的完整日历。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class RecordDateFilterUiTest {
     private static final int[] PRESET_IDS = {R.id.record_date_today, R.id.record_date_24_hours,
@@ -84,7 +86,8 @@ public final class RecordDateFilterUiTest {
     private MockWebServer endpoint;
     private ActivityScenario<RecordsActivity> scenario;
 
-    @Before public void isolateSdkAndPreservePreferences() throws Exception {
+    @Before
+    public void isolateSdkAndPreservePreferences() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         binding = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
@@ -96,11 +99,14 @@ public final class RecordDateFilterUiTest {
             app.sdkSession().disconnect();
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
-                if (request.getPath() == null || !request.getPath().startsWith("/sdk")) businessRequests.incrementAndGet();
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
+                if (request.getPath() == null || !request.getPath().startsWith("/sdk"))
+                    businessRequests.incrementAndGet();
                 return new MockResponse().setResponseCode(503).setBody("日期筛选隔离回归");
             }
         });
@@ -111,23 +117,33 @@ public final class RecordDateFilterUiTest {
                 .putBoolean("voice", false).putInt(AppFontSettings.KEY, AppFontSettings.DEFAULT_INDEX).commit());
     }
 
-    @After public void restorePreferencesAndCloseWindows() throws Exception {
+    @After
+    public void restorePreferencesAndCloseWindows() throws Exception {
         try {
             if (scenario != null) scenario.close();
-            if (app != null) instrumentation.runOnMainSync(() -> { finishPages(); app.sdkSession().disconnect(); });
+            if (app != null) instrumentation.runOnMainSync(() -> {
+                finishPages();
+                app.sdkSession().disconnect();
+            });
             instrumentation.waitForIdleSync();
-            if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
-            if (binding != null) assertEquals("日期筛选不能修改门店归属", originalBinding, binding.getAll());
+            if (app != null) app.io.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
+            if (binding != null)
+                assertEquals("日期筛选不能修改门店归属", originalBinding, binding.getAll());
         } finally {
             try {
-                if (preferences != null && originalPreferences != null) restore(preferences, originalPreferences);
+                if (preferences != null && originalPreferences != null)
+                    restore(preferences, originalPreferences);
                 if (binding != null && originalBinding != null) restore(binding, originalBinding);
-            } finally { if (endpoint != null) endpoint.shutdown(); }
+            } finally {
+                if (endpoint != null) endpoint.shutdown();
+            }
         }
         assertEquals("日期筛选只能读取本地记录，不能访问业务云", 0, businessRequests.get());
     }
 
-    @Test public void allShortcutRangesApplyOnlyAfterConfirmationAndCancelKeepsPreviousRange() {
+    @Test
+    public void allShortcutRangesApplyOnlyAfterConfirmationAndCancelKeepsPreviousRange() {
         launch();
         for (int index = 0; index < PRESETS.length; index++) {
             final int selected = index;
@@ -152,7 +168,8 @@ public final class RecordDateFilterUiTest {
         }
     }
 
-    @Test public void calendarAndTimeEditBothEndpointsAndConfirmTheExactMinutes() {
+    @Test
+    public void calendarAndTimeEditBothEndpointsAndConfirmTheExactMinutes() {
         launch();
         openWithPreset(0);
         scenario.onActivity(activity -> {
@@ -184,13 +201,18 @@ public final class RecordDateFilterUiTest {
             assertEquals(RecordDateRange.Preset.CUSTOM, applied.preset());
             java.time.LocalDateTime start = java.time.Instant.ofEpochMilli(applied.customStart()).atZone(ZoneId.systemDefault()).toLocalDateTime();
             java.time.LocalDateTime end = java.time.Instant.ofEpochMilli(applied.customEnd()).atZone(ZoneId.systemDefault()).toLocalDateTime();
-            assertEquals(12, start.getDayOfMonth()); assertEquals(8, start.getHour()); assertEquals(25, start.getMinute());
-            assertEquals(13, end.getDayOfMonth()); assertEquals(18, end.getHour()); assertEquals(35, end.getMinute());
+            assertEquals(12, start.getDayOfMonth());
+            assertEquals(8, start.getHour());
+            assertEquals(25, start.getMinute());
+            assertEquals(13, end.getDayOfMonth());
+            assertEquals(18, end.getHour());
+            assertEquals(35, end.getMinute());
             assertFalse(applied.followsNow());
         });
     }
 
-    @Test public void calendarAlwaysUsesTheLatestTwoClicksAndOrdersTheirDates() {
+    @Test
+    public void calendarAlwaysUsesTheLatestTwoClicksAndOrdersTheirDates() {
         launch();
         openCalendar();
         scenario.onActivity(activity -> {
@@ -216,7 +238,8 @@ public final class RecordDateFilterUiTest {
         });
     }
 
-    @Test public void crossMonthRangeKeepsTheLatestClickAcrossDraftRestoreAndActivityRecreation() {
+    @Test
+    public void crossMonthRangeKeepsTheLatestClickAcrossDraftRestoreAndActivityRecreation() {
         launch();
         openCalendar();
         AtomicReference<LocalDate> first = new AtomicReference<>();
@@ -252,7 +275,8 @@ public final class RecordDateFilterUiTest {
         });
     }
 
-    @Test public void singleCalendarClickCanApplyWholeDayAndShortcutsResetLatestClick() {
+    @Test
+    public void singleCalendarClickCanApplyWholeDayAndShortcutsResetLatestClick() {
         launch();
         openCalendar();
         scenario.onActivity(activity -> {
@@ -289,7 +313,8 @@ public final class RecordDateFilterUiTest {
         });
     }
 
-    @Test public void calendarRangePaintsStraightInnerEdgesAndKeepsSingleDayRounded() throws Exception {
+    @Test
+    public void calendarRangePaintsStraightInnerEdgesAndKeepsSingleDayRounded() throws Exception {
         launch();
         openCalendar();
         scenario.onActivity(activity -> {
@@ -315,7 +340,9 @@ public final class RecordDateFilterUiTest {
                     assertEquals("范围中间日期上角不应露出白缝", soft, image.getPixel(x, middle.getTop()));
                     assertEquals("范围中间日期下角不应露出白缝", soft, image.getPixel(x, middle.getBottom() - 1));
                 }
-            } finally { image.recycle(); }
+            } finally {
+                image.recycle();
+            }
         });
         capture("continuous-range");
         scenario.onActivity(activity -> {
@@ -335,15 +362,19 @@ public final class RecordDateFilterUiTest {
             Bitmap image = Bitmap.createBitmap(day.getWidth(), day.getHeight(), Bitmap.Config.ARGB_8888);
             try {
                 background.draw(new Canvas(image));
-                for (int x : new int[]{0, image.getWidth() - 1}) for (int y : new int[]{0, image.getHeight() - 1})
-                    assertEquals("同一天的完整圆角外侧应保持透明", 0, Color.alpha(image.getPixel(x, y)));
+                for (int x : new int[]{0, image.getWidth() - 1})
+                    for (int y : new int[]{0, image.getHeight() - 1})
+                        assertEquals("同一天的完整圆角外侧应保持透明", 0, Color.alpha(image.getPixel(x, y)));
                 assertEquals("单日背景中心应保留选中颜色", ContextCompat.getColor(activity, R.color.mc_button_primary_fill),
                         image.getPixel(image.getWidth() / 2, image.getHeight() / 2));
-            } finally { image.recycle(); }
+            } finally {
+                image.recycle();
+            }
         });
     }
 
-    @Test public void reversedRangeShowsErrorAndDoesNotCloseOrApply() {
+    @Test
+    public void reversedRangeShowsErrorAndDoesNotCloseOrApply() {
         launch();
         openWithPreset(0);
         scenario.onActivity(activity -> {
@@ -360,7 +391,8 @@ public final class RecordDateFilterUiTest {
         });
     }
 
-    @Test public void followingNowUsesActualCurrentTimeAndManualEndStopsFollowing() {
+    @Test
+    public void followingNowUsesActualCurrentTimeAndManualEndStopsFollowing() {
         launch();
         openWithPreset(2);
         scenario.onActivity(activity -> {
@@ -379,7 +411,8 @@ public final class RecordDateFilterUiTest {
         });
     }
 
-    @Test public void redrawAndRecreationKeepUnconfirmedDraftAndDismissDoesNotReopen() {
+    @Test
+    public void redrawAndRecreationKeepUnconfirmedDraftAndDismissDoesNotReopen() {
         launch();
         openWithPreset(3);
         scenario.onActivity(activity -> {
@@ -408,7 +441,8 @@ public final class RecordDateFilterUiTest {
         });
     }
 
-    @Test public void ordinaryBackgroundStopClosesDraftAndReturnDoesNotReopenIt() {
+    @Test
+    public void ordinaryBackgroundStopClosesDraftAndReturnDoesNotReopenIt() {
         launch();
         AtomicReference<RecordsActivity> previous = new AtomicReference<>();
         AtomicReference<RecordDateFilterDialog> previousDialog = new AtomicReference<>();
@@ -429,18 +463,21 @@ public final class RecordDateFilterUiTest {
         });
     }
 
-    @Test public void calendarAndActionsFitEveryLayoutAtAllFontSizesAndActualWindow() throws Exception {
+    @Test
+    public void calendarAndActionsFitEveryLayoutAtAllFontSizesAndActualWindow() throws Exception {
         instrumentation.runOnMainSync(() -> {
             for (int[] window : new int[][]{{360, 640}, {640, 360}, {800, 1280}, {1280, 800}, {360, 480}, {640, 320}, {640, 480}}) {
                 for (int font = 0; font < 4; font++) {
                     Configuration config = new Configuration(app.getResources().getConfiguration());
-                    config.screenWidthDp = window[0]; config.screenHeightDp = window[1];
+                    config.screenWidthDp = window[0];
+                    config.screenHeightDp = window[1];
                     config.smallestScreenWidthDp = Math.min(window[0], window[1]);
                     config.orientation = window[0] > window[1] ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
                     config.fontScale = AppFontSettings.scaleFor(font);
                     Context context = new ContextThemeWrapper(app.createConfigurationContext(config), R.style.AppTheme);
                     installDateViewFactory(context);
-                    RecordDateFilterDialog popup = new RecordDateFilterDialog(context, RecordDateRange.today(), ignored -> { });
+                    RecordDateFilterDialog popup = new RecordDateFilterDialog(context, RecordDateRange.today(), ignored -> {
+                    });
                     ViewGroup panel = popup.findViewById(R.id.record_date_panel);
                     float density = context.getResources().getDisplayMetrics().density;
                     int[] size = popup.panelSize(Math.round(window[0] * density), Math.round(window[1] * density));
@@ -448,7 +485,8 @@ public final class RecordDateFilterUiTest {
                     String scene = window[0] + "×" + window[1] + "，字号 " + config.fontScale;
                     if (panel.findViewById(R.id.record_date_preset_picker) != null)
                         assertContained(panel, panel.findViewById(R.id.record_date_preset_picker), scene);
-                    else for (int id : PRESET_IDS) assertContained(panel, panel.findViewById(id), scene);
+                    else for (int id : PRESET_IDS)
+                        assertContained(panel, panel.findViewById(id), scene);
                     for (int id : new int[]{R.id.record_date_start, R.id.record_date_end, R.id.record_date_follow_now,
                             R.id.record_date_start_time, R.id.record_date_end_time, R.id.record_date_cancel, R.id.record_date_confirm})
                         assertContained(panel, panel.findViewById(id), scene);
@@ -509,12 +547,14 @@ public final class RecordDateFilterUiTest {
                 assertVisibleTextFits((ViewGroup) panel, panel, "实际日期窗口，字号 " + font);
             });
             capture(font == AppFontSettings.DEFAULT_INDEX ? "default" : "largest");
-            scenario.close(); scenario = null;
+            scenario.close();
+            scenario = null;
             instrumentation.waitForIdleSync();
         }
     }
 
-    @Test public void recordFiltersAndPaginationStayInsideEveryWindowWithCustomRange() throws Exception {
+    @Test
+    public void recordFiltersAndPaginationStayInsideEveryWindowWithCustomRange() throws Exception {
         RecordDateRange[] ranges = customEntryRanges();
         String[] cases = {"同年区间", "同日区间", "跨年区间", "跟随当前时刻"};
         launch();
@@ -522,7 +562,8 @@ public final class RecordDateFilterUiTest {
             for (int[] window : new int[][]{{360, 640}, {640, 360}, {800, 1280}, {1280, 800}, {360, 480}, {640, 320}}) {
                 for (int font = 0; font < 4; font++) {
                     Configuration config = new Configuration(activity.getResources().getConfiguration());
-                    config.screenWidthDp = window[0]; config.screenHeightDp = window[1];
+                    config.screenWidthDp = window[0];
+                    config.screenHeightDp = window[1];
                     config.smallestScreenWidthDp = Math.min(window[0], window[1]);
                     config.orientation = window[0] > window[1] ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
                     config.fontScale = AppFontSettings.scaleFor(font);
@@ -535,7 +576,8 @@ public final class RecordDateFilterUiTest {
                     int width = Math.round(window[0] * density), height = Math.round(window[1] * density);
                     int[] size = {width, height};
                     layoutDatePanel(panel, size);
-                    RecordDateFilterUi entry = new RecordDateFilterUi(activity, trigger, ranges[0], ignored -> { });
+                    RecordDateFilterUi entry = new RecordDateFilterUi(activity, trigger, ranges[0], ignored -> {
+                    });
                     String scene = "记录列表 " + window[0] + "×" + window[1] + "，字号 " + config.fontScale;
                     for (int index = 0; index < ranges.length; index++) {
                         RecordDateRange chosen = ranges[index];
@@ -568,7 +610,8 @@ public final class RecordDateFilterUiTest {
                 }
             }
         });
-        scenario.close(); scenario = null;
+        scenario.close();
+        scenario = null;
         instrumentation.waitForIdleSync();
         for (int font : new int[]{AppFontSettings.DEFAULT_INDEX, 3}) {
             assertTrue(preferences.edit().putInt(AppFontSettings.KEY, font).commit());
@@ -601,15 +644,18 @@ public final class RecordDateFilterUiTest {
                     assertEquals(scene + "：窗口恢复自定义范围", RecordDateRange.Preset.CUSTOM.name(), draft.getString("preset"));
                     assertEquals(scene + "：窗口保留开始分钟", chosen.customStart(), draft.getLong("start"));
                     assertEquals(scene + "：窗口保留跟随当前时刻状态", chosen.followsNow(), draft.getBoolean("follow"));
-                    if (!chosen.followsNow()) assertEquals(scene + "：窗口保留结束分钟", chosen.customEnd(), draft.getLong("end"));
+                    if (!chosen.followsNow())
+                        assertEquals(scene + "：窗口保留结束分钟", chosen.customEnd(), draft.getLong("end"));
                     popup.findViewById(R.id.record_date_confirm).performClick();
                     assertFalse(scene + "：确认后应关闭窗口", popup.isShowing());
                     assertEquals(scene + "：确认仍应用真实起点", chosen.customStart(), range(activity).customStart());
                     assertEquals(scene + "：确认仍应用真实动态截止状态", chosen.followsNow(), range(activity).followsNow());
-                    if (!chosen.followsNow()) assertEquals(scene + "：确认仍应用真实结束分钟", chosen.customEnd(), range(activity).customEnd());
+                    if (!chosen.followsNow())
+                        assertEquals(scene + "：确认仍应用真实结束分钟", chosen.customEnd(), range(activity).customEnd());
                 });
                 instrumentation.waitForIdleSync();
-                if (index == 0) captureDateEntry(font == AppFontSettings.DEFAULT_INDEX ? "default" : "largest");
+                if (index == 0)
+                    captureDateEntry(font == AppFontSettings.DEFAULT_INDEX ? "default" : "largest");
             }
             scenario.onActivity(activity -> {
                 int[] labels = {R.string.record_date_today, R.string.record_date_24_hours,
@@ -620,7 +666,8 @@ public final class RecordDateFilterUiTest {
                             ((TextView) activity.findViewById(R.id.records_date_filter)).getText().toString());
                 }
             });
-            scenario.close(); scenario = null;
+            scenario.close();
+            scenario = null;
             instrumentation.waitForIdleSync();
         }
     }
@@ -636,6 +683,7 @@ public final class RecordDateFilterUiTest {
                         LocalDate.of(2026, 1, 1).atTime(0, 5).atZone(zone).toInstant().toEpochMilli(), false),
                 RecordDateRange.custom(followingStart, System.currentTimeMillis(), true)};
     }
+
     private static void assertDateEntryFits(ViewGroup panel, TextView trigger, RecordDateRange range, String scene) {
         assertVisibleTextFits(panel, trigger, scene);
         String rendered = trigger.getText().toString();
@@ -663,21 +711,41 @@ public final class RecordDateFilterUiTest {
         assertTrue(scene + "：无障碍说明始终保留完整结束时间", description.contains(fullEnd));
     }
 
-    private void launch() { scenario = ActivityScenario.launch(new Intent(app, RecordsActivity.class)); instrumentation.waitForIdleSync(); }
-    private RecordDateRange range(RecordsActivity page) { return field(page, "dateRange", RecordDateRange.class); }
-    private RecordDateFilterUi ui(RecordsActivity page) { return field(page, "dateFilter", RecordDateFilterUi.class); }
+    private void launch() {
+        scenario = ActivityScenario.launch(new Intent(app, RecordsActivity.class));
+        instrumentation.waitForIdleSync();
+    }
+
+    private RecordDateRange range(RecordsActivity page) {
+        return field(page, "dateRange", RecordDateRange.class);
+    }
+
+    private RecordDateFilterUi ui(RecordsActivity page) {
+        return field(page, "dateFilter", RecordDateFilterUi.class);
+    }
+
     private RecordDateFilterDialog dialog(RecordsActivity page) {
         RecordDateFilterDialog dialog = field(ui(page), "dialog", RecordDateFilterDialog.class);
-        assertNotNull("记录日期入口必须打开日期窗口", dialog); assertTrue(dialog.isShowing()); return dialog;
+        assertNotNull("记录日期入口必须打开日期窗口", dialog);
+        assertTrue(dialog.isShowing());
+        return dialog;
     }
+
     private static <T> T field(Object object, String name, Class<T> type) {
-        try { Field field = object.getClass().getDeclaredField(name); field.setAccessible(true); return type.cast(field.get(object)); }
-        catch (ReflectiveOperationException failure) { throw new AssertionError(failure); }
+        try {
+            Field field = object.getClass().getDeclaredField(name);
+            field.setAccessible(true);
+            return type.cast(field.get(object));
+        } catch (ReflectiveOperationException failure) {
+            throw new AssertionError(failure);
+        }
     }
+
     private void openCalendar() {
         scenario.onActivity(activity -> activity.findViewById(R.id.records_date_filter).performClick());
         instrumentation.waitForIdleSync();
     }
+
     private static void assertWholeDayDraft(RecordDateFilterDialog popup, LocalDate start, LocalDate end) {
         Bundle draft = popup.saveDraft();
         RecordDateRange expected = wholeDays(start, end);
@@ -686,11 +754,13 @@ public final class RecordDateFilterUiTest {
         assertEquals("范围应包含较晚日期的完整一天", expected.customEnd(), draft.getLong("end"));
         assertFalse("普通日历点选应使用固定结束日期", draft.getBoolean("follow"));
     }
+
     private static RecordDateRange wholeDays(LocalDate start, LocalDate end) {
         ZoneId zone = ZoneId.systemDefault();
         return RecordDateRange.custom(start.atStartOfDay(zone).toInstant().toEpochMilli(),
                 end.atTime(23, 59).atZone(zone).toInstant().toEpochMilli(), false);
     }
+
     private void openWithPreset(int index) {
         scenario.onActivity(activity -> activity.findViewById(R.id.records_date_filter).performClick());
         instrumentation.waitForIdleSync();
@@ -733,12 +803,15 @@ public final class RecordDateFilterUiTest {
                     assertTrue("快捷范围选项必须已经可见并完成布局", option.isShown() && option.getWidth() > 0 && option.getHeight() > 0);
                     assertTrue("选择真实可见的下拉条目必须成功", list.performItemClick(option, index, list.getAdapter().getItemId(index)));
                     assertFalse("选择范围后应收起快捷列表", popupShowing(popupWindow));
-                } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+                } catch (ReflectiveOperationException error) {
+                    throw new AssertionError(error);
+                }
             });
         }
         instrumentation.waitForIdleSync();
         scenario.onActivity(activity -> assertEquals("快捷范围已提交到弹窗草稿", PRESETS[index].name(), dialog(activity).saveDraft().getString("preset")));
     }
+
     private static Object spinnerPopup(Spinner picker) throws ReflectiveOperationException {
         if (picker instanceof ChoiceSpinner) {
             Field dialog = ChoiceSpinner.class.getDeclaredField("choiceDialog");
@@ -752,10 +825,12 @@ public final class RecordDateFilterUiTest {
                 popup.setAccessible(true);
                 Object value = popup.get(picker);
                 if (value != null) return value;
-            } catch (NoSuchFieldException ignored) { }
+            } catch (NoSuchFieldException ignored) {
+            }
         }
         throw new NoSuchFieldException(picker.getClass().getName() + ".mPopup");
     }
+
     private static boolean popupShowing(Object popup) {
         if (popup instanceof AlertDialog) return ((AlertDialog) popup).isShowing();
         if (popup instanceof androidx.appcompat.widget.ListPopupWindow)
@@ -764,6 +839,7 @@ public final class RecordDateFilterUiTest {
             return ((android.widget.ListPopupWindow) popup).isShowing();
         throw new AssertionError("不支持的快捷范围窗口：" + popup.getClass().getName());
     }
+
     private static android.widget.ListView popupList(Object popup) {
         if (popup instanceof AlertDialog)
             return ((AlertDialog) popup).findViewById(R.id.department_filter_options);
@@ -773,23 +849,27 @@ public final class RecordDateFilterUiTest {
             return ((android.widget.ListPopupWindow) popup).getListView();
         throw new AssertionError("不支持的快捷范围窗口：" + popup.getClass().getName());
     }
+
     private static void chooseDay(RecordDateFilterDialog popup, int day) {
         GridView calendar = popup.findViewById(R.id.record_date_days);
         String selectedMonth = popup.saveDraft().getString("month");
         for (int position = 0; position < calendar.getAdapter().getCount(); position++) {
             LocalDate value = (LocalDate) calendar.getAdapter().getItem(position);
             if (value.getDayOfMonth() == day && value.toString().startsWith(selectedMonth)) {
-                calendar.performItemClick(calendar.getChildAt(position), position, calendar.getAdapter().getItemId(position)); return;
+                calendar.performItemClick(calendar.getChildAt(position), position, calendar.getAdapter().getItemId(position));
+                return;
             }
         }
         fail("日历未找到当月日期 " + day);
     }
+
     private static View calendarDayCell(RecordDateFilterDialog popup, int day) {
         GridView calendar = popup.findViewById(R.id.record_date_days);
         String selectedMonth = popup.saveDraft().getString("month");
         for (int position = 0; position < calendar.getAdapter().getCount(); position++) {
             LocalDate value = (LocalDate) calendar.getAdapter().getItem(position);
-            if (value.getDayOfMonth() != day || !value.toString().startsWith(selectedMonth)) continue;
+            if (value.getDayOfMonth() != day || !value.toString().startsWith(selectedMonth))
+                continue;
             View cell = calendar.getChildAt(position - calendar.getFirstVisiblePosition());
             assertNotNull("日期必须已显示在真实日历中：" + value, cell);
             assertTrue("日期必须完成实际布局：" + value, cell.getWidth() > 0 && cell.getHeight() > 0);
@@ -797,6 +877,7 @@ public final class RecordDateFilterUiTest {
         }
         throw new AssertionError("日历未找到当月日期 " + day);
     }
+
     private static void layoutDatePanel(ViewGroup panel, int[] size) {
         // Spinner 和日历适配器在首轮布局后填充子项，再测量确认最终显示尺寸。
         for (int pass = 0; pass < 3; pass++) {
@@ -805,6 +886,7 @@ public final class RecordDateFilterUiTest {
             panel.layout(0, 0, size[0], size[1]);
         }
     }
+
     private void installDateViewFactory(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         assertNotSame("合成日期窗口不能修改 application 的共享 inflater", LayoutInflater.from(app), inflater);
@@ -812,14 +894,18 @@ public final class RecordDateFilterUiTest {
         // 每轮新建的主题上下文持有自己的 inflater；模拟 Activity 的 AppCompat Factory2。
         AppCompatViewInflater widgets = new AppCompatViewInflater();
         inflater.setFactory2(new LayoutInflater.Factory2() {
-            @Override public View onCreateView(View parent, String name, Context viewContext, AttributeSet attrs) {
+            @Override
+            public View onCreateView(View parent, String name, Context viewContext, AttributeSet attrs) {
                 return widgets.createView(parent, name, viewContext, attrs, false, true, true, false);
             }
-            @Override public View onCreateView(String name, Context viewContext, AttributeSet attrs) {
+
+            @Override
+            public View onCreateView(String name, Context viewContext, AttributeSet attrs) {
                 return onCreateView(null, name, viewContext, attrs);
             }
         });
     }
+
     private static void assertCalendarFits(ViewGroup panel, float density, float fontScale, String scene) {
         GridView calendar = panel.findViewById(R.id.record_date_days);
         assertContained(panel, calendar, scene);
@@ -840,10 +926,12 @@ public final class RecordDateFilterUiTest {
             assertTrue(scene + "：日期行必须容纳完整字高", metrics.descent - metrics.ascent
                     <= cell.getHeight() - cell.getCompoundPaddingTop() - cell.getCompoundPaddingBottom() + 1f);
             if (index % 7 == 0) rowTops.add(cell.getTop());
-            else assertEquals(scene + "：每周七天必须在同一行", calendar.getChildAt(index - index % 7).getTop(), cell.getTop());
+            else
+                assertEquals(scene + "：每周七天必须在同一行", calendar.getChildAt(index - index % 7).getTop(), cell.getTop());
         }
         assertEquals(scene + "：六周日期必须分成六个可见行", 6, rowTops.size());
     }
+
     private static void assertVisibleTextFits(ViewGroup panel, View view, String scene) {
         // 跳过未显示的错误提示和另一种编辑区；检查真实子项，不自行创建替代选项。
         if (view.getVisibility() != View.VISIBLE) return;
@@ -884,10 +972,13 @@ public final class RecordDateFilterUiTest {
                 assertVisibleTextFits(panel, group.getChildAt(index), scene);
         }
     }
+
     private static void assertContained(ViewGroup panel, View view, String scene) {
-        assertNotNull(scene, view); assertEquals(scene, View.VISIBLE, view.getVisibility());
+        assertNotNull(scene, view);
+        assertEquals(scene, View.VISIBLE, view.getVisibility());
         String target = viewName(view);
-        assertTrue(scene + "：" + target + "须有宽度", view.getWidth() > 0); assertTrue(scene + "：" + target + "须有高度", view.getHeight() > 0);
+        assertTrue(scene + "：" + target + "须有宽度", view.getWidth() > 0);
+        assertTrue(scene + "：" + target + "须有高度", view.getHeight() > 0);
         Rect bounds = new Rect(0, 0, view.getWidth(), view.getHeight());
         ViewParent parent = view.getParent();
         View child = view;
@@ -898,48 +989,74 @@ public final class RecordDateFilterUiTest {
                     + "，祖先可用矩形=[0,0," + ancestor.getWidth() + "," + ancestor.getHeight() + "]";
             assertTrue(geometry, bounds.left >= 0 && bounds.top >= 0 && bounds.right <= ancestor.getWidth() && bounds.bottom <= ancestor.getHeight());
             if (ancestor == panel) return;
-            child = ancestor; parent = ancestor.getParent();
+            child = ancestor;
+            parent = ancestor.getParent();
         }
         fail(scene + "：控件必须属于弹窗面板");
     }
+
     private static String viewName(View view) {
         if (view.getId() == View.NO_ID) return view.getClass().getSimpleName();
-        try { return view.getResources().getResourceEntryName(view.getId()); }
-        catch (android.content.res.Resources.NotFoundException generatedId) { return view.getClass().getSimpleName(); }
+        try {
+            return view.getResources().getResourceEntryName(view.getId());
+        } catch (android.content.res.Resources.NotFoundException generatedId) {
+            return view.getClass().getSimpleName();
+        }
     }
+
     private static void assertNoPageScroll(View view, String scene) {
         assertFalse(scene + "：日期窗口不能依赖整页滚动", view instanceof ScrollView);
-        if (view instanceof ViewGroup) for (int index = 0; index < ((ViewGroup) view).getChildCount(); index++) assertNoPageScroll(((ViewGroup) view).getChildAt(index), scene);
+        if (view instanceof ViewGroup)
+            for (int index = 0; index < ((ViewGroup) view).getChildCount(); index++)
+                assertNoPageScroll(((ViewGroup) view).getChildAt(index), scene);
     }
+
     private void finishPages() {
-        for (Stage stage : Stage.values()) for (Activity page : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-            if (page.getPackageName().equals(app.getPackageName()) && !page.isFinishing()) page.finish();
+        for (Stage stage : Stage.values())
+            for (Activity page : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
+                if (page.getPackageName().equals(app.getPackageName()) && !page.isFinishing())
+                    page.finish();
     }
+
     private void capture(String scene) throws Exception {
         capture(scene, "dateCapture", "dateCapturePrefix", "qa-record-date");
     }
+
     private void captureDateEntry(String scene) throws Exception {
         capture(scene, "dateEntryCapture", "dateEntryCapturePrefix", "qa-record-date-entry");
     }
+
     private void capture(String scene, String captureKey, String prefixKey, String directoryName) throws Exception {
-        if (!"true".equalsIgnoreCase(InstrumentationRegistry.getArguments().getString(captureKey, "false"))) return;
+        if (!"true".equalsIgnoreCase(InstrumentationRegistry.getArguments().getString(captureKey, "false")))
+            return;
         SystemClock.sleep(180);
-        File root = app.getExternalFilesDir(null); assertNotNull(root);
-        File directory = new File(root, directoryName); assertTrue(directory.isDirectory() || directory.mkdirs());
+        File root = app.getExternalFilesDir(null);
+        assertNotNull(root);
+        File directory = new File(root, directoryName);
+        assertTrue(directory.isDirectory() || directory.mkdirs());
         String prefix = InstrumentationRegistry.getArguments().getString(prefixKey, "device").replaceAll("[^A-Za-z0-9_-]", "_");
-        Bitmap image = instrumentation.getUiAutomation().takeScreenshot(); assertNotNull(image);
-        try (FileOutputStream output = new FileOutputStream(new File(directory, prefix + "-" + scene + ".png"))) { assertTrue(image.compress(Bitmap.CompressFormat.PNG, 100, output)); }
-        finally { image.recycle(); }
+        Bitmap image = instrumentation.getUiAutomation().takeScreenshot();
+        assertNotNull(image);
+        try (FileOutputStream output = new FileOutputStream(new File(directory, prefix + "-" + scene + ".png"))) {
+            assertTrue(image.compress(Bitmap.CompressFormat.PNG, 100, output));
+        } finally {
+            image.recycle();
+        }
     }
+
     private static Map<String, Object> snapshot(SharedPreferences prefs) {
         Map<String, Object> copy = new HashMap<>();
-        for (Map.Entry<String, ?> entry : prefs.getAll().entrySet()) copy.put(entry.getKey(), entry.getValue() instanceof Set ? new HashSet<>((Set<?>) entry.getValue()) : entry.getValue());
+        for (Map.Entry<String, ?> entry : prefs.getAll().entrySet())
+            copy.put(entry.getKey(), entry.getValue() instanceof Set ? new HashSet<>((Set<?>) entry.getValue()) : entry.getValue());
         return copy;
     }
-    @SuppressWarnings("unchecked") private static void restore(SharedPreferences prefs, Map<String, Object> values) {
+
+    @SuppressWarnings("unchecked")
+    private static void restore(SharedPreferences prefs, Map<String, Object> values) {
         SharedPreferences.Editor editor = prefs.edit().clear();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
-            String key = entry.getKey(); Object value = entry.getValue();
+            String key = entry.getKey();
+            Object value = entry.getValue();
             if (value instanceof String) editor.putString(key, (String) value);
             else if (value instanceof Boolean) editor.putBoolean(key, (Boolean) value);
             else if (value instanceof Integer) editor.putInt(key, (Integer) value);

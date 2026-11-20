@@ -50,7 +50,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 隔离 SDK 与业务云，验证持续测温的数值更新、停止和页面资源释放。 */
+/**
+ * 隔离 SDK 与业务云，验证持续测温的数值更新、停止和页面资源释放。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class TemperatureSettingsUiTest {
     private static final String MISSING_DEVICE = "/dev/huoyan-temperature-ui-test-missing";
@@ -62,7 +64,8 @@ public final class TemperatureSettingsUiTest {
     private ActivityScenario<TemperatureSettingsActivity> scenario;
     private final AtomicInteger businessRequests = new AtomicInteger();
 
-    @Before public void isolateEndpointsAndDeviceConfiguration() throws Exception {
+    @Before
+    public void isolateEndpointsAndDeviceConfiguration() throws Exception {
         instrumentation = InstrumentationRegistry.getInstrumentation();
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         device = app.getSharedPreferences("device", Context.MODE_PRIVATE);
@@ -73,7 +76,8 @@ public final class TemperatureSettingsUiTest {
         instrumentation.runOnMainSync(() -> app.sdkSession().disconnect());
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (request.getPath() != null && request.getPath().startsWith("/cloud"))
                     businessRequests.incrementAndGet();
                 return new MockResponse().setResponseCode(503).setBody("测温设置测试，不连接真实 SDK");
@@ -89,10 +93,12 @@ public final class TemperatureSettingsUiTest {
                 .remove("temperature_measurement_mode").remove("temperature_measurement_path")
                 .remove("temperature_measurement_baud")
                 .putString("serial_path", MISSING_DEVICE).putString("baud", "115200").commit());
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
     }
 
-    @After public void closePageAndRestoreDeviceConfiguration() throws Exception {
+    @After
+    public void closePageAndRestoreDeviceConfiguration() throws Exception {
         try {
             if (scenario != null) scenario.close();
         } finally {
@@ -106,7 +112,8 @@ public final class TemperatureSettingsUiTest {
         assertEquals("设置试读不能访问业务云", 0, businessRequests.get());
     }
 
-    @Test public void configurationChangesSaveImmediatelyWithoutStartingTemperatureRead() {
+    @Test
+    public void configurationChangesSaveImmediatelyWithoutStartingTemperatureRead() {
         AtomicInteger writes = new AtomicInteger();
         SharedPreferences.OnSharedPreferenceChangeListener observer = (preferences, key) -> {
             if ("temperature_mode".equals(key) || "serial_path".equals(key) || "baud".equals(key))
@@ -137,7 +144,8 @@ public final class TemperatureSettingsUiTest {
         }
     }
 
-    @Test public void latestSavedConfigurationWinsOverRestoredOldForm() {
+    @Test
+    public void latestSavedConfigurationWinsOverRestoredOldForm() {
         launchPage();
         scenario.onActivity(activity -> {
             configure(activity, MISSING_DEVICE + "-live", "38400", true);
@@ -162,7 +170,8 @@ public final class TemperatureSettingsUiTest {
         });
     }
 
-    @Test public void eachValidFieldPersistsIndependentlyOfAnotherInvalidField() {
+    @Test
+    public void eachValidFieldPersistsIndependentlyOfAnotherInvalidField() {
         launchPage();
         scenario.onActivity(activity -> {
             ((TextView) activity.findViewById(R.id.settings_serial_path)).setText("/dev/");
@@ -180,7 +189,8 @@ public final class TemperatureSettingsUiTest {
     }
 
     @SdkSuppress(minSdkVersion = 29)
-    @Test public void serialChoiceDialogClosesOnRedrawAndNewChoiceSavesImmediately() {
+    @Test
+    public void serialChoiceDialogClosesOnRedrawAndNewChoiceSavesImmediately() {
         launchPage();
         AtomicReference<TextView> oldField = new AtomicReference<>();
         scenario.onActivity(activity -> {
@@ -223,7 +233,8 @@ public final class TemperatureSettingsUiTest {
         });
     }
 
-    @Test public void continuousReadFollowsChangedParametersAndRejectsOldCallbacks() {
+    @Test
+    public void continuousReadFollowsChangedParametersAndRejectsOldCallbacks() {
         launchPage();
         scenario.onActivity(activity -> {
             configure(activity, MISSING_DEVICE + "-first", "38400", true);
@@ -276,7 +287,8 @@ public final class TemperatureSettingsUiTest {
         });
     }
 
-    @Test public void redrawBackgroundAndRecreationReleaseSourceWithoutAutomaticallyResumingTest() {
+    @Test
+    public void redrawBackgroundAndRecreationReleaseSourceWithoutAutomaticallyResumingTest() {
         launchPage();
         AtomicReference<TemperatureSource.Listener> backgroundListener = new AtomicReference<>();
         AtomicReference<TemperatureSource> backgroundSource = new AtomicReference<>();
@@ -317,7 +329,8 @@ public final class TemperatureSettingsUiTest {
         });
     }
 
-    @Test public void missingSerialDeviceReportsFailureAndCanRetryWithoutDefaultTemperature() {
+    @Test
+    public void missingSerialDeviceReportsFailureAndCanRetryWithoutDefaultTemperature() {
         launchPage();
         scenario.onActivity(activity -> assertTrue(activity.findViewById(R.id.settings_read_temperature).performClick()));
         await(() -> {
@@ -547,7 +560,8 @@ public final class TemperatureSettingsUiTest {
         });
     }
 
-    @Test public void currentLayoutsOmitSaveAndKeepTestControlReachableAtEveryWindowAndFontSize() {
+    @Test
+    public void currentLayoutsOmitSaveAndKeepTestControlReachableAtEveryWindowAndFontSize() {
         instrumentation.runOnMainSync(() -> {
             for (float scale : new float[]{1.15f, 1.495f})
                 for (int[] size : new int[][]{{360, 640}, {640, 320}, {1280, 800}, {800, 1280}})
@@ -730,7 +744,9 @@ public final class TemperatureSettingsUiTest {
             Field field = target.getClass().getDeclaredField(name);
             field.setAccessible(true);
             return field.get(target);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -743,7 +759,8 @@ public final class TemperatureSettingsUiTest {
             else if (value instanceof Integer) editor.putInt(entry.getKey(), (Integer) value);
             else if (value instanceof Long) editor.putLong(entry.getKey(), (Long) value);
             else if (value instanceof Float) editor.putFloat(entry.getKey(), (Float) value);
-            else if (value instanceof Set) editor.putStringSet(entry.getKey(), new HashSet<>((Set<String>) value));
+            else if (value instanceof Set)
+                editor.putStringSet(entry.getKey(), new HashSet<>((Set<String>) value));
             else throw new AssertionError("未知配置类型：" + entry.getKey());
         }
         assertTrue(editor.commit());

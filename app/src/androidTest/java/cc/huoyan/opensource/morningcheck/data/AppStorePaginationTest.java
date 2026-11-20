@@ -19,25 +19,30 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-/** 分页、筛选和升级使用单独的测试库，不连接 SDK、相机或云端。 */
+/**
+ * 分页、筛选和升级使用单独的测试库，不连接 SDK、相机或云端。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class AppStorePaginationTest {
     private Context context;
     private String databaseName;
     private AppStore store;
 
-    @Before public void createSeparateStore() {
+    @Before
+    public void createSeparateStore() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         databaseName = "pagination-test-" + UUID.randomUUID() + ".db";
         store = new AppStore(context, databaseName);
     }
 
-    @After public void removeOwnDatabase() {
+    @After
+    public void removeOwnDatabase() {
         store.close();
         context.deleteDatabase(databaseName);
     }
 
-    @Test public void staffPagesHaveStableOrderAndClampAfterLastPageDeletion() {
+    @Test
+    public void staffPagesHaveStableOrderAndClampAfterLastPageDeletion() {
         for (int i = 1; i <= 43; i++) store.saveStaff(person(i, "员工 " + i, "厨房"));
         AppStore.DataPage first = store.staffPage("", 1, 20);
         AppStore.DataPage second = store.staffPage("", 2, 20);
@@ -60,7 +65,8 @@ public final class AppStorePaginationTest {
         assertEquals(40L, store.staffCount());
     }
 
-    @Test public void staffSearchFiltersBeforePagingAndTreatsWildcardsAsText() {
+    @Test
+    public void staffSearchFiltersBeforePagingAndTreatsWildcardsAsText() {
         for (int i = 1; i <= 45; i++)
             store.saveStaff(person(i, "员工 " + i, i <= 25 ? "后厨" : "前厅"));
         store.saveStaff(person(46, "比例%_员工", "测试"));
@@ -77,7 +83,8 @@ public final class AppStorePaginationTest {
         assertEquals(26L, store.staffPage("后厨", 1, 20).total);
     }
 
-    @Test public void recordFiltersCountOnlyMatchesAndUpdateAfterUploadResult() {
+    @Test
+    public void recordFiltersCountOnlyMatchesAndUpdateAfterUploadResult() {
         for (int i = 1; i <= 47; i++)
             store.saveRecord(record("record-" + i, i, 1, i <= 27 ? 0 : 1,
                     i <= 22 ? "结果待核实" : i <= 32 ? "上传失败" : "已上传"));
@@ -95,7 +102,8 @@ public final class AppStorePaginationTest {
         assertEquals(26L, store.recordsPage(1, 1, 20).total);
     }
 
-    @Test public void homeSummaryCountsDistinctCurrentStaffWithinDayOnly() {
+    @Test
+    public void homeSummaryCountsDistinctCurrentStaffWithinDayOnly() {
         store.saveStaff(person(1, "甲", ""));
         store.saveStaff(person(2, "乙", ""));
         store.saveStaff(person(3, "丙", ""));
@@ -112,7 +120,8 @@ public final class AppStorePaginationTest {
         assertEquals(1L, store.homeSummary(100, 200).checkedTodayCount);
     }
 
-    @Test public void interruptedUploadsRecoverEveryBatchWithoutChangingOtherResults() {
+    @Test
+    public void interruptedUploadsRecoverEveryBatchWithoutChangingOtherResults() {
         for (int i = 1; i <= 51; i++)
             store.saveRecord(record("upload-" + i, i, 1, 1, i <= 45 ? "上传中" : "已上传"));
         store.recoverInterruptedUploads();
@@ -124,7 +133,8 @@ public final class AppStorePaginationTest {
         assertEquals(45L, store.recordsPage(3, 1, 20).total);
     }
 
-    @Test public void versionOneDatabaseIsMigratedAndAllRecordsSurviveReopen() {
+    @Test
+    public void versionOneDatabaseIsMigratedAndAllRecordsSurviveReopen() {
         store.close();
         try (SQLiteDatabase old = context.openOrCreateDatabase(databaseName, Context.MODE_PRIVATE, null)) {
             old.execSQL("CREATE TABLE staff (id TEXT PRIMARY KEY, data TEXT NOT NULL, time INTEGER NOT NULL)");

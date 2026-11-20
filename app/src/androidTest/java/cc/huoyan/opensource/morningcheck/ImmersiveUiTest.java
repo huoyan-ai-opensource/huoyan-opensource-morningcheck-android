@@ -63,10 +63,13 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 真实窗口的沉浸与输入法验收；不录入业务资料、不保存镜头或系统显示配置。 */
+/**
+ * 真实窗口的沉浸与输入法验收；不录入业务资料、不保存镜头或系统显示配置。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class ImmersiveUiTest {
-    @Rule public final TestName testName = new TestName();
+    @Rule
+    public final TestName testName = new TestName();
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
     private final JSONArray evidence = new JSONArray();
     private final AtomicInteger businessRequests = new AtomicInteger();
@@ -82,7 +85,8 @@ public final class ImmersiveUiTest {
     private boolean isolated;
     private boolean educationDismissed;
 
-    @Before public void isolateAllConnections() throws Exception {
+    @Before
+    public void isolateAllConnections() throws Exception {
         boolean x86 = false;
         for (String abi : Build.SUPPORTED_ABIS) x86 |= abi.startsWith("x86");
         String hardware = Build.HARDWARE.toLowerCase(java.util.Locale.ROOT);
@@ -102,7 +106,8 @@ public final class ImmersiveUiTest {
         });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (request.getPath() != null && request.getPath().startsWith("/cloud"))
                     businessRequests.incrementAndGet();
                 // 不升级 WebSocket，登录只能连接失败，永远不会提交真实或模拟成功的绑定。
@@ -115,33 +120,47 @@ public final class ImmersiveUiTest {
                         endpoint.url("/sdk").toString().replaceFirst("http", "ws"))
                 .putString("cloud_url", endpoint.url("/cloud").toString())
                 .putString("cloud_token", "").putBoolean("voice", false).commit());
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         output = new File(app.getCacheDir(), "immersive-evidence");
         assertTrue(output.isDirectory() || output.mkdirs());
     }
 
-    @After public void closeWindowsAndRestoreConfiguration() throws Exception {
+    @After
+    public void closeWindowsAndRestoreConfiguration() throws Exception {
         try {
-            if (dialog != null) onMain(() -> { dialog.dismiss(); return null; });
+            if (dialog != null) onMain(() -> {
+                dialog.dismiss();
+                return null;
+            });
             if (scenario != null) scenario.close();
         } finally {
             try {
                 if (app != null && isolated) {
-                    onMain(() -> { app.sdkSession().disconnect(); return null; });
+                    onMain(() -> {
+                        app.sdkSession().disconnect();
+                        return null;
+                    });
                     await(() -> !onMain(() -> app.shopLogin().getState().isRunning()), 8_000,
                             "应先结束仅本机的失败登录，再恢复配置");
-                    onMain(() -> { app.shopLogin().clearResult(); return null; });
+                    onMain(() -> {
+                        app.shopLogin().clearResult();
+                        return null;
+                    });
                 }
             } finally {
                 try {
-                    if (isolated && device != null && originalDevice != null) restorePreferences(device, originalDevice);
-                    if (isolated && binding != null && originalBinding != null) restorePreferences(binding, originalBinding);
+                    if (isolated && device != null && originalDevice != null)
+                        restorePreferences(device, originalDevice);
+                    if (isolated && binding != null && originalBinding != null)
+                        restorePreferences(binding, originalBinding);
                     restored = isolated && originalDevice != null && originalDevice.equals(device.getAll())
                             && originalBinding != null && originalBinding.equals(binding.getAll());
                     if (isolated) assertTrue("必须恢复全部设备及门店配置", restored);
                 } finally {
-                    try { if (endpoint != null) endpoint.shutdown(); }
-                    finally {
+                    try {
+                        if (endpoint != null) endpoint.shutdown();
+                    } finally {
                         if (output != null) {
                             JSONObject metadata = new JSONObject().put("test", testName.getMethodName())
                                     .put("completed", completed).put("preferences_restored", restored)
@@ -159,7 +178,8 @@ public final class ImmersiveUiTest {
         assertEquals("沉浸显示验收不应请求业务云", 0, businessRequests.get());
     }
 
-    @Test public void pagesStayFullscreenAcrossRecreationAndBarsAreTransient() throws Exception {
+    @Test
+    public void pagesStayFullscreenAcrossRecreationAndBarsAreTransient() throws Exception {
         launch(new Intent(app, HomeActivity.class));
         Activity home = currentActivity();
         // 模拟器未装本机壳时只关闭安装引导，不进入安装、授权或连接设置。
@@ -169,7 +189,9 @@ public final class ImmersiveUiTest {
                 field.setAccessible(true);
                 SdkInstallController installation = (SdkInstallController) field.get(home);
                 if (installation != null) installation.onPause();
-            } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+            } catch (ReflectiveOperationException error) {
+                throw new AssertionError(error);
+            }
             return null;
         });
         awaitFullscreen(R.id.main_root);
@@ -208,7 +230,8 @@ public final class ImmersiveUiTest {
         completed = true;
     }
 
-    @Test public void inputDialogAndKeyboardRestoreImmersiveLayoutWithoutSaving() throws Exception {
+    @Test
+    public void inputDialogAndKeyboardRestoreImmersiveLayoutWithoutSaving() throws Exception {
         launch(new Intent(app, DevicesActivity.class).putExtra(DevicesActivity.EXTRA_SECTION, 0));
         awaitFullscreen(R.id.main_root);
         assertSdkSection();
@@ -254,7 +277,10 @@ public final class ImmersiveUiTest {
         assertLayoutRestored(dialogBaseline, dialogWindow, onMain(dialogWindow::getDecorView));
         // 系统输入法关闭后，原业务弹窗继续保持沉浸显示。
         awaitBarsHidden(dialogWindow);
-        onMain(() -> { dialog.getButton(AlertDialog.BUTTON_NEGATIVE).performClick(); return null; });
+        onMain(() -> {
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).performClick();
+            return null;
+        });
         await(() -> onMain(() -> !dialog.isShowing()), 5_000, "取消应关闭输入弹窗");
         awaitFullscreen(R.id.main_root);
         assertLayoutRestored(baseline, host, onMain(() -> activity.findViewById(R.id.main_root)));
@@ -269,7 +295,7 @@ public final class ImmersiveUiTest {
         scenario = ActivityScenario.launch(intent);
         instrumentation.waitForIdleSync();
         await(() -> onMain(() -> !(currentActivity() instanceof BaseMorningActivity)
-                || ((BaseMorningActivity) currentActivity()).loaded), 8_000,
+                        || ((BaseMorningActivity) currentActivity()).loaded), 8_000,
                 "窗口验收前应完成页面首次数据读取与布局");
     }
 
@@ -294,13 +320,13 @@ public final class ImmersiveUiTest {
         await(() -> {
             dismissFullscreenEducation();
             return onMain(() -> {
-            View root = activity.findViewById(rootId);
-            if (root == null || !root.hasWindowFocus()) return false;
-            Snapshot state = snapshot(activity.getWindow(), root);
-            return state != null && state.barsHidden() && state.root.equals(state.decor)
-                    && state.root.width() > 0 && state.root.height() > 0 && !state.imeVisible
-                    && state.padding.equals(new Rect(state.cutout.left, state.cutout.top,
-                    state.cutout.right, state.cutout.bottom));
+                View root = activity.findViewById(rootId);
+                if (root == null || !root.hasWindowFocus()) return false;
+                Snapshot state = snapshot(activity.getWindow(), root);
+                return state != null && state.barsHidden() && state.root.equals(state.decor)
+                        && state.root.width() > 0 && state.root.height() > 0 && !state.imeVisible
+                        && state.padding.equals(new Rect(state.cutout.left, state.cutout.top,
+                        state.cutout.right, state.cutout.bottom));
             });
         }, 12_000, "系统栏应隐藏，页面根布局应覆盖完整窗口且拥有焦点");
         onMain(() -> {
@@ -334,8 +360,11 @@ public final class ImmersiveUiTest {
                 MotionEvent event = MotionEvent.obtain(down, SystemClock.uptimeMillis(), action,
                         x, top + distance * index / 12f, 0);
                 event.setSource(InputDevice.SOURCE_TOUCHSCREEN);
-                try { assertTrue("系统边缘滑动应成功注入", instrumentation.getUiAutomation().injectInputEvent(event, true)); }
-                finally { event.recycle(); }
+                try {
+                    assertTrue("系统边缘滑动应成功注入", instrumentation.getUiAutomation().injectInputEvent(event, true));
+                } finally {
+                    event.recycle();
+                }
                 SystemClock.sleep(16);
             }
             // 部分系统不向应用分发临时系统栏的可见性，实际边缘画面必须有变化且不能打开通知面板。
@@ -345,23 +374,29 @@ public final class ImmersiveUiTest {
             recordWindow("home-transient-bars", window, root);
             await(() -> screenTopEdgeMatches(before), 12_000, "临时系统栏应自动隐藏，还原全屏边缘画面");
             awaitFullscreen(R.id.main_root);
-        } finally { before.recycle(); }
+        } finally {
+            before.recycle();
+        }
     }
 
     private boolean screenTopEdgeMatches(Bitmap before) {
         Bitmap after = instrumentation.getUiAutomation().takeScreenshot();
         if (after == null) return false;
         try {
-            if (before.getWidth() != after.getWidth() || before.getHeight() != after.getHeight()) return false;
+            if (before.getWidth() != after.getWidth() || before.getHeight() != after.getHeight())
+                return false;
             int band = Math.max(24, before.getHeight() / 24);
             int changed = 0;
             // 首页顶部是稳定页头；底部 SDK 重试提示可能变化，不能把业务文案变化当作系统栏。
             for (int y = 0; y < band; y += 2) {
                 for (int x = 0; x < before.getWidth(); x += 2)
-                    if (before.getPixel(x, y) != after.getPixel(x, y) && ++changed > 20) return false;
+                    if (before.getPixel(x, y) != after.getPixel(x, y) && ++changed > 20)
+                        return false;
             }
             return true;
-        } finally { after.recycle(); }
+        } finally {
+            after.recycle();
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -378,9 +413,13 @@ public final class ImmersiveUiTest {
                     if (node.isVisibleToUser() && node.isEnabled()
                             && (label.equalsIgnoreCase("Got it") || label.equals("知道了") || label.equals("我知道了")))
                         educationDismissed |= node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                } finally { node.recycle(); }
+                } finally {
+                    node.recycle();
+                }
             }
-        } finally { root.recycle(); }
+        } finally {
+            root.recycle();
+        }
     }
 
     private void showKeyboard(Window window, EditText input) {
@@ -454,7 +493,8 @@ public final class ImmersiveUiTest {
         try {
             await(() -> onMain(() -> {
                 WindowInsetsCompat insets = inputInsets(window);
-                if (insets == null || !insets.isVisible(WindowInsetsCompat.Type.ime())) return false;
+                if (insets == null || !insets.isVisible(WindowInsetsCompat.Type.ime()))
+                    return false;
                 Rect visible = new Rect();
                 // 系统返回屏幕可见区域，避免对已经缩小的弹窗再次扣除整个 IME 高度。
                 input.getWindowVisibleDisplayFrame(visible);
@@ -507,7 +547,9 @@ public final class ImmersiveUiTest {
         assertNotNull(image);
         try (FileOutputStream stream = new FileOutputStream(new File(output, name + ".png"))) {
             assertTrue(image.compress(Bitmap.CompressFormat.PNG, 100, stream));
-        } finally { image.recycle(); }
+        } finally {
+            image.recycle();
+        }
         JSONObject sample = new JSONObject().put("sample", name).put("root", state.root.toShortString())
                 .put("decor", state.decor.toShortString()).put("padding", state.padding.toShortString())
                 .put("status_bar_visible", state.statusVisible).put("navigation_bar_visible", state.navVisible)
@@ -531,6 +573,7 @@ public final class ImmersiveUiTest {
         final Insets cutout;
         final boolean statusVisible, navVisible, imeVisible;
         final int imeBottom;
+
         Snapshot(Window window, View view, WindowInsetsCompat insets) {
             root = screenBounds(view);
             decor = screenBounds(window.getDecorView());
@@ -541,7 +584,10 @@ public final class ImmersiveUiTest {
             imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
             imeBottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
         }
-        boolean barsHidden() { return !statusVisible && !navVisible; }
+
+        boolean barsHidden() {
+            return !statusVisible && !navVisible;
+        }
     }
 
     private void assertCameraPreferencesUnchanged() {
@@ -553,8 +599,11 @@ public final class ImmersiveUiTest {
         AtomicReference<T> result = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { result.set(work.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                result.set(work.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError("主线程验收失败", failure.get());
         return result.get();
@@ -578,7 +627,8 @@ public final class ImmersiveUiTest {
             else if (value instanceof Integer) editor.putInt(entry.getKey(), (Integer) value);
             else if (value instanceof Long) editor.putLong(entry.getKey(), (Long) value);
             else if (value instanceof Float) editor.putFloat(entry.getKey(), (Float) value);
-            else if (value instanceof Set) editor.putStringSet(entry.getKey(), new HashSet<>((Set<String>) value));
+            else if (value instanceof Set)
+                editor.putStringSet(entry.getKey(), new HashSet<>((Set<String>) value));
             else throw new AssertionError("未知设备配置类型：" + entry.getKey());
         }
         assertTrue("应完整恢复测试前配置", editor.commit());

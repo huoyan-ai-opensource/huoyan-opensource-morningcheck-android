@@ -53,7 +53,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 场所编辑与扫码登录使用真实页面栈和本机 WS 夹具，测试结束恢复全部设备与归属配置。 */
+/**
+ * 场所编辑与扫码登录使用真实页面栈和本机 WS 夹具，测试结束恢复全部设备与归属配置。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class PlaceSettingsUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -84,7 +86,8 @@ public final class PlaceSettingsUiTest {
             return null;
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         server = new MockWebServer();
         server.setDispatcher(new Dispatcher() {
             @Override
@@ -142,12 +145,29 @@ public final class PlaceSettingsUiTest {
                 writeLoginField((LoginActivity) activity, "cameraFailure", "场所测试不采集摄像头");
             }
 
-            @Override public void onActivityStarted(Activity activity) { }
-            @Override public void onActivityResumed(Activity activity) { }
-            @Override public void onActivityPaused(Activity activity) { }
-            @Override public void onActivityStopped(Activity activity) { }
-            @Override public void onActivitySaveInstanceState(Activity activity, Bundle state) { }
-            @Override public void onActivityDestroyed(Activity activity) { }
+            @Override
+            public void onActivityStarted(Activity activity) {
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle state) {
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+            }
         };
         app.registerActivityLifecycleCallbacks(cameraIsolation);
     }
@@ -157,7 +177,8 @@ public final class PlaceSettingsUiTest {
         try {
             if (scenario != null) scenario.close();
             if (app != null) onMain(() -> {
-                if (cameraIsolation != null) app.unregisterActivityLifecycleCallbacks(cameraIsolation);
+                if (cameraIsolation != null)
+                    app.unregisterActivityLifecycleCallbacks(cameraIsolation);
                 finishPages();
                 app.sdkSession().disconnect();
                 return null;
@@ -166,12 +187,16 @@ public final class PlaceSettingsUiTest {
             if (app != null) await(() -> onMain(() -> !app.shopLogin().getState().isRunning()),
                     "测试绑定结束后才能恢复原配置");
             instrumentation.waitForIdleSync();
-            if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+            if (app != null) app.io.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
         } finally {
             try {
                 if (device != null && originalDevice != null) restore(device, originalDevice);
                 if (binding != null && originalBinding != null) restore(binding, originalBinding);
-                if (app != null) onMain(() -> { app.shopLogin().clearResult(); return null; });
+                if (app != null) onMain(() -> {
+                    app.shopLogin().clearResult();
+                    return null;
+                });
             } finally {
                 if (server != null) server.shutdown();
             }
@@ -212,14 +237,17 @@ public final class PlaceSettingsUiTest {
             return null;
         });
         await(() -> onMain(() -> current(SystemSettingsActivity.class) == settings
-                && "测试手动场所".contentEquals(((TextView) settings.findViewById(R.id.settings_shop_name)).getText())),
+                        && "测试手动场所".contentEquals(((TextView) settings.findViewById(R.id.settings_shop_name)).getText())),
                 "保存应返回原系统设置并刷新场所名称");
         assertEquals("测试手动场所", device.getString("shop_name", ""));
         assertEquals("13800138000", device.getString("shop_phone", ""));
         assertEquals("测试市食品安全路 100 号中央厨房", device.getString("shop_address", ""));
         assertEquals("仅修改场所名称不能建立 SDK 归属", 0, new ShopBindingStore(app).read().length());
         assertEquals(0, bindCount.get());
-        onMain(() -> { settings.findViewById(R.id.settings_shop_name).performClick(); return null; });
+        onMain(() -> {
+            settings.findViewById(R.id.settings_shop_name).performClick();
+            return null;
+        });
         await(() -> onMain(() -> current(PlaceSettingsActivity.class) != null), "应能再次打开场所页");
         PlaceSettingsActivity originalPlace = onMain(() -> current(PlaceSettingsActivity.class));
         onMain(() -> {
@@ -246,7 +274,7 @@ public final class PlaceSettingsUiTest {
                 .put("account_id", "PLACE-TEST-ACCOUNT").put("shop_id", "PLACE-TEST-SHOP")
                 .put("shop_name", "测试登录场所")));
         await(() -> onMain(() -> current(PlaceSettingsActivity.class) == originalPlace
-                && "测试登录场所".contentEquals(((EditText) originalPlace.findViewById(R.id.place_name)).getText())),
+                        && "测试登录场所".contentEquals(((EditText) originalPlace.findViewById(R.id.place_name)).getText())),
                 "登录成功应留在原场所页面并展示新的场所名称");
         JSONObject scope = new ShopBindingStore(app).read();
         assertEquals("PLACE-TEST-SHOP", scope.getString("shop_id"));
@@ -266,7 +294,7 @@ public final class PlaceSettingsUiTest {
             return null;
         });
         await(() -> onMain(() -> current(SystemSettingsActivity.class) == settings
-                && "测试登录场所".contentEquals(((TextView) settings.findViewById(R.id.settings_shop_name)).getText())),
+                        && "测试登录场所".contentEquals(((TextView) settings.findViewById(R.id.settings_shop_name)).getText())),
                 "从场所页面返回后系统设置应刷新登录场所名称");
         assertEquals("13900139000", device.getString("shop_phone", ""));
         assertEquals("测试市食品安全路 200 号新场所", device.getString("shop_address", ""));
@@ -316,9 +344,11 @@ public final class PlaceSettingsUiTest {
     }
 
     private void finishPages() {
-        for (Stage stage : Stage.values()) for (Activity activity : new ArrayList<>(
-                ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-            if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+        for (Stage stage : Stage.values())
+            for (Activity activity : new ArrayList<>(
+                    ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private static void restore(SharedPreferences preferences, Map<String, ?> values) {
@@ -340,8 +370,11 @@ public final class PlaceSettingsUiTest {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(action.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError(failure.get());
         return value.get();
@@ -350,8 +383,11 @@ public final class PlaceSettingsUiTest {
     private void await(Callable<Boolean> condition, String message) {
         long deadline = SystemClock.uptimeMillis() + 10_000;
         while (SystemClock.uptimeMillis() < deadline) {
-            try { if (condition.call()) return; }
-            catch (Exception error) { throw new AssertionError(error); }
+            try {
+                if (condition.call()) return;
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
             SystemClock.sleep(40);
         }
         fail(message);

@@ -75,7 +75,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 字号行为使用隔离 SDK；尺寸矩阵使用 Android 的真实 XML 测量和排版结果。 */
+/**
+ * 字号行为使用隔离 SDK；尺寸矩阵使用 Android 的真实 XML 测量和排版结果。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class FontSizeUiTest {
     private static final String TAG = "FontSizeUiTest";
@@ -96,7 +98,8 @@ public final class FontSizeUiTest {
     private ActivityScenario<HomeActivity> homeScenario;
     private String measurementCase;
 
-    @Before public void isolateSdkAndPreferences() throws Exception {
+    @Before
+    public void isolateSdkAndPreferences() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         device = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         binding = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
@@ -109,17 +112,24 @@ public final class FontSizeUiTest {
             return null;
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (!"/sdk".equals(request.getPath())) {
                     businessRequests.incrementAndGet();
                     return new MockResponse().setResponseCode(503);
                 }
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject request = new JSONObject(text), data = new JSONObject();
                             String command = request.getString("cmd");
@@ -130,7 +140,9 @@ public final class FontSizeUiTest {
                                     .put("device_id", "FONT-SIZE-TEST-ONLY");
                             socket.send(new JSONObject().put("requestId", request.getString("requestId"))
                                     .put("code", 0).put("reason", "字号隔离夹具").put("data", data).toString());
-                        } catch (Throwable error) { serverFailure.set(error); }
+                        } catch (Throwable error) {
+                            serverFailure.set(error);
+                        }
                     }
                 });
             }
@@ -142,12 +154,18 @@ public final class FontSizeUiTest {
                 .putBoolean("voice", false).putInt(AppFontSettings.KEY, AppFontSettings.DEFAULT_INDEX).commit());
     }
 
-    @After public void restoreTestState() throws Exception {
+    @After
+    public void restoreTestState() throws Exception {
         try {
             if (homeScenario != null) homeScenario.close();
-            if (app != null) onMain(() -> { finishPages(); app.sdkSession().disconnect(); return null; });
+            if (app != null) onMain(() -> {
+                finishPages();
+                app.sdkSession().disconnect();
+                return null;
+            });
             instrumentation.waitForIdleSync();
-            if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+            if (app != null) app.io.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
         } finally {
             try {
                 if (device != null && originalDevice != null) restore(device, originalDevice);
@@ -165,11 +183,15 @@ public final class FontSizeUiTest {
         assertEquals("字号调整不能执行 SDK 管理写入", 0, unexpectedWrites.get());
     }
 
-    @Test public void fontDraftApplyReturnAndRecreationKeepOneSharedSdkInitialization() throws Exception {
+    @Test
+    public void fontDraftApplyReturnAndRecreationKeepOneSharedSdkInitialization() throws Exception {
         launchHome();
         HomeActivity originalHome = onMain(() -> current(HomeActivity.class));
         float standardHomeText = onMain(() -> ((TextView) originalHome.findViewById(R.id.home_start)).getTextSize());
-        onMain(() -> { originalHome.navigate("settings", 7); return null; });
+        onMain(() -> {
+            originalHome.navigate("settings", 7);
+            return null;
+        });
         await(() -> onMain(() -> current(SystemSettingsActivity.class) != null
                 && current(SystemSettingsActivity.class).loaded), "系统设置应进入前台并读取完成");
         SystemSettingsActivity first = onMain(() -> current(SystemSettingsActivity.class));
@@ -276,7 +298,10 @@ public final class FontSizeUiTest {
             return null;
         });
         captureScreen("real-system-settings-font130-screen");
-        onMain(() -> { current(SystemSettingsActivity.class).findViewById(R.id.header_home).performClick(); return null; });
+        onMain(() -> {
+            current(SystemSettingsActivity.class).findViewById(R.id.header_home).performClick();
+            return null;
+        });
         await(() -> onMain(() -> current(HomeActivity.class) != null
                 && current(HomeActivity.class).loaded
                 && Math.abs(current(HomeActivity.class).getResources().getConfiguration().fontScale
@@ -294,10 +319,14 @@ public final class FontSizeUiTest {
         assertGeometryPasses();
     }
 
-    @Test public void fontDialogKeepsPreviewAndActionsReachableInBothOrientationsAtLargestFont() throws Exception {
+    @Test
+    public void fontDialogKeepsPreviewAndActionsReachableInBothOrientationsAtLargestFont() throws Exception {
         assertTrue(device.edit().putInt(AppFontSettings.KEY, 3).commit());
         launchHome();
-        onMain(() -> { current(HomeActivity.class).navigate("settings", 7); return null; });
+        onMain(() -> {
+            current(HomeActivity.class).navigate("settings", 7);
+            return null;
+        });
         await(() -> onMain(() -> current(SystemSettingsActivity.class) != null
                 && current(SystemSettingsActivity.class).loaded), "系统设置应读取完成");
         int originalOrientation = onMain(() -> current(SystemSettingsActivity.class).getRequestedOrientation());
@@ -305,7 +334,10 @@ public final class FontSizeUiTest {
             for (int requested : new int[]{ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}) {
                 int expected = requested == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                         ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE;
-                onMain(() -> { current(SystemSettingsActivity.class).setRequestedOrientation(requested); return null; });
+                onMain(() -> {
+                    current(SystemSettingsActivity.class).setRequestedOrientation(requested);
+                    return null;
+                });
                 await(() -> onMain(() -> {
                     SystemSettingsActivity activity = current(SystemSettingsActivity.class);
                     if (activity == null || !activity.loaded) return false;
@@ -326,7 +358,10 @@ public final class FontSizeUiTest {
                 for (int index = 0; index < 4; index++) {
                     int choice = index;
                     scrollToFont(activity, choice);
-                    onMain(() -> { chooseFont(activity, choice); return null; });
+                    onMain(() -> {
+                        chooseFont(activity, choice);
+                        return null;
+                    });
                     awaitStableFontPreview(activity, "真实方向下预览档位 " + choice);
                     onMain(() -> {
                         measurementCase = "real-font-dialog-" + expected + "-preview" + choice;
@@ -359,7 +394,8 @@ public final class FontSizeUiTest {
         assertGeometryPasses();
     }
 
-    @Test public void newFontBaselineMapsLegacyChoicesAndPreservesPreviousLargeTextSize() throws Exception {
+    @Test
+    public void newFontBaselineMapsLegacyChoicesAndPreservesPreviousLargeTextSize() throws Exception {
         Map<String, Object> initial = new HashMap<>(device.getAll());
         try {
             assertTrue(device.edit().remove(AppFontSettings.KEY).remove("app_font_size").commit());
@@ -397,23 +433,25 @@ public final class FontSizeUiTest {
         }
     }
 
-    @Test public void savedFontContextKeepsScreenQualifiersAndRejectsCorruptStoredValue() throws Exception {
+    @Test
+    public void savedFontContextKeepsScreenQualifiersAndRejectsCorruptStoredValue() throws Exception {
         onMain(() -> {
-            for (int[] size : WINDOWS) for (int index = 0; index < 4; index++) {
-                device.edit().putInt(AppFontSettings.KEY, index).commit();
-                Context base = configurationContext(size[0], size[1], 1f);
-                Context wrapped = AppFontSettings.wrap(base);
-                Configuration before = base.getResources().getConfiguration(), after = wrapped.getResources().getConfiguration();
-                assertEquals(AppFontSettings.scaleFor(index), after.fontScale, .001f);
-                assertEquals("字体不能改变屏幕宽度限定符", before.screenWidthDp, after.screenWidthDp);
-                assertEquals("字体不能改变屏幕高度限定符", before.screenHeightDp, after.screenHeightDp);
-                assertEquals("字体不能改变最小宽度限定符", before.smallestScreenWidthDp, after.smallestScreenWidthDp);
-                assertEquals("字体不能改变横竖屏限定符", before.orientation, after.orientation);
-                assertEquals("字体不能改变系统密度", before.densityDpi, after.densityDpi);
-                assertEquals("字体不能改写原Context资源", 1f, before.fontScale, .001f);
-                assertEquals("字体不能改变实际显示密度", base.getResources().getDisplayMetrics().density,
-                        wrapped.getResources().getDisplayMetrics().density, .001f);
-            }
+            for (int[] size : WINDOWS)
+                for (int index = 0; index < 4; index++) {
+                    device.edit().putInt(AppFontSettings.KEY, index).commit();
+                    Context base = configurationContext(size[0], size[1], 1f);
+                    Context wrapped = AppFontSettings.wrap(base);
+                    Configuration before = base.getResources().getConfiguration(), after = wrapped.getResources().getConfiguration();
+                    assertEquals(AppFontSettings.scaleFor(index), after.fontScale, .001f);
+                    assertEquals("字体不能改变屏幕宽度限定符", before.screenWidthDp, after.screenWidthDp);
+                    assertEquals("字体不能改变屏幕高度限定符", before.screenHeightDp, after.screenHeightDp);
+                    assertEquals("字体不能改变最小宽度限定符", before.smallestScreenWidthDp, after.smallestScreenWidthDp);
+                    assertEquals("字体不能改变横竖屏限定符", before.orientation, after.orientation);
+                    assertEquals("字体不能改变系统密度", before.densityDpi, after.densityDpi);
+                    assertEquals("字体不能改写原Context资源", 1f, before.fontScale, .001f);
+                    assertEquals("字体不能改变实际显示密度", base.getResources().getDisplayMetrics().density,
+                            wrapped.getResources().getDisplayMetrics().density, .001f);
+                }
             for (int invalid : new int[]{-1, 4, Integer.MAX_VALUE}) {
                 device.edit().putInt(AppFontSettings.KEY, invalid).commit();
                 assertEquals(1, AppFontSettings.readIndex(app));
@@ -429,7 +467,8 @@ public final class FontSizeUiTest {
     }
 
 
-    @Test public void realOrientationChangesUpdateScreenQualifiersWhileKeepingSavedFontSize() throws Exception {
+    @Test
+    public void realOrientationChangesUpdateScreenQualifiersWhileKeepingSavedFontSize() throws Exception {
         assertTrue(device.edit().putInt(AppFontSettings.KEY, 3).commit());
         launchHome();
         int originalOrientation = onMain(() -> current(HomeActivity.class).getRequestedOrientation());
@@ -437,7 +476,10 @@ public final class FontSizeUiTest {
             for (int requested : new int[]{ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}) {
                 int expected = requested == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                         ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE;
-                onMain(() -> { current(HomeActivity.class).setRequestedOrientation(requested); return null; });
+                onMain(() -> {
+                    current(HomeActivity.class).setRequestedOrientation(requested);
+                    return null;
+                });
                 AtomicReference<String> previousState = new AtomicReference<>();
                 // 必须等待系统真的旋转窗口；桌面模式忽略方向请求时不能伪造方向验收。
                 await(() -> onMain(() -> {
@@ -480,12 +522,16 @@ public final class FontSizeUiTest {
             }
             assertEquals("真实方向变化不能重复初始化共享 SDK", 1, initCount.get());
         } finally {
-            onMain(() -> { HomeActivity home = current(HomeActivity.class);
-                if (home != null) home.setRequestedOrientation(originalOrientation); return null; });
+            onMain(() -> {
+                HomeActivity home = current(HomeActivity.class);
+                if (home != null) home.setRequestedOrientation(originalOrientation);
+                return null;
+            });
         }
     }
 
-    @Test public void majorPageAndDataRowXmlFitsFourFontSizesAcrossPhoneAndTabletWindows() throws Exception {
+    @Test
+    public void majorPageAndDataRowXmlFitsFourFontSizesAcrossPhoneAndTabletWindows() throws Exception {
         String pageScope = InstrumentationRegistry.getArguments().getString("fontPages", "");
         boolean filtersOnly = "filters".equals(pageScope);
         boolean listsOnly = "lists".equals(pageScope);
@@ -500,104 +546,115 @@ public final class FontSizeUiTest {
                 : new int[]{R.layout.item_staff_row, R.layout.item_department_design, R.layout.item_record_row,
                 R.layout.item_face_employee, R.layout.item_record_design_field, R.layout.item_license_design};
         onMain(() -> {
-            for (int[] size : WINDOWS) for (int index = 0; index < 4; index++) {
-                Context context = configurationContext(size[0], size[1], AppFontSettings.scaleFor(index));
-                for (int resource : pages) {
-                    measurementCase = caseLabel(context, resource, index, size);
-                    try {
-                        ViewGroup root = (ViewGroup) LayoutInflater.from(context).inflate(resource, null);
-                        preparePage(root, resource, context);
-                        measure(root, size[0], size[1]);
-                        checkTree(root, root, false);
-                        if ((index == 1 || index == 3) && (resource == R.layout.activity_staff
-                                || resource == R.layout.activity_records
-                                || resource == R.layout.view_departments_design
-                                || resource == R.layout.activity_record_design)) captureXml(root);
-                        if (resource == R.layout.activity_staff_edit) {
-                            for (String group : new String[]{"staff_edit_group_name", "staff_edit_group_number",
-                                    "staff_edit_group_department", "staff_edit_group_health"}) {
-                                for (String other : new String[]{"staff_edit_group_name", "staff_edit_group_number",
-                                        "staff_edit_group_department", "staff_edit_group_health"})
-                                    required(root, other).setVisibility(group.equals(other) ? View.VISIBLE : View.GONE);
-                                measure(root, size[0], size[1]);
-                                checkTree(root, root, false);
+            for (int[] size : WINDOWS)
+                for (int index = 0; index < 4; index++) {
+                    Context context = configurationContext(size[0], size[1], AppFontSettings.scaleFor(index));
+                    for (int resource : pages) {
+                        measurementCase = caseLabel(context, resource, index, size);
+                        try {
+                            ViewGroup root = (ViewGroup) LayoutInflater.from(context).inflate(resource, null);
+                            preparePage(root, resource, context);
+                            measure(root, size[0], size[1]);
+                            checkTree(root, root, false);
+                            if ((index == 1 || index == 3) && (resource == R.layout.activity_staff
+                                    || resource == R.layout.activity_records
+                                    || resource == R.layout.view_departments_design
+                                    || resource == R.layout.activity_record_design))
+                                captureXml(root);
+                            if (resource == R.layout.activity_staff_edit) {
+                                for (String group : new String[]{"staff_edit_group_name", "staff_edit_group_number",
+                                        "staff_edit_group_department", "staff_edit_group_health"}) {
+                                    for (String other : new String[]{"staff_edit_group_name", "staff_edit_group_number",
+                                            "staff_edit_group_department", "staff_edit_group_health"})
+                                        required(root, other).setVisibility(group.equals(other) ? View.VISIBLE : View.GONE);
+                                    measure(root, size[0], size[1]);
+                                    checkTree(root, root, false);
+                                }
                             }
+                        } catch (Throwable failure) {
+                            issue(null, "布局构建失败：" + failure);
                         }
-                    } catch (Throwable failure) { issue(null, "布局构建失败：" + failure); }
+                    }
+                    for (int resource : rows) {
+                        measurementCase = caseLabel(context, resource, index, size);
+                        try {
+                            ViewGroup row = (ViewGroup) LayoutInflater.from(context).inflate(resource, null);
+                            prepareValues(row);
+                            int width = Math.round((size[0] - 40) * context.getResources().getDisplayMetrics().density);
+                            // 窄屏数据表允许横向查看，独立行应使用真实表格的最小宽度，而不是页面视口宽度。
+                            int tableResource = resource == R.layout.item_staff_row ? R.layout.activity_staff
+                                    : resource == R.layout.item_record_row ? R.layout.activity_records
+                                    : resource == R.layout.item_department_design ? R.layout.view_departments_design : 0;
+                            if (tableResource != 0) {
+                                ViewGroup page = (ViewGroup) LayoutInflater.from(context).inflate(tableResource, null);
+                                String tableId = resource == R.layout.item_staff_row ? "staff_table_content"
+                                        : resource == R.layout.item_record_row ? "records_table_content" : "department_table_content";
+                                width = Math.max(width, required(page, tableId).getMinimumWidth());
+                            }
+                            row.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                            row.layout(0, 0, row.getMeasuredWidth(), row.getMeasuredHeight());
+                            checkTree(row, row, false);
+                            if (resource == R.layout.item_record_row) {
+                                TextView date = row.findViewById(R.id.record_row_date);
+                                Layout dateLayout = date.getLayout();
+                                int dateWidth = date.getWidth() - date.getCompoundPaddingLeft() - date.getCompoundPaddingRight();
+                                if (dateLayout == null || dateLayout.getLineCount() != 1
+                                        || dateLayout.getEllipsisCount(0) != 0 || dateLayout.getLineWidth(0) > dateWidth + 1)
+                                    issue(date, "完整日期和时间必须在同一行显示，不省略或裁切");
+                            }
+                            if ((index == 1 || index == 3) && (resource == R.layout.item_staff_row
+                                    || resource == R.layout.item_record_row)) captureXml(row);
+                        } catch (Throwable failure) {
+                            issue(null, "数据行构建失败：" + failure);
+                        }
+                    }
                 }
-                for (int resource : rows) {
-                    measurementCase = caseLabel(context, resource, index, size);
-                    try {
-                        ViewGroup row = (ViewGroup) LayoutInflater.from(context).inflate(resource, null);
-                        prepareValues(row);
-                        int width = Math.round((size[0] - 40) * context.getResources().getDisplayMetrics().density);
-                        // 窄屏数据表允许横向查看，独立行应使用真实表格的最小宽度，而不是页面视口宽度。
-                        int tableResource = resource == R.layout.item_staff_row ? R.layout.activity_staff
-                                : resource == R.layout.item_record_row ? R.layout.activity_records
-                                : resource == R.layout.item_department_design ? R.layout.view_departments_design : 0;
-                        if (tableResource != 0) {
-                            ViewGroup page = (ViewGroup) LayoutInflater.from(context).inflate(tableResource, null);
-                            String tableId = resource == R.layout.item_staff_row ? "staff_table_content"
-                                    : resource == R.layout.item_record_row ? "records_table_content" : "department_table_content";
-                            width = Math.max(width, required(page, tableId).getMinimumWidth());
-                        }
-                        row.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                        row.layout(0, 0, row.getMeasuredWidth(), row.getMeasuredHeight());
-                        checkTree(row, row, false);
-                        if (resource == R.layout.item_record_row) {
-                            TextView date = row.findViewById(R.id.record_row_date);
-                            Layout dateLayout = date.getLayout();
-                            int dateWidth = date.getWidth() - date.getCompoundPaddingLeft() - date.getCompoundPaddingRight();
-                            if (dateLayout == null || dateLayout.getLineCount() != 1
-                                    || dateLayout.getEllipsisCount(0) != 0 || dateLayout.getLineWidth(0) > dateWidth + 1)
-                                issue(date, "完整日期和时间必须在同一行显示，不省略或裁切");
-                        }
-                        if ((index == 1 || index == 3) && (resource == R.layout.item_staff_row
-                                || resource == R.layout.item_record_row)) captureXml(row);
-                    } catch (Throwable failure) { issue(null, "数据行构建失败：" + failure); }
-                }
-            }
             return null;
         });
         assertGeometryPasses();
     }
 
-    @Test public void currentDesignPagesKeepBusinessControlsReadableAtNewFontBaseline() throws Exception {
+    @Test
+    public void currentDesignPagesKeepBusinessControlsReadableAtNewFontBaseline() throws Exception {
         boolean resultOnly = "result".equals(InstrumentationRegistry.getArguments().getString("fontPages", ""));
         int[] pages = resultOnly ? new int[]{R.layout.activity_result_design}
                 : new int[]{R.layout.activity_home_design, R.layout.activity_check_design_ready,
                 R.layout.activity_check_design_active, R.layout.activity_result_design, R.layout.activity_face_design};
         onMain(() -> {
-            for (int[] size : WINDOWS) for (int index = 0; index < 4; index++) {
-                Context context = configurationContext(size[0], size[1], AppFontSettings.scaleFor(index));
-                for (int resource : pages) {
-                    measurementCase = caseLabel(context, resource, index, size);
-                    try {
-                        ViewGroup root = (ViewGroup) LayoutInflater.from(context).inflate(resource, null);
-                        prepareCurrentDesignPage(root, resource, context);
-                        measure(root, size[0], size[1]);
-                        checkTree(root, root, false);
-                        captureXml(root);
-                        if (resource == R.layout.activity_face_design) {
-                            // 选择浮层由真实页面按需展开；分别测采集与选人，隐藏区不参与断言。
-                            required(root, "enrollment_selection_overlay").setVisibility(View.VISIBLE);
-                            required(root, "enrollment_selection").setVisibility(View.VISIBLE);
-                            ((TextView) required(root, "enrollment_choose_staff")).setText("关闭选择");
-                            measurementCase += "-selection";
+            for (int[] size : WINDOWS)
+                for (int index = 0; index < 4; index++) {
+                    Context context = configurationContext(size[0], size[1], AppFontSettings.scaleFor(index));
+                    for (int resource : pages) {
+                        measurementCase = caseLabel(context, resource, index, size);
+                        try {
+                            ViewGroup root = (ViewGroup) LayoutInflater.from(context).inflate(resource, null);
+                            prepareCurrentDesignPage(root, resource, context);
                             measure(root, size[0], size[1]);
                             checkTree(root, root, false);
                             captureXml(root);
+                            if (resource == R.layout.activity_face_design) {
+                                // 选择浮层由真实页面按需展开；分别测采集与选人，隐藏区不参与断言。
+                                required(root, "enrollment_selection_overlay").setVisibility(View.VISIBLE);
+                                required(root, "enrollment_selection").setVisibility(View.VISIBLE);
+                                ((TextView) required(root, "enrollment_choose_staff")).setText("关闭选择");
+                                measurementCase += "-selection";
+                                measure(root, size[0], size[1]);
+                                checkTree(root, root, false);
+                                captureXml(root);
+                            }
+                        } catch (Throwable failure) {
+                            issue(null, "当前业务布局构建失败：" + failure);
                         }
-                    } catch (Throwable failure) { issue(null, "当前业务布局构建失败：" + failure); }
+                    }
                 }
-            }
             return null;
         });
         assertGeometryPasses();
     }
 
-    @Test public void deviceFormsKeepActionsReadableAtEveryFontSizeAndWindow() throws Exception {
+    @Test
+    public void deviceFormsKeepActionsReadableAtEveryFontSizeAndWindow() throws Exception {
         boolean systemOnly = "system".equals(InstrumentationRegistry.getArguments().getString("fontForms", ""));
         int[] regular = systemOnly ? new int[]{R.layout.view_system_design} : new int[]{R.layout.view_sdk_design, R.layout.settings_cloud,
                 R.layout.view_license_design, R.layout.view_camera_design, R.layout.view_rules_design,
@@ -608,63 +665,68 @@ public final class FontSizeUiTest {
         List<int[]> windows = new ArrayList<>(Arrays.asList(WINDOWS));
         if (systemOnly) windows.add(new int[]{1920, 1080});
         onMain(() -> {
-            for (int[] size : windows) for (int index = 0; index < 4; index++) {
-                Context context = configurationContext(size[0], size[1], AppFontSettings.scaleFor(index));
-                boolean useCompact = context.getResources().getBoolean(R.bool.mc_compact);
-                for (int resource : useCompact ? compact : regular) {
-                    measurementCase = caseLabel(context, resource, index, size);
-                    try {
-                        LayoutInflater inflater = LayoutInflater.from(context);
-                        ViewGroup root = (ViewGroup) inflater.inflate(useCompact
-                                ? R.layout.activity_devices_compact : R.layout.activity_devices, null);
-                        preparePage(root, resource, context);
-                        FrameLayout body = root.findViewById(R.id.settings_body);
-                        if (resource != R.layout.settings_cloud && resource != R.layout.settings_cloud_compact) {
-                            int inset = context.getResources().getDimensionPixelSize(R.dimen.dp_12);
-                            root.findViewById(R.id.page_content).setPadding(inset, inset, inset, inset);
-                            body.setPadding(0, 0, 0, 0);
-                            body.setBackground(null);
-                        }
-                        body.addView(inflater.inflate(resource, body, false));
-                        prepareValues(root);
-                        prepareSpinners(root, context);
-                        TextView fontLabel = root.findViewById(R.id.settings_font_label);
-                        TextView fontValue = root.findViewById(R.id.settings_font_value);
-                        if (fontLabel != null) fontLabel.setText(context.getResources()
-                                .getStringArray(R.array.app_font_size_labels)[index]);
-                        if (fontValue != null) fontValue.setText(new String[]{"85%  ›", "100%  ›", "115%  ›", "130%  ›"}[index]);
-                        measure(root, size[0], size[1]);
-                        checkTree(root, root, false);
-                        if (resource == R.layout.view_sdk_design) {
-                            required(root, "settings_sdk_local_panel").setVisibility(View.GONE);
-                            required(root, "settings_sdk_lan_panel").setVisibility(View.VISIBLE);
+            for (int[] size : windows)
+                for (int index = 0; index < 4; index++) {
+                    Context context = configurationContext(size[0], size[1], AppFontSettings.scaleFor(index));
+                    boolean useCompact = context.getResources().getBoolean(R.bool.mc_compact);
+                    for (int resource : useCompact ? compact : regular) {
+                        measurementCase = caseLabel(context, resource, index, size);
+                        try {
+                            LayoutInflater inflater = LayoutInflater.from(context);
+                            ViewGroup root = (ViewGroup) inflater.inflate(useCompact
+                                    ? R.layout.activity_devices_compact : R.layout.activity_devices, null);
+                            preparePage(root, resource, context);
+                            FrameLayout body = root.findViewById(R.id.settings_body);
+                            if (resource != R.layout.settings_cloud && resource != R.layout.settings_cloud_compact) {
+                                int inset = context.getResources().getDimensionPixelSize(R.dimen.dp_12);
+                                root.findViewById(R.id.page_content).setPadding(inset, inset, inset, inset);
+                                body.setPadding(0, 0, 0, 0);
+                                body.setBackground(null);
+                            }
+                            body.addView(inflater.inflate(resource, body, false));
+                            prepareValues(root);
+                            prepareSpinners(root, context);
+                            TextView fontLabel = root.findViewById(R.id.settings_font_label);
+                            TextView fontValue = root.findViewById(R.id.settings_font_value);
+                            if (fontLabel != null) fontLabel.setText(context.getResources()
+                                    .getStringArray(R.array.app_font_size_labels)[index]);
+                            if (fontValue != null)
+                                fontValue.setText(new String[]{"85%  ›", "100%  ›", "115%  ›", "130%  ›"}[index]);
                             measure(root, size[0], size[1]);
                             checkTree(root, root, false);
+                            if (resource == R.layout.view_sdk_design) {
+                                required(root, "settings_sdk_local_panel").setVisibility(View.GONE);
+                                required(root, "settings_sdk_lan_panel").setVisibility(View.VISIBLE);
+                                measure(root, size[0], size[1]);
+                                checkTree(root, root, false);
+                            }
+                            if (resource == R.layout.view_system_design) {
+                                assertFontEntryOnly(root);
+                                View capabilities = required(root, "settings_capabilities");
+                                assertEquals("系统设置暂时隐藏 SDK 能力入口", View.GONE, capabilities.getVisibility());
+                                assertFalse("隐藏的 SDK 能力入口不应显示", capabilities.isShown());
+                            }
+                            if (index == 1 || index == 3) captureXml(root);
+                        } catch (Throwable failure) {
+                            issue(null, "设置表单构建失败：" + failure);
                         }
-                        if (resource == R.layout.view_system_design) {
-                            assertFontEntryOnly(root);
-                            View capabilities = required(root, "settings_capabilities");
-                            assertEquals("系统设置暂时隐藏 SDK 能力入口", View.GONE, capabilities.getVisibility());
-                            assertFalse("隐藏的 SDK 能力入口不应显示", capabilities.isShown());
-                        }
-                        if (index == 1 || index == 3) captureXml(root);
-                    } catch (Throwable failure) { issue(null, "设置表单构建失败：" + failure); }
+                    }
+                    measurementCase = caseLabel(context, R.layout.activity_place_settings, index, size);
+                    try {
+                        ViewGroup place = (ViewGroup) LayoutInflater.from(context)
+                                .inflate(R.layout.activity_place_settings, null);
+                        preparePage(place, R.layout.activity_place_settings, context);
+                        measure(place, size[0], size[1]);
+                        checkTree(place, place, false);
+                        if (index == 1 || index == 3) captureXml(place);
+                    } catch (Throwable failure) {
+                        issue(null, "场所页面构建失败：" + failure);
+                    }
                 }
-                measurementCase = caseLabel(context, R.layout.activity_place_settings, index, size);
-                try {
-                    ViewGroup place = (ViewGroup) LayoutInflater.from(context)
-                            .inflate(R.layout.activity_place_settings, null);
-                    preparePage(place, R.layout.activity_place_settings, context);
-                    measure(place, size[0], size[1]);
-                    checkTree(place, place, false);
-                    if (index == 1 || index == 3) captureXml(place);
-                } catch (Throwable failure) { issue(null, "场所页面构建失败：" + failure); }
-            }
             return null;
         });
         assertGeometryPasses();
     }
-
 
 
     private void launchHome() {
@@ -696,7 +758,9 @@ public final class FontSizeUiTest {
         prepareSpinners(root, context);
     }
 
-    /** 使用当前页面实际页头；现场晨检独立页头不具备返回与关于设备控件。 */
+    /**
+     * 使用当前页面实际页头；现场晨检独立页头不具备返回与关于设备控件。
+     */
     private void prepareHeader(ViewGroup root, int layout, Context context) {
         boolean home = layout == R.layout.activity_home_design;
         boolean phone = context.getResources().getBoolean(R.bool.mc_phone);
@@ -799,7 +863,8 @@ public final class FontSizeUiTest {
         if (layout == R.layout.activity_staff_edit) return "编辑员工";
         if (layout == R.layout.view_departments_design) return "部门管理";
         if (layout == R.layout.activity_face_design) return "人脸录入";
-        if (layout == R.layout.activity_check_design_active || layout == R.layout.activity_check_design_ready) return "晨检工作台";
+        if (layout == R.layout.activity_check_design_active || layout == R.layout.activity_check_design_ready)
+            return "晨检工作台";
         if (layout == R.layout.activity_result_design) return "检查结果";
         if (layout == R.layout.activity_records) return "晨检记录";
         if (layout == R.layout.activity_record_design) return "记录详情";
@@ -862,9 +927,11 @@ public final class FontSizeUiTest {
                     Arrays.asList(context.getResources().getStringArray(R.array.list_filter_staff_statuses)), "启用状态"));
             else if (name.equals("records_filter")) spinner.setAdapter(Ui.filterAdapter(context,
                     Arrays.asList(context.getResources().getStringArray(R.array.list_filter_record_results)), "结果"));
-            else if (name.contains("department_filter")) spinner.setAdapter(Ui.filterAdapter(context,
-                    Arrays.asList("全部部门", LONG_DEPARTMENT), "部门"));
-            else spinner.setAdapter(Ui.spinnerAdapter(context, Arrays.asList("默认设备", "备用设备")));
+            else if (name.contains("department_filter"))
+                spinner.setAdapter(Ui.filterAdapter(context,
+                        Arrays.asList("全部部门", LONG_DEPARTMENT), "部门"));
+            else
+                spinner.setAdapter(Ui.spinnerAdapter(context, Arrays.asList("默认设备", "备用设备")));
         }
         if (view instanceof ViewGroup) for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
             prepareSpinners(((ViewGroup) view).getChildAt(i), context);
@@ -892,14 +959,16 @@ public final class FontSizeUiTest {
             checkDataViewport((RecyclerView) view);
             checkResultPhotoViewport((RecyclerView) view);
         }
-        if (view instanceof HorizontalScrollView) checkHorizontalDataViewport((HorizontalScrollView) view);
+        if (view instanceof HorizontalScrollView)
+            checkHorizontalDataViewport((HorizontalScrollView) view);
         if (view instanceof AbsListView || view instanceof RecyclerView
                 || view instanceof ScrollView || view instanceof HorizontalScrollView)
             checkBounds(root, view, horizontalData, verticalData);
         if (view instanceof TextView && ((TextView) view).length() > 0) {
             checkText((TextView) view);
             if (resourceName(view).equals("result_findings")) checkFindingViewport((TextView) view);
-            if (!horizontalData || !verticalData) checkBounds(root, view, horizontalData, verticalData);
+            if (!horizontalData || !verticalData)
+                checkBounds(root, view, horizontalData, verticalData);
         } else if (view.isClickable() && (!horizontalData || !verticalData))
             checkBounds(root, view, horizontalData, verticalData);
         boolean listData = view instanceof AbsListView || view instanceof ScrollView;
@@ -914,7 +983,10 @@ public final class FontSizeUiTest {
     }
 
     private void checkHorizontalDataViewport(HorizontalScrollView viewport) {
-        if (viewport.getChildCount() != 1) { issue(viewport, "横向数据视口必须只有一个表格内容容器"); return; }
+        if (viewport.getChildCount() != 1) {
+            issue(viewport, "横向数据视口必须只有一个表格内容容器");
+            return;
+        }
         View table = viewport.getChildAt(0);
         int availableHeight = viewport.getHeight() - viewport.getPaddingTop() - viewport.getPaddingBottom();
         if (table.getHeight() > availableHeight + 1)
@@ -928,7 +1000,9 @@ public final class FontSizeUiTest {
                 viewport.scrollTo(expected, 0);
                 if (viewport.getScrollX() != expected)
                     issue(viewport, "横向表格最后一列无法滚入视口：" + viewport.getScrollX() + " != " + expected);
-            } finally { viewport.scrollTo(oldX, oldY); }
+            } finally {
+                viewport.scrollTo(oldX, oldY);
+            }
         }
     }
 
@@ -936,12 +1010,17 @@ public final class FontSizeUiTest {
         Layout layout = findings.getLayout();
         if (layout == null || layout.getLineCount() == 0) return;
         ViewParent parent = findings.getParent();
-        while (parent instanceof View && !(parent instanceof ScrollView)) parent = parent.getParent();
-        if (!(parent instanceof ScrollView)) { issue(findings, "异常明细缺少独立数据视口"); return; }
+        while (parent instanceof View && !(parent instanceof ScrollView))
+            parent = parent.getParent();
+        if (!(parent instanceof ScrollView)) {
+            issue(findings, "异常明细缺少独立数据视口");
+            return;
+        }
         ScrollView viewport = (ScrollView) parent;
         int available = viewport.getHeight() - viewport.getPaddingTop() - viewport.getPaddingBottom();
         int lineHeight = layout.getLineBottom(0) - layout.getLineTop(0);
-        if (available < lineHeight) issue(findings, "异常明细视口不能完整显示一行：" + available + " < " + lineHeight);
+        if (available < lineHeight)
+            issue(findings, "异常明细视口不能完整显示一行：" + available + " < " + lineHeight);
     }
 
     private void checkResultPhotoViewport(RecyclerView viewport) {
@@ -988,16 +1067,44 @@ public final class FontSizeUiTest {
         String name = resourceName(viewport), label;
         int rowLayout;
         switch (name) {
-            case "result_evidence_grid": rowLayout = R.layout.item_result_photo; label = "result_photo_label"; break;
-            case "staff_list": rowLayout = R.layout.item_staff_row; label = "staff_row_name"; break;
-            case "department_list": rowLayout = R.layout.item_department_design; label = "business_row_name"; break;
-            case "records_list": rowLayout = R.layout.item_record_row; label = "record_row_name"; break;
-            case "enrollment_staff_list": rowLayout = R.layout.item_face_employee; label = "business_row_name"; break;
-            case "enrollment_faces": rowLayout = R.layout.item_face_sample; label = "face_sample_uid"; break;
-            case "record_detail_fields": rowLayout = R.layout.item_record_design_field; label = "record_detail_field_label"; break;
-            case "sdk_detail_fields": rowLayout = R.layout.item_record_design_field; label = "record_detail_field_label"; break;
-            case "settings_license_fields": rowLayout = R.layout.item_license_design; label = "record_detail_field_label"; break;
-            default: return;
+            case "result_evidence_grid":
+                rowLayout = R.layout.item_result_photo;
+                label = "result_photo_label";
+                break;
+            case "staff_list":
+                rowLayout = R.layout.item_staff_row;
+                label = "staff_row_name";
+                break;
+            case "department_list":
+                rowLayout = R.layout.item_department_design;
+                label = "business_row_name";
+                break;
+            case "records_list":
+                rowLayout = R.layout.item_record_row;
+                label = "record_row_name";
+                break;
+            case "enrollment_staff_list":
+                rowLayout = R.layout.item_face_employee;
+                label = "business_row_name";
+                break;
+            case "enrollment_faces":
+                rowLayout = R.layout.item_face_sample;
+                label = "face_sample_uid";
+                break;
+            case "record_detail_fields":
+                rowLayout = R.layout.item_record_design_field;
+                label = "record_detail_field_label";
+                break;
+            case "sdk_detail_fields":
+                rowLayout = R.layout.item_record_design_field;
+                label = "record_detail_field_label";
+                break;
+            case "settings_license_fields":
+                rowLayout = R.layout.item_license_design;
+                label = "record_detail_field_label";
+                break;
+            default:
+                return;
         }
         // 只要求至少能看清一条关键信息；数据列表和照片网格仍可按正常业务滚动。
         if (viewport instanceof RecyclerView && ((RecyclerView) viewport).getLayoutManager() == null) {
@@ -1019,10 +1126,14 @@ public final class FontSizeUiTest {
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         row.layout(0, 0, row.getMeasuredWidth(), row.getMeasuredHeight());
         Layout layout = key.getLayout();
-        if (layout == null || layout.getLineCount() == 0) { issue(viewport, "无法测得列表关键数据行高"); return; }
+        if (layout == null || layout.getLineCount() == 0) {
+            issue(viewport, "无法测得列表关键数据行高");
+            return;
+        }
         int lineHeight = layout.getLineBottom(0) - layout.getLineTop(0);
         int available = viewport.getHeight() - viewport.getPaddingTop() - viewport.getPaddingBottom();
-        if (available < lineHeight) issue(viewport, "数据视口不能完整显示一行关键信息：" + available + " < " + lineHeight);
+        if (available < lineHeight)
+            issue(viewport, "数据视口不能完整显示一行关键信息：" + available + " < " + lineHeight);
     }
 
     private void checkBounds(View root, View view) {
@@ -1030,8 +1141,10 @@ public final class FontSizeUiTest {
     }
 
     private void checkBounds(View root, View view, boolean horizontalData, boolean verticalData) {
-        Rect bounds = new Rect(); view.getDrawingRect(bounds);
-        if (view != root && root instanceof ViewGroup) ((ViewGroup) root).offsetDescendantRectToMyCoords(view, bounds);
+        Rect bounds = new Rect();
+        view.getDrawingRect(bounds);
+        if (view != root && root instanceof ViewGroup)
+            ((ViewGroup) root).offsetDescendantRectToMyCoords(view, bounds);
         if (bounds.width() <= 0 || bounds.height() <= 0) issue(view, "没有可操作尺寸 " + bounds);
         else if ((!horizontalData && (bounds.left < -1 || bounds.right > root.getWidth() + 1))
                 || (!verticalData && (bounds.top < -1 || bounds.bottom > root.getHeight() + 1)))
@@ -1040,17 +1153,22 @@ public final class FontSizeUiTest {
 
     private void checkText(TextView view) {
         Layout layout = view.getLayout();
-        if (layout == null) { issue(view, "没有 Android 文字排版结果"); return; }
+        if (layout == null) {
+            issue(view, "没有 Android 文字排版结果");
+            return;
+        }
         int availableHeight = view.getHeight() - view.getCompoundPaddingTop() - view.getCompoundPaddingBottom();
         if (!(view instanceof EditText) && layout.getHeight() > availableHeight + 1)
             issue(view, "文字纵向截断：" + layout.getHeight() + " > " + availableHeight);
         // 长姓名、工号、部门和证书值允许按原控件规则省略；操作名称必须完整。
         if (isOperationLabel(view)) {
-            for (int line = 0; line < layout.getLineCount(); line++) if (layout.getEllipsisCount(line) > 0)
-                issue(view, "操作文字被省略：" + view.getText());
+            for (int line = 0; line < layout.getLineCount(); line++)
+                if (layout.getEllipsisCount(line) > 0)
+                    issue(view, "操作文字被省略：" + view.getText());
             int availableWidth = view.getWidth() - view.getCompoundPaddingLeft() - view.getCompoundPaddingRight();
-            for (int line = 0; line < layout.getLineCount(); line++) if (layout.getLineWidth(line) > availableWidth + 1)
-                issue(view, "操作文字横向截断：" + view.getText());
+            for (int line = 0; line < layout.getLineCount(); line++)
+                if (layout.getLineWidth(line) > availableWidth + 1)
+                    issue(view, "操作文字横向截断：" + view.getText());
         }
     }
 
@@ -1078,8 +1196,9 @@ public final class FontSizeUiTest {
     }
 
     private void assertGeometryPasses() {
-        if (!geometryFailures.isEmpty()) fail("字号尺寸矩阵发现 " + geometryFailures.size() + " 项问题：\n"
-                + android.text.TextUtils.join("\n", geometryFailures));
+        if (!geometryFailures.isEmpty())
+            fail("字号尺寸矩阵发现 " + geometryFailures.size() + " 项问题：\n"
+                    + android.text.TextUtils.join("\n", geometryFailures));
     }
 
     private String caseLabel(Context context, int resource, int index, int[] size) {
@@ -1092,7 +1211,7 @@ public final class FontSizeUiTest {
         // Android 14 起大字号使用非线性缩放，必须用对应的逆转换还原 sp。
         float sizeSp = android.os.Build.VERSION.SDK_INT >= 34
                 ? TypedValue.deriveDimension(TypedValue.COMPLEX_UNIT_SP, view.getTextSize(),
-                        view.getResources().getDisplayMetrics())
+                view.getResources().getDisplayMetrics())
                 : view.getTextSize() / view.getResources().getDisplayMetrics().scaledDensity;
         assertTrue("弹窗的局部主题应保持可读字号，实际 " + sizeSp + "sp",
                 sizeSp >= (title ? 17f : 15f) && sizeSp <= (title ? 20f : 18f));
@@ -1107,7 +1226,9 @@ public final class FontSizeUiTest {
             try (FileOutputStream output = new FileOutputStream(new File(directory, measurementCase + ".png"))) {
                 assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output));
             }
-        } finally { bitmap.recycle(); }
+        } finally {
+            bitmap.recycle();
+        }
     }
 
     private void captureScreen(String name) throws Exception {
@@ -1117,7 +1238,9 @@ public final class FontSizeUiTest {
         assertTrue(directory.isDirectory() || directory.mkdirs());
         try (FileOutputStream output = new FileOutputStream(new File(directory, name + ".png"))) {
             assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output));
-        } finally { bitmap.recycle(); }
+        } finally {
+            bitmap.recycle();
+        }
     }
 
 
@@ -1142,7 +1265,9 @@ public final class FontSizeUiTest {
         }), "字号预览应完成真实布局：" + phase);
     }
 
-    /** 诊断只读取实际页面和独立资源配置，不修改预览文字或产品状态。 */
+    /**
+     * 诊断只读取实际页面和独立资源配置，不修改预览文字或产品状态。
+     */
     private String fontPreviewState(SystemSettingsActivity activity) {
         TextView preview = fontPreview(activity);
         Configuration applied = activity.getResources().getConfiguration();
@@ -1265,8 +1390,9 @@ public final class FontSizeUiTest {
 
     private static String resourceName(View view) {
         if (view.getId() == View.NO_ID) return view.getClass().getSimpleName();
-        try { return view.getResources().getResourceEntryName(view.getId()); }
-        catch (Resources.NotFoundException generatedId) {
+        try {
+            return view.getResources().getResourceEntryName(view.getId());
+        } catch (Resources.NotFoundException generatedId) {
             return view.getClass().getSimpleName() + "#" + Integer.toHexString(view.getId());
         }
     }
@@ -1277,10 +1403,14 @@ public final class FontSizeUiTest {
     }
 
     private static View required(View root, String name) {
-        View view = optional(root, name); assertNotNull("缺少字号控件：" + name, view); return view;
+        View view = optional(root, name);
+        assertNotNull("缺少字号控件：" + name, view);
+        return view;
     }
 
-    private static View required(Activity activity, String name) { return required(activity.getWindow().getDecorView(), name); }
+    private static View required(Activity activity, String name) {
+        return required(activity.getWindow().getDecorView(), name);
+    }
 
     private <T extends Activity> T current(Class<T> type) {
         for (Activity activity : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
@@ -1289,15 +1419,18 @@ public final class FontSizeUiTest {
     }
 
     private void finishPages() {
-        for (Stage stage : Stage.values()) for (Activity activity : new ArrayList<>(
-                ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-            if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+        for (Stage stage : Stage.values())
+            for (Activity activity : new ArrayList<>(
+                    ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private static void restore(SharedPreferences preferences, Map<String, Object> values) {
         SharedPreferences.Editor editor = preferences.edit().clear();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
-            Object value = entry.getValue(); String key = entry.getKey();
+            Object value = entry.getValue();
+            String key = entry.getKey();
             if (value instanceof String) editor.putString(key, (String) value);
             else if (value instanceof Boolean) editor.putBoolean(key, (Boolean) value);
             else if (value instanceof Integer) editor.putInt(key, (Integer) value);
@@ -1310,15 +1443,27 @@ public final class FontSizeUiTest {
     }
 
     private <T> T onMain(Callable<T> action) throws Exception {
-        AtomicReference<T> value = new AtomicReference<>(); AtomicReference<Throwable> failure = new AtomicReference<>();
-        instrumentation.runOnMainSync(() -> { try { value.set(action.call()); } catch (Throwable error) { failure.set(error); } });
-        if (failure.get() != null) throw new AssertionError(failure.get()); return value.get();
+        AtomicReference<T> value = new AtomicReference<>();
+        AtomicReference<Throwable> failure = new AtomicReference<>();
+        instrumentation.runOnMainSync(() -> {
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
+        });
+        if (failure.get() != null) throw new AssertionError(failure.get());
+        return value.get();
     }
 
     private void await(Callable<Boolean> condition, String message) {
         long deadline = SystemClock.uptimeMillis() + 10000;
         while (SystemClock.uptimeMillis() < deadline) {
-            try { if (condition.call()) return; } catch (Exception error) { throw new AssertionError(error); }
+            try {
+                if (condition.call()) return;
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
             SystemClock.sleep(40);
         }
         fail(message);

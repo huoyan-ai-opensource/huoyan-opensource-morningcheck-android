@@ -2,7 +2,9 @@ package cc.huoyan.opensource.morningcheck.hardware;
 
 import java.nio.charset.StandardCharsets;
 
-/** 海曼测温算法模式，与串口读取协议分别设置。 */
+/**
+ * 海曼测温算法模式，与串口读取协议分别设置。
+ */
 public enum TemperatureMeasurementMode {
     INSIDE("inside", "*inside"),
     OUTSIDE("outside", "*outside"),
@@ -20,7 +22,9 @@ public enum TemperatureMeasurementMode {
         return value;
     }
 
-    /** 未确认过的设备模式保持未知，不推定模块出厂或上次状态。 */
+    /**
+     * 未确认过的设备模式保持未知，不推定模块出厂或上次状态。
+     */
     public static TemperatureMeasurementMode fromValue(String value) {
         for (TemperatureMeasurementMode mode : values()) {
             if (mode.value.equals(value)) return mode;

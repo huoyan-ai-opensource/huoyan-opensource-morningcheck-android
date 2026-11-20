@@ -3,7 +3,9 @@ package cc.huoyan.morningcheck.app.aidl;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/** 授权可选模型，字段由 Core 原样返回。 */
+/**
+ * 授权可选模型，字段由 Core 原样返回。
+ */
 public final class LicenseModelParcel implements Parcelable {
     private final String modelCode;
     private final String modelName;

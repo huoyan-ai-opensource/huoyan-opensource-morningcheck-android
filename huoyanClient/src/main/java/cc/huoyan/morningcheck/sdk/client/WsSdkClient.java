@@ -49,7 +49,9 @@ final class WsSdkClient implements ClientTransport {
     private final ScheduledExecutorService io;
     private final Connector connector;
     private final Map<String, Pending> pending = new LinkedHashMap<>();
-    /** 宿主 APK 版本；首次、重连、自动重试与显式 init 使用同一来源。 */
+    /**
+     * 宿主 APK 版本；首次、重连、自动重试与显式 init 使用同一来源。
+     */
     private final String appVersion;
     private volatile boolean connected;
     private volatile boolean destroyed;

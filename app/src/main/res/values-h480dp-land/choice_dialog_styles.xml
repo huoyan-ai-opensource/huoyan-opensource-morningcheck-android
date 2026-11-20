@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ChoiceDialogPanel" parent="">
+        <item name="android:padding">@dimen/dp_9</item>
+    </style>
+
+    <style name="FontChoiceList" parent="">
+        <item name="android:layout_marginStart">@dimen/dp_9</item>
+        <item name="android:dividerHeight">@dimen/dp_3</item>
+    </style>
+
+    <style name="ChoiceContent" parent="">
+        <item name="android:layout_marginTop">@dimen/dp_5</item>
+    </style>
+
+    <style name="ChoiceList" parent="ChoiceContent">
+        <item name="android:dividerHeight">@dimen/dp_3</item>
+    </style>
+
+    <style name="ChoiceRow" parent="">
+        <item name="android:minHeight">@dimen/dp_26</item>
+    </style>
+
+    <style name="ChoiceClose" parent="ChoiceContent">
+        <item name="android:minHeight">@dimen/dp_26</item>
+    </style>
+
+    <style name="FontChoicePreview" parent="PenText">
+        <item name="android:minHeight">@dimen/dp_26</item>
+    </style>
+
+    <style name="FontChoiceCancel" parent="PenButton">
+        <item name="android:minHeight">@dimen/dp_26</item>
+    </style>
+
+    <style name="FontChoiceApply" parent="PenPrimary">
+        <item name="android:layout_marginStart">@dimen/dp_3</item>
+        <item name="android:minHeight">@dimen/dp_26</item>
+    </style>
+</resources>

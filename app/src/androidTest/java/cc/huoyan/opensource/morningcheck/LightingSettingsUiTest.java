@@ -60,7 +60,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 注入假灯和本机拒绝端点，验证页面所有权、离页关灯及短屏布局，不访问现场灯光。 */
+/**
+ * 注入假灯和本机拒绝端点，验证页面所有权、离页关灯及短屏布局，不访问现场灯光。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class LightingSettingsUiTest {
     private static final String TEST_PATH = "/dev/huoyan-light-ui-test";
@@ -80,7 +82,8 @@ public final class LightingSettingsUiTest {
     private ExecutorService worker;
     private volatile CountDownLatch openEntered, allowOpen;
 
-    @Before public void isolateEndpointsPreferencesAndLamp() throws Exception {
+    @Before
+    public void isolateEndpointsPreferencesAndLamp() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         binding = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
@@ -96,7 +99,8 @@ public final class LightingSettingsUiTest {
         app.io.submit(() -> null).get(10, TimeUnit.SECONDS);
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (request.getPath() == null || !request.getPath().startsWith("/sdk"))
                     businessRequests.incrementAndGet();
                 return new MockResponse().setResponseCode(503).setBody("灯光页面隔离回归");
@@ -119,7 +123,8 @@ public final class LightingSettingsUiTest {
             if (entered != null) {
                 entered.countDown();
                 try {
-                    if (!release.await(10, TimeUnit.SECONDS)) throw new IOException("假设备打开等待超时");
+                    if (!release.await(10, TimeUnit.SECONDS))
+                        throw new IOException("假设备打开等待超时");
                 } catch (InterruptedException error) {
                     Thread.currentThread().interrupt();
                     throw new IOException("假设备打开被打断", error);
@@ -137,7 +142,8 @@ public final class LightingSettingsUiTest {
         });
     }
 
-    @After public void closeFakeLampAndRestoreAllConfiguration() throws Exception {
+    @After
+    public void closeFakeLampAndRestoreAllConfiguration() throws Exception {
         try {
             if (allowOpen != null) allowOpen.countDown();
             if (scenario != null) scenario.close();
@@ -156,10 +162,14 @@ public final class LightingSettingsUiTest {
             assertNull("不能关闭后再次写入已释放的假灯设备", deviceFailure.get());
         } finally {
             try {
-                if (controllerInjected) onMain(() -> { setStaticField("instance", originalController); return null; });
+                if (controllerInjected) onMain(() -> {
+                    setStaticField("instance", originalController);
+                    return null;
+                });
                 if (worker != null) worker.shutdownNow();
                 if (app != null) app.io.submit(() -> null).get(10, TimeUnit.SECONDS);
-                if (preferences != null && originalPreferences != null) restore(preferences, originalPreferences);
+                if (preferences != null && originalPreferences != null)
+                    restore(preferences, originalPreferences);
                 if (binding != null && originalBinding != null)
                     assertEquals("灯光设置不能改变 SDK 门店归属", originalBinding, binding.getAll());
             } finally {
@@ -169,7 +179,8 @@ public final class LightingSettingsUiTest {
         assertEquals("灯光测试和配置不能访问业务云", 0, businessRequests.get());
     }
 
-    @Test public void homeEntryOpensIndependentPageOnlyExplicitTestsOpenLampAndReturnClosesIt() {
+    @Test
+    public void homeEntryOpensIndependentPageOnlyExplicitTestsOpenLampAndReturnClosesIt() {
         scenario = ActivityScenario.launch(new Intent(app, HomeActivity.class));
         await(() -> onMain(() -> {
             HomeActivity home = resumed(HomeActivity.class);
@@ -203,7 +214,8 @@ public final class LightingSettingsUiTest {
         drainCallbacks();
     }
 
-    @Test public void editingOrSavingDraftClosesLampAndOldSuccessCannotChangeNewState() {
+    @Test
+    public void editingOrSavingDraftClosesLampAndOldSuccessCannotChangeNewState() {
         launchPage();
         startAndAwaitOn();
         awaitWorker();
@@ -238,7 +250,8 @@ public final class LightingSettingsUiTest {
         });
     }
 
-    @Test public void redrawBackgroundAndRecreationCloseLampAndRejectPreviousCallbacks() {
+    @Test
+    public void redrawBackgroundAndRecreationCloseLampAndRejectPreviousCallbacks() {
         launchPage();
         startAndAwaitOn();
         int beforeRedrawOff = offWrites.get();
@@ -270,7 +283,8 @@ public final class LightingSettingsUiTest {
         assertIdle();
     }
 
-    @Test public void leavingWhilePortOpensCannotSendQueuedOnCommand() throws Exception {
+    @Test
+    public void leavingWhilePortOpensCannotSendQueuedOnCommand() throws Exception {
         launchPage();
         openEntered = new CountDownLatch(1);
         allowOpen = new CountDownLatch(1);
@@ -290,7 +304,8 @@ public final class LightingSettingsUiTest {
         assertIdle();
     }
 
-    @Test public void phoneAndTabletPortraitLandscapeKeepCoreControlsVisibleWithoutPageScrolling() {
+    @Test
+    public void phoneAndTabletPortraitLandscapeKeepCoreControlsVisibleWithoutPageScrolling() {
         onMain(() -> {
             for (float fontScale : new float[]{1, 1.3f}) {
                 assertLayout(360, 640, 320, fontScale);
@@ -302,7 +317,8 @@ public final class LightingSettingsUiTest {
         });
     }
 
-    @Test public void oldSavedStateCannotRestoreCommandsFromBeforeDefaultsReset() {
+    @Test
+    public void oldSavedStateCannotRestoreCommandsFromBeforeDefaultsReset() {
         launchPage();
         onMain(() -> {
             LightingSettingsActivity page = resumed(LightingSettingsActivity.class);
@@ -338,7 +354,8 @@ public final class LightingSettingsUiTest {
         assertTrue("恢复表单不能触碰灯光设备", devices.isEmpty());
     }
 
-    @Test public void formatPickerConvertsBothCommandsAndRetainsDraftAndSavedFormatAcrossRecreation() {
+    @Test
+    public void formatPickerConvertsBothCommandsAndRetainsDraftAndSavedFormatAcrossRecreation() {
         launchPage();
         assertCommands(R.string.lighting_format_character, "A00101A0", "A00100A0");
         onMain(() -> {
@@ -400,7 +417,8 @@ public final class LightingSettingsUiTest {
         assertTrue("切换、保存和恢复格式不能触碰灯光设备", devices.isEmpty());
     }
 
-    @Test public void failedFormatConversionRetainsBothDraftsAndOriginalSelection() {
+    @Test
+    public void failedFormatConversionRetainsBothDraftsAndOriginalSelection() {
         launchPage();
         chooseCommandFormat(1);
         onMain(() -> {
@@ -579,17 +597,27 @@ public final class LightingSettingsUiTest {
         final LightConfig config;
         final AtomicBoolean closed = new AtomicBoolean();
         volatile boolean on;
-        FakeDevice(LightConfig config) { this.config = config; }
-        @Override public void setOn(boolean value) throws IOException {
+
+        FakeDevice(LightConfig config) {
+            this.config = config;
+        }
+
+        @Override
+        public void setOn(boolean value) throws IOException {
             if (closed.get()) {
                 IOException failure = new IOException("设备已关闭");
                 deviceFailure.compareAndSet(null, failure);
                 throw failure;
             }
             on = value;
-            if (value) onWrites.incrementAndGet(); else offWrites.incrementAndGet();
+            if (value) onWrites.incrementAndGet();
+            else offWrites.incrementAndGet();
         }
-        @Override public void close() { closed.set(true); }
+
+        @Override
+        public void close() {
+            closed.set(true);
+        }
     }
 
     private void drainCallbacks() {
@@ -604,13 +632,16 @@ public final class LightingSettingsUiTest {
     private void awaitWorker() {
         try {
             if (worker != null) worker.submit(() -> null).get(10, TimeUnit.SECONDS);
-        } catch (Exception error) { throw new AssertionError("灯光后台队列应完成当前命令", error); }
+        } catch (Exception error) {
+            throw new AssertionError("灯光后台队列应完成当前命令", error);
+        }
     }
 
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private static <T extends Activity> T resumed(Class<T> type) {
@@ -623,10 +654,14 @@ public final class LightingSettingsUiTest {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(action.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
-        if (failure.get() != null) throw new AssertionError("灯光页面主线程验收失败", failure.get());
+        if (failure.get() != null)
+            throw new AssertionError("灯光页面主线程验收失败", failure.get());
         return value.get();
     }
 
@@ -635,7 +670,9 @@ public final class LightingSettingsUiTest {
             Field field = target.getClass().getDeclaredField(name);
             field.setAccessible(true);
             return field.get(target);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static Object staticField(String name) {
@@ -643,7 +680,9 @@ public final class LightingSettingsUiTest {
             Field field = LightController.class.getDeclaredField(name);
             field.setAccessible(true);
             return field.get(null);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static void setStaticField(String name, Object value) {
@@ -651,7 +690,9 @@ public final class LightingSettingsUiTest {
             Field field = LightController.class.getDeclaredField(name);
             field.setAccessible(true);
             field.set(null, value);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static Map<String, Object> snapshot(SharedPreferences preferences) {
@@ -671,7 +712,8 @@ public final class LightingSettingsUiTest {
             else if (value instanceof Integer) editor.putInt(entry.getKey(), (Integer) value);
             else if (value instanceof Long) editor.putLong(entry.getKey(), (Long) value);
             else if (value instanceof Float) editor.putFloat(entry.getKey(), (Float) value);
-            else if (value instanceof Set) editor.putStringSet(entry.getKey(), new HashSet<>((Set<String>) value));
+            else if (value instanceof Set)
+                editor.putStringSet(entry.getKey(), new HashSet<>((Set<String>) value));
             else throw new AssertionError("未知配置类型：" + entry.getKey());
         }
         assertTrue(editor.commit());

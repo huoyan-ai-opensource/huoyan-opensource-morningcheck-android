@@ -9,21 +9,32 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/** 验证公共入口确实走同一传输与请求生命周期，不依赖 Android 页面或真实云。 */
+/**
+ * 验证公共入口确实走同一传输与请求生命周期，不依赖 Android 页面或真实云。
+ */
 public class NamedClientOperationsTest {
-    @Test public void lifecycleQueriesAndSettingsDispatchOnBothChannels() throws Exception {
+    @Test
+    public void lifecycleQueriesAndSettingsDispatchOnBothChannels() throws Exception {
         for (int api : new int[]{21, 30}) {
             Fixture f = new Fixture(api);
             List<Integer> codes = new ArrayList<>();
             HuoyanClient.Callback callback = (code, message, data) -> codes.add(code);
-            f.client.init(callback); f.finish("init", 0);
-            f.client.refreshStatus(callback); f.finish("getStatus", 0);
-            f.client.refreshCapabilities(callback); f.finish("getCapabilities", 0);
-            f.client.getCertInfo(callback); f.finish("getCertInfo", 0);
-            f.client.getDownloadProgress(callback); f.finish("getDownloadProgress", 0);
-            f.client.refreshClassTable(callback); f.finish("getClassTable", 0);
-            f.client.getCloudStatus(callback); f.finish("getCloudStatus", 0);
-            f.client.userCount(callback); f.finish("userCount", 0);
+            f.client.init(callback);
+            f.finish("init", 0);
+            f.client.refreshStatus(callback);
+            f.finish("getStatus", 0);
+            f.client.refreshCapabilities(callback);
+            f.finish("getCapabilities", 0);
+            f.client.getCertInfo(callback);
+            f.finish("getCertInfo", 0);
+            f.client.getDownloadProgress(callback);
+            f.finish("getDownloadProgress", 0);
+            f.client.refreshClassTable(callback);
+            f.finish("getClassTable", 0);
+            f.client.getCloudStatus(callback);
+            f.finish("getCloudStatus", 0);
+            f.client.userCount(callback);
+            f.finish("userCount", 0);
             f.client.activate("HY2-abcd-1234-abcd", "morningcheck", callback);
             assertEquals("HY2-abcd-1234-abcd", f.last().params.getString("activation_code"));
             f.finish("activate", -42);
@@ -44,7 +55,8 @@ public class NamedClientOperationsTest {
         }
     }
 
-    @Test public void licenseModelsAndActivationUseNewProtocolOnBothChannels() throws Exception {
+    @Test
+    public void licenseModelsAndActivationUseNewProtocolOnBothChannels() throws Exception {
         for (int api : new int[]{21, 30}) {
             Fixture f = new Fixture(api);
             List<JSONObject> replies = new ArrayList<>();
@@ -67,7 +79,8 @@ public class NamedClientOperationsTest {
         }
     }
 
-    @Test public void licenseQueryRequiresCodeAndDeviceQueryHasNoParameters() throws Exception {
+    @Test
+    public void licenseQueryRequiresCodeAndDeviceQueryHasNoParameters() throws Exception {
         for (int api : new int[]{21, 30}) {
             Fixture f = new Fixture(api);
             f.client.queryLicenseModels("INPUT-CODE", null);
@@ -84,7 +97,8 @@ public class NamedClientOperationsTest {
         }
     }
 
-    @Test public void imageMethodsPreserveFrameAndExactPersonId() throws Exception {
+    @Test
+    public void imageMethodsPreserveFrameAndExactPersonId() throws Exception {
         Fixture f = new Fixture(30);
         byte[] rgb = new byte[]{1, 2, 3, 4, 5, 6};
         f.client.identify(rgb, 2, 1, null);
@@ -109,7 +123,8 @@ public class NamedClientOperationsTest {
         f.client.destroy();
     }
 
-    @Test public void personnelManagementStaysAvailableWithoutModelReady() throws Exception {
+    @Test
+    public void personnelManagementStaysAvailableWithoutModelReady() throws Exception {
         Fixture f = new Fixture(30);
         assertFalse(f.client.isReady());
         f.client.userDetail(9007199254740993L, null);
@@ -128,7 +143,8 @@ public class NamedClientOperationsTest {
         f.client.destroy();
     }
 
-    @Test public void faceDetectionPreservesFrameLimitAndReplyOnBothChannels() throws Exception {
+    @Test
+    public void faceDetectionPreservesFrameLimitAndReplyOnBothChannels() throws Exception {
         for (int api : new int[]{21, 30}) {
             Fixture f = new Fixture(api);
             byte[] rgb = new byte[]{1, 2, 3, 4, 5, 6};
@@ -150,7 +166,8 @@ public class NamedClientOperationsTest {
         }
     }
 
-    @Test public void feedbackUsesOriginalFieldsAndUnknownResultIsNeverReplayed() throws Exception {
+    @Test
+    public void feedbackUsesOriginalFieldsAndUnknownResultIsNeverReplayed() throws Exception {
         Fixture f = new Fixture(21);
         JSONObject feedback = new JSONObject().put("request_id", "result-1")
                 .put("photo_file_url", "https://photo.example.test/check.jpg").put("feedback_type", 1)
@@ -168,7 +185,8 @@ public class NamedClientOperationsTest {
         f.client.destroy();
     }
 
-    @Test public void invalidNamedParametersNeverReachTransport() {
+    @Test
+    public void invalidNamedParametersNeverReachTransport() {
         Fixture f = new Fixture(21);
         byte[] rgb = new byte[3];
         assertThrows(IllegalArgumentException.class, () -> f.client.activate("  ", "morningcheck", null));
@@ -186,7 +204,8 @@ public class NamedClientOperationsTest {
         f.client.destroy();
     }
 
-    @Test public void namedRequestCancellationKeepsOriginalRequestIdentity() {
+    @Test
+    public void namedRequestCancellationKeepsOriginalRequestIdentity() {
         Fixture f = new Fixture(30);
         List<Integer> codes = new ArrayList<>();
         String id = f.client.forgetByUid(17, (code, message, data) -> codes.add(code));
@@ -204,8 +223,12 @@ public class NamedClientOperationsTest {
         final JSONObject params;
         final byte[] image;
         final HuoyanClient.Callback callback;
+
         Call(String command, JSONObject params, byte[] image, HuoyanClient.Callback callback) {
-            this.command = command; this.params = params; this.image = image; this.callback = callback;
+            this.command = command;
+            this.params = params;
+            this.image = image;
+            this.callback = callback;
         }
     }
 
@@ -219,16 +242,24 @@ public class NamedClientOperationsTest {
 
         Fixture(int api) {
             client = new HuoyanClient(api, null, Runnable::run, (channel, listener) -> {
-                selected = channel; return this;
-            }, (delay, action) -> { throw new AssertionError("本用例初始化已经完成，不应再预约等待"); });
+                selected = channel;
+                return this;
+            }, (delay, action) -> {
+                throw new AssertionError("本用例初始化已经完成，不应再预约等待");
+            });
             client.connect(SdkConfig.automatic(SdkConfig.DEFAULT_WS_ENDPOINT));
         }
-        Call last() { return calls.get(calls.size() - 1); }
+
+        Call last() {
+            return calls.get(calls.size() - 1);
+        }
+
         void finish(String command, int code) {
             assertEquals(command, last().command);
             assertNull(last().image);
             last().callback.onResult(code, "测试回执", new JSONObject());
         }
+
         void assertImage(String command, byte[] image, int width, int height) throws Exception {
             assertEquals(command, last().command);
             assertSame(image, last().image);
@@ -236,18 +267,62 @@ public class NamedClientOperationsTest {
             assertEquals(height, last().params.getInt("height"));
             assertEquals("rgb", last().params.getString("format"));
         }
-        @Override public void setInitializationListener(Runnable listener) { initialized = listener; }
-        @Override public void connect(String endpoint) { connected = true; initialized.run(); }
-        @Override public String request(String command, JSONObject params, byte[] image, HuoyanClient.Callback callback) {
-            calls.add(new Call(command, params, image, callback)); return "wire-" + calls.size();
+
+        @Override
+        public void setInitializationListener(Runnable listener) {
+            initialized = listener;
         }
-        @Override public void cancel(String id) { cancelled = id; }
-        @Override public void close() { connected = false; }
-        @Override public void destroy() { connected = false; }
-        @Override public JSONObject getStatus() { return new JSONObject(); }
-        @Override public JSONObject getCapabilities() { return new JSONObject(); }
-        @Override public JSONObject getClassTable() { return new JSONObject(); }
-        @Override public boolean isConnected() { return connected; }
-        @Override public boolean isReady() { return false; }
+
+        @Override
+        public void connect(String endpoint) {
+            connected = true;
+            initialized.run();
+        }
+
+        @Override
+        public String request(String command, JSONObject params, byte[] image, HuoyanClient.Callback callback) {
+            calls.add(new Call(command, params, image, callback));
+            return "wire-" + calls.size();
+        }
+
+        @Override
+        public void cancel(String id) {
+            cancelled = id;
+        }
+
+        @Override
+        public void close() {
+            connected = false;
+        }
+
+        @Override
+        public void destroy() {
+            connected = false;
+        }
+
+        @Override
+        public JSONObject getStatus() {
+            return new JSONObject();
+        }
+
+        @Override
+        public JSONObject getCapabilities() {
+            return new JSONObject();
+        }
+
+        @Override
+        public JSONObject getClassTable() {
+            return new JSONObject();
+        }
+
+        @Override
+        public boolean isConnected() {
+            return connected;
+        }
+
+        @Override
+        public boolean isReady() {
+            return false;
+        }
     }
 }

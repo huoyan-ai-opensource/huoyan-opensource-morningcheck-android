@@ -48,7 +48,8 @@ public final class SecuritySettings {
         if (!validPassword(password)) return false;
         synchronized (PASSWORD_LOCK) {
             SharedPreferences prefs = preferences(context);
-            if (prefs.contains(PASSWORD_KEY)) return matchesPassword(prefs.getString(PASSWORD_KEY, ""), password);
+            if (prefs.contains(PASSWORD_KEY))
+                return matchesPassword(prefs.getString(PASSWORD_KEY, ""), password);
             if (!matchesInitialPassword(password)) return false;
             // 首次验证只对已确认的默认密码派生一次；已有损坏值不进入默认密码分支。
             if (!prefs.edit().putString(PASSWORD_KEY, encodePassword(password)).commit())
@@ -69,7 +70,8 @@ public final class SecuritySettings {
     }
 
     static boolean changePassword(Context context, char[] original, char[] newValue) {
-        if (!validPassword(newValue)) throw new IllegalArgumentException("安全密码需为 6–32 位数字");
+        if (!validPassword(newValue))
+            throw new IllegalArgumentException("安全密码需为 6–32 位数字");
         if (!validPassword(original)) return false;
         synchronized (PASSWORD_LOCK) {
             SharedPreferences prefs = preferences(context);
@@ -99,7 +101,8 @@ public final class SecuritySettings {
     }
 
     static boolean validPassword(char[] value) {
-        if (value == null || value.length < MIN_PASSWORD_LENGTH || value.length > MAX_PASSWORD_LENGTH) return false;
+        if (value == null || value.length < MIN_PASSWORD_LENGTH || value.length > MAX_PASSWORD_LENGTH)
+            return false;
         for (char character : value)
             if (character < '0' || character > '9') return false;
         return true;

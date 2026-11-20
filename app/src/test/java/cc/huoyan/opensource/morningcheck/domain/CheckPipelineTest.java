@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cc.huoyan.opensource.morningcheck.domain.CheckPipeline.Stage;
+
 import static cc.huoyan.opensource.morningcheck.domain.DetectionClasses.*;
 import static org.junit.Assert.*;
 
@@ -34,7 +35,8 @@ public class CheckPipelineTest {
         return Collections.emptyList();
     }
 
-    @Test public void identityRequiresConsecutiveSamplesOfSamePerson() {
+    @Test
+    public void identityRequiresConsecutiveSamplesOfSamePerson() {
         CheckPipeline pipeline = pipeline(true);
         pipeline.onIdentity(10, true);
         pipeline.onIdentity(10, true);
@@ -50,7 +52,8 @@ public class CheckPipelineTest {
         assertTrue(Double.isNaN(pipeline.getTemperature()));
     }
 
-    @Test public void temperatureRejectsInvalidReadingsAndRecordsFeverAtThreshold() {
+    @Test
+    public void temperatureRejectsInvalidReadingsAndRecordsFeverAtThreshold() {
         CheckPipeline pipeline = pipeline(true);
         identify(pipeline);
         for (double value : new double[]{0, 33.9, 43.1, Double.NaN, Double.POSITIVE_INFINITY}) {
@@ -63,7 +66,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().get(0).contains("体温偏高"));
     }
 
-    @Test public void headCanBeDisabledWithoutFabricatingHeadFindings() {
+    @Test
+    public void headCanBeDisabledWithoutFabricatingHeadFindings() {
         CheckPipeline pipeline = pipeline(false);
         identify(pipeline);
         pipeline.onTemperature(36.6);
@@ -75,7 +79,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void identityAndTemperatureAdvanceTogetherInEitherArrivalOrder() {
+    @Test
+    public void identityAndTemperatureAdvanceTogetherInEitherArrivalOrder() {
         for (int temperatureAfterSample : new int[]{0, 2, 4}) {
             CheckPipeline pipeline = pipeline(true);
             for (int sample = 0; sample <= 4; sample++) {
@@ -93,7 +98,8 @@ public class CheckPipelineTest {
         }
     }
 
-    @Test public void confirmedIdentityKeepsCheckingSameEmployeeWhileWaitingForTemperature() {
+    @Test
+    public void confirmedIdentityKeepsCheckingSameEmployeeWhileWaitingForTemperature() {
         CheckPipeline pipeline = pipeline(true);
         identify(pipeline);
         assertEquals(Stage.IDENTITY, pipeline.getStage());
@@ -107,7 +113,8 @@ public class CheckPipelineTest {
         assertEquals(Stage.HEAD, pipeline.getStage());
     }
 
-    @Test public void changingCandidateClearsPreviousEmployeesTemperatureAndConfirmation() {
+    @Test
+    public void changingCandidateClearsPreviousEmployeesTemperatureAndConfirmation() {
         CheckPipeline pipeline = pipeline(false);
         pipeline.onIdentity(10, true);
         pipeline.onTemperature(38.1);
@@ -129,7 +136,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void unmatchedFrameClearsEarlyTemperatureAndConfirmedIdentity() {
+    @Test
+    public void unmatchedFrameClearsEarlyTemperatureAndConfirmedIdentity() {
         for (boolean confirmed : new boolean[]{false, true}) {
             CheckPipeline pipeline = pipeline(false);
             if (confirmed) identify(pipeline);
@@ -151,7 +159,8 @@ public class CheckPipelineTest {
         }
     }
 
-    @Test public void latestValidTemperatureDeterminesFindingAfterIdentityFinishes() {
+    @Test
+    public void latestValidTemperatureDeterminesFindingAfterIdentityFinishes() {
         CheckPipeline pipeline = pipeline(false);
         pipeline.onIdentity(21, true);
         pipeline.onTemperature(38.1);
@@ -167,7 +176,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void invalidTemperatureClearsEarlierReadingWhileIdentityIsPending() {
+    @Test
+    public void invalidTemperatureClearsEarlierReadingWhileIdentityIsPending() {
         CheckPipeline pipeline = pipeline(false);
         pipeline.onTemperature(36.6);
         pipeline.onIdentity(21, true);
@@ -180,7 +190,8 @@ public class CheckPipelineTest {
         assertEquals(Collections.singletonList("体温偏高：38.1°C"), pipeline.getFindings());
     }
 
-    @Test public void pendingTemperatureCannotSurviveResetForNextEmployee() {
+    @Test
+    public void pendingTemperatureCannotSurviveResetForNextEmployee() {
         CheckPipeline pipeline = pipeline(false);
         pipeline.onTemperature(38.1);
         pipeline.onIdentity(10, true);
@@ -192,7 +203,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void normalTemperatureMatchesOldBusinessExclusiveBounds() {
+    @Test
+    public void normalTemperatureMatchesOldBusinessExclusiveBounds() {
         for (double value : new double[]{34.0, 35.9, 36.0, 37.3, 43.0}) {
             CheckPipeline pipeline = pipeline(false);
             identify(pipeline);
@@ -206,7 +218,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void skippedTemperatureIsExplicitAndNeverNormalMeasurement() {
+    @Test
+    public void skippedTemperatureIsExplicitAndNeverNormalMeasurement() {
         CheckPipeline pipeline = pipeline(false);
         identify(pipeline);
         pipeline.skipTemperature();
@@ -222,7 +235,8 @@ public class CheckPipelineTest {
         assertFalse(pipeline.isTemperatureSkipped());
     }
 
-    @Test public void skippedTemperatureWaitsForIdentityAndSurvivesCandidateLoss() {
+    @Test
+    public void skippedTemperatureWaitsForIdentityAndSurvivesCandidateLoss() {
         CheckPipeline pipeline = pipeline(false);
         pipeline.onTemperature(38.1);
         pipeline.skipTemperature();
@@ -240,7 +254,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void interruptionClearsPendingIdentityAndTemperatureTogether() {
+    @Test
+    public void interruptionClearsPendingIdentityAndTemperatureTogether() {
         for (boolean confirmed : new boolean[]{false, true}) {
             CheckPipeline pipeline = pipeline(false);
             if (confirmed) identify(pipeline);
@@ -261,7 +276,8 @@ public class CheckPipelineTest {
         }
     }
 
-    @Test public void interruptionRestartsHeadSamplesWithoutDiscardingCommittedTemperature() {
+    @Test
+    public void interruptionRestartsHeadSamplesWithoutDiscardingCommittedTemperature() {
         CheckPipeline pipeline = pipeline(true);
         identify(pipeline);
         pipeline.onTemperature(38.1);
@@ -285,7 +301,8 @@ public class CheckPipelineTest {
         assertEquals(Collections.singletonList("体温偏高：38.1°C"), pipeline.getFindings());
     }
 
-    @Test public void interruptionClearsUncommittedHandFindingsWithoutDiscardingEmployee() {
+    @Test
+    public void interruptionClearsUncommittedHandFindingsWithoutDiscardingEmployee() {
         CheckPipeline pipeline = pipeline(false);
         identify(pipeline);
         pipeline.onTemperature(36.6);
@@ -302,7 +319,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void emptyAndUnknownHeadBoxesCannotAdvance() {
+    @Test
+    public void emptyAndUnknownHeadBoxesCannotAdvance() {
         CheckPipeline pipeline = pipeline(true);
         identify(pipeline);
         pipeline.onTemperature(36.6);
@@ -315,7 +333,8 @@ public class CheckPipelineTest {
         assertEquals(0, pipeline.getProgress());
     }
 
-    @Test public void missingHatMaskOrBothCannotAdvanceEvenWithValidFace() {
+    @Test
+    public void missingHatMaskOrBothCannotAdvanceEvenWithValidFace() {
         List<List<CheckPipeline.Detection>> frames = Arrays.asList(
                 boxes(HEAD_MASK), boxes(HEAD_HAT), Collections.emptyList());
         List<List<CheckPipeline.Issue>> expectedIssues = Arrays.asList(
@@ -340,7 +359,8 @@ public class CheckPipelineTest {
         }
     }
 
-    @Test public void missingAttireRestartsFourConsecutiveSamplesAndCorrectionLeavesNoFinding() {
+    @Test
+    public void missingAttireRestartsFourConsecutiveSamplesAndCorrectionLeavesNoFinding() {
         CheckPipeline pipeline = pipeline(true);
         identify(pipeline);
         pipeline.onTemperature(36.6);
@@ -370,7 +390,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getDisplayFindings().isEmpty());
     }
 
-    @Test public void everyAttireRuleCombinationRejectsMismatchAndAcceptsOnlyMatchingSamples() {
+    @Test
+    public void everyAttireRuleCombinationRejectsMismatchAndAcceptsOnlyMatchingSamples() {
         for (boolean requireHat : new boolean[]{false, true}) {
             for (boolean requireMask : new boolean[]{false, true}) {
                 for (boolean hasHat : new boolean[]{false, true}) {
@@ -394,7 +415,8 @@ public class CheckPipelineTest {
         }
     }
 
-    @Test public void attireRulesStillRequireCurrentFaceEvidenceWhenNoAttireIsExpected() {
+    @Test
+    public void attireRulesStillRequireCurrentFaceEvidenceWhenNoAttireIsExpected() {
         CheckPipeline pipeline = new CheckPipeline(new CheckPipeline.Rules(
                 4, 4, 2, true, false, false, 37.3));
         identify(pipeline);
@@ -409,7 +431,8 @@ public class CheckPipelineTest {
         assertTrue(pipeline.getFindings().isEmpty());
     }
 
-    @Test public void handRequiresTwoCorrectHandsWithoutOppositeOrInvalidPose() {
+    @Test
+    public void handRequiresTwoCorrectHandsWithoutOppositeOrInvalidPose() {
         CheckPipeline pipeline = pipeline(false);
         identify(pipeline);
         pipeline.onTemperature(36.6);
@@ -427,7 +450,8 @@ public class CheckPipelineTest {
         }
     }
 
-    @Test public void abnormalitiesOnlyComeFromQualifiedConsecutiveHandFrames() {
+    @Test
+    public void abnormalitiesOnlyComeFromQualifiedConsecutiveHandFrames() {
         CheckPipeline pipeline = pipeline(false);
         identify(pipeline);
         pipeline.onTemperature(36.6);
@@ -444,7 +468,8 @@ public class CheckPipelineTest {
         assertEquals(Arrays.asList("手背：戒指", "手心：创可贴"), pipeline.getFindings());
     }
 
-    @Test public void resultIsStableUntilResetAndFindingsAreSnapshot() {
+    @Test
+    public void resultIsStableUntilResetAndFindingsAreSnapshot() {
         CheckPipeline pipeline = pipeline(false);
         identify(pipeline);
         pipeline.onTemperature(38);
@@ -468,7 +493,8 @@ public class CheckPipelineTest {
         assertEquals(1, findings.size());
     }
 
-    @Test public void invalidConfidenceCannotProvidePoseEvidence() {
+    @Test
+    public void invalidConfidenceCannotProvidePoseEvidence() {
         CheckPipeline pipeline = pipeline(false);
         identify(pipeline);
         pipeline.onTemperature(36.6);

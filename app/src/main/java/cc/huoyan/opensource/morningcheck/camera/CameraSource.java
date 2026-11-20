@@ -606,7 +606,7 @@ public final class CameraSource implements AutoCloseable {
         int displayRotationDegrees() {
             int display = activity.getWindowManager().getDefaultDisplay().getRotation();
             return display == Surface.ROTATION_90 ? 90 : display == Surface.ROTATION_180 ? 180
-                                                         : display == Surface.ROTATION_270 ? 270 : 0;
+                    : display == Surface.ROTATION_270 ? 270 : 0;
         }
 
         void consumeImage(ImageReader source) {

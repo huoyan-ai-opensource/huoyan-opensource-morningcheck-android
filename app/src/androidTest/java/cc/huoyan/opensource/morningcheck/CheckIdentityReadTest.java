@@ -58,7 +58,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.ByteString;
 
-/** 身份读取使用独立测试库、本机 SDK 夹具和人工帧，不打开相机或测温硬件。 */
+/**
+ * 身份读取使用独立测试库、本机 SDK 夹具和人工帧，不打开相机或测温硬件。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class CheckIdentityReadTest {
     private static final long PERSON_ID = 42;
@@ -80,7 +82,8 @@ public final class CheckIdentityReadTest {
     private CheckPipeline pipeline;
     private CountDownLatch releaseIo;
 
-    @Before public void prepareIsolatedIdentityFlow() throws Exception {
+    @Before
+    public void prepareIsolatedIdentityFlow() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         assumeTrue("测试不弹权限窗口；设备需已授予相机权限",
                 ContextCompat.checkSelfPermission(app, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
@@ -103,12 +106,19 @@ public final class CheckIdentityReadTest {
                         .put("staff_no", "TEST-" + PERSON_ID).put("department", "测试夹具").put("enabled", true));
                 testStore.saveStaff(new JSONObject().put("id", SECOND_PERSON_ID).put("name", "换入画面的员工")
                         .put("staff_no", "TEST-" + SECOND_PERSON_ID).put("department", "测试夹具").put("enabled", true));
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         }).get(10, TimeUnit.SECONDS);
-        onMain(() -> { originalStore = app.store; app.store = testStore; return null; });
+        onMain(() -> {
+            originalStore = app.store;
+            app.store = testStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 assertEquals("所有请求必须只进入本机 SDK 夹具", "/sdk", request.getPath());
                 return new MockResponse().withWebSocketUpgrade(new IdentityFixture());
             }
@@ -141,22 +151,31 @@ public final class CheckIdentityReadTest {
         });
     }
 
-    @After public void restoreOriginalStoreAndDeviceConfiguration() throws Exception {
+    @After
+    public void restoreOriginalStoreAndDeviceConfiguration() throws Exception {
         if (releaseIo != null) releaseIo.countDown();
         try {
             if (scenario != null) scenario.close();
             if (app != null && originalStore != null) {
-                onMain(() -> { app.sdkSession().disconnect(); return null; });
+                onMain(() -> {
+                    app.sdkSession().disconnect();
+                    return null;
+                });
                 app.io.submit(() -> null).get(10, TimeUnit.SECONDS);
                 instrumentation.waitForIdleSync();
                 assertEquals("测试不得生成晨检完成记录", 0L,
                         app.io.submit(() -> testStore.recordsPage(0, 1, 20).totalRows).get(10, TimeUnit.SECONDS).longValue());
             }
         } finally {
-            if (app != null && originalStore != null) onMain(() -> { app.store = originalStore; return null; });
+            if (app != null && originalStore != null) onMain(() -> {
+                app.store = originalStore;
+                return null;
+            });
             if (testStore != null) testStore.close();
-            if (databaseName != null) assertTrue("应清理本用例的独立数据库", app.deleteDatabase(databaseName));
-            if (preferences != null && originalPreferences != null) restore(preferences, originalPreferences);
+            if (databaseName != null)
+                assertTrue("应清理本用例的独立数据库", app.deleteDatabase(databaseName));
+            if (preferences != null && originalPreferences != null)
+                restore(preferences, originalPreferences);
             for (WebSocket socket : sockets) socket.close(1001, "测试结束");
             if (endpoint != null) endpoint.shutdown();
         }
@@ -164,7 +183,8 @@ public final class CheckIdentityReadTest {
         assertNull("存储队列夹具应在限定时间内释放", storageFixtureFailure.get());
     }
 
-    @Test public void blockedStaffReadKeepsOneIdentityRequestAndThenAdvancesById() throws Exception {
+    @Test
+    public void blockedStaffReadKeepsOneIdentityRequestAndThenAdvancesById() throws Exception {
         blockStorageQueue();
         feedFrame();
         awaitReplyWaitingForStaff();
@@ -188,7 +208,8 @@ public final class CheckIdentityReadTest {
         assertEquals(CheckPipeline.Stage.HEAD, onMain(pipeline::getStage));
     }
 
-    @Test public void realtimeTemperatureWaitsForPendingIdentityAndThenAdvancesTogether() throws Exception {
+    @Test
+    public void realtimeTemperatureWaitsForPendingIdentityAndThenAdvancesTogether() throws Exception {
         blockStorageQueue();
         feedFrame();
         awaitReplyWaitingForStaff();
@@ -211,7 +232,8 @@ public final class CheckIdentityReadTest {
         });
     }
 
-    @Test public void temperatureDuringNextEmployeesStaffReadCannotAdvancePreviousEmployee() throws Exception {
+    @Test
+    public void temperatureDuringNextEmployeesStaffReadCannotAdvancePreviousEmployee() throws Exception {
         feedFrame();
         await(() -> onMain(pipeline::isIdentityConfirmed), "先确认员工 A，等待设备温度");
         assertEquals(PERSON_ID, onMain(pipeline::getPersonId).longValue());
@@ -241,7 +263,8 @@ public final class CheckIdentityReadTest {
         assertTrue(onMain(() -> pipeline.getFindings().isEmpty()));
     }
 
-    @Test public void unmatchedIdentityClearsEarlyTemperatureBeforeNextEmployee() throws Exception {
+    @Test
+    public void unmatchedIdentityClearsEarlyTemperatureBeforeNextEmployee() throws Exception {
         scenario.onActivity(activity -> {
             pipeline = new CheckPipeline(new CheckPipeline.Rules(4, 4, 5, true, true, true, 37.3));
             writeField(activity, "pipeline", pipeline);
@@ -276,7 +299,8 @@ public final class CheckIdentityReadTest {
         assertTrue(onMain(() -> pipeline.getFindings().isEmpty()));
     }
 
-    @Test public void cameraFailureRejectsLateTemperatureAndNewFrameRequiresIdentityAgain() throws Exception {
+    @Test
+    public void cameraFailureRejectsLateTemperatureAndNewFrameRequiresIdentityAgain() throws Exception {
         feedFrame();
         await(() -> onMain(pipeline::isIdentityConfirmed), "相机故障前先确认当前员工");
         blockStorageQueue();
@@ -313,7 +337,8 @@ public final class CheckIdentityReadTest {
         assertTrue(onMain(() -> pipeline.getFindings().isEmpty()));
     }
 
-    @Test public void earlyTemperatureOlderThanFiveSecondsCannotAdvanceNewIdentity() throws Exception {
+    @Test
+    public void earlyTemperatureOlderThanFiveSecondsCannotAdvanceNewIdentity() throws Exception {
         feedTemperature(38.1);
         scenario.onActivity(activity -> {
             assertTrue(temperatureText(activity).contains("38.1"));
@@ -332,7 +357,8 @@ public final class CheckIdentityReadTest {
         assertTrue(onMain(() -> pipeline.getFindings().isEmpty()));
     }
 
-    @Test public void pauseRejectsStaffReadThatArrivesAfterIdentityReply() throws Exception {
+    @Test
+    public void pauseRejectsStaffReadThatArrivesAfterIdentityReply() throws Exception {
         blockStorageQueue();
         feedFrame();
         awaitReplyWaitingForStaff();
@@ -356,7 +382,8 @@ public final class CheckIdentityReadTest {
         });
     }
 
-    @Test public void leavingPageRejectsStaffReadThatArrivesAfterIdentityReply() throws Exception {
+    @Test
+    public void leavingPageRejectsStaffReadThatArrivesAfterIdentityReply() throws Exception {
         blockStorageQueue();
         feedFrame();
         awaitReplyWaitingForStaff();
@@ -371,22 +398,30 @@ public final class CheckIdentityReadTest {
         AtomicReference<Throwable> lifecycleFailure = new AtomicReference<>();
         ActivityLifecycleCallback callback = (activity, stage) -> {
             if (activity != target.get() || stage != Stage.STOPPED) return;
-            try { oldListener.get().onTemperature(39.1); }
-            catch (Throwable error) { lifecycleFailure.set(error); }
-            finally {
+            try {
+                oldListener.get().onTemperature(39.1);
+            } catch (Throwable error) {
+                lifecycleFailure.set(error);
+            } finally {
                 // onStop 已真实执行，立即放行迟到读库；不让同步状态切换与 IO 夹具互相等待。
                 releaseIo.countDown();
                 stopped.countDown();
             }
         };
-        onMain(() -> { ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(callback); return null; });
+        onMain(() -> {
+            ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(callback);
+            return null;
+        });
         try {
             scenario.moveToState(Lifecycle.State.CREATED);
             assertTrue("应观察到现场页真正停止", stopped.await(5, TimeUnit.SECONDS));
             assertNull("停止后的迟到温度回调不应抛异常", lifecycleFailure.get());
         } finally {
             releaseIo.countDown();
-            onMain(() -> { ActivityLifecycleMonitorRegistry.getInstance().removeLifecycleCallback(callback); return null; });
+            onMain(() -> {
+                ActivityLifecycleMonitorRegistry.getInstance().removeLifecycleCallback(callback);
+                return null;
+            });
         }
         drainStorageCallbacks();
         scenario.onActivity(activity -> {
@@ -437,8 +472,12 @@ public final class CheckIdentityReadTest {
         // refreshStatus 的独立回执作为传输屏障；同一 WS 上更早的 identify 回调已交到主线程。
         CountDownLatch barrier = new CountDownLatch(1);
         scenario.onActivity(activity -> activity.sdk.refreshStatus((code, message, data) -> barrier.countDown()));
-        try { assertTrue("身份回执传输屏障超时", barrier.await(5, TimeUnit.SECONDS)); }
-        catch (InterruptedException error) { Thread.currentThread().interrupt(); throw new AssertionError(error); }
+        try {
+            assertTrue("身份回执传输屏障超时", barrier.await(5, TimeUnit.SECONDS));
+        } catch (InterruptedException error) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(error);
+        }
         instrumentation.waitForIdleSync();
     }
 
@@ -452,9 +491,13 @@ public final class CheckIdentityReadTest {
     private final class IdentityFixture extends WebSocketListener {
         private final Map<String, JSONObject> images = new ConcurrentHashMap<>();
 
-        @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
+        @Override
+        public void onOpen(WebSocket socket, Response response) {
+            sockets.add(socket);
+        }
 
-        @Override public void onMessage(WebSocket socket, String text) {
+        @Override
+        public void onMessage(WebSocket socket, String text) {
             try {
                 JSONObject request = new JSONObject(text);
                 String command = request.getString("cmd");
@@ -468,13 +511,17 @@ public final class CheckIdentityReadTest {
                         || "get_class_table".equals(command) || "getCertInfo".equals(command)
                         || "getDownloadProgress".equals(command) || "getCloudStatus".equals(command));
                 JSONObject data = new JSONObject();
-                if ("getStatus".equals(command)) data.put("sdk_state", "READY").put("model_ready", true)
-                        .put("certificate_valid", true).put("device_id", "IDENTITY-READ-TEST");
+                if ("getStatus".equals(command))
+                    data.put("sdk_state", "READY").put("model_ready", true)
+                            .put("certificate_valid", true).put("device_id", "IDENTITY-READ-TEST");
                 reply(socket, request.getString("requestId"), data);
-            } catch (Throwable error) { serverFailure.set(error); }
+            } catch (Throwable error) {
+                serverFailure.set(error);
+            }
         }
 
-        @Override public void onMessage(WebSocket socket, ByteString bytes) {
+        @Override
+        public void onMessage(WebSocket socket, ByteString bytes) {
             try {
                 ByteBuffer buffer = bytes.asByteBuffer();
                 int length = buffer.getInt();
@@ -487,7 +534,9 @@ public final class CheckIdentityReadTest {
                 reply(socket, requestId, new JSONObject().put("matched", fixtureMatched.get())
                         .put("person_id", fixturePerson.get()));
                 binaryReplies.incrementAndGet();
-            } catch (Throwable error) { serverFailure.set(error); }
+            } catch (Throwable error) {
+                serverFailure.set(error);
+            }
         }
 
         private void reply(WebSocket socket, String id, JSONObject data) throws Exception {
@@ -500,16 +549,23 @@ public final class CheckIdentityReadTest {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(operation.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(operation.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
-        if (failure.get() != null) throw new AssertionError("主线程身份读取验收失败", failure.get());
+        if (failure.get() != null)
+            throw new AssertionError("主线程身份读取验收失败", failure.get());
         return value.get();
     }
 
     private static Object readField(Object target, String name) {
-        try { return field(target, name).get(target); }
-        catch (IllegalAccessException error) { throw new AssertionError(error); }
+        try {
+            return field(target, name).get(target);
+        } catch (IllegalAccessException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private void feedTemperature(double value) {
@@ -525,8 +581,11 @@ public final class CheckIdentityReadTest {
     }
 
     private static void writeField(Object target, String name, Object value) {
-        try { field(target, name).set(target, value); }
-        catch (IllegalAccessException error) { throw new AssertionError(error); }
+        try {
+            field(target, name).set(target, value);
+        } catch (IllegalAccessException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static Field field(Object target, String name) {
@@ -535,7 +594,8 @@ public final class CheckIdentityReadTest {
                 Field result = type.getDeclaredField(name);
                 result.setAccessible(true);
                 return result;
-            } catch (NoSuchFieldException ignored) { }
+            } catch (NoSuchFieldException ignored) {
+            }
         }
         throw new AssertionError("缺少测试状态：" + name);
     }

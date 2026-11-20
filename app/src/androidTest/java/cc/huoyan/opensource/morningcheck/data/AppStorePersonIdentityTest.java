@@ -19,25 +19,30 @@ import org.junit.runner.RunWith;
 
 import java.util.UUID;
 
-/** 人员身份与软删除仅使用隔离数据库，不调用 SDK 或修改设备业务名册。 */
+/**
+ * 人员身份与软删除仅使用隔离数据库，不调用 SDK 或修改设备业务名册。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class AppStorePersonIdentityTest {
     private Context context;
     private AppStore store;
     private String databaseName;
 
-    @Before public void openStore() {
+    @Before
+    public void openStore() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         databaseName = "person-identity-" + UUID.randomUUID() + ".db";
         store = new AppStore(context, databaseName);
     }
 
-    @After public void closeStore() {
+    @After
+    public void closeStore() {
         store.close();
         context.deleteDatabase(databaseName);
     }
 
-    @Test public void personIdsAdvanceIndependentlyOfLocalIdsAndSurviveReopenAndNumberChanges() {
+    @Test
+    public void personIdsAdvanceIndependentlyOfLocalIdsAndSurviveReopenAndNumberChanges() {
         JSONObject imported = Jsons.obj("id", 8000L, "name", "外部员工", "staff_no", "A001", "person_id", 70000L);
         store.saveStaff(imported);
         JSONObject first = store.staff(8000);
@@ -54,7 +59,8 @@ public final class AppStorePersonIdentityTest {
         assertNull("不能把本地主键误当成 SDK 标识回查", store.staffByPersonId(8000));
     }
 
-    @Test public void cloudUpdatesPreserveAssignedPersonIdAndExplicitReassignmentIsRejected() {
+    @Test
+    public void cloudUpdatesPreserveAssignedPersonIdAndExplicitReassignmentIsRejected() {
         long localId = store.createStaffProfile(profile("S001"));
         long personId = store.staff(localId).optLong("person_id");
         JSONObject remote = Jsons.obj("id", localId, "name", "云端姓名", "staff_no", "C001",
@@ -70,7 +76,8 @@ public final class AppStorePersonIdentityTest {
         assertEquals(personId, store.staff(localId).optLong("person_id"));
     }
 
-    @Test public void deletedStaffRetainIdentityButLeaveEveryBusinessRosterQuery() {
+    @Test
+    public void deletedStaffRetainIdentityButLeaveEveryBusinessRosterQuery() {
         long department = store.saveDepartment(0, "已删除人员部门");
         long deleted = store.createStaffProfile(Jsons.obj("name", "待删除员工", "staff_no", "OLD001",
                 "department_id", department, "enabled", false));
@@ -105,7 +112,8 @@ public final class AppStorePersonIdentityTest {
         assertNull(store.staffByPersonId(personId));
     }
 
-    @Test public void tombstoneCannotBeRevivedByLateFaceCallbacksCloudImportOrRecreatedProfile() {
+    @Test
+    public void tombstoneCannotBeRevivedByLateFaceCallbacksCloudImportOrRecreatedProfile() {
         long id = store.createStaffProfile(profile("S001"));
         JSONObject stale = store.staff(id);
         store.removeStaff(id);
@@ -121,7 +129,8 @@ public final class AppStorePersonIdentityTest {
         assertEquals(stale.optLong("person_id"), rawLong("person_id", id));
     }
 
-    @Test public void deletingOnlyMemberAllowsDepartmentRemovalWithoutTouchingTombstone() {
+    @Test
+    public void deletingOnlyMemberAllowsDepartmentRemovalWithoutTouchingTombstone() {
         long department = store.saveDepartment(0, "可删除部门");
         long id = store.createStaffProfile(Jsons.obj("name", "旧员工", "staff_no", "S001", "department_id", department));
         long personId = store.staff(id).optLong("person_id");
@@ -132,7 +141,8 @@ public final class AppStorePersonIdentityTest {
         assertNull(store.staffByPersonId(personId));
     }
 
-    @Test public void ambiguousPersonIdNeverSelectsFirstLiveOrDeletedEmployee() {
+    @Test
+    public void ambiguousPersonIdNeverSelectsFirstLiveOrDeletedEmployee() {
         long first = store.createStaffProfile(profile("A001"));
         long second = store.createStaffProfile(profile("A002"));
         long personId = store.staff(first).optLong("person_id");
@@ -146,7 +156,8 @@ public final class AppStorePersonIdentityTest {
         assertNull(store.staffByPersonId(-1));
     }
 
-    @Test public void failedWriteRollsBackBothIdentityCountersAndExhaustionDoesNotWrap() {
+    @Test
+    public void failedWriteRollsBackBothIdentityCountersAndExhaustionDoesNotWrap() {
         long first = store.createStaffProfile(profile("A001"));
         long firstPerson = store.staff(first).optLong("person_id");
         expectFailure("工号", () -> store.createStaffProfile(profile("A001")));
@@ -159,7 +170,8 @@ public final class AppStorePersonIdentityTest {
         assertEquals(2L, store.staffCount());
     }
 
-    @Test public void versionFiveMigrationKeepsOriginalSdkIdsAndReservesPreviouslyAllocatedRange() {
+    @Test
+    public void versionFiveMigrationKeepsOriginalSdkIdsAndReservesPreviouslyAllocatedRange() {
         JSONObject original = Jsons.obj("id", 42L, "person_id", 9999L, "name", "旧员工", "staff_no", "OLD042",
                 "face_registered", true, "face_uids", new JSONArray().put(905L), "created_at", 100L);
         store.close();
@@ -184,7 +196,8 @@ public final class AppStorePersonIdentityTest {
         assertEquals(502L, store.staff(store.createStaffProfile(profile("NEW502"))).optLong("person_id"));
     }
 
-    @Test public void migratedInt64PersonIdRemainsExactAboveDoubleIntegerPrecision() {
+    @Test
+    public void migratedInt64PersonIdRemainsExactAboveDoubleIntegerPrecision() {
         long exact = 9_007_199_254_740_993L;
         store.close();
         try (SQLiteDatabase previous = context.openOrCreateDatabase(databaseName, Context.MODE_PRIVATE, null)) {
@@ -247,8 +260,10 @@ public final class AppStorePersonIdentityTest {
     }
 
     private static void expectFailure(String message, Runnable operation) {
-        try { operation.run(); fail("操作应被拒绝：" + message); }
-        catch (IllegalArgumentException | IllegalStateException expected) {
+        try {
+            operation.run();
+            fail("操作应被拒绝：" + message);
+        } catch (IllegalArgumentException | IllegalStateException expected) {
             assertTrue(expected.getMessage(), expected.getMessage().contains(message));
         }
     }

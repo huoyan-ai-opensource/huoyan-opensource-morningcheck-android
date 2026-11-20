@@ -5,18 +5,24 @@ import static org.junit.Assume.assumeTrue;
 
 import android.os.SystemClock;
 import android.util.Log;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
+
 import cc.huoyan.morningcheck.sdk.client.HuoyanClient;
 import cc.huoyan.morningcheck.sdk.client.SdkConfig;
+
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-/** 显式开启的真实日志驱动，只初始化和查询，不修改授权或人员数据。 */
+/**
+ * 显式开启的真实日志驱动，只初始化和查询，不修改授权或人员数据。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class ClsBusinessFlowDeviceTest {
     @Test
@@ -57,7 +63,9 @@ public final class ClsBusinessFlowDeviceTest {
         }
     }
 
-    /** 通过客户端公开异步回执等待，不访问 SDK 私有状态。 */
+    /**
+     * 通过客户端公开异步回执等待，不访问 SDK 私有状态。
+     */
     private interface Query {
         String run(HuoyanClient.Callback callback);
     }

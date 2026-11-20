@@ -67,7 +67,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 以独立业务库和本机 SDK 验收部门门槛、真实入口、稳定 ID 和窗口收尾。 */
+/**
+ * 以独立业务库和本机 SDK 验收部门门槛、真实入口、稳定 ID 和窗口收尾。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class DepartmentFilterUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -82,7 +84,8 @@ public final class DepartmentFilterUiTest {
     private String databaseName;
     private ActivityScenario<? extends BaseMorningActivity> scenario;
 
-    @Before public void isolateStoreAndSdk() throws Exception {
+    @Before
+    public void isolateStoreAndSdk() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         originalPreferences = snapshot(preferences);
@@ -93,32 +96,49 @@ public final class DepartmentFilterUiTest {
             return null;
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         originalStore = app.store;
         databaseName = "department-filter-ui-" + UUID.randomUUID() + ".db";
         isolatedStore = new AppStore(new ContextWrapper(app) {
-            @Override public File getDatabasePath(String name) { return app.getDatabasePath(databaseName); }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode,
-                    SQLiteDatabase.CursorFactory factory) {
+            @Override
+            public File getDatabasePath(String name) {
+                return app.getDatabasePath(databaseName);
+            }
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode,
+                                                       SQLiteDatabase.CursorFactory factory) {
                 return app.openOrCreateDatabase(databaseName, mode, factory);
             }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode,
-                    SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode,
+                                                       SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
                 return app.openOrCreateDatabase(databaseName, mode, factory, handler);
             }
         });
         app.io.submit(() -> isolatedStore.getWritableDatabase()).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.store = isolatedStore; return null; });
+        onMain(() -> {
+            app.store = isolatedStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (!"/sdk".equals(request.getPath())) {
                     businessRequests.incrementAndGet();
                     return new MockResponse().setResponseCode(503);
                 }
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject request = new JSONObject(text);
                             JSONObject data = "getStatus".equals(request.optString("cmd"))
@@ -126,7 +146,9 @@ public final class DepartmentFilterUiTest {
                                     : new JSONObject();
                             socket.send(Jsons.obj("requestId", request.getString("requestId"), "code", 0,
                                     "reason", "部门筛选隔离夹具", "data", data).toString());
-                        } catch (Throwable error) { serverFailure.set(error); }
+                        } catch (Throwable error) {
+                            serverFailure.set(error);
+                        }
                     }
                 });
             }
@@ -138,17 +160,27 @@ public final class DepartmentFilterUiTest {
                 .putBoolean("voice", false).putInt(AppFontSettings.KEY, AppFontSettings.DEFAULT_INDEX).commit());
     }
 
-    @After public void restoreStoreAndSdk() throws Exception {
+    @After
+    public void restoreStoreAndSdk() throws Exception {
         try {
             if (scenario != null) scenario.close();
-            if (app != null) onMain(() -> { finishPages(); app.sdkSession().disconnect(); return null; });
+            if (app != null) onMain(() -> {
+                finishPages();
+                app.sdkSession().disconnect();
+                return null;
+            });
             instrumentation.waitForIdleSync();
-            if (app != null) app.networkIo.submit(() -> { }).get(10, TimeUnit.SECONDS);
-            if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+            if (app != null) app.networkIo.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
+            if (app != null) app.io.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
             instrumentation.waitForIdleSync();
         } finally {
             try {
-                if (originalStore != null) onMain(() -> { app.store = originalStore; return null; });
+                if (originalStore != null) onMain(() -> {
+                    app.store = originalStore;
+                    return null;
+                });
                 if (isolatedStore != null) isolatedStore.close();
                 if (databaseName != null) assertTrue(app.deleteDatabase(databaseName));
                 if (originalPreferences != null) restore(preferences, originalPreferences);
@@ -161,12 +193,16 @@ public final class DepartmentFilterUiTest {
         assertNull("隔离 SDK 不能发生异常", serverFailure.get());
     }
 
-    @Test public void largeChoiceListMeasuresOnlyVisibleRangeAndCanSelectLastAtLargestFont() throws Exception {
+    @Test
+    public void largeChoiceListMeasuresOnlyVisibleRangeAndCanSelectLastAtLargestFont() throws Exception {
         assertTrue(preferences.edit().putInt(AppFontSettings.KEY, 3).commit());
         launch(StaffActivity.class, 2, 0);
         for (int orientation : new int[]{ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT}) {
-            onMain(() -> { resumed(StaffActivity.class).setRequestedOrientation(orientation); return null; });
+            onMain(() -> {
+                resumed(StaffActivity.class).setRequestedOrientation(orientation);
+                return null;
+            });
             int expected = orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                     ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
             await(() -> onMain(() -> resumed(StaffActivity.class) != null
@@ -182,9 +218,18 @@ public final class DepartmentFilterUiTest {
                 ListView rows = list(dialog);
                 ListAdapter source = rows.getAdapter();
                 rows.setAdapter(new BaseAdapter() {
-                    public int getCount() { return source.getCount(); }
-                    public Object getItem(int position) { return source.getItem(position); }
-                    public long getItemId(int position) { return source.getItemId(position); }
+                    public int getCount() {
+                        return source.getCount();
+                    }
+
+                    public Object getItem(int position) {
+                        return source.getItem(position);
+                    }
+
+                    public long getItemId(int position) {
+                        return source.getItemId(position);
+                    }
+
                     public View getView(int position, View recycled, ViewGroup parent) {
                         highestBound.set(Math.max(highestBound.get(), position));
                         if (recycled == null) created.incrementAndGet();
@@ -213,12 +258,16 @@ public final class DepartmentFilterUiTest {
                     return null;
                 });
             } finally {
-                onMain(() -> { choices.dismiss(); return null; });
+                onMain(() -> {
+                    choices.dismiss();
+                    return null;
+                });
             }
         }
     }
 
-    @Test public void departmentChoicesUseSharedDialogAndDirectoryUpdatesCloseOldWindow() throws Exception {
+    @Test
+    public void departmentChoicesUseSharedDialogAndDirectoryUpdatesCloseOldWindow() throws Exception {
         app.io.submit(() -> {
             for (int i = 0; i < 10; i++) isolatedStore.saveDepartment(0, "门槛部门" + i);
         }).get(10, TimeUnit.SECONDS);
@@ -241,12 +290,21 @@ public final class DepartmentFilterUiTest {
             return null;
         });
         long extraId = app.io.submit(() -> isolatedStore.saveDepartment(0, "新增第十一部门")).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.notifyDepartmentsChanged(); return null; });
+        onMain(() -> {
+            app.notifyDepartmentsChanged();
+            return null;
+        });
         awaitOptions(StaffActivity.class, 13);
         Dialog oldDialog = open(StaffActivity.class, true);
-        onMain(() -> { assertFalse("触摸模式不能同时打开旧下拉", dropdown(resumed(StaffActivity.class)).isShowing()); return null; });
+        onMain(() -> {
+            assertFalse("触摸模式不能同时打开旧下拉", dropdown(resumed(StaffActivity.class)).isShowing());
+            return null;
+        });
         app.io.submit(() -> isolatedStore.removeDepartment(extraId)).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.notifyDepartmentsChanged(); return null; });
+        onMain(() -> {
+            app.notifyDepartmentsChanged();
+            return null;
+        });
         awaitOptions(StaffActivity.class, 12);
         onMain(() -> {
             assertFalse("目录变化先撤销旧选择窗口", oldDialog.isShowing());
@@ -259,11 +317,6 @@ public final class DepartmentFilterUiTest {
             return null;
         });
     }
-
-
-
-
-
 
 
     private long[] seedHierarchy() throws Exception {
@@ -319,9 +372,17 @@ public final class DepartmentFilterUiTest {
             long down = SystemClock.uptimeMillis();
             MotionEvent press = MotionEvent.obtain(down, down, MotionEvent.ACTION_DOWN, center[0], center[1], 0);
             MotionEvent release = MotionEvent.obtain(down, down + 30, MotionEvent.ACTION_UP, center[0], center[1], 0);
-            try { instrumentation.sendPointerSync(press); instrumentation.sendPointerSync(release); }
-            finally { press.recycle(); release.recycle(); }
-        } else onMain(() -> { assertTrue("部门筛选应响应点击", spinner(resumed(type)).performClick()); return null; });
+            try {
+                instrumentation.sendPointerSync(press);
+                instrumentation.sendPointerSync(release);
+            } finally {
+                press.recycle();
+                release.recycle();
+            }
+        } else onMain(() -> {
+            assertTrue("部门筛选应响应点击", spinner(resumed(type)).performClick());
+            return null;
+        });
         await(() -> onMain(() -> {
             T page = resumed(type);
             Dialog result = page == null ? null : dialog(page);
@@ -331,14 +392,14 @@ public final class DepartmentFilterUiTest {
     }
 
 
-
     private void choose(Dialog dialog, long id) {
         int position = onMain(() -> {
             ListView options = list(dialog);
-            for (int i = 0; i < options.getCount(); i++) if (options.getItemIdAtPosition(i) == id) {
-                options.setSelection(i);
-                return i;
-            }
+            for (int i = 0; i < options.getCount(); i++)
+                if (options.getItemIdAtPosition(i) == id) {
+                    options.setSelection(i);
+                    return i;
+                }
             throw new AssertionError("弹窗缺少部门 ID：" + id);
         });
         await(() -> onMain(() -> {
@@ -366,7 +427,9 @@ public final class DepartmentFilterUiTest {
         String size = configuration.screenWidthDp + "x" + configuration.screenHeightDp;
         try (FileOutputStream output = new FileOutputStream(new File(directory, name + "-" + size + ".png"))) {
             assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output));
-        } finally { bitmap.recycle(); }
+        } finally {
+            bitmap.recycle();
+        }
     }
 
     private <T extends BaseMorningActivity> void assertSelection(Class<T> type, long id) {
@@ -382,13 +445,22 @@ public final class DepartmentFilterUiTest {
         return page.findViewById(page instanceof StaffActivity ? R.id.staff_department_filter : R.id.records_department_filter);
     }
 
-    private static ListView list(Dialog dialog) { return dialog.findViewById(R.id.department_filter_options); }
-    private static ListFilterUi.DepartmentFilter filter(BaseMorningActivity page) { return field(page, "departmentFilter"); }
+    private static ListView list(Dialog dialog) {
+        return dialog.findViewById(R.id.department_filter_options);
+    }
+
+    private static ListFilterUi.DepartmentFilter filter(BaseMorningActivity page) {
+        return field(page, "departmentFilter");
+    }
+
     private static Dialog dialog(BaseMorningActivity page) {
         DepartmentFilterDialog controller = field(filter(page), "dialog");
         return controller == null ? null : field(controller, "dialog");
     }
-    private static long selectedId(BaseMorningActivity page) { return field(filter(page), "selectedId"); }
+
+    private static long selectedId(BaseMorningActivity page) {
+        return field(filter(page), "selectedId");
+    }
 
     private static ListPopupWindow dropdown(BaseMorningActivity page) throws Exception {
         Field popup = AppCompatSpinner.class.getDeclaredField("mPopup");
@@ -396,12 +468,15 @@ public final class DepartmentFilterUiTest {
         return (ListPopupWindow) popup.get(spinner(page));
     }
 
-    @SuppressWarnings("unchecked") private static <T> T field(Object object, String name) {
+    @SuppressWarnings("unchecked")
+    private static <T> T field(Object object, String name) {
         try {
             Field field = object.getClass().getDeclaredField(name);
             field.setAccessible(true);
             return (T) field.get(object);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static Rect bounds(View view) {
@@ -419,14 +494,19 @@ public final class DepartmentFilterUiTest {
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private <T> T onMain(Callable<T> action) {
         AtomicReference<T> result = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { result.set(action.call()); } catch (Throwable error) { failure.set(error); }
+            try {
+                result.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError(failure.get());
         return result.get();
@@ -439,7 +519,8 @@ public final class DepartmentFilterUiTest {
         return result;
     }
 
-    @SuppressWarnings("unchecked") private static void restore(SharedPreferences preferences, Map<String, Object> original) {
+    @SuppressWarnings("unchecked")
+    private static void restore(SharedPreferences preferences, Map<String, Object> original) {
         SharedPreferences.Editor editor = preferences.edit().clear();
         for (Map.Entry<String, Object> entry : original.entrySet()) {
             Object value = entry.getValue();

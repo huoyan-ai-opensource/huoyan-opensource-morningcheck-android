@@ -71,7 +71,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.ByteString;
 
-/** 安全密码与晨检出口使用独立数据库、本机 SDK 夹具，不采集真实图像或提交业务云。 */
+/**
+ * 安全密码与晨检出口使用独立数据库、本机 SDK 夹具，不采集真实图像或提交业务云。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class SecurityCheckUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -157,7 +159,7 @@ public final class SecurityCheckUiTest {
                             }
                             JSONObject data = "getStatus".equals(command)
                                     ? Jsons.obj("sdk_state", resultSdkReady ? "READY" : "MODEL_NOT_READY", "model_ready", resultSdkReady,
-                                            "certificate_valid", true, "device_id", "SECURITY-UI-TEST")
+                                    "certificate_valid", true, "device_id", "SECURITY-UI-TEST")
                                     : new JSONObject();
                             socket.send(Jsons.obj("requestId", request.getString("requestId"), "code", 0,
                                     "reason", "本机安全设置测试夹具", "data", data).toString());
@@ -544,8 +546,8 @@ public final class SecurityCheckUiTest {
             return null;
         });
         await(() -> onMain(() -> page.findViewById(R.id.result_body).isShown()
-                && page.findViewById(R.id.result_stay).isShown()
-                && page.findViewById(R.id.result_next).isShown()),
+                        && page.findViewById(R.id.result_stay).isShown()
+                        && page.findViewById(R.id.result_next).isShown()),
                 "读盘期间取消退出后必须恢复结果内容及停留、下一位按钮");
         onMain(() -> {
             View stay = page.findViewById(R.id.result_stay), next = page.findViewById(R.id.result_next);
@@ -597,8 +599,8 @@ public final class SecurityCheckUiTest {
             return null;
         });
         await(() -> onMain(() -> passwordDialog(check) == null
-                && Boolean.FALSE.equals(privateField(check, "paused"))
-                && Boolean.TRUE.equals(privateField(privateField(check, "speech"), "active"))),
+                        && Boolean.FALSE.equals(privateField(check, "paused"))
+                        && Boolean.TRUE.equals(privateField(privateField(check, "speech"), "active"))),
                 "晨检重排后取消退出应恢复原来的暂停与语音状态");
         onMain(() -> {
             assertEquals("取消重排后的验证窗应清空草稿", 0,
@@ -651,9 +653,9 @@ public final class SecurityCheckUiTest {
             return null;
         });
         await(() -> onMain(() -> passwordDialog(result) == null
-                && Boolean.FALSE.equals(privateField(result, "paused"))
-                && Boolean.TRUE.equals(privateField(privateField(result, "speech"), "active"))
-                && Boolean.TRUE.equals(privateField(result, "nextScheduled"))),
+                        && Boolean.FALSE.equals(privateField(result, "paused"))
+                        && Boolean.TRUE.equals(privateField(privateField(result, "speech"), "active"))
+                        && Boolean.TRUE.equals(privateField(result, "nextScheduled"))),
                 "结果重排后取消退出应恢复语音及自动下一位预约");
         onMain(() -> {
             View stay = result.findViewById(R.id.result_stay), next = result.findViewById(R.id.result_next);
@@ -779,9 +781,9 @@ public final class SecurityCheckUiTest {
                 new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null), true);
         String recordId = "security-countdown-result-" + UUID.randomUUID();
         app.io.submit(() -> isolatedStore.saveRecord(Jsons.obj("id", recordId, "staff_id", 28,
-                "staff_name", "倒计时测试员工", "staff_no", "SAFE28", "created_at", System.currentTimeMillis(),
-                "status", status, "temperature", "36.5", "abnormal_temperature", 0,
-                "abnormal_face", 0, "abnormal_hand", 0, "findings", new JSONArray(), "upload", "未上传")))
+                        "staff_name", "倒计时测试员工", "staff_no", "SAFE28", "created_at", System.currentTimeMillis(),
+                        "status", status, "temperature", "36.5", "abnormal_temperature", 0,
+                        "abnormal_face", 0, "abnormal_hand", 0, "findings", new JSONArray(), "upload", "未上传")))
                 .get(10, TimeUnit.SECONDS);
         scenario = ActivityScenario.launch(new Intent(app, ResultActivity.class).putExtra("record_id", recordId));
         awaitPage(ResultActivity.class, R.id.result_exit);
@@ -867,7 +869,8 @@ public final class SecurityCheckUiTest {
             } finally {
                 long elapsed = SystemClock.elapsedRealtime() - started;
                 Log.i("安全设置验收", (existingPassword ? "常规密码校验" : "首次密码初始化与校验") + "耗时 " + elapsed + " ms");
-                if (existingPassword) assertTrue("常规密码校验应在 3 秒内完成，实际 " + elapsed + " ms", elapsed <= 3000);
+                if (existingPassword)
+                    assertTrue("常规密码校验应在 3 秒内完成，实际 " + elapsed + " ms", elapsed <= 3000);
             }
         }).get(15, TimeUnit.SECONDS);
     }
@@ -889,7 +892,8 @@ public final class SecurityCheckUiTest {
     }
 
     private void capturePageArtifact(String name) throws Exception {
-        if (!Boolean.parseBoolean(InstrumentationRegistry.getArguments().getString("security_capture_artifacts", "false"))) return;
+        if (!Boolean.parseBoolean(InstrumentationRegistry.getArguments().getString("security_capture_artifacts", "false")))
+            return;
         instrumentation.waitForIdleSync();
         onMain(() -> {
             for (Activity activity : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
@@ -920,7 +924,8 @@ public final class SecurityCheckUiTest {
     }
 
     private void captureEmptyPasswordArtifact(AlertDialog dialog, String name) throws Exception {
-        if (!Boolean.parseBoolean(InstrumentationRegistry.getArguments().getString("security_capture_password_artifacts", "false"))) return;
+        if (!Boolean.parseBoolean(InstrumentationRegistry.getArguments().getString("security_capture_password_artifacts", "false")))
+            return;
         onMain(() -> {
             assertTrue("密码弹窗生产逻辑必须保持防截图", (dialog.getWindow().getAttributes().flags
                     & WindowManager.LayoutParams.FLAG_SECURE) != 0);
@@ -968,7 +973,8 @@ public final class SecurityCheckUiTest {
     }
 
     private AlertDialog passwordDialog(BaseMorningActivity page) {
-        if (page instanceof SystemSettingsActivity) return ((SystemSettingsActivity) page).formDialog;
+        if (page instanceof SystemSettingsActivity)
+            return ((SystemSettingsActivity) page).formDialog;
         if (!(page instanceof CheckActivity) && !(page instanceof ResultActivity)) return null;
         try {
             Field field = page.getClass().getDeclaredField("exitDialog");
@@ -1199,7 +1205,8 @@ public final class SecurityCheckUiTest {
     private void finishPages() {
         for (Stage stage : new Stage[]{Stage.RESUMED, Stage.STARTED, Stage.PAUSED, Stage.STOPPED, Stage.CREATED})
             for (Activity page : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (app.getPackageName().equals(page.getPackageName()) && !page.isFinishing()) page.finish();
+                if (app.getPackageName().equals(page.getPackageName()) && !page.isFinishing())
+                    page.finish();
     }
 
     private <T> T onMain(Callable<T> action) {

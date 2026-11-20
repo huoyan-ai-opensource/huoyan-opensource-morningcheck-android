@@ -155,7 +155,8 @@ public final class SdkDetailsActivity extends BaseMorningActivity {
                 return;
             reading = false;
             readingDialog.dismiss();
-            if (code != 0) notice(message == null ? getString(R.string.i18n_b_details_failed) : message);
+            if (code != 0)
+                notice(message == null ? getString(R.string.i18n_b_details_failed) : message);
             readError = code == 0 ? "" : (message == null ? getString(R.string.i18n_b_details_failed) : message) + "（" + code + "）";
             if (code == 0 && "capabilities".equals(kind))
                 capabilities = data == null ? new JSONObject() : data;

@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel;
 import cc.huoyan.morningcheck.sdk.client.HuoyanClient;
 import cc.huoyan.opensource.morningcheck.sdk.MorningSdkSession;
 
-/** 页面重建只恢复选模阶段，不重新查询或提交激活。 */
+/**
+ * 页面重建只恢复选模阶段，不重新查询或提交激活。
+ */
 public final class ModelSelectionViewModel extends ViewModel {
     private ModelSelectionSession selection;
 

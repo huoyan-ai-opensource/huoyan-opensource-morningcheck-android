@@ -14,16 +14,20 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 
-/** 真机执行系统检测器，不以 SDK 的 matched 字段制造预览框。 */
+/**
+ * 真机执行系统检测器，不以 SDK 的 matched 字段制造预览框。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class PreviewFaceDetectorTest {
-    @Test public void emptyFrameNeverProducesFaceBox() {
+    @Test
+    public void emptyFrameNeverProducesFaceBox() {
         assertEquals(0, PreviewFaceDetector.detect(new CameraSource.Frame(new byte[640 * 480 * 3], 640, 480)).length());
         assertEquals(0, PreviewFaceDetector.detect(new CameraSource.Frame(new byte[639 * 480 * 3], 639, 480)).length());
         assertEquals(0, PreviewFaceDetector.detect(new CameraSource.Frame(new byte[3], 1, 1)).length());
     }
 
-    @Test public void realFaceBoxesUseImageCoordinatesWithoutIdentityLabels() throws Exception {
+    @Test
+    public void realFaceBoxesUseImageCoordinatesWithoutIdentityLabels() throws Exception {
         String path = InstrumentationRegistry.getArguments().getString("previewFacePath", "");
         assumeTrue("真实人脸素材只通过本次设备测试参数传入，不随 APK 发布", !path.isEmpty());
         Bitmap bitmap = BitmapFactory.decodeFile(path);

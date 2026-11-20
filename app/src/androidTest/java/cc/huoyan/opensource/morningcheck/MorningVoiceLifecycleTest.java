@@ -35,7 +35,9 @@ import cc.huoyan.opensource.morningcheck.camera.CameraSource;
 
 import static org.junit.Assert.*;
 
-/** 假语音引擎验证实际页面语音出口的初始化、开关及生命周期，不发声、不打开硬件。 */
+/**
+ * 假语音引擎验证实际页面语音出口的初始化、开关及生命周期，不发声、不打开硬件。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class MorningVoiceLifecycleTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -47,7 +49,8 @@ public final class MorningVoiceLifecycleTest {
     private final List<CheckActivity> checkFixtures = new ArrayList<>();
     private final String preferenceName = "voice_stage_test_" + SystemClock.elapsedRealtimeNanos();
 
-    @Before public void createVoice() {
+    @Before
+    public void createVoice() {
         onMain(() -> {
             voice = new MorningVoice(new Handler(Looper.getMainLooper()), enabled::get, listener -> {
                 ready = listener;
@@ -57,22 +60,28 @@ public final class MorningVoiceLifecycleTest {
         });
     }
 
-    @After public void closeVoice() {
+    @After
+    public void closeVoice() {
         onMain(() -> {
             for (CheckActivity check : checkFixtures) {
                 try {
                     Field expiry = CheckActivity.class.getDeclaredField("facePresenceExpiry");
                     expiry.setAccessible(true);
                     check.main.removeCallbacks((Runnable) expiry.get(check));
-                } catch (Exception error) { throw new AssertionError(error); }
+                } catch (Exception error) {
+                    throw new AssertionError(error);
+                }
                 if (check.sdkSession != null) check.sdkSession.client().destroy();
                 check.overlay = null;
                 check.foreground = false;
                 check.destroyed = true;
             }
             for (ResultActivity result : resultFixtures) {
-                try { removeAutomaticNext(result); }
-                catch (Exception error) { throw new AssertionError(error); }
+                try {
+                    removeAutomaticNext(result);
+                } catch (Exception error) {
+                    throw new AssertionError(error);
+                }
                 if (result.sdkSession != null) result.sdkSession.client().destroy();
                 result.foreground = false;
             }
@@ -84,7 +93,8 @@ public final class MorningVoiceLifecycleTest {
         assertTrue(engine.closed);
     }
 
-    @Test public void delayedInitializationOnlyAnnouncesCurrentStageWithoutOldFaceReminders() {
+    @Test
+    public void delayedInitializationOnlyAnnouncesCurrentStageWithoutOldFaceReminders() {
         onMain(() -> {
             voice.enterStage("identity", "请正视摄像头");
             voice.update("identity_absent", "请入镜摄像头", 0, 1000);
@@ -98,13 +108,17 @@ public final class MorningVoiceLifecycleTest {
         assertEquals(1, engine.spoken.size());
         assertEquals("请佩戴口罩、工作帽检测", engine.spoken.get(0));
         int stops = engine.stopped;
-        onMain(() -> { for (int frame = 0; frame < 100; frame++) voice.enterStage("head", "请佩戴口罩、工作帽检测"); });
+        onMain(() -> {
+            for (int frame = 0; frame < 100; frame++)
+                voice.enterStage("head", "请佩戴口罩、工作帽检测");
+        });
         instrumentation.waitForIdleSync();
         assertEquals(1, engine.spoken.size());
         assertEquals("同阶段每帧不得停止已开始的提示", stops, engine.stopped);
     }
 
-    @Test public void initializationOrChineseLanguageFailureNeverSpeaksOrBlocksCaller() {
+    @Test
+    public void initializationOrChineseLanguageFailureNeverSpeaksOrBlocksCaller() {
         onMain(() -> voice.update("identity", "正视镜头", 0, 0));
         ready.ready(TextToSpeech.ERROR);
         instrumentation.waitForIdleSync();
@@ -119,7 +133,8 @@ public final class MorningVoiceLifecycleTest {
         assertTrue(engine.spoken.isEmpty());
     }
 
-    @Test public void disabledVoiceRejectsInitialAndLaterPromptsAndStopsCurrentSpeech() {
+    @Test
+    public void disabledVoiceRejectsInitialAndLaterPromptsAndStopsCurrentSpeech() {
         enabled.set(false);
         onMain(() -> voice.update("identity", "正视镜头", 0, 0));
         ready.ready(TextToSpeech.SUCCESS);
@@ -136,7 +151,8 @@ public final class MorningVoiceLifecycleTest {
         assertTrue(engine.stopped > 0);
     }
 
-    @Test public void postureBlipIsDiscardedWhenCurrentPhaseChanges() {
+    @Test
+    public void postureBlipIsDiscardedWhenCurrentPhaseChanges() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> {
@@ -149,7 +165,8 @@ public final class MorningVoiceLifecycleTest {
         assertEquals("翻转双手，检查手心", engine.spoken.get(0));
     }
 
-    @Test public void postureBlipReturningToAlreadySpokenStageDoesNotReplayIt() {
+    @Test
+    public void postureBlipReturningToAlreadySpokenStageDoesNotReplayIt() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> voice.update("head", "检查头部", 0, 15000));
@@ -164,7 +181,8 @@ public final class MorningVoiceLifecycleTest {
         assertEquals(1, engine.spoken.size());
     }
 
-    @Test public void pauseBeforeEngineReadyAndDestroyCancelPendingAnnouncements() {
+    @Test
+    public void pauseBeforeEngineReadyAndDestroyCancelPendingAnnouncements() {
         onMain(() -> {
             voice.update("head", "检查头部", 0, 0);
             voice.pause();
@@ -188,7 +206,8 @@ public final class MorningVoiceLifecycleTest {
         assertEquals(1, engine.spoken.size());
     }
 
-    @Test public void sameIdentityStageRemindersWaitForCurrentSentenceAndNeverInterrupt() {
+    @Test
+    public void sameIdentityStageRemindersWaitForCurrentSentenceAndNeverInterrupt() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> {
@@ -222,7 +241,8 @@ public final class MorningVoiceLifecycleTest {
         assertFalse(engine.speaking);
     }
 
-    @Test public void enteringNewStageInterruptsOldSentenceAndDiscardsItsQueuedReminder() {
+    @Test
+    public void enteringNewStageInterruptsOldSentenceAndDiscardsItsQueuedReminder() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> {
@@ -239,7 +259,8 @@ public final class MorningVoiceLifecycleTest {
         int stops = engine.stopped;
         assertTrue("进入头部阶段必须停止旧人脸语音", stops > 0);
         onMain(() -> {
-            for (int frame = 0; frame < 100; frame++) voice.enterStage("head", "请佩戴口罩、工作帽检测");
+            for (int frame = 0; frame < 100; frame++)
+                voice.enterStage("head", "请佩戴口罩、工作帽检测");
             engine.speaking = false;
         });
         SystemClock.sleep(350);
@@ -260,7 +281,8 @@ public final class MorningVoiceLifecycleTest {
                 "请伸出双手手背", "请翻转双手手心"), engine.spoken);
     }
 
-    @Test public void absenceChangingToUnmatchedWithinSameStageKeepsOnlyLatestWithoutInterrupting() {
+    @Test
+    public void absenceChangingToUnmatchedWithinSameStageKeepsOnlyLatestWithoutInterrupting() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> {
@@ -290,7 +312,8 @@ public final class MorningVoiceLifecycleTest {
         assertEquals("已清除的旧缺脸预约不能在未匹配提示后补播", 2, engine.spoken.size());
     }
 
-    @Test public void identityEntryBeforeFirstFrameWaitsForTtsAndDoesNotReplayAfterReturning() {
+    @Test
+    public void identityEntryBeforeFirstFrameWaitsForTtsAndDoesNotReplayAfterReturning() {
         final CheckActivity[] check = new CheckActivity[1];
         onMain(() -> {
             try {
@@ -307,7 +330,9 @@ public final class MorningVoiceLifecycleTest {
                 setCheckField(check[0], "resumed", false);
                 invokeResetCheckVoice(check[0]);
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
@@ -317,7 +342,9 @@ public final class MorningVoiceLifecycleTest {
                 setCheckField(check[0], "resumed", true);
                 voice.resume();
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         assertEquals("请正视摄像头", engine.spoken.get(0));
@@ -330,14 +357,17 @@ public final class MorningVoiceLifecycleTest {
                 setCheckField(check[0], "waitingDeparture", false);
                 check[0].cameraError = "";
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         instrumentation.waitForIdleSync();
         assertEquals("返回同一晨检页、布局刷新或相机恢复不能重复首句", 1, engine.spoken.size());
         assertFalse("不等帧播报不能绕过真实身份识别", checkPipeline(check[0]).isIdentityConfirmed());
     }
 
-    @Test public void actualCheckPipelineOnlyAnnouncesFaceHeadBackAndPalmOnce() {
+    @Test
+    public void actualCheckPipelineOnlyAnnouncesFaceHeadBackAndPalmOnce() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         CheckPipeline.Rules rules = new CheckPipeline.Rules(1, 1, 1, true, true, true, 37.3);
@@ -349,7 +379,9 @@ public final class MorningVoiceLifecycleTest {
                 engine.simulateSpeech = true;
                 check[0] = createCheckFixture(pipeline, rules);
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         int initialStops = engine.stopped;
@@ -361,7 +393,9 @@ public final class MorningVoiceLifecycleTest {
                 assertEquals("仍在人脸识别阶段，不允许打断初始提示", initialStops, engine.stopped);
                 pipeline.onTemperature(36.6);
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(2);
         assertTrue("头部首句应停止正在播的人脸句", engine.stopped > initialStops);
@@ -372,7 +406,9 @@ public final class MorningVoiceLifecycleTest {
                         new CheckPipeline.Detection(DetectionClasses.HEAD_HAT, .9f),
                         new CheckPipeline.Detection(DetectionClasses.HEAD_MASK, .9f)), true);
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(3);
         assertTrue("手背首句应停止正在播的头部句", engine.stopped > headStops);
@@ -385,7 +421,9 @@ public final class MorningVoiceLifecycleTest {
                         new CheckPipeline.Detection(DetectionClasses.HAND_BACK, .9f),
                         new CheckPipeline.Detection(DetectionClasses.HAND_BACK, .9f)));
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(4);
         assertTrue("手心首句应停止正在播的手背句", engine.stopped > backStops);
@@ -398,22 +436,27 @@ public final class MorningVoiceLifecycleTest {
                 invokeCheckVoice(check[0]);
                 assertEquals(CheckPipeline.Stage.RESULT, pipeline.getStage());
                 assertFalse(voice.awaitingOrSpeaking());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         assertTrue("实际结果状态应停止旧手心句", engine.stopped > palmStops);
         assertEquals(java.util.Arrays.asList("请正视摄像头", "请佩戴口罩、工作帽检测",
                 "请伸出双手手背", "请翻转双手手心"), engine.spoken);
     }
 
-    @Test public void actualHeadAbsenceNeedsContinuousEvidenceAndWaitsForFirstSentence() {
+    @Test
+    public void actualHeadAbsenceNeedsContinuousEvidenceAndWaitsForFirstSentence() {
         verifyActualFaceReminderWaitsForFirstSentence(true, false);
     }
 
-    @Test public void actualIdentityAbsenceNeedsContinuousEvidenceAndWaitsForFirstSentence() {
+    @Test
+    public void actualIdentityAbsenceNeedsContinuousEvidenceAndWaitsForFirstSentence() {
         verifyActualFaceReminderWaitsForFirstSentence(false, false);
     }
 
-    @Test public void actualHeadSingleFaceNeverQueuesAnotherIdentityMatchReminder() {
+    @Test
+    public void actualHeadSingleFaceNeverQueuesAnotherIdentityMatchReminder() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> {
@@ -423,7 +466,9 @@ public final class MorningVoiceLifecycleTest {
                 checkPresence(check).observeDetection(now, 1, now);
                 checkPresence(check).match(now, false, now);
                 invokeCheckVoice(check);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         SystemClock.sleep(350);
@@ -431,7 +476,8 @@ public final class MorningVoiceLifecycleTest {
         onMain(() -> assertFalse("单脸头检不应预约身份未匹配提醒", voice.awaitingOrSpeaking()));
     }
 
-    @Test public void actualHeadMultipleFacesWaitForCurrentSentenceAndKeepFiveSecondCooldown() {
+    @Test
+    public void actualHeadMultipleFacesWaitForCurrentSentenceAndKeepFiveSecondCooldown() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final CheckActivity[] check = new CheckActivity[1];
@@ -439,7 +485,9 @@ public final class MorningVoiceLifecycleTest {
             try {
                 engine.simulateSpeech = true;
                 check[0] = createOverlayCheckFixture(true);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         int stops = engine.stopped;
@@ -474,11 +522,13 @@ public final class MorningVoiceLifecycleTest {
         assertEquals("同阶段状态更新不能反复 stop", stops, engine.stopped);
     }
 
-    @Test public void actualIdentityUnmatchedEmployeeIsDistinctFromMissingFace() {
+    @Test
+    public void actualIdentityUnmatchedEmployeeIsDistinctFromMissingFace() {
         verifyActualFaceReminderWaitsForFirstSentence(false, true);
     }
 
-    @Test public void actualIdentityDelayedSdkReplyAnnouncesUnmatchedWithFreshFacePreview() {
+    @Test
+    public void actualIdentityDelayedSdkReplyAnnouncesUnmatchedWithFreshFacePreview() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final CheckActivity[] check = new CheckActivity[1];
@@ -490,7 +540,9 @@ public final class MorningVoiceLifecycleTest {
                 identifyFrame[0] = new CameraSource.Frame(new byte[12], 2, 2);
                 invokeFacePreview(check[0], identifyFrame[0], boxAt(.2), true,
                         check[0].session, CheckPipeline.Stage.IDENTITY, 1);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         long replyAt = SystemClock.elapsedRealtime() + 2000;
@@ -501,7 +553,9 @@ public final class MorningVoiceLifecycleTest {
                     CameraSource.Frame freshPreview = new CameraSource.Frame(new byte[12], 2, 2);
                     invokeFacePreview(check[0], freshPreview, boxAt(.2), true,
                             check[0].session, CheckPipeline.Stage.IDENTITY, 1);
-                } catch (Exception error) { throw new AssertionError(error); }
+                } catch (Exception error) {
+                    throw new AssertionError(error);
+                }
             });
             SystemClock.sleep(200);
         }
@@ -511,7 +565,9 @@ public final class MorningVoiceLifecycleTest {
                 invokeFacePreview(check[0], freshPreview, boxAt(.2), true,
                         check[0].session, CheckPipeline.Stage.IDENTITY, 1);
                 invokeIdentityReply(check[0], request, false, true, identifyFrame[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(2);
         assertEquals("SDK 回包虽耗时两秒，仍应播实际未匹配结论", "未匹配员工", engine.spoken.get(1));
@@ -519,7 +575,8 @@ public final class MorningVoiceLifecycleTest {
                 checkPipeline(check[0]).getStage() == CheckPipeline.Stage.IDENTITY));
     }
 
-    @Test public void actualUnknownFacePreviewCancelsPendingUnmatchedAndRecoveryKeepsRepeatCooldown() {
+    @Test
+    public void actualUnknownFacePreviewCancelsPendingUnmatchedAndRecoveryKeepsRepeatCooldown() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final CheckActivity[] check = new CheckActivity[1];
@@ -528,7 +585,9 @@ public final class MorningVoiceLifecycleTest {
             try {
                 engine.simulateSpeech = true;
                 check[0] = createIdentityReplyFixture(request);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         int stops = engine.stopped;
@@ -542,7 +601,9 @@ public final class MorningVoiceLifecycleTest {
                 invokeFacePreview(check[0], unavailable, new JSONArray(), false,
                         check[0].session, CheckPipeline.Stage.IDENTITY, 1);
                 engine.speaking = false;
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(350);
         assertEquals("预览事实未知时应撤销尚未播出的未匹配提示", 1, engine.spoken.size());
@@ -552,7 +613,9 @@ public final class MorningVoiceLifecycleTest {
                 CameraSource.Frame recovered = new CameraSource.Frame(new byte[12], 2, 2);
                 invokeFacePreview(check[0], recovered, boxAt(.2), true,
                         check[0].session, CheckPipeline.Stage.IDENTITY, 1);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(2);
         assertEquals("当前人脸恢复后应采用仍有效的真实未匹配回包", "未匹配员工", engine.spoken.get(1));
@@ -565,14 +628,17 @@ public final class MorningVoiceLifecycleTest {
                 invokeFacePreview(check[0], recovered, boxAt(.2), true,
                         check[0].session, CheckPipeline.Stage.IDENTITY, 1);
                 engine.speaking = false;
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(350);
         assertEquals("预览短暂抖动不能清除已播未匹配提示的五秒冷却", 2, engine.spoken.size());
         assertEquals(stops, engine.stopped);
     }
 
-    @Test public void actualNoFaceAndMissingMatchedFieldCannotInventUnmatchedEmployee() {
+    @Test
+    public void actualNoFaceAndMissingMatchedFieldCannotInventUnmatchedEmployee() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final CheckActivity[] check = new CheckActivity[1];
@@ -580,7 +646,9 @@ public final class MorningVoiceLifecycleTest {
         onMain(() -> {
             try {
                 check[0] = createIdentityReplyFixture(request);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         onMain(() -> {
@@ -597,7 +665,9 @@ public final class MorningVoiceLifecycleTest {
                         check[0].session, CheckPipeline.Stage.IDENTITY, 1);
                 assertFalse("缺少 matched 的回包必须是未知，不应伪造未匹配", checkPresence(check[0]).isUnmatched(System.nanoTime()));
                 assertFalse("未知回包也应撤销旧缺脸预约", voice.awaitingOrSpeaking());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(350);
         assertEquals("无人和匹配未知两种真实回包都不应播未匹配员工", 1, engine.spoken.size());
@@ -618,7 +688,9 @@ public final class MorningVoiceLifecycleTest {
                 engine.simulateSpeech = true;
                 check[0] = createCheckFixture(pipeline, rules);
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         assertEquals(enterHead ? "请佩戴口罩检测" : "请正视摄像头", engine.spoken.get(0));
@@ -635,7 +707,9 @@ public final class MorningVoiceLifecycleTest {
                         if (unmatched) presence.match(now, false, now);
                     }
                     invokeCheckVoice(check[0]);
-                } catch (Exception error) { throw new AssertionError(error); }
+                } catch (Exception error) {
+                    throw new AssertionError(error);
+                }
             });
             SystemClock.sleep(200);
         }
@@ -653,7 +727,9 @@ public final class MorningVoiceLifecycleTest {
                     checkPresence(check[0]).match(now, true, now);
                 }
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         assertEquals("人脸重新入镜只能取消待播提醒，不能截断正在播的同阶段句", stops, engine.stopped);
         onMain(() -> engine.speaking = false);
@@ -661,7 +737,8 @@ public final class MorningVoiceLifecycleTest {
         assertEquals(2, engine.spoken.size());
     }
 
-    @Test public void actualFaceWithUnknownMatchOrInferenceErrorNeverQueuesUnmatchedEmployee() {
+    @Test
+    public void actualFaceWithUnknownMatchOrInferenceErrorNeverQueuesUnmatchedEmployee() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         CheckPipeline.Rules rules = new CheckPipeline.Rules(1, 1, 1, true, true, true, 37.3);
@@ -671,7 +748,9 @@ public final class MorningVoiceLifecycleTest {
             try {
                 check[0] = createCheckFixture(pipeline, rules);
                 invokeCheckVoice(check[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         awaitSpeechCount(1);
         onMain(() -> {
@@ -704,12 +783,15 @@ public final class MorningVoiceLifecycleTest {
                 setCheckField(check[0], "inferenceIssue", "夹具识别失败");
                 invokeCheckVoice(check[0]);
                 assertFalse("SDK识别异常不能伪造未匹配或追加错误口播", voice.awaitingOrSpeaking());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         assertEquals("未知、等待和错误状态均不能新增语音", 1, engine.spoken.size());
     }
 
-    @Test public void actualFacePreviewShowsRealCoordinatesDuringIdentityAndHeadWithoutHeadMatch() {
+    @Test
+    public void actualFacePreviewShowsRealCoordinatesDuringIdentityAndHeadWithoutHeadMatch() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> {
@@ -719,17 +801,22 @@ public final class MorningVoiceLifecycleTest {
                     CameraSource.Frame frame = new CameraSource.Frame(new byte[12], 2, 2);
                     JSONArray realBoxes = new JSONArray().put(new JSONObject()
                             .put("x", .2).put("y", .25).put("w", .4).put("h", .5));
-                    if (enterHead) checkPresence(check).observeDetection(frame.receivedAtNanos, 1, System.nanoTime());
-                    else checkPresence(check).match(frame.receivedAtNanos, false, System.nanoTime());
+                    if (enterHead)
+                        checkPresence(check).observeDetection(frame.receivedAtNanos, 1, System.nanoTime());
+                    else
+                        checkPresence(check).match(frame.receivedAtNanos, false, System.nanoTime());
                     invokeFacePreview(check, frame, realBoxes, true, check.session,
                             enterHead ? CheckPipeline.Stage.HEAD : CheckPipeline.Stage.IDENTITY, 1);
                     assertEquals("检测到的人脸应显示真实坐标，头检不依赖身份匹配", realBoxes.toString(), overlayBoxes(check).toString());
                 }
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
     }
 
-    @Test public void actualEmptyFacePreviewNeverInventsUnmatchedEmployeeOrFaceBoxes() {
+    @Test
+    public void actualEmptyFacePreviewNeverInventsUnmatchedEmployeeOrFaceBoxes() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> {
@@ -737,18 +824,23 @@ public final class MorningVoiceLifecycleTest {
                 for (boolean enterHead : new boolean[]{false, true}) {
                     CheckActivity check = createOverlayCheckFixture(enterHead);
                     CameraSource.Frame frame = new CameraSource.Frame(new byte[12], 2, 2);
-                    if (enterHead) checkPresence(check).observeDetection(frame.receivedAtNanos, 0, System.nanoTime());
-                    else checkPresence(check).match(frame.receivedAtNanos, false, System.nanoTime());
+                    if (enterHead)
+                        checkPresence(check).observeDetection(frame.receivedAtNanos, 0, System.nanoTime());
+                    else
+                        checkPresence(check).match(frame.receivedAtNanos, false, System.nanoTime());
                     invokeFacePreview(check, frame, new JSONArray(), true, check.session,
                             enterHead ? CheckPipeline.Stage.HEAD : CheckPipeline.Stage.IDENTITY, 1);
                     assertEquals("没有检测到脸时不能画固定假框", 0, overlayBoxes(check).length());
                     assertFalse("只有SDK未匹配而没有实际人脸，不应播未匹配员工", checkPresence(check).isUnmatched(System.nanoTime()));
                 }
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
     }
 
-    @Test public void lateFaceCallbacksCannotReplaceCurrentSdkDetectionBoxes() {
+    @Test
+    public void lateFaceCallbacksCannotReplaceCurrentSdkDetectionBoxes() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final CheckActivity[] check = new CheckActivity[1];
@@ -771,7 +863,9 @@ public final class MorningVoiceLifecycleTest {
                 invokeFacePreview(check[0], frame, faceBoxes, true, check[0].session, CheckPipeline.Stage.HEAD, 0);
                 assertEquals("旧阶段、旧会话及旧generation回包均不能覆盖当前检测框", headBoxes.toString(), overlayBoxes(check[0]).toString());
                 oldFrame[0] = new CameraSource.Frame(new byte[12], 2, 2);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(1600);
         onMain(() -> {
@@ -780,11 +874,14 @@ public final class MorningVoiceLifecycleTest {
                                 .put("x", .4).put("y", .4).put("w", .2).put("h", .2)),
                         true, check[0].session, CheckPipeline.Stage.HEAD, 1);
                 assertEquals("过期采集帧不能恢复已到期的人脸或头检框", 0, overlayBoxes(check[0]).length());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
     }
 
-    @Test public void delayedHeadDetectionCannotReplaceFreshMissingOrMultipleFacePreview() {
+    @Test
+    public void delayedHeadDetectionCannotReplaceFreshMissingOrMultipleFacePreview() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final CheckActivity[] check = new CheckActivity[1];
@@ -793,7 +890,9 @@ public final class MorningVoiceLifecycleTest {
             try {
                 check[0] = createOverlayCheckFixture(true);
                 oldFrame[0] = new CameraSource.Frame(new byte[12], 2, 2);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(1600);
         onMain(() -> {
@@ -818,11 +917,14 @@ public final class MorningVoiceLifecycleTest {
                 checkPresence(check[0]).match(single.receivedAtNanos, false, System.nanoTime());
                 invokeDetectionOverlay(check[0], single, CheckPipeline.Stage.HEAD, sdkBoxes);
                 assertEquals("单脸即使未匹配身份仍可显示同帧着装框", sdkBoxes.toString(), overlayBoxes(check[0]).toString());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
     }
 
-    @Test public void headDetectionAndFacePreviewExpiryOnlyClearTheirOwnGeneration() {
+    @Test
+    public void headDetectionAndFacePreviewExpiryOnlyClearTheirOwnGeneration() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final CheckActivity[] check = new CheckActivity[1];
@@ -835,7 +937,9 @@ public final class MorningVoiceLifecycleTest {
                 JSONArray firstSdkBoxes = boxAt(.1);
                 invokeDetectionOverlay(check[0], frame, CheckPipeline.Stage.HEAD, firstSdkBoxes);
                 assertEquals("新鲜且单脸的SDK框应正常显示", firstSdkBoxes.toString(), overlayBoxes(check[0]).toString());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(850);
         onMain(() -> {
@@ -846,7 +950,9 @@ public final class MorningVoiceLifecycleTest {
                 invokeFacePreview(check[0], preview, previewBoxes[0], true,
                         check[0].session, CheckPipeline.Stage.HEAD, 1);
                 assertEquals(previewBoxes[0].toString(), overlayBoxes(check[0]).toString());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(850);
         onMain(() -> {
@@ -856,22 +962,30 @@ public final class MorningVoiceLifecycleTest {
                 newestSdkBoxes[0] = boxAt(.5);
                 checkPresence(check[0]).observeDetection(frame.receivedAtNanos, 1, System.nanoTime());
                 invokeDetectionOverlay(check[0], frame, CheckPipeline.Stage.HEAD, newestSdkBoxes[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(850);
         onMain(() -> {
             try {
                 assertEquals("旧人脸清框预约不能清掉更新的SDK框", newestSdkBoxes[0].toString(), overlayBoxes(check[0]).toString());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(850);
         onMain(() -> {
-            try { assertEquals("断流后SDK框必须在采集帧过期时消失", 0, overlayBoxes(check[0]).length()); }
-            catch (Exception error) { throw new AssertionError(error); }
+            try {
+                assertEquals("断流后SDK框必须在采集帧过期时消失", 0, overlayBoxes(check[0]).length());
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
     }
 
-    @Test public void resultPendingBeforeInitializationIsRequeuedAfterBackgroundAndAcceptedOnlyOnce() {
+    @Test
+    public void resultPendingBeforeInitializationIsRequeuedAfterBackgroundAndAcceptedOnlyOnce() {
         onMain(() -> {
             voice.enterStage("result", "晨检正常");
             assertFalse(voice.hasAnnounced("result"));
@@ -895,7 +1009,8 @@ public final class MorningVoiceLifecycleTest {
         assertEquals(1, engine.spoken.size());
     }
 
-    @Test public void resultCanBeRestoredAsAnnouncedAndFailedEngineSubmissionIsNotSavedAsSpoken() {
+    @Test
+    public void resultCanBeRestoredAsAnnouncedAndFailedEngineSubmissionIsNotSavedAsSpoken() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         onMain(() -> {
@@ -914,7 +1029,8 @@ public final class MorningVoiceLifecycleTest {
         onMain(() -> assertTrue(voice.hasAnnounced("new-result")));
     }
 
-    @Test public void resultUploadRefreshDoesNotReannounceOrAddExtraVoice() {
+    @Test
+    public void resultUploadRefreshDoesNotReannounceOrAddExtraVoice() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final ResultActivity[] result = new ResultActivity[1];
@@ -930,7 +1046,9 @@ public final class MorningVoiceLifecycleTest {
                 output.setAccessible(true);
                 output.set(result[0], voice);
                 invokeResultAnnouncement(result[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         instrumentation.waitForIdleSync();
         assertEquals(1, engine.spoken.size());
@@ -939,13 +1057,16 @@ public final class MorningVoiceLifecycleTest {
             try {
                 result[0].currentRecord.put("upload", "已上传");
                 invokeResultAnnouncement(result[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         instrumentation.waitForIdleSync();
         assertEquals("上传元信息刷新不应重放检测结论或追加姓名等内容", 1, engine.spoken.size());
     }
 
-    @Test public void disconnectedSdkDoesNotReplaceResultWaitingForVoiceInitialization() {
+    @Test
+    public void disconnectedSdkDoesNotReplaceResultWaitingForVoiceInitialization() {
         final ResultActivity[] result = new ResultActivity[1];
         onMain(() -> {
             try {
@@ -953,7 +1074,9 @@ public final class MorningVoiceLifecycleTest {
                 result[0] = createDisconnectedResult();
                 invokeResultAnnouncement(result[0]);
                 attemptAutomaticNext(result[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(1300);
         assertTrue(engine.spoken.isEmpty());
@@ -966,12 +1089,15 @@ public final class MorningVoiceLifecycleTest {
                 restoreReadySdk(result[0]);
                 attemptAutomaticNext(result[0]);
                 assertTrue("SDK 恢复后仍要等待实际结论结束", voice.awaitingOrSpeaking());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         assertEquals(1, engine.spoken.size());
     }
 
-    @Test public void disconnectedSdkDoesNotInterruptLongAbnormalResultAlreadySpeaking() {
+    @Test
+    public void disconnectedSdkDoesNotInterruptLongAbnormalResultAlreadySpeaking() {
         ready.ready(TextToSpeech.SUCCESS);
         instrumentation.waitForIdleSync();
         final ResultActivity[] result = new ResultActivity[1];
@@ -980,13 +1106,18 @@ public final class MorningVoiceLifecycleTest {
                 engine.simulateSpeech = true;
                 result[0] = createDisconnectedResult();
                 invokeResultAnnouncement(result[0]);
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         instrumentation.waitForIdleSync();
         assertEquals(1, engine.spoken.size());
         onMain(() -> {
-            try { attemptAutomaticNext(result[0]); }
-            catch (Exception error) { throw new AssertionError(error); }
+            try {
+                attemptAutomaticNext(result[0]);
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         SystemClock.sleep(1300);
         instrumentation.waitForIdleSync();
@@ -997,7 +1128,9 @@ public final class MorningVoiceLifecycleTest {
                 restoreReadySdk(result[0]);
                 attemptAutomaticNext(result[0]);
                 assertTrue(voice.awaitingOrSpeaking());
-            } catch (Exception error) { throw new AssertionError(error); }
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         });
         assertEquals(1, engine.spoken.size());
     }
@@ -1064,7 +1197,7 @@ public final class MorningVoiceLifecycleTest {
     }
 
     private static void invokeIdentityReply(CheckActivity check, int request, boolean matched,
-                                             boolean matchAvailable, CameraSource.Frame frame) throws Exception {
+                                            boolean matchAvailable, CameraSource.Frame frame) throws Exception {
         Method accept = CheckActivity.class.getDeclaredMethod("acceptIdentity", int.class, int.class, long.class,
                 boolean.class, boolean.class, JSONObject.class, CameraSource.Frame.class);
         accept.setAccessible(true);
@@ -1076,7 +1209,9 @@ public final class MorningVoiceLifecycleTest {
             Field pipeline = CheckActivity.class.getDeclaredField("pipeline");
             pipeline.setAccessible(true);
             return (CheckPipeline) pipeline.get(check);
-        } catch (Exception error) { throw new AssertionError(error); }
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static void invokeFacePreview(CheckActivity check, CameraSource.Frame frame, JSONArray boxes,
@@ -1089,7 +1224,7 @@ public final class MorningVoiceLifecycleTest {
     }
 
     private static void invokeDetectionOverlay(CheckActivity check, CameraSource.Frame frame,
-                                                CheckPipeline.Stage stage, JSONArray boxes) throws Exception {
+                                               CheckPipeline.Stage stage, JSONArray boxes) throws Exception {
         Method show = CheckActivity.class.getDeclaredMethod("showDetectionOverlay", CameraSource.Frame.class,
                 CheckPipeline.Stage.class, JSONArray.class);
         show.setAccessible(true);
@@ -1123,7 +1258,9 @@ public final class MorningVoiceLifecycleTest {
             long now = System.nanoTime();
             checkPresence(check).observeDetection(now, count, now);
             invokeCheckVoice(check);
-        } catch (Exception error) { throw new AssertionError(error); }
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static void invokeCheckVoice(CheckActivity check) throws Exception {
@@ -1149,8 +1286,11 @@ public final class MorningVoiceLifecycleTest {
         Field next = ResultActivity.class.getDeclaredField("nextPerson");
         next.setAccessible(true);
         Runnable scheduled = (Runnable) next.get(result);
-        try { scheduled.run(); }
-        finally { result.main.removeCallbacks(scheduled); }
+        try {
+            scheduled.run();
+        } finally {
+            result.main.removeCallbacks(scheduled);
+        }
     }
 
     private static void removeAutomaticNext(ResultActivity result) throws Exception {
@@ -1165,11 +1305,14 @@ public final class MorningVoiceLifecycleTest {
         announce.invoke(result);
     }
 
-    private void onMain(Runnable action) { instrumentation.runOnMainSync(action); }
+    private void onMain(Runnable action) {
+        instrumentation.runOnMainSync(action);
+    }
 
     private void awaitSpeechCount(int expected) {
         long deadline = SystemClock.elapsedRealtime() + 3000;
-        while (engine.spoken.size() < expected && SystemClock.elapsedRealtime() < deadline) SystemClock.sleep(20);
+        while (engine.spoken.size() < expected && SystemClock.elapsedRealtime() < deadline)
+            SystemClock.sleep(20);
         assertEquals(expected, engine.spoken.size());
         instrumentation.waitForIdleSync();
     }
@@ -1181,10 +1324,33 @@ public final class MorningVoiceLifecycleTest {
         int stopped;
         int language = TextToSpeech.LANG_AVAILABLE;
         int speakResult = TextToSpeech.SUCCESS;
-        @Override public int setLanguage() { return language; }
-        @Override public int speak(String text) { spoken.add(text); speaking = simulateSpeech && speakResult == TextToSpeech.SUCCESS; return speakResult; }
-        @Override public boolean isSpeaking() { return speaking; }
-        @Override public void stop() { stopped++; speaking = false; }
-        @Override public void shutdown() { closed = true; }
+
+        @Override
+        public int setLanguage() {
+            return language;
+        }
+
+        @Override
+        public int speak(String text) {
+            spoken.add(text);
+            speaking = simulateSpeech && speakResult == TextToSpeech.SUCCESS;
+            return speakResult;
+        }
+
+        @Override
+        public boolean isSpeaking() {
+            return speaking;
+        }
+
+        @Override
+        public void stop() {
+            stopped++;
+            speaking = false;
+        }
+
+        @Override
+        public void shutdown() {
+            closed = true;
+        }
     }
 }

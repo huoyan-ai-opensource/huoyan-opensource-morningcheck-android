@@ -16,7 +16,8 @@ import cc.huoyan.morningcheck.sdk.client.SdkConfig;
 import static org.junit.Assert.*;
 
 public final class ShopBindingStoreTest {
-    @Test public void commitsScopeAndConfigurationTogetherAndIncrementsGeneration() {
+    @Test
+    public void commitsScopeAndConfigurationTogetherAndIncrementsGeneration() {
         PreferenceFixture preferences = new PreferenceFixture();
         ShopBindingStore store = new ShopBindingStore(preferences.preferences);
         assertEquals(0, store.read().length());
@@ -44,7 +45,8 @@ public final class ShopBindingStoreTest {
         assertFalse(preferences.values.containsKey("cloud_token"));
     }
 
-    @Test public void commitFailureIsReportedAndCannotFabricateSuccess() {
+    @Test
+    public void commitFailureIsReportedAndCannotFabricateSuccess() {
         PreferenceFixture preferences = new PreferenceFixture();
         preferences.failCommit = true;
         ShopBindingStore store = new ShopBindingStore(preferences.preferences);
@@ -55,7 +57,8 @@ public final class ShopBindingStoreTest {
         assertTrue(preferences.values.isEmpty());
     }
 
-    @Test public void failedCommitRestoresEntirePreviousSnapshotIncludingNameAndConnection() {
+    @Test
+    public void failedCommitRestoresEntirePreviousSnapshotIncludingNameAndConnection() {
         PreferenceFixture preferences = new PreferenceFixture();
         ShopBindingStore store = new ShopBindingStore(preferences.preferences);
         assertTrue(store.save(new ShopLoginCoordinator.Binding("a", "s", "001", SdkConfig.aidl(),
@@ -73,7 +76,8 @@ public final class ShopBindingStoreTest {
         assertEquals(1, preferences.applies);
     }
 
-    @Test public void throwingCommitAfterMemoryWriteRestoresPreviousSnapshot() {
+    @Test
+    public void throwingCommitAfterMemoryWriteRestoresPreviousSnapshot() {
         PreferenceFixture preferences = new PreferenceFixture();
         ShopBindingStore store = new ShopBindingStore(preferences.preferences);
         assertTrue(store.save(new ShopLoginCoordinator.Binding("a", "s", "001", SdkConfig.aidl())));
@@ -84,7 +88,8 @@ public final class ShopBindingStoreTest {
         assertEquals(1, preferences.applies);
     }
 
-    @Test public void legacyScopeRemainsAvailableWhenFirstSnapshotCommitFails() {
+    @Test
+    public void legacyScopeRemainsAvailableWhenFirstSnapshotCommitFails() {
         PreferenceFixture preferences = new PreferenceFixture();
         preferences.values.put("account_id", "legacy-account");
         preferences.values.put("shop_id", "legacy-shop");
@@ -97,7 +102,8 @@ public final class ShopBindingStoreTest {
         assertEquals(7, store.read().optLong("generation"));
     }
 
-    @Test public void corruptSnapshotDoesNotFallBackToStaleLegacyScope() {
+    @Test
+    public void corruptSnapshotDoesNotFallBackToStaleLegacyScope() {
         PreferenceFixture preferences = new PreferenceFixture();
         preferences.values.put("account_id", "legacy-account");
         preferences.values.put("shop_id", "legacy-shop");
@@ -105,7 +111,8 @@ public final class ShopBindingStoreTest {
         assertEquals(0, new ShopBindingStore(preferences.preferences).read().length());
     }
 
-    @Test public void partialPersistedScopeIsNotPresentedAsLoggedIn() {
+    @Test
+    public void partialPersistedScopeIsNotPresentedAsLoggedIn() {
         PreferenceFixture preferences = new PreferenceFixture();
         preferences.values.put("account_id", "a");
         ShopBindingStore store = new ShopBindingStore(preferences.preferences);
@@ -114,7 +121,8 @@ public final class ShopBindingStoreTest {
         assertEquals(0, store.read().length());
     }
 
-    @Test public void addressChangePreservesScopeButRequiresNewConfirmedBinding() {
+    @Test
+    public void addressChangePreservesScopeButRequiresNewConfirmedBinding() {
         PreferenceFixture preferences = new PreferenceFixture();
         ShopBindingStore store = new ShopBindingStore(preferences.preferences);
         SdkConfig config = SdkConfig.aidl();
@@ -128,7 +136,8 @@ public final class ShopBindingStoreTest {
         assertFalse(store.read().has("needs_verification"));
     }
 
-    @Test public void failedVerificationMarkNeverRestoresOldScopeAsCurrent() {
+    @Test
+    public void failedVerificationMarkNeverRestoresOldScopeAsCurrent() {
         PreferenceFixture preferences = new PreferenceFixture();
         ShopBindingStore store = new ShopBindingStore(preferences.preferences);
         assertTrue(store.save(new ShopLoginCoordinator.Binding("a", "s", "001", SdkConfig.aidl())));
@@ -138,7 +147,8 @@ public final class ShopBindingStoreTest {
         assertFalse(ShopBindingStore.matchesConnection(store.read(), SdkConfig.aidl()));
     }
 
-    @Test public void asynchronousInvalidationTakesEffectImmediatelyAndSurvivesFailedRelogin() {
+    @Test
+    public void asynchronousInvalidationTakesEffectImmediatelyAndSurvivesFailedRelogin() {
         PreferenceFixture preferences = new PreferenceFixture();
         ShopBindingStore store = new ShopBindingStore(preferences.preferences);
         assertTrue(store.save(new ShopLoginCoordinator.Binding("a", "s", "001", SdkConfig.aidl())));
@@ -152,7 +162,9 @@ public final class ShopBindingStoreTest {
         assertFalse(ShopBindingStore.matchesConnection(store.read(), SdkConfig.aidl()));
     }
 
-    /** 模拟一次 Editor 的暂存区，使测试能够观察提交边界及旧快照是否受到污染。 */
+    /**
+     * 模拟一次 Editor 的暂存区，使测试能够观察提交边界及旧快照是否受到污染。
+     */
     private static final class PreferenceFixture {
         final Map<String, Object> values = new LinkedHashMap<>();
         int commits;
@@ -164,12 +176,18 @@ public final class ShopBindingStoreTest {
                 (proxy, method, arguments) -> {
                     switch (method.getName()) {
                         case "getString":
-                        case "getLong": return values.containsKey(arguments[0]) ? values.get(arguments[0]) : arguments[1];
-                        case "edit": return editor();
-                        case "toString": return "测试 SDK 归属存储";
-                        case "hashCode": return System.identityHashCode(proxy);
-                        case "equals": return proxy == arguments[0];
-                        default: throw new AssertionError("非预期的存储操作：" + method.getName());
+                        case "getLong":
+                            return values.containsKey(arguments[0]) ? values.get(arguments[0]) : arguments[1];
+                        case "edit":
+                            return editor();
+                        case "toString":
+                            return "测试 SDK 归属存储";
+                        case "hashCode":
+                            return System.identityHashCode(proxy);
+                        case "equals":
+                            return proxy == arguments[0];
+                        default:
+                            throw new AssertionError("非预期的存储操作：" + method.getName());
                     }
                 });
 
@@ -181,8 +199,12 @@ public final class ShopBindingStoreTest {
                     (proxy, method, arguments) -> {
                         switch (method.getName()) {
                             case "putString":
-                            case "putLong": pending.put((String) arguments[0], arguments[1]); return proxy;
-                            case "remove": removals.add((String) arguments[0]); return proxy;
+                            case "putLong":
+                                pending.put((String) arguments[0], arguments[1]);
+                                return proxy;
+                            case "remove":
+                                removals.add((String) arguments[0]);
+                                return proxy;
                             case "commit":
                                 commits++;
                                 // Android 先提交内存，再等待磁盘结果；失败也不能撤销内存修改。
@@ -195,7 +217,8 @@ public final class ShopBindingStoreTest {
                                 for (String key : removals) values.remove(key);
                                 values.putAll(pending);
                                 return null;
-                            default: throw new AssertionError("非预期的提交操作：" + method.getName());
+                            default:
+                                throw new AssertionError("非预期的提交操作：" + method.getName());
                         }
                     });
         }

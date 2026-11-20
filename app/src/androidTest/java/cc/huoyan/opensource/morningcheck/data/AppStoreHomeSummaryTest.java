@@ -20,27 +20,33 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-/** 首页按员工去重统计最新有效结果，复检不会重复增加人数。 */
+/**
+ * 首页按员工去重统计最新有效结果，复检不会重复增加人数。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class AppStoreHomeSummaryTest {
     private Context context;
     private String databaseName;
     private AppStore store;
 
-    @Before public void createStore() {
+    @Before
+    public void createStore() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         databaseName = "home-summary-" + UUID.randomUUID() + ".db";
         store = new AppStore(context, databaseName);
-        for (int i = 1; i <= 4; i++) store.saveStaff(Jsons.obj("id", i, "name", "员工" + i,
-                "staff_no", "S" + i, "enabled", i != 4, "created_at", i));
+        for (int i = 1; i <= 4; i++)
+            store.saveStaff(Jsons.obj("id", i, "name", "员工" + i,
+                    "staff_no", "S" + i, "enabled", i != 4, "created_at", i));
     }
 
-    @After public void removeStore() {
+    @After
+    public void removeStore() {
         store.close();
         context.deleteDatabase(databaseName);
     }
 
-    @Test public void latestValidResultPartitionsCheckedPeopleAndResolvesTimestampTies() {
+    @Test
+    public void latestValidResultPartitionsCheckedPeopleAndResolvesTimestampTies() {
         save("first-normal", 1, 100, 1);
         save("later-abnormal", 1, 150, 0);
         save("same-a", 2, 120, 0);
@@ -60,7 +66,8 @@ public final class AppStoreHomeSummaryTest {
         assertEquals(0L, store.homeSummary(100, 200).abnormalTodayCount);
     }
 
-    @Test public void emptyDayHasZeroCountersAndAbnormalRecordsRemainAvailableAfterNormalRetest() {
+    @Test
+    public void emptyDayHasZeroCountersAndAbnormalRecordsRemainAvailableAfterNormalRetest() {
         AppStore.HomeSummary empty = store.homeSummary(100, 200);
         assertEquals(0L, empty.checkedTodayCount);
         assertEquals(0L, empty.normalTodayCount);
@@ -76,13 +83,15 @@ public final class AppStoreHomeSummaryTest {
                 cc.huoyan.opensource.morningcheck.domain.RecordDateRange.Bounds.between(100, 200), 1, 20).total);
     }
 
-    @Test public void employeeChangesCannotMixDifferentSnapshotsOfRosterAndCheckedCount() throws Exception {
+    @Test
+    public void employeeChangesCannotMixDifferentSnapshotsOfRosterAndCheckedCount() throws Exception {
         for (int id = 1; id <= 4; id++) save("checked-" + id, id, 100 + id, id % 2);
         ExecutorService writer = Executors.newSingleThreadExecutor();
         CountDownLatch begin = new CountDownLatch(1);
         Future<?> changes = writer.submit(() -> {
             try {
-                if (!begin.await(10, TimeUnit.SECONDS)) throw new AssertionError("并发统计测试未开始");
+                if (!begin.await(10, TimeUnit.SECONDS))
+                    throw new AssertionError("并发统计测试未开始");
                 SQLiteDatabase db = store.getWritableDatabase();
                 for (int round = 0; round < 80; round++) {
                     db.beginTransaction();
@@ -93,7 +102,9 @@ public final class AppStoreHomeSummaryTest {
                             store.saveStaff(Jsons.obj("id", id, "name", "员工" + id, "staff_no", "S" + id,
                                     "created_at", id));
                         db.setTransactionSuccessful();
-                    } finally { db.endTransaction(); }
+                    } finally {
+                        db.endTransaction();
+                    }
                     Thread.yield();
                 }
             } catch (InterruptedException interrupted) {
@@ -110,8 +121,12 @@ public final class AppStoreHomeSummaryTest {
                 assertEquals(summary.checkedTodayCount, summary.normalTodayCount + summary.abnormalTodayCount);
             }
         } finally {
-            try { changes.get(15, TimeUnit.SECONDS); }
-            finally { writer.shutdownNow(); assertTrue(writer.awaitTermination(10, TimeUnit.SECONDS)); }
+            try {
+                changes.get(15, TimeUnit.SECONDS);
+            } finally {
+                writer.shutdownNow();
+                assertTrue(writer.awaitTermination(10, TimeUnit.SECONDS));
+            }
         }
     }
 

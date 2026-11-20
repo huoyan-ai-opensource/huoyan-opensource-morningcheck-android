@@ -43,7 +43,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.ByteString;
 
-/** 截获晨检导航并使用只读 SDK 夹具，验证冷启动和返回边界，不操作现场摄像头。 */
+/**
+ * 截获晨检导航并使用只读 SDK 夹具，验证冷启动和返回边界，不操作现场摄像头。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class HomeAutoCheckUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -71,7 +73,8 @@ public final class HomeAutoCheckUiTest {
             app.sdkSession().disconnect();
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
             @Override
@@ -140,7 +143,8 @@ public final class HomeAutoCheckUiTest {
                 app.sdkSession().disconnect();
             });
             instrumentation.waitForIdleSync();
-            app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+            app.io.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
         } finally {
             if (checkStarts != null) instrumentation.removeMonitor(checkStarts);
             try {
@@ -215,7 +219,8 @@ public final class HomeAutoCheckUiTest {
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private static Map<String, Object> snapshot(SharedPreferences preferences) {

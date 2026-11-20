@@ -1,6 +1,8 @@
 package cc.huoyan.opensource.morningcheck.hardware;
 
-/** 回执可拆包或与温度帧混在一起，只有独立的 success 才能确认模式切换。 */
+/**
+ * 回执可拆包或与温度帧混在一起，只有独立的 success 才能确认模式切换。
+ */
 final class TemperatureModeReply {
     enum Result {
         PENDING, SUCCESS, FAILURE
@@ -34,7 +36,9 @@ final class TemperatureModeReply {
         return result;
     }
 
-    /** 部分固件只回 success 而没有换行；串口空闲后才把完整词视作结束。 */
+    /**
+     * 部分固件只回 success 而没有换行；串口空闲后才把完整词视作结束。
+     */
     Result finishWhenIdle() {
         if (!inTemperatureFrame && !isTemperatureTail()) finishToken();
         return result;

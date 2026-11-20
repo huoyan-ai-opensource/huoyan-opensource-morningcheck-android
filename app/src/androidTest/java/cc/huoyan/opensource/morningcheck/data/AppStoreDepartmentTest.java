@@ -20,25 +20,30 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-/** 部门管理、旧库迁移、成员保护与表单冲突全部使用独立数据库，不触碰设备名册或云端。 */
+/**
+ * 部门管理、旧库迁移、成员保护与表单冲突全部使用独立数据库，不触碰设备名册或云端。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class AppStoreDepartmentTest {
     private Context context;
     private String databaseName;
     private AppStore store;
 
-    @Before public void createSeparateStore() {
+    @Before
+    public void createSeparateStore() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         databaseName = "department-test-" + UUID.randomUUID() + ".db";
         store = new AppStore(context, databaseName);
     }
 
-    @After public void removeOwnDatabase() {
+    @After
+    public void removeOwnDatabase() {
         store.close();
         context.deleteDatabase(databaseName);
     }
 
-    @Test public void staffImportCollectsUniqueDepartmentsAndCountsMembers() {
+    @Test
+    public void staffImportCollectsUniqueDepartmentsAndCountsMembers() {
         store.saveStaff(person(1, "  后厨  "));
         store.saveStaff(person(2, "后厨"));
         store.saveStaff(person(3, "   "));
@@ -53,7 +58,8 @@ public final class AppStoreDepartmentTest {
         assertEquals(1L, store.departmentsPage("前厅", 1, 20).rows.get(0).optLong("member_count"));
     }
 
-    @Test public void departmentSearchPaginatesBeforeRenderingAndUsesLiteralKeywords() {
+    @Test
+    public void departmentSearchPaginatesBeforeRenderingAndUsesLiteralKeywords() {
         for (int i = 0; i < 45; ++i) store.saveDepartment(0, "测试部门" + i);
         store.saveDepartment(0, "比例%_部门");
         AppStore.DataPage first = store.departmentsPage("测试", 1, 20);
@@ -75,7 +81,8 @@ public final class AppStoreDepartmentTest {
         assertEquals(1, store.departmentsPage("不存在", 99, 20).page);
     }
 
-    @Test public void renameUpdatesAllCurrentStaffAndPreservesFaceAndHistoricalSnapshots() {
+    @Test
+    public void renameUpdatesAllCurrentStaffAndPreservesFaceAndHistoricalSnapshots() {
         for (int i = 1; i <= 51; ++i) {
             JSONObject person = person(i, "后厨");
             Jsons.put(person, "face_registered", true);
@@ -105,7 +112,8 @@ public final class AppStoreDepartmentTest {
         assertEquals("前厅", store.staff(52).optString("department"));
     }
 
-    @Test public void departmentDeletionChecksLiveMembersAndNamesAreTrimUnique() {
+    @Test
+    public void departmentDeletionChecksLiveMembersAndNamesAreTrimUnique() {
         long occupied = store.saveDepartment(0, "厨房");
         long empty = store.saveDepartment(0, "空部门");
         expectFailure("已存在", () -> store.saveDepartment(0, "  厨房  "));
@@ -122,7 +130,8 @@ public final class AppStoreDepartmentTest {
         assertNotNull(store.staff(1));
     }
 
-    @Test public void editingStaffMergesNewFaceResultsButRejectsChangedProfile() {
+    @Test
+    public void editingStaffMergesNewFaceResultsButRejectsChangedProfile() {
         store.saveStaff(person(1, "后厨"));
         JSONObject expected = store.staff(1);
         store.patchStaff(1, Jsons.obj("face_registered", true, "face_uids", new JSONArray().put(901L), "enabled", false));
@@ -141,7 +150,8 @@ public final class AppStoreDepartmentTest {
         expectFailure("字段无效", () -> store.patchStaffProfile(1, store.staff(1), Jsons.obj("face_registered", false)));
     }
 
-    @Test public void staleDepartmentSelectionCannotRecreateDeletedOrRenamedNames() {
+    @Test
+    public void staleDepartmentSelectionCannotRecreateDeletedOrRenamedNames() {
         long id = store.saveDepartment(0, "已选择部门");
         store.saveStaff(person(1, ""));
         JSONObject expected = store.staff(1);
@@ -159,7 +169,8 @@ public final class AppStoreDepartmentTest {
         assertEquals("新部门", store.department(renamed).optString("name"));
     }
 
-    @Test public void versionTwoDatabaseKeepsDepartmentsAndBusinessRows() {
+    @Test
+    public void versionTwoDatabaseKeepsDepartmentsAndBusinessRows() {
         store.close();
         try (SQLiteDatabase old = context.openOrCreateDatabase(databaseName, Context.MODE_PRIVATE, null)) {
             old.execSQL("CREATE TABLE staff (id TEXT PRIMARY KEY, data TEXT NOT NULL, time INTEGER NOT NULL, name TEXT NOT NULL DEFAULT '', department TEXT NOT NULL DEFAULT '')");
@@ -189,7 +200,8 @@ public final class AppStoreDepartmentTest {
         assertEquals("新部门", store.department(department).optString("name"));
     }
 
-    @Test public void renameRollsBackDepartmentAndEarlierBatchIfAnEmployeeIsCorrupt() {
+    @Test
+    public void renameRollsBackDepartmentAndEarlierBatchIfAnEmployeeIsCorrupt() {
         for (int i = 1; i <= 45; ++i) store.saveStaff(person(i, "旧部门"));
         long id = store.departmentsPage("旧部门", 1, 20).rows.get(0).optLong("id");
         ContentValues broken = new ContentValues();
@@ -202,7 +214,8 @@ public final class AppStoreDepartmentTest {
         assertEquals(0L, store.departmentsPage("新部门", 1, 20).total);
     }
 
-    @Test public void versionThreeDatabaseKeepsRawReviewAndCorruptRowsAndDoesNotClearAfterReopen() {
+    @Test
+    public void versionThreeDatabaseKeepsRawReviewAndCorruptRowsAndDoesNotClearAfterReopen() {
         store.saveStaff(person(1, "旧部门"));
         store.saveRecord(Jsons.obj("id", "reviewed-record", "created_at", 100L, "staff_id", 1,
                 "status", 0, "upload", "已上传", "review", "已复核",

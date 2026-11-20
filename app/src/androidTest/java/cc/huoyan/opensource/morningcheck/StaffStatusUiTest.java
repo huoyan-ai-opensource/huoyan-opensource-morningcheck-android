@@ -66,7 +66,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 员工列表在模拟器或指定 C106 / NB55 的 UUID 数据库中验收，SDK 使用本机 503 端点。 */
+/**
+ * 员工列表在模拟器或指定 C106 / NB55 的 UUID 数据库中验收，SDK 使用本机 503 端点。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class StaffStatusUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -82,7 +84,8 @@ public final class StaffStatusUiTest {
     private String isolatedWsEndpoint;
     private ActivityScenario<? extends Activity> scenario;
 
-    @Before public void isolateStaffFixtures() throws Exception {
+    @Before
+    public void isolateStaffFixtures() throws Exception {
         boolean x86 = false;
         for (String abi : Build.SUPPORTED_ABIS) x86 |= abi.startsWith("x86");
         String hardware = Build.HARDWARE.toLowerCase(Locale.ROOT);
@@ -93,24 +96,40 @@ public final class StaffStatusUiTest {
         assumeTrue("不能中断现有门店绑定", onMain(() -> !app.shopLogin().getState().isRunning()));
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         originalPreferences = snapshot(preferences);
-        onMain(() -> { finishPages(); app.sdkSession().disconnect(); return null; });
+        onMain(() -> {
+            finishPages();
+            app.sdkSession().disconnect();
+            return null;
+        });
         drainIo();
         originalStore = app.store;
         databaseName = "staff-status-ui-" + UUID.randomUUID() + ".db";
         isolatedStore = new AppStore(new ContextWrapper(app) {
-            @Override public File getDatabasePath(String name) { return app.getDatabasePath(databaseName); }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
+            @Override
+            public File getDatabasePath(String name) {
+                return app.getDatabasePath(databaseName);
+            }
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
                 return app.openOrCreateDatabase(databaseName, mode, factory);
             }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
                 return app.openOrCreateDatabase(databaseName, mode, factory, handler);
             }
         });
-        onMain(() -> { app.store = isolatedStore; return null; });
+        onMain(() -> {
+            app.store = isolatedStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
-                if (request.getPath() != null && request.getPath().startsWith("/cloud")) cloudRequests.incrementAndGet();
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
+                if (request.getPath() != null && request.getPath().startsWith("/cloud"))
+                    cloudRequests.incrementAndGet();
                 else if ("/sdk".equals(request.getPath())) sdkRequests.incrementAndGet();
                 return new MockResponse().setResponseCode(503).setBody("员工资料界面回归：本机 SDK 保持未连接");
             }
@@ -124,8 +143,13 @@ public final class StaffStatusUiTest {
                 .putString("cloud_url", "http://127.0.0.2:" + endpoint.getPort() + "/cloud").putString("cloud_token", "LOCAL-STAFF-UI-TEST")
                 .putBoolean("voice", false).commit());
         String fontIndex = InstrumentationRegistry.getArguments().getString("staffUiFontIndex");
-        if (fontIndex != null) assertTrue(preferences.edit().putInt(AppFontSettings.KEY, Integer.parseInt(fontIndex)).commit());
-        onMain(() -> { app.sdkSession().reconnect(MorningSdkSettings.read(preferences)); assertIsolatedConnection(); return null; });
+        if (fontIndex != null)
+            assertTrue(preferences.edit().putInt(AppFontSettings.KEY, Integer.parseInt(fontIndex)).commit());
+        onMain(() -> {
+            app.sdkSession().reconnect(MorningSdkSettings.read(preferences));
+            assertIsolatedConnection();
+            return null;
+        });
         await(() -> sdkRequests.get() > 0, "WS 连接请求应实际抵达本机测试端点");
         LocalDate today = LocalDate.now();
         fixtures.put(99101L, person(99101, "空配置员工", "", "", "", true));
@@ -149,32 +173,37 @@ public final class StaffStatusUiTest {
         }).get(10, TimeUnit.SECONDS);
     }
 
-    @After public void restoreStaffFixtures() throws Exception {
+    @After
+    public void restoreStaffFixtures() throws Exception {
         if (app == null || originalStore == null) return;
         try {
             if (scenario != null) scenario.close();
-            onMain(() -> { finishPages(); app.sdkSession().disconnect(); return null; });
+            onMain(() -> {
+                finishPages();
+                app.sdkSession().disconnect();
+                return null;
+            });
             drainIo();
             assertEquals("浏览员工列表与详情不能调用业务云", 0, cloudRequests.get());
         } finally {
             try {
-                onMain(() -> { app.store = originalStore; return null; });
+                onMain(() -> {
+                    app.store = originalStore;
+                    return null;
+                });
                 if (isolatedStore != null) isolatedStore.close();
-                if (databaseName != null) assertTrue("仅删除本用例 UUID 数据库", app.deleteDatabase(databaseName));
+                if (databaseName != null)
+                    assertTrue("仅删除本用例 UUID 数据库", app.deleteDatabase(databaseName));
                 if (originalPreferences != null) restore(preferences, originalPreferences);
-            } finally { if (endpoint != null) endpoint.shutdown(); }
+            } finally {
+                if (endpoint != null) endpoint.shutdown();
+            }
         }
     }
 
 
-
-
-
-
-
-
-
-    @Test public void listShowsDesignColumnsAndResetsRecycledColors() throws Exception {
+    @Test
+    public void listShowsDesignColumnsAndResetsRecycledColors() throws Exception {
         launchList();
         onMain(() -> {
             StaffActivity activity = resumed(StaffActivity.class);
@@ -183,19 +212,20 @@ public final class StaffStatusUiTest {
             assertSingleTableHeader(activity);
             RecyclerView.ViewHolder recycled = null;
             // 依次复用同一行，并反向重绑，使有效/过期/缺省的文字和颜色不会残留。
-            for (int pass = 0; pass < 2; pass++) for (int i = 0; i < RecyclerListTestHelper.count(list); i++) {
-                int position = pass == 0 ? i : RecyclerListTestHelper.count(list) - i - 1;
-                JSONObject person = RecyclerListTestHelper.item(list, position);
-                RecyclerView.ViewHolder holder = RecyclerListTestHelper.bind(list, position, recycled);
-                View row = holder.itemView;
-                if (recycled != null) assertSame("员工列表应复用传入的行", recycled, holder);
-                row.measure(View.MeasureSpec.makeMeasureSpec(list.getWidth(), View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                row.layout(0, 0, row.getMeasuredWidth(), row.getMeasuredHeight());
-                assertFields(row, person, true);
-                assertTitledColumns(activity, (ViewGroup) row);
-                recycled = holder;
-            }
+            for (int pass = 0; pass < 2; pass++)
+                for (int i = 0; i < RecyclerListTestHelper.count(list); i++) {
+                    int position = pass == 0 ? i : RecyclerListTestHelper.count(list) - i - 1;
+                    JSONObject person = RecyclerListTestHelper.item(list, position);
+                    RecyclerView.ViewHolder holder = RecyclerListTestHelper.bind(list, position, recycled);
+                    View row = holder.itemView;
+                    if (recycled != null) assertSame("员工列表应复用传入的行", recycled, holder);
+                    row.measure(View.MeasureSpec.makeMeasureSpec(list.getWidth(), View.MeasureSpec.EXACTLY),
+                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                    row.layout(0, 0, row.getMeasuredWidth(), row.getMeasuredHeight());
+                    assertFields(row, person, true);
+                    assertTitledColumns(activity, (ViewGroup) row);
+                    recycled = holder;
+                }
             return null;
         });
         // 所有列留在同一视口，列表滚动不移动公共表头。
@@ -219,7 +249,8 @@ public final class StaffStatusUiTest {
         captureList();
     }
 
-    @Test public void listHeaderAndActionsStayFixedWhileRowsScroll() throws Exception {
+    @Test
+    public void listHeaderAndActionsStayFixedWhileRowsScroll() throws Exception {
         // 仅扩充本用例的 UUID 数据库，不向现场库或业务云添加资料。
         ArrayList<JSONObject> extra = new ArrayList<>();
         for (int index = 0; fixtures.size() < AppStore.DEFAULT_PAGE_SIZE; index++) {
@@ -229,7 +260,9 @@ public final class StaffStatusUiTest {
             fixtures.put(id, value);
             extra.add(value);
         }
-        app.io.submit(() -> { for (JSONObject value : extra) isolatedStore.saveStaff(value); }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+            for (JSONObject value : extra) isolatedStore.saveStaff(value);
+        }).get(10, TimeUnit.SECONDS);
         launchList();
         Map<Integer, Rect> fixed = onMain(() -> fixedControls(resumed(StaffActivity.class), true));
         showListPosition(fixtures.size() - 1);
@@ -242,7 +275,10 @@ public final class StaffStatusUiTest {
             return null;
         });
         assertEachColumnCanBeRead(fixtures.size() - 1);
-        onMain(() -> { assertFixedControls(resumed(StaffActivity.class), fixed); return null; });
+        onMain(() -> {
+            assertFixedControls(resumed(StaffActivity.class), fixed);
+            return null;
+        });
         showListPosition(0);
     }
 
@@ -280,9 +316,11 @@ public final class StaffStatusUiTest {
             TextView value = root.findViewById(id);
             assertEquals("独立字段应可见", View.VISIBLE, value.getVisibility());
             assertTrue("字段行应有实际高度", value.getHeight() > 0);
-            Rect bounds = new Rect(); value.getDrawingRect(bounds);
+            Rect bounds = new Rect();
+            value.getDrawingRect(bounds);
             root.offsetDescendantRectToMyCoords(value, bounds);
-            for (Rect other : fields) assertFalse("工号、状态、部门及健康证不能互相覆盖", Rect.intersects(other, bounds));
+            for (Rect other : fields)
+                assertFalse("工号、状态、部门及健康证不能互相覆盖", Rect.intersects(other, bounds));
             fields.add(bounds);
         }
     }
@@ -306,7 +344,8 @@ public final class StaffStatusUiTest {
         int count = root.getId() == id ? 1 : 0;
         if (root instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) root;
-            for (int index = 0; index < group.getChildCount(); index++) count += countViews(group.getChildAt(index), id);
+            for (int index = 0; index < group.getChildCount(); index++)
+                count += countViews(group.getChildAt(index), id);
         }
         return count;
     }
@@ -390,7 +429,8 @@ public final class StaffStatusUiTest {
             assertFullyVisible(activity.findViewById(id));
             result.put(id, screenBounds(activity.findViewById(id)));
         }
-        if (includeHeader) result.put(R.id.staff_table_header, screenBounds(activity.findViewById(R.id.staff_table_header)));
+        if (includeHeader)
+            result.put(R.id.staff_table_header, screenBounds(activity.findViewById(R.id.staff_table_header)));
         return result;
     }
 
@@ -425,7 +465,6 @@ public final class StaffStatusUiTest {
     }
 
 
-
     private static void assertFullyVisible(View view) {
         String label = view.getId() == View.NO_ID ? ((TextView) view).getText().toString()
                 : view.getResources().getResourceEntryName(view.getId());
@@ -452,7 +491,10 @@ public final class StaffStatusUiTest {
     }
 
     private void showListPosition(int position) {
-        onMain(() -> { RecyclerListTestHelper.scroll(((RecyclerView) resumed(StaffActivity.class).findViewById(R.id.staff_list)), position, 0); return null; });
+        onMain(() -> {
+            RecyclerListTestHelper.scroll(((RecyclerView) resumed(StaffActivity.class).findViewById(R.id.staff_list)), position, 0);
+            return null;
+        });
         await(() -> onMain(() -> {
             RecyclerView list = resumed(StaffActivity.class).findViewById(R.id.staff_list);
             View row = RecyclerListTestHelper.row(list, position);
@@ -463,15 +505,25 @@ public final class StaffStatusUiTest {
                 View field = row.findViewById(id);
                 Rect fieldBounds = screenBounds(field), listBounds = screenBounds(list);
                 if (!field.isShown() || field.getWidth() <= 0 || field.getHeight() <= 0
-                        || fieldBounds.top < listBounds.top || fieldBounds.bottom > listBounds.bottom) return false;
+                        || fieldBounds.top < listBounds.top || fieldBounds.bottom > listBounds.bottom)
+                    return false;
             }
             return true;
         }), "员工行滚动后各列的垂直信息应完整进入列表视口：" + position);
     }
 
-    private static int[] rowIds() { return new int[]{R.id.staff_row_name, R.id.staff_row_number, R.id.staff_row_department, R.id.staff_row_enabled, R.id.staff_row_face}; }
-    private static String text(View root, int id) { return ((TextView) root.findViewById(id)).getText().toString(); }
-    private static String string(JSONObject person, String key) { return person.isNull(key) ? "" : person.optString(key, "").trim(); }
+    private static int[] rowIds() {
+        return new int[]{R.id.staff_row_name, R.id.staff_row_number, R.id.staff_row_department, R.id.staff_row_enabled, R.id.staff_row_face};
+    }
+
+    private static String text(View root, int id) {
+        return ((TextView) root.findViewById(id)).getText().toString();
+    }
+
+    private static String string(JSONObject person, String key) {
+        return person.isNull(key) ? "" : person.optString(key, "").trim();
+    }
+
     private static JSONObject person(long id, String name, String number, String department, String expiry, boolean enabled) throws Exception {
         return new JSONObject().put("id", id).put("name", name).put("staff_no", number == null ? JSONObject.NULL : number)
                 .put("department", department == null ? JSONObject.NULL : department).put("health_expiry", expiry == null ? JSONObject.NULL : expiry)
@@ -490,15 +542,17 @@ public final class StaffStatusUiTest {
     }
 
 
-
     private <T extends Activity> void awaitExpectedStaffOrientation(Class<T> type) {
         String expected = InstrumentationRegistry.getArguments().getString("expectedStaffLayoutOrientation", "");
         if (expected.isEmpty()) return;
         assertTrue("验收方向只允许 portrait 或 landscape", "portrait".equals(expected) || "landscape".equals(expected));
         boolean portrait = "portrait".equals(expected);
         await(() -> onMain(() -> resumed(type) != null), "指定方向前员工页面应已恢复");
-        onMain(() -> { resumed(type).setRequestedOrientation(portrait
-                ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); return null; });
+        onMain(() -> {
+            resumed(type).setRequestedOrientation(portrait
+                    ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            return null;
+        });
         await(() -> onMain(() -> {
             T page = resumed(type);
             if (page == null) return false;
@@ -506,11 +560,13 @@ public final class StaffStatusUiTest {
             return root.getWidth() > 0 && root.getHeight() > 0 && !root.isLayoutRequested()
                     && (portrait ? root.getHeight() > root.getWidth() : root.getWidth() > root.getHeight())
                     && page.getResources().getConfiguration().orientation == (portrait
-                            ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE);
+                    ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE);
         }), "实际员工页面窗口应符合验收方向：" + expected);
     }
 
-    /** 可选截图只写应用自己的外部 files；由执行方拉回工作区 codexFile。 */
+    /**
+     * 可选截图只写应用自己的外部 files；由执行方拉回工作区 codexFile。
+     */
     private void captureList() throws Exception {
         String prefix = InstrumentationRegistry.getArguments().getString("staffUiCapturePrefix", "");
         if (prefix.isEmpty()) return;
@@ -524,44 +580,63 @@ public final class StaffStatusUiTest {
         try (FileOutputStream output = new FileOutputStream(new File(directory,
                 prefix.replaceAll("[^A-Za-z0-9_-]", "_") + ".png"))) {
             assertTrue(image.compress(Bitmap.CompressFormat.PNG, 100, output));
-        } finally { image.recycle(); }
+        } finally {
+            image.recycle();
+        }
     }
 
     private static JSONObject measure(View view) throws Exception {
-        int[] origin = new int[2]; view.getLocationOnScreen(origin);
+        int[] origin = new int[2];
+        view.getLocationOnScreen(origin);
         TextView text = (TextView) view;
         return new JSONObject().put("id", view.getResources().getResourceEntryName(view.getId())).put("text", text.getText().toString())
                 .put("color", String.format(Locale.ROOT, "#%08X", text.getCurrentTextColor())).put("x", origin[0]).put("y", origin[1])
                 .put("width", view.getWidth()).put("height", view.getHeight());
     }
+
     private void drainIo() throws Exception {
         instrumentation.waitForIdleSync();
         app.networkIo.submit(() -> null).get(10, TimeUnit.SECONDS);
         app.io.submit(() -> null).get(10, TimeUnit.SECONDS);
         instrumentation.waitForIdleSync();
     }
+
     private <T extends Activity> T resumed(Class<T> type) {
         for (Activity activity : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
             if (type.isInstance(activity)) return type.cast(activity);
         return null;
     }
+
     private void finishPages() {
-        for (Stage stage : Stage.values()) for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-            if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+        for (Stage stage : Stage.values())
+            for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
+
     private <T> T onMain(Callable<T> action) {
-        AtomicReference<T> value = new AtomicReference<>(); AtomicReference<Throwable> failure = new AtomicReference<>();
-        instrumentation.runOnMainSync(() -> { try { value.set(action.call()); } catch (Throwable error) { failure.set(error); } });
+        AtomicReference<T> value = new AtomicReference<>();
+        AtomicReference<Throwable> failure = new AtomicReference<>();
+        instrumentation.runOnMainSync(() -> {
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
+        });
         if (failure.get() != null) throw new AssertionError(failure.get());
         return value.get();
     }
+
     private static Map<String, Object> snapshot(SharedPreferences preferences) {
         Map<String, Object> result = new HashMap<>();
         for (Map.Entry<String, ?> entry : preferences.getAll().entrySet())
             result.put(entry.getKey(), entry.getValue() instanceof Set ? new HashSet<>((Set<?>) entry.getValue()) : entry.getValue());
         return result;
     }
-    @SuppressWarnings("unchecked") private static void restore(SharedPreferences preferences, Map<String, Object> original) {
+
+    @SuppressWarnings("unchecked")
+    private static void restore(SharedPreferences preferences, Map<String, Object> original) {
         SharedPreferences.Editor editor = preferences.edit().clear();
         for (Map.Entry<String, Object> entry : original.entrySet()) {
             Object value = entry.getValue();
@@ -573,11 +648,16 @@ public final class StaffStatusUiTest {
             else if (value instanceof Set) editor.putStringSet(entry.getKey(), (Set<String>) value);
             else throw new AssertionError("未知配置类型：" + entry.getKey());
         }
-        assertTrue(editor.commit()); assertEquals(original, preferences.getAll());
+        assertTrue(editor.commit());
+        assertEquals(original, preferences.getAll());
     }
+
     private static void await(BooleanSupplier condition, String message) {
         long deadline = SystemClock.elapsedRealtime() + 10_000;
-        do { if (condition.getAsBoolean()) return; SystemClock.sleep(50); } while (SystemClock.elapsedRealtime() < deadline);
+        do {
+            if (condition.getAsBoolean()) return;
+            SystemClock.sleep(50);
+        } while (SystemClock.elapsedRealtime() < deadline);
         fail(message);
     }
 }

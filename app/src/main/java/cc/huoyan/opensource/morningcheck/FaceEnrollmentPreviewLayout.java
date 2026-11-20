@@ -7,7 +7,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-/** 人脸录入预览等比铺满容器，画面与检测框共同缩放并裁切超出的区域。 */
+/**
+ * 人脸录入预览等比铺满容器，画面与检测框共同缩放并裁切超出的区域。
+ */
 public final class FaceEnrollmentPreviewLayout extends FrameLayout {
     private final Path previewClip = new Path();
     private final float cornerRadius;

@@ -74,7 +74,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 历史详情的界面回归；夹具只能显式运行于 x86 模拟器，现场设备仅提供只读入口。 */
+/**
+ * 历史详情的界面回归；夹具只能显式运行于 x86 模拟器，现场设备仅提供只读入口。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class RecordDetailUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -90,13 +92,17 @@ public final class RecordDetailUiTest {
     private Map<String, Object> readOnlyPreferences;
     private ActivityScenario<RecordDetailActivity> scenario;
 
-    @Before public void obtainApplicationWithoutChangingDevice() {
+    @Before
+    public void obtainApplicationWithoutChangingDevice() {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
     }
 
-    /** 测试只能清理自己创建的 UUID 文件；配置、业务库在任何失败路径都恢复。 */
-    @After public void restoreFixtureOrCheckReadOnlyState() throws Exception {
+    /**
+     * 测试只能清理自己创建的 UUID 文件；配置、业务库在任何失败路径都恢复。
+     */
+    @After
+    public void restoreFixtureOrCheckReadOnlyState() throws Exception {
         if (scenario != null) scenario.close();
         if (readOnlyRecordId != null) {
             assertEquals("只读验收不能改写晨检记录", readOnlyRecordSnapshot,
@@ -106,7 +112,11 @@ public final class RecordDetailUiTest {
         }
         if (originalStore == null) return;
         try {
-            onMain(() -> { finishPages(); app.sdkSession().disconnect(); return null; });
+            onMain(() -> {
+                finishPages();
+                app.sdkSession().disconnect();
+                return null;
+            });
             app.networkIo.submit(() -> null).get(10, TimeUnit.SECONDS);
             onIo(() -> {
                 for (String id : recordIds) {
@@ -124,7 +134,10 @@ public final class RecordDetailUiTest {
             assertEquals("浏览历史详情不能触发业务云请求", 0, cloudRequests.get());
         } finally {
             try {
-                onMain(() -> { app.store = originalStore; return null; });
+                onMain(() -> {
+                    app.store = originalStore;
+                    return null;
+                });
                 if (isolatedStore != null) isolatedStore.close();
                 if (databaseName != null) assertTrue(app.deleteDatabase(databaseName));
                 if (originalPreferences != null) restore(preferences, originalPreferences);
@@ -134,8 +147,10 @@ public final class RecordDetailUiTest {
         }
     }
 
-    @Test public void readsRequestedRecordAndKeepsReadOnlySections() throws Exception {
-        isolateFixtures(); String id = newRecordId("details");
+    @Test
+    public void readsRequestedRecordAndKeepsReadOnlySections() throws Exception {
+        isolateFixtures();
+        String id = newRecordId("details");
         String finding = longText("完整检查说明", "检查说明末尾标记");
         save(record(id).put("staff_name", "按编号加载的历史员工").put("findings", new JSONArray().put(finding)));
         launch(id);
@@ -151,21 +166,31 @@ public final class RecordDetailUiTest {
             }
             assertTrue("长检查说明应完整保留在数据列表", found);
         });
-        scenario.recreate(); awaitLoaded(id);
-        scenario.onActivity(activity -> { assertTrue(activity.findViewById(R.id.record_detail_photos).isShown()); assertReadOnlySections(activity); });
+        scenario.recreate();
+        awaitLoaded(id);
+        scenario.onActivity(activity -> {
+            assertTrue(activity.findViewById(R.id.record_detail_photos).isShown());
+            assertReadOnlySections(activity);
+        });
     }
 
-    @Test public void fivePhotosUseTwoColumnsAndShowMissingFileWithoutDroppingIt() throws Exception {
-        isolateFixtures(); String id = newRecordId("five"); JSONArray captured = new JSONArray();
-        for (int i = 0; i < 5; i++) captured.put(new JSONObject().put("file", i == 4 ? prefix + "-missing.jpg" : createPhoto(id, "sample-" + i, i == 1 ? Color.BLUE : Color.RED)).put("label", "采集 " + (i + 1)));
-        save(record(id).put("captured_photos", captured)); launch(id);
+    @Test
+    public void fivePhotosUseTwoColumnsAndShowMissingFileWithoutDroppingIt() throws Exception {
+        isolateFixtures();
+        String id = newRecordId("five");
+        JSONArray captured = new JSONArray();
+        for (int i = 0; i < 5; i++)
+            captured.put(new JSONObject().put("file", i == 4 ? prefix + "-missing.jpg" : createPhoto(id, "sample-" + i, i == 1 ? Color.BLUE : Color.RED)).put("label", "采集 " + (i + 1)));
+        save(record(id).put("captured_photos", captured));
+        launch(id);
         await(() -> visibleColor(0, Color.RED), "照片网格应读取真实测试照片");
         scenario.onActivity(activity -> {
             RecyclerView list = activity.findViewById(R.id.record_detail_photos);
             assertTwoColumnPhotoGrid(list);
             assertPhotoHint(activity);
             assertEquals("不能限制为三张照片", 5, list.getAdapter().getItemCount());
-            View row = visibleRow(list, 0); ImageView image = row.findViewById(R.id.record_photo_thumbnail);
+            View row = visibleRow(list, 0);
+            ImageView image = row.findViewById(R.id.record_photo_thumbnail);
             assertTrue("缩略图应有可见高度", image.getHeight() > 0);
             Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
             assertTrue("缩略图应按需采样", Math.max(bitmap.getWidth(), bitmap.getHeight()) <= 480);
@@ -176,17 +201,27 @@ public final class RecordDetailUiTest {
             if (page == null) return false;
             View row = visibleRow(page.findViewById(R.id.record_detail_photos), 4);
             if (row == null) return false;
-            TextView empty = row.findViewById(R.id.record_photo_empty); ImageView image = row.findViewById(R.id.record_photo_thumbnail);
+            TextView empty = row.findViewById(R.id.record_photo_empty);
+            ImageView image = row.findViewById(R.id.record_photo_thumbnail);
             return empty.isShown() && empty.getText().toString().contains("缺失") && image.getDrawable() == null && !image.hasOnClickListeners();
         }), "缺失文件应显示占位且不能打开查看器", () -> visiblePhotoState(4));
-        scenario.recreate(); awaitLoaded(id);
-        scenario.onActivity(activity -> { assertTrue(activity.findViewById(R.id.record_detail_photos).isShown()); assertEquals(5, ((RecyclerView) activity.findViewById(R.id.record_detail_photos)).getAdapter().getItemCount()); });
+        scenario.recreate();
+        awaitLoaded(id);
+        scenario.onActivity(activity -> {
+            assertTrue(activity.findViewById(R.id.record_detail_photos).isShown());
+            assertEquals(5, ((RecyclerView) activity.findViewById(R.id.record_detail_photos)).getAdapter().getItemCount());
+        });
     }
 
-    @Test public void verticalGridCanOpenLastOfTwelvePhotosAndReturnToItsPosition() throws Exception {
-        isolateFixtures(); String id = newRecordId("many"); JSONArray captured = new JSONArray();
-        for (int i = 0; i < 12; i++) captured.put(new JSONObject().put("file", createPhoto(id, "many-" + i, Color.GREEN)).put("label", "照片 " + (i + 1)));
-        save(record(id).put("captured_photos", captured)); launch(id);
+    @Test
+    public void verticalGridCanOpenLastOfTwelvePhotosAndReturnToItsPosition() throws Exception {
+        isolateFixtures();
+        String id = newRecordId("many");
+        JSONArray captured = new JSONArray();
+        for (int i = 0; i < 12; i++)
+            captured.put(new JSONObject().put("file", createPhoto(id, "many-" + i, Color.GREEN)).put("label", "照片 " + (i + 1)));
+        save(record(id).put("captured_photos", captured));
+        launch(id);
         await(() -> visibleColor(0, Color.GREEN), "照片网格应完成加载");
         scenario.onActivity(activity -> {
             RecyclerView list = activity.findViewById(R.id.record_detail_photos);
@@ -226,34 +261,64 @@ public final class RecordDetailUiTest {
             return null;
         });
         await(() -> photoPositionMatches(firstPosition.get(), firstTop.get()), "关闭查看器应保留照片网格的滚动位置");
-        scenario.recreate(); awaitLoaded(id);
+        scenario.recreate();
+        awaitLoaded(id);
         await(() -> photoPositionMatches(firstPosition.get(), firstTop.get()), "详情重建应保留照片网格的滚动位置");
     }
 
-    @Test public void selectedPhotoRoutesToViewerAndNavigationAndRecreationKeepItsIndex() throws Exception {
-        isolateFixtures(); String id = newRecordId("viewer"); JSONArray captured = new JSONArray();
+    @Test
+    public void selectedPhotoRoutesToViewerAndNavigationAndRecreationKeepItsIndex() throws Exception {
+        isolateFixtures();
+        String id = newRecordId("viewer");
+        JSONArray captured = new JSONArray();
         int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA};
-        for (int i = 0; i < colors.length; i++) captured.put(new JSONObject().put("file", createPhoto(id, "viewer-" + i, colors[i])).put("label", "照片 " + (i + 1)));
-        save(record(id).put("captured_photos", captured)); launch(id);
+        for (int i = 0; i < colors.length; i++)
+            captured.put(new JSONObject().put("file", createPhoto(id, "viewer-" + i, colors[i])).put("label", "照片 " + (i + 1)));
+        save(record(id).put("captured_photos", captured));
+        launch(id);
         await(() -> visibleColor(1, Color.BLUE), "第二张缩略图应显示蓝色照片");
         Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(RecordPhotoActivity.class.getName(), null, false);
         RecordPhotoActivity opened;
-        try { scenario.onActivity(activity -> visibleRow(activity.findViewById(R.id.record_detail_photos), 1).findViewById(R.id.record_photo_thumbnail).performClick()); Activity routed = instrumentation.waitForMonitorWithTimeout(monitor, 10000); assertTrue(routed instanceof RecordPhotoActivity); opened = (RecordPhotoActivity) routed; }
-        finally { instrumentation.removeMonitor(monitor); }
+        try {
+            scenario.onActivity(activity -> visibleRow(activity.findViewById(R.id.record_detail_photos), 1).findViewById(R.id.record_photo_thumbnail).performClick());
+            Activity routed = instrumentation.waitForMonitorWithTimeout(monitor, 10000);
+            assertTrue(routed instanceof RecordPhotoActivity);
+            opened = (RecordPhotoActivity) routed;
+        } finally {
+            instrumentation.removeMonitor(monitor);
+        }
         awaitPhotoOrientation();
         awaitPhoto(false, 2, 5, Color.BLUE);
-        onMain(() -> { assertEquals(1, opened.getIntent().getIntExtra(RecordPhotoActivity.EXTRA_PHOTO_INDEX, -1)); assertEquals("2/5", text(opened, R.id.photo_position).replace(" ", "")); return null; });
+        onMain(() -> {
+            assertEquals(1, opened.getIntent().getIntExtra(RecordPhotoActivity.EXTRA_PHOTO_INDEX, -1));
+            assertEquals("2/5", text(opened, R.id.photo_position).replace(" ", ""));
+            return null;
+        });
         gesturePhoto(false, .8f, .5f, .2f, .5f, MotionEvent.ACTION_UP);
         awaitPhoto(false, 3, 5, Color.GREEN);
-        onMain(() -> { opened.recreate(); return null; });
-        await(() -> onMain(() -> { RecordPhotoActivity page = resumedPhoto(); return page != null && page != opened && matchesPhoto(false, 3, 5, Color.GREEN); }), "照片页重建应保持当前选择");
-        onMain(() -> { RecordPhotoActivity page = resumedPhoto(); page.findViewById(R.id.photo_previous).performClick(); return null; });
+        onMain(() -> {
+            opened.recreate();
+            return null;
+        });
+        await(() -> onMain(() -> {
+            RecordPhotoActivity page = resumedPhoto();
+            return page != null && page != opened && matchesPhoto(false, 3, 5, Color.GREEN);
+        }), "照片页重建应保持当前选择");
+        onMain(() -> {
+            RecordPhotoActivity page = resumedPhoto();
+            page.findViewById(R.id.photo_previous).performClick();
+            return null;
+        });
         awaitPhoto(false, 2, 5, Color.BLUE);
-        onMain(() -> { resumedPhoto().onBackPressed(); return null; });
+        onMain(() -> {
+            resumedPhoto().onBackPressed();
+            return null;
+        });
         await(() -> onMain(() -> currentDetail() != null && currentDetail().findViewById(R.id.record_detail_photos).isShown()), "关闭查看器应返回原详情照片页签");
     }
 
-    @Test public void photoSwipesRespectBoundsAndCanContinuePastMissingFiles() throws Exception {
+    @Test
+    public void photoSwipesRespectBoundsAndCanContinuePastMissingFiles() throws Exception {
         isolateFixtures();
         String id = newRecordId("swipe-missing");
         JSONArray captured = new JSONArray()
@@ -289,7 +354,8 @@ public final class RecordDetailUiTest {
         awaitMissingPhoto(2, 3);
     }
 
-    @Test public void photoPagerFollowsFingerBeforeReleaseWithoutOpeningLoadingDialog() throws Exception {
+    @Test
+    public void photoPagerFollowsFingerBeforeReleaseWithoutOpeningLoadingDialog() throws Exception {
         isolateFixtures();
         String id = newRecordId("follow-finger");
         save(record(id).put("captured_photos", new JSONArray()
@@ -327,10 +393,14 @@ public final class RecordDetailUiTest {
             sendPointer(down, MotionEvent.ACTION_UP, bounds.left + bounds.width() * .2f, y);
         }
         awaitPhoto(false, 2, 2, Color.BLUE);
-        onMain(() -> { assertNoPhotoLoadingDialog(); return null; });
+        onMain(() -> {
+            assertNoPhotoLoadingDialog();
+            return null;
+        });
     }
 
-    @Test public void allTwelvePhotosArePreloadedAndPagerRestoresSelectionWithoutPerPhotoIo() throws Exception {
+    @Test
+    public void allTwelvePhotosArePreloadedAndPagerRestoresSelectionWithoutPerPhotoIo() throws Exception {
         isolateFixtures();
         String id = newRecordId("preloaded");
         JSONArray captured = new JSONArray();
@@ -360,24 +430,34 @@ public final class RecordDetailUiTest {
             for (int i = 1; i < colors.length; i++) {
                 gesturePhoto(false, .8f, .5f, .2f, .5f, MotionEvent.ACTION_UP);
                 awaitPhoto(false, i + 1, colors.length, colors[i]);
-                onMain(() -> { assertNoPhotoLoadingDialog(); return null; });
+                onMain(() -> {
+                    assertNoPhotoLoadingDialog();
+                    return null;
+                });
             }
         } finally {
             release.countDown();
             blocked.get(10, TimeUnit.SECONDS);
         }
         RecordPhotoActivity previous = onMain(RecordDetailUiTest::resumedPhoto);
-        onMain(() -> { previous.recreate(); return null; });
+        onMain(() -> {
+            previous.recreate();
+            return null;
+        });
         await(() -> onMain(() -> resumedPhoto() != null && resumedPhoto() != previous), "预加载照片页应完成重建");
         awaitPhoto(false, 12, 12, colors[11]);
         gesturePhoto(false, .2f, .5f, .8f, .5f, MotionEvent.ACTION_UP);
         awaitPhoto(false, 11, 12, colors[10]);
-        onMain(() -> { resumedPhoto().onBackPressed(); return null; });
+        onMain(() -> {
+            resumedPhoto().onBackPressed();
+            return null;
+        });
         await(() -> onMain(() -> currentDetail() != null && currentDetail().findViewById(R.id.record_detail_photos).isShown()),
                 "返回详情时应保留照片页签");
     }
 
-    @Test public void fullscreenPhotoCanSwipeZoomDragAndRestoreCurrentSelection() throws Exception {
+    @Test
+    public void fullscreenPhotoCanSwipeZoomDragAndRestoreCurrentSelection() throws Exception {
         isolateFixtures();
         String id = newRecordId("fullscreen");
         JSONArray captured = new JSONArray();
@@ -435,7 +515,10 @@ public final class RecordDetailUiTest {
         gesturePhoto(false, .5f, .5f, .5f, .5f, MotionEvent.ACTION_UP);
         awaitPhoto(true, 3, 3, Color.GREEN);
         RecordPhotoActivity previous = onMain(RecordDetailUiTest::resumedPhoto);
-        onMain(() -> { previous.recreate(); return null; });
+        onMain(() -> {
+            previous.recreate();
+            return null;
+        });
         await(() -> onMain(() -> resumedPhoto() != null && resumedPhoto() != previous),
                 "图片页重建应完成");
         awaitPhoto(true, 3, 3, Color.GREEN);
@@ -445,8 +528,10 @@ public final class RecordDetailUiTest {
         awaitPhoto(false, 3, 3, Color.GREEN);
     }
 
-    @Test public void missingRecordHasVisibleEmptyState() throws Exception {
-        isolateFixtures(); String id = newRecordId("missing");
+    @Test
+    public void missingRecordHasVisibleEmptyState() throws Exception {
+        isolateFixtures();
+        String id = newRecordId("missing");
         scenario = ActivityScenario.launch(new Intent(app, RecordDetailActivity.class).putExtra(RecordDetailActivity.EXTRA_RECORD_ID, id));
         awaitExpectedOrientation();
         await(() -> onMain(() -> currentDetail() != null
@@ -478,25 +563,41 @@ public final class RecordDetailUiTest {
         assumeTrue("夹具只允许已识别的 x86 Android 模拟器，禁止写入现场机器",
                 x86 && (hardware.contains("ranchu") || hardware.contains("goldfish") || device.startsWith("generic_x86")));
         assumeTrue("不能中断现有门店绑定", onMain(() -> !app.shopLogin().getState().isRunning()));
-        onMain(() -> { finishPages(); app.sdkSession().disconnect(); return null; });
+        onMain(() -> {
+            finishPages();
+            app.sdkSession().disconnect();
+            return null;
+        });
         drainIo();
         originalPreferences = snapshot(preferences);
         originalStore = app.store;
         databaseName = prefix + ".db";
         isolatedStore = new AppStore(new ContextWrapper(app) {
-            @Override public File getDatabasePath(String name) { return app.getDatabasePath(databaseName); }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
+            @Override
+            public File getDatabasePath(String name) {
+                return app.getDatabasePath(databaseName);
+            }
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
                 return app.openOrCreateDatabase(databaseName, mode, factory);
             }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
                 return app.openOrCreateDatabase(databaseName, mode, factory, handler);
             }
         });
-        onMain(() -> { app.store = isolatedStore; return null; });
+        onMain(() -> {
+            app.store = isolatedStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
-                if (request.getPath() != null && request.getPath().startsWith("/cloud")) cloudRequests.incrementAndGet();
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
+                if (request.getPath() != null && request.getPath().startsWith("/cloud"))
+                    cloudRequests.incrementAndGet();
                 return new MockResponse().setResponseCode(503).setBody("仅测试历史记录界面，SDK 保持未就绪");
             }
         });
@@ -524,15 +625,21 @@ public final class RecordDetailUiTest {
     }
 
     private void save(JSONObject record) throws Exception {
-        onIo(() -> { isolatedStore.saveRecord(record); return null; });
+        onIo(() -> {
+            isolatedStore.saveRecord(record);
+            return null;
+        });
     }
 
     private String createPhoto(String recordId, String stage, int color) throws Exception {
         String name = onIo(() -> {
             Bitmap bitmap = Bitmap.createBitmap(1600, 900, Bitmap.Config.ARGB_8888);
             bitmap.eraseColor(color);
-            try { return isolatedStore.savePhoto(recordId, stage, bitmap); }
-            finally { bitmap.recycle(); }
+            try {
+                return isolatedStore.savePhoto(recordId, stage, bitmap);
+            } finally {
+                bitmap.recycle();
+            }
         });
         photoNames.add(name);
         return name;
@@ -562,8 +669,11 @@ public final class RecordDetailUiTest {
         assertTrue("记录验收方向只允许 portrait 或 landscape", "portrait".equals(expected) || "landscape".equals(expected));
         boolean portrait = "portrait".equals(expected);
         await(() -> onMain(() -> currentDetail() != null), "指定方向前记录详情应恢复");
-        onMain(() -> { currentDetail().setRequestedOrientation(portrait
-                ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); return null; });
+        onMain(() -> {
+            currentDetail().setRequestedOrientation(portrait
+                    ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            return null;
+        });
         await(() -> onMain(() -> {
             RecordDetailActivity page = currentDetail();
             if (page == null) return false;
@@ -571,11 +681,20 @@ public final class RecordDetailUiTest {
             return root.getWidth() > 0 && root.getHeight() > 0 && !root.isLayoutRequested()
                     && (portrait ? root.getHeight() > root.getWidth() : root.getWidth() > root.getHeight())
                     && page.getResources().getConfiguration().orientation == (portrait
-                            ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE);
+                    ? Configuration.ORIENTATION_PORTRAIT : Configuration.ORIENTATION_LANDSCAPE);
         }), "实际记录详情窗口应符合验收方向：" + expected);
     }
 
-    private boolean visibleColor(int position, int color) { return onMain(() -> { RecordDetailActivity page = currentDetail(); if (page == null) return false; RecyclerView list = page.findViewById(R.id.record_detail_photos); View row = visibleRow(list, position); return row != null && hasColor(row.findViewById(R.id.record_photo_thumbnail), color); }); }
+    private boolean visibleColor(int position, int color) {
+        return onMain(() -> {
+            RecordDetailActivity page = currentDetail();
+            if (page == null) return false;
+            RecyclerView list = page.findViewById(R.id.record_detail_photos);
+            View row = visibleRow(list, position);
+            return row != null && hasColor(row.findViewById(R.id.record_photo_thumbnail), color);
+        });
+    }
+
     private String visiblePhotoState(int position) {
         return onMain(() -> {
             RecordDetailActivity page = currentDetail();
@@ -596,10 +715,12 @@ public final class RecordDetailUiTest {
                     + "，占位在屏幕内=" + empty.getGlobalVisibleRect(visible) + "，占位区域=" + visible
                     + "，占位文案=" + empty.getText() + "，图片=" + (drawable == null ? "null" : drawable.getClass().getSimpleName())
                     + "，有点击监听=" + image.hasOnClickListeners();
-            if (drawable instanceof BitmapDrawable) state += "，位图=" + ((BitmapDrawable) drawable).getBitmap();
+            if (drawable instanceof BitmapDrawable)
+                state += "，位图=" + ((BitmapDrawable) drawable).getBitmap();
             return state;
         });
     }
+
     private static View visibleRow(RecyclerView list, int position) {
         RecyclerView.LayoutManager layout = list.getLayoutManager();
         if (layout == null) return null;
@@ -797,8 +918,9 @@ public final class RecordDetailUiTest {
         Bitmap screenshot = instrumentation.getUiAutomation().takeScreenshot();
         assertNotNull("图片查看器应能截图核对", screenshot);
         String expected = InstrumentationRegistry.getArguments().getString("expectedRecordsLayoutOrientation", "");
-        if (!expected.isEmpty()) assertEquals("全屏大图应使用实际指定方向", "portrait".equals(expected),
-                screenshot.getHeight() > screenshot.getWidth());
+        if (!expected.isEmpty())
+            assertEquals("全屏大图应使用实际指定方向", "portrait".equals(expected),
+                    screenshot.getHeight() > screenshot.getWidth());
         File directory = new File(app.getCacheDir(), "photo-viewer-qa");
         assertTrue(directory.isDirectory() || directory.mkdirs());
         try (FileOutputStream output = new FileOutputStream(new File(directory, name + ".png"))) {
@@ -887,8 +1009,19 @@ public final class RecordDetailUiTest {
                     && Math.abs(layout.getDecoratedTop(row) - list.getPaddingTop() - top) <= 1;
         });
     }
-    private static RecordDetailActivity currentDetail() { for (Activity page : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)) if (page instanceof RecordDetailActivity) return (RecordDetailActivity) page; return null; }
-    private static RecordPhotoActivity resumedPhoto() { for (Activity page : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)) if (page instanceof RecordPhotoActivity) return (RecordPhotoActivity) page; return null; }
+
+    private static RecordDetailActivity currentDetail() {
+        for (Activity page : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
+            if (page instanceof RecordDetailActivity) return (RecordDetailActivity) page;
+        return null;
+    }
+
+    private static RecordPhotoActivity resumedPhoto() {
+        for (Activity page : ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))
+            if (page instanceof RecordPhotoActivity) return (RecordPhotoActivity) page;
+        return null;
+    }
+
     private static void assertReadOnlySections(RecordDetailActivity page) {
         assertTrue(page.findViewById(R.id.record_detail_fields).isShown());
         assertTrue(page.findViewById(R.id.record_detail_photos).isShown());
@@ -896,15 +1029,37 @@ public final class RecordDetailUiTest {
         assertEquals("采集照片", title.getText().toString());
         assertTrue(title.isShown());
         assertFalse("采集照片标题不再充当切换标签", title.hasOnClickListeners());
-        for (String name : new String[]{"record_detail_review", "record_detail_upload", "record_detail_tab_audit", "record_detail_tab_check", "record_design_upload", "record_design_upload_state", "record_extra_photos"}) { int id = page.getResources().getIdentifier(name, "id", page.getPackageName()); assertTrue("已移除功能不得留下控件", id == 0 || page.findViewById(id) == null); }
+        for (String name : new String[]{"record_detail_review", "record_detail_upload", "record_detail_tab_audit", "record_detail_tab_check", "record_design_upload", "record_design_upload_state", "record_extra_photos"}) {
+            int id = page.getResources().getIdentifier(name, "id", page.getPackageName());
+            assertTrue("已移除功能不得留下控件", id == 0 || page.findViewById(id) == null);
+        }
     }
-    private static boolean hasColor(ImageView image, int expected) { if (image == null || !image.isShown() || !(image.getDrawable() instanceof BitmapDrawable)) return false; Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap(); if (bitmap == null || bitmap.isRecycled()) return false; int actual = bitmap.getPixel(bitmap.getWidth()/2, bitmap.getHeight()/2); return Math.abs(Color.red(actual)-Color.red(expected)) < 15 && Math.abs(Color.green(actual)-Color.green(expected)) < 15 && Math.abs(Color.blue(actual)-Color.blue(expected)) < 15; }
-    private static String text(Activity activity, int id) { return ((TextView) activity.findViewById(id)).getText().toString(); }
-    private static String longText(String start, String ending) { StringBuilder text = new StringBuilder(start); for (int i = 0; i < 16; i++) text.append("；第").append(i + 1).append("项检查说明需要完整保留"); return text.append("；").append(ending).toString(); }
+
+    private static boolean hasColor(ImageView image, int expected) {
+        if (image == null || !image.isShown() || !(image.getDrawable() instanceof BitmapDrawable))
+            return false;
+        Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        if (bitmap == null || bitmap.isRecycled()) return false;
+        int actual = bitmap.getPixel(bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+        return Math.abs(Color.red(actual) - Color.red(expected)) < 15 && Math.abs(Color.green(actual) - Color.green(expected)) < 15 && Math.abs(Color.blue(actual) - Color.blue(expected)) < 15;
+    }
+
+    private static String text(Activity activity, int id) {
+        return ((TextView) activity.findViewById(id)).getText().toString();
+    }
+
+    private static String longText(String start, String ending) {
+        StringBuilder text = new StringBuilder(start);
+        for (int i = 0; i < 16; i++)
+            text.append("；第").append(i + 1).append("项检查说明需要完整保留");
+        return text.append("；").append(ending).toString();
+    }
+
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity page : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (page.getPackageName().equals(app.getPackageName()) && !page.isFinishing()) page.finish();
+                if (page.getPackageName().equals(app.getPackageName()) && !page.isFinishing())
+                    page.finish();
     }
 
     private static Map<String, Object> snapshot(SharedPreferences preferences) {
@@ -933,17 +1088,25 @@ public final class RecordDetailUiTest {
     }
 
     private void drainIo() throws Exception {
-        for (int i = 0; i < 3; i++) { onIo(() -> null); instrumentation.waitForIdleSync(); }
+        for (int i = 0; i < 3; i++) {
+            onIo(() -> null);
+            instrumentation.waitForIdleSync();
+        }
     }
 
-    private <T> T onIo(Callable<T> action) throws Exception { return app.io.submit(action).get(10, TimeUnit.SECONDS); }
+    private <T> T onIo(Callable<T> action) throws Exception {
+        return app.io.submit(action).get(10, TimeUnit.SECONDS);
+    }
 
     private <T> T onMain(Callable<T> action) {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(action.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError(failure.get());
         return value.get();

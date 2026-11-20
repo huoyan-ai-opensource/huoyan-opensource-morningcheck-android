@@ -79,7 +79,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 使用独立数据库和本机 WS 夹具，验收分页控件、筛选及页面重建，不读写真实业务资料。 */
+/**
+ * 使用独立数据库和本机 WS 夹具，验收分页控件、筛选及页面重建，不读写真实业务资料。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class DataPaginationUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -101,7 +103,8 @@ public final class DataPaginationUiTest {
     private final ArrayList<String> testPhotoNames = new ArrayList<>();
     private ActivityScenario<? extends BaseMorningActivity> scenario;
 
-    @Before public void isolateDatabaseAndConnections() throws Exception {
+    @Before
+    public void isolateDatabaseAndConnections() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         preferences = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         originalPreferences = snapshot(preferences);
@@ -112,26 +115,38 @@ public final class DataPaginationUiTest {
             return null;
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         originalStore = app.store;
         databaseName = "pagination-ui-" + UUID.randomUUID() + ".db";
         // SQLiteOpenHelper 在不同 Android 版本调用不同重载，全部映射到这份 UUID 测试库。
         isolatedStore = new AppStore(new ContextWrapper(app) {
-            @Override public File getDatabasePath(String name) { return app.getDatabasePath(databaseName); }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode,
-                    SQLiteDatabase.CursorFactory factory) {
+            @Override
+            public File getDatabasePath(String name) {
+                return app.getDatabasePath(databaseName);
+            }
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode,
+                                                       SQLiteDatabase.CursorFactory factory) {
                 return app.openOrCreateDatabase(databaseName, mode, factory);
             }
-            @Override public SQLiteDatabase openOrCreateDatabase(String name, int mode,
-                    SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
+
+            @Override
+            public SQLiteDatabase openOrCreateDatabase(String name, int mode,
+                                                       SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler handler) {
                 return app.openOrCreateDatabase(databaseName, mode, factory, handler);
             }
         });
         app.io.submit(() -> isolatedStore.getWritableDatabase()).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.store = isolatedStore; return null; });
+        onMain(() -> {
+            app.store = isolatedStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
                 if (allowDelayedStaffQuery && "/cloud/staff/1/".equals(request.getPath())) {
                     if (!"pagination-test-token".equals(request.getHeader("X-USER-TOKEN"))) {
                         serverFailure.set(new AssertionError("本机云查询应携带配置的测试令牌"));
@@ -149,19 +164,26 @@ public final class DataPaginationUiTest {
                     return new MockResponse().setResponseCode(503);
                 }
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject request = new JSONObject(text);
                             sdkCommands.add(request.optString("cmd"));
                             JSONObject data = "getStatus".equals(request.optString("cmd"))
                                     ? Jsons.obj("sdk_state", "READY", "model_ready", true, "certificate_valid", true)
                                     : "userDetail".equals(request.optString("cmd")) && isolatedFaceDetail != null
-                                            ? isolatedFaceDetail
+                                    ? isolatedFaceDetail
                                     : new JSONObject();
                             socket.send(Jsons.obj("requestId", request.getString("requestId"), "code", 0,
                                     "reason", "分页本机测试夹具", "data", data).toString());
-                        } catch (Throwable error) { serverFailure.set(error); }
+                        } catch (Throwable error) {
+                            serverFailure.set(error);
+                        }
                     }
                 });
             }
@@ -175,7 +197,8 @@ public final class DataPaginationUiTest {
                 .putBoolean("voice", false).commit());
     }
 
-    @After public void restoreDatabaseAndConfiguration() throws Exception {
+    @After
+    public void restoreDatabaseAndConfiguration() throws Exception {
         finishStaffResponse.countDown();
         try {
             if (scenario != null) scenario.close();
@@ -185,8 +208,10 @@ public final class DataPaginationUiTest {
                 return null;
             });
             instrumentation.waitForIdleSync();
-            if (app != null) app.networkIo.submit(() -> { }).get(10, TimeUnit.SECONDS);
-            if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+            if (app != null) app.networkIo.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
+            if (app != null) app.io.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
             instrumentation.waitForIdleSync();
         } finally {
             try {
@@ -197,7 +222,10 @@ public final class DataPaginationUiTest {
                     }
                     return null;
                 }).get(10, TimeUnit.SECONDS);
-                if (originalStore != null) onMain(() -> { app.store = originalStore; return null; });
+                if (originalStore != null) onMain(() -> {
+                    app.store = originalStore;
+                    return null;
+                });
                 if (isolatedStore != null) isolatedStore.close();
                 if (databaseName != null) assertTrue(app.deleteDatabase(databaseName));
                 if (originalPreferences != null) restore(preferences, originalPreferences);
@@ -213,12 +241,13 @@ public final class DataPaginationUiTest {
     }
 
 
-
-    @Test public void staffSearchPagesAndRestoresSameQueryAfterRecreation() throws Exception {
+    @Test
+    public void staffSearchPagesAndRestoresSameQueryAfterRecreation() throws Exception {
         app.io.submit(() -> {
-            for (int i = 1; i <= 55; i++) isolatedStore.saveStaff(Jsons.obj("id", i,
-                    "name", (i <= 45 ? "分页员工 " : "其他员工 ") + i, "staff_no", "S" + i,
-                    "department", i <= 45 ? "后厨" : "前厅", "created_at", i));
+            for (int i = 1; i <= 55; i++)
+                isolatedStore.saveStaff(Jsons.obj("id", i,
+                        "name", (i <= 45 ? "分页员工 " : "其他员工 ") + i, "staff_no", "S" + i,
+                        "department", i <= 45 ? "后厨" : "前厅", "created_at", i));
         }).get(10, TimeUnit.SECONDS);
         scenario = ActivityScenario.launch(new Intent(app, StaffActivity.class));
         awaitStaffPage("第 1 / 3 页 · 共 55 条", 24);
@@ -254,10 +283,12 @@ public final class DataPaginationUiTest {
         });
     }
 
-    @Test public void staffFirstLastAndJumpValidateInputAndClampAfterRefresh() throws Exception {
+    @Test
+    public void staffFirstLastAndJumpValidateInputAndClampAfterRefresh() throws Exception {
         app.io.submit(() -> {
-            for (int i = 1; i <= 55; i++) isolatedStore.saveStaff(Jsons.obj("id", i,
-                    "name", "跳页员工 " + i, "staff_no", "J" + i, "created_at", i));
+            for (int i = 1; i <= 55; i++)
+                isolatedStore.saveStaff(Jsons.obj("id", i,
+                        "name", "跳页员工 " + i, "staff_no", "J" + i, "created_at", i));
         }).get(10, TimeUnit.SECONDS);
         scenario = ActivityScenario.launch(new Intent(app, StaffActivity.class));
         awaitListTestOrientation(StaffActivity.class);
@@ -340,7 +371,10 @@ public final class DataPaginationUiTest {
             for (int i = 21; i <= 55; i++) isolatedStore.removeStaff(i);
         }).get(10, TimeUnit.SECONDS);
         // 用进程内实际资料变更通知触发刷新，验证末页消失后页码会收敛。
-        onMain(() -> { app.notifyStaffChanged(); return null; });
+        onMain(() -> {
+            app.notifyStaffChanged();
+            return null;
+        });
         awaitStaffPage("第 1 / 1 页 · 共 20 条", 20);
         assertPagerEdges(StaffActivity.class, R.id.staff_first, R.id.staff_previous,
                 R.id.staff_next, R.id.staff_last, true, true);
@@ -349,14 +383,8 @@ public final class DataPaginationUiTest {
     }
 
 
-
-
-
-
-
-
-
-    @Test public void staffEditorKeepsFocusedTabletFieldWhenWindowBecomesPhone() throws Exception {
+    @Test
+    public void staffEditorKeepsFocusedTabletFieldWhenWindowBecomesPhone() throws Exception {
         scenario = ActivityScenario.launch(new Intent(app, StaffEditActivity.class));
         awaitPage(StaffEditActivity.class, R.id.staff_edit_save);
         StaffEditActivity page = onMain(() -> resumed(StaffEditActivity.class));
@@ -411,14 +439,9 @@ public final class DataPaginationUiTest {
     }
 
 
-
-
-
-
-
-
     private static Rect pageBounds(View view) {
-        int[] origin = new int[2]; view.getLocationOnScreen(origin);
+        int[] origin = new int[2];
+        view.getLocationOnScreen(origin);
         return new Rect(origin[0], origin[1], origin[0] + view.getWidth(), origin[1] + view.getHeight());
     }
 
@@ -439,10 +462,12 @@ public final class DataPaginationUiTest {
                 visible.bottom <= origin[1] + root.getHeight() - root.getPaddingBottom());
     }
 
-    @Test public void departmentFirstLastAndJumpRestorePageAndResetForSearch() throws Exception {
+    @Test
+    public void departmentFirstLastAndJumpRestorePageAndResetForSearch() throws Exception {
         app.io.submit(() -> {
-            for (int i = 1; i <= 55; i++) isolatedStore.saveDepartment(0,
-                    String.format(java.util.Locale.ROOT, "跳页部门%02d", i));
+            for (int i = 1; i <= 55; i++)
+                isolatedStore.saveDepartment(0,
+                        String.format(java.util.Locale.ROOT, "跳页部门%02d", i));
         }).get(10, TimeUnit.SECONDS);
         scenario = ActivityScenario.launch(new Intent(app, DepartmentsActivity.class));
         awaitListTestOrientation(DepartmentsActivity.class);
@@ -478,7 +503,8 @@ public final class DataPaginationUiTest {
                 .findViewById(R.id.department_list)) == 0), "清除搜索后完整树应从顶部展示");
     }
 
-    @Test public void departmentManagementPaginatesAndRenamesFromCustomDialog() throws Exception {
+    @Test
+    public void departmentManagementPaginatesAndRenamesFromCustomDialog() throws Exception {
         app.io.submit(() -> {
             for (int i = 1; i <= 25; i++) isolatedStore.saveDepartment(0, "测试部门" + i);
             isolatedStore.saveStaff(Jsons.obj("id", 8, "name", "部门成员", "staff_no", "S8", "department", "测试部门25"));
@@ -549,7 +575,8 @@ public final class DataPaginationUiTest {
         }
     }
 
-    @Test public void departmentEditorSavesEditedTextAndUpdatesStaffDepartment() throws Exception {
+    @Test
+    public void departmentEditorSavesEditedTextAndUpdatesStaffDepartment() throws Exception {
         app.io.submit(() -> {
             long id = isolatedStore.saveDepartment(0, "输入测试部门");
             isolatedStore.saveStaff(Jsons.obj("id", 90504, "name", "部门输入测试员工", "staff_no", "S90504", "department", "输入测试部门"));
@@ -575,7 +602,8 @@ public final class DataPaginationUiTest {
         assertEquals("实时输入后的部门", result.optString("department"));
     }
 
-    @Test public void departmentDialogCancellationAndDuplicateNameNeverCreateRows() throws Exception {
+    @Test
+    public void departmentDialogCancellationAndDuplicateNameNeverCreateRows() throws Exception {
         app.io.submit(() -> isolatedStore.saveDepartment(0, "已经存在的部门")).get(10, TimeUnit.SECONDS);
         launchDepartments();
         DepartmentsActivity host = onMain(() -> resumed(DepartmentsActivity.class));
@@ -607,14 +635,15 @@ public final class DataPaginationUiTest {
         });
         clickDepartmentDialog(R.id.department_edit_save);
         await(() -> onMain(() -> departmentDialog() != null
-                && departmentDialog().findViewById(R.id.department_edit_save).isEnabled()
+                        && departmentDialog().findViewById(R.id.department_edit_save).isEnabled()
                 ),
                 "重复名称必须显示错误并保留弹窗");
         assertEquals(1L, app.io.submit(() -> isolatedStore.departmentsPage("", 1, 20).totalRows)
                 .get(10, TimeUnit.SECONDS).longValue());
     }
 
-    @Test public void departmentDialogBackAndOutsideTapConfirmDiscardWithoutSaving() throws Exception {
+    @Test
+    public void departmentDialogBackAndOutsideTapConfirmDiscardWithoutSaving() throws Exception {
         launchDepartments();
         DepartmentsActivity host = onMain(() -> resumed(DepartmentsActivity.class));
         click(DepartmentsActivity.class, R.id.department_add);
@@ -627,7 +656,7 @@ public final class DataPaginationUiTest {
         });
         await(() -> onMain(() -> departmentDialog() != null
                 && "返回和外部点击待确认草稿".contentEquals(((EditText) departmentDialog()
-                        .findViewById(R.id.department_edit_name)).getText())
+                .findViewById(R.id.department_edit_name)).getText())
                 && departmentDialog().getWindow().getDecorView().hasWindowFocus()), "草稿应保留在原字段，弹窗继续保持焦点");
         Dialog originalDialog = onMain(this::departmentDialog);
         boolean imeVisible = onMain(() -> {
@@ -683,13 +712,17 @@ public final class DataPaginationUiTest {
         try {
             down.setSource(InputDevice.SOURCE_TOUCHSCREEN);
             assertTrue("真实外部按下事件应注入成功", instrumentation.getUiAutomation().injectInputEvent(down, true));
-        } finally { down.recycle(); }
+        } finally {
+            down.recycle();
+        }
         SystemClock.sleep(60);
         MotionEvent up = MotionEvent.obtain(downTime, SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, outsidePoint[0], outsidePoint[1], 0);
         try {
             up.setSource(InputDevice.SOURCE_TOUCHSCREEN);
             assertTrue("真实外部抬起事件应注入成功", instrumentation.getUiAutomation().injectInputEvent(up, true));
-        } finally { up.recycle(); }
+        } finally {
+            up.recycle();
+        }
         clickDepartmentConfirmation("放弃修改", "放弃并关闭", true);
         awaitDepartmentEditorClosed();
         assertSame("放弃草稿只关闭弹窗，不退出宿主", host, onMain(() -> resumed(DepartmentsActivity.class)));
@@ -697,7 +730,8 @@ public final class DataPaginationUiTest {
                 app.io.submit(() -> isolatedStore.departmentsPage("", 1, 20).totalRows).get(10, TimeUnit.SECONDS).longValue());
     }
 
-    @Test public void departmentDialogRecreationAndConfigurationKeepUnsavedDraft() throws Exception {
+    @Test
+    public void departmentDialogRecreationAndConfigurationKeepUnsavedDraft() throws Exception {
         long id = app.io.submit(() -> isolatedStore.saveDepartment(0, "重建前部门")).get(10, TimeUnit.SECONDS);
         launchDepartments();
         openDepartmentNamed("重建前部门");
@@ -732,7 +766,8 @@ public final class DataPaginationUiTest {
         assertEquals("重建后保留的草稿", app.io.submit(() -> isolatedStore.department(id).optString("name")).get(10, TimeUnit.SECONDS));
     }
 
-    @Test public void departmentDialogPendingSaveSurvivesRecreationWithoutDuplicateWrite() throws Exception {
+    @Test
+    public void departmentDialogPendingSaveSurvivesRecreationWithoutDuplicateWrite() throws Exception {
         app.io.submit(() -> {
             SQLiteDatabase db = isolatedStore.getWritableDatabase();
             // 审计仅存在于 UUID 测试库，用事务实际写入次数识别重建后的重复提交。
@@ -751,8 +786,13 @@ public final class DataPaginationUiTest {
         AtomicReference<Throwable> queueFailure = new AtomicReference<>();
         app.io.execute(() -> {
             blocked.countDown();
-            try { if (!release.await(15, TimeUnit.SECONDS)) queueFailure.set(new AssertionError("保存队列隔离等待超时")); }
-            catch (InterruptedException error) { Thread.currentThread().interrupt(); queueFailure.set(error); }
+            try {
+                if (!release.await(15, TimeUnit.SECONDS))
+                    queueFailure.set(new AssertionError("保存队列隔离等待超时"));
+            } catch (InterruptedException error) {
+                Thread.currentThread().interrupt();
+                queueFailure.set(error);
+            }
         });
         try {
             assertTrue(blocked.await(5, TimeUnit.SECONDS));
@@ -769,7 +809,9 @@ public final class DataPaginationUiTest {
                 dialog.findViewById(R.id.department_edit_save).performClick();
                 return null;
             });
-        } finally { release.countDown(); }
+        } finally {
+            release.countDown();
+        }
         awaitDepartmentEditorClosed();
         app.io.submit(() -> {
             assertEquals(1L, isolatedStore.departmentsPage("", 1, 20).totalRows);
@@ -789,7 +831,10 @@ public final class DataPaginationUiTest {
     }
 
     private void openDepartmentNamed(String name) {
-        onMain(() -> { ((EditText) resumed(DepartmentsActivity.class).findViewById(R.id.department_search)).setText(name); return null; });
+        onMain(() -> {
+            ((EditText) resumed(DepartmentsActivity.class).findViewById(R.id.department_search)).setText(name);
+            return null;
+        });
         await(() -> onMain(() -> {
             DepartmentsActivity host = resumed(DepartmentsActivity.class);
             RecyclerView list = host == null ? null : host.findViewById(R.id.department_list);
@@ -847,16 +892,25 @@ public final class DataPaginationUiTest {
                     root.recycle();
                 }
             }, "截图前活动窗口必须实际出现部门详情标题及可操作的保存按钮");
-        } finally { info.flags = originalFlags; instrumentation.getUiAutomation().setServiceInfo(info); }
+        } finally {
+            info.flags = originalFlags;
+            instrumentation.getUiAutomation().setServiceInfo(info);
+        }
     }
 
     private void clickDepartmentDialog(int id) {
-        onMain(() -> { Dialog dialog = departmentDialog(); assertNotNull(dialog); assertTrue(dialog.findViewById(id).performClick()); return null; });
+        onMain(() -> {
+            Dialog dialog = departmentDialog();
+            assertNotNull(dialog);
+            assertTrue(dialog.findViewById(id).performClick());
+            return null;
+        });
     }
 
     private static void assertDepartmentDialogVisible(Dialog dialog) {
         for (int id : new int[]{R.id.department_edit_panel, R.id.department_edit_name, R.id.department_edit_actions,
-                R.id.department_edit_cancel, R.id.department_edit_save}) assertDepartmentControlVisible(dialog, id);
+                R.id.department_edit_cancel, R.id.department_edit_save})
+            assertDepartmentControlVisible(dialog, id);
     }
 
     private void clickDepartmentConfirmation(String title, String label, boolean positive) {
@@ -870,18 +924,23 @@ public final class DataPaginationUiTest {
                 if (root == null) return false;
                 java.util.List<AccessibilityNodeInfo> titles = root.findAccessibilityNodeInfosByText(title);
                 java.util.List<AccessibilityNodeInfo> buttons = root.findAccessibilityNodeInfosByViewId(positive ? "android:id/button1" : "android:id/button2");
-                try { return !titles.isEmpty() && buttons.size() == 1 && label.contentEquals(buttons.get(0).getText())
-                        && buttons.get(0).isEnabled() && buttons.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK); }
-                finally {
+                try {
+                    return !titles.isEmpty() && buttons.size() == 1 && label.contentEquals(buttons.get(0).getText())
+                            && buttons.get(0).isEnabled() && buttons.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                } finally {
                     for (AccessibilityNodeInfo node : titles) node.recycle();
                     for (AccessibilityNodeInfo node : buttons) node.recycle();
                     root.recycle();
                 }
             }, "部门确认窗应明确提示范围且按钮可点击：" + title + " / " + label);
-        } finally { info.flags = originalFlags; instrumentation.getUiAutomation().setServiceInfo(info); }
+        } finally {
+            info.flags = originalFlags;
+            instrumentation.getUiAutomation().setServiceInfo(info);
+        }
     }
 
-    @Test public void recordDetailPhotosNavigateAllFramesAndReturnWithoutChangingEvidence() throws Exception {
+    @Test
+    public void recordDetailPhotosNavigateAllFramesAndReturnWithoutChangingEvidence() throws Exception {
         String fontArgument = InstrumentationRegistry.getArguments().getString("photo_test_font_index", "");
         if (!fontArgument.isEmpty()) {
             int fontIndex = Integer.parseInt(fontArgument);
@@ -896,8 +955,11 @@ public final class DataPaginationUiTest {
                 Bitmap bitmap = Bitmap.createBitmap(160, 120, Bitmap.Config.ARGB_8888);
                 bitmap.eraseColor(colors[i]);
                 String name;
-                try { name = isolatedStore.savePhoto(recordId, "frame-" + i, bitmap); }
-                finally { bitmap.recycle(); }
+                try {
+                    name = isolatedStore.savePhoto(recordId, "frame-" + i, bitmap);
+                } finally {
+                    bitmap.recycle();
+                }
                 testPhotoNames.add(name);
                 photos.put(Jsons.obj("file", name, "label", "采集照片 " + (i + 1)));
             }
@@ -1007,7 +1069,10 @@ public final class DataPaginationUiTest {
         click(RecordPhotoActivity.class, R.id.photo_previous);
         awaitPhotoPosition(3, 4);
         RecordPhotoActivity oldViewer = onMain(() -> resumed(RecordPhotoActivity.class));
-        onMain(() -> { oldViewer.recreate(); return null; });
+        onMain(() -> {
+            oldViewer.recreate();
+            return null;
+        });
         await(() -> onMain(() -> resumed(RecordPhotoActivity.class) != null
                 && resumed(RecordPhotoActivity.class) != oldViewer), "查看器重建应替换原页面");
         awaitPhotoPosition(3, 4);
@@ -1029,16 +1094,18 @@ public final class DataPaginationUiTest {
             return null;
         });
         await(() -> onMain(() -> {
-            RecordDetailActivity page = resumed(RecordDetailActivity.class);
-            if (page == null || page == source || !page.findViewById(R.id.record_detail_fields).isShown()) return false;
-            RecyclerView list = page.findViewById(R.id.record_detail_photos);
-            if (list.getAdapter() == null || list.getAdapter().getItemCount() != 4
-                    || !(list.getLayoutManager() instanceof GridLayoutManager) || list.isLayoutRequested()) return false;
-            GridLayoutManager manager = (GridLayoutManager) list.getLayoutManager();
-            View first = manager.findViewByPosition(scrollPosition[0]);
-            return first != null && manager.findFirstVisibleItemPosition() == scrollPosition[0]
-                    && manager.getDecoratedTop(first) - list.getPaddingTop() == scrollPosition[1];
-        }),
+                    RecordDetailActivity page = resumed(RecordDetailActivity.class);
+                    if (page == null || page == source || !page.findViewById(R.id.record_detail_fields).isShown())
+                        return false;
+                    RecyclerView list = page.findViewById(R.id.record_detail_photos);
+                    if (list.getAdapter() == null || list.getAdapter().getItemCount() != 4
+                            || !(list.getLayoutManager() instanceof GridLayoutManager) || list.isLayoutRequested())
+                        return false;
+                    GridLayoutManager manager = (GridLayoutManager) list.getLayoutManager();
+                    View first = manager.findViewByPosition(scrollPosition[0]);
+                    return first != null && manager.findFirstVisibleItemPosition() == scrollPosition[0]
+                            && manager.getDecoratedTop(first) - list.getPaddingTop() == scrollPosition[1];
+                }),
                 "详情重建应同时展示字段与完整照片列表");
         click(RecordDetailActivity.class, R.id.header_home);
         awaitRecordPage("第 1 / 1 页 · 共 1 条", 1);
@@ -1048,7 +1115,8 @@ public final class DataPaginationUiTest {
         assertEquals("38.1", result.optString("temperature"));
         assertEquals("已上传", result.optString("upload"));
         assertEquals(4, result.optJSONArray("captured_photos").length());
-        for (String name : testPhotoNames) assertTrue("页面导航不能删除证据照片", isolatedStore.photo(name).isFile());
+        for (String name : testPhotoNames)
+            assertTrue("页面导航不能删除证据照片", isolatedStore.photo(name).isFile());
     }
 
     private void awaitPhotoPosition(int selected, int total) {
@@ -1072,7 +1140,8 @@ public final class DataPaginationUiTest {
         }), "照片查看器未收敛到第 " + selected + " / " + total + " 张");
     }
 
-    @Test public void sdkCertificateAndModelDetailsAreIndependentPages() throws Exception {
+    @Test
+    public void sdkCertificateAndModelDetailsAreIndependentPages() throws Exception {
         assertFalse("旧版 cloud kind 已不属于可访问的详情类型", SdkDetailsActivity.isDetailKind("cloud"));
         for (String kind : new String[]{"certificate", "model", "status", "capabilities", "cloud"}) {
             scenario = ActivityScenario.launch(new Intent(app, SdkDetailsActivity.class).putExtra(SdkDetailsActivity.EXTRA_KIND, kind));
@@ -1141,12 +1210,10 @@ public final class DataPaginationUiTest {
         assertNotNull("其余 SDK 详情仍有数据列表", list.getAdapter());
         for (int index = 0; index < list.getCount(); index++) {
             String[] row = (String[]) list.getItemAtPosition(index);
-            for (String field : row) assertFalse("SDK 状态详情不再展示云端托管文案", field.contains("云端托管"));
+            for (String field : row)
+                assertFalse("SDK 状态详情不再展示云端托管文案", field.contains("云端托管"));
         }
     }
-
-
-
 
 
     private <T extends BaseMorningActivity> void awaitPage(Class<T> type, int control) {
@@ -1169,7 +1236,9 @@ public final class DataPaginationUiTest {
         assertTrue(folder.isDirectory() || folder.mkdirs());
         try (java.io.FileOutputStream output = new java.io.FileOutputStream(new File(folder, name + ".png"))) {
             assertTrue(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output));
-        } finally { bitmap.recycle(); }
+        } finally {
+            bitmap.recycle();
+        }
     }
 
     private void assertInsidePage(BaseMorningActivity page, int id) {
@@ -1204,11 +1273,13 @@ public final class DataPaginationUiTest {
         }), "列表必须实际使用指定方向：" + (portrait ? "portrait" : "landscape"));
     }
 
-    @Test public void recordsFirstLastAndJumpKeepPageAfterRecreationAndResetForResultFilter() throws Exception {
+    @Test
+    public void recordsFirstLastAndJumpKeepPageAfterRecreationAndResetForResultFilter() throws Exception {
         app.io.submit(() -> {
-            for (int i = 1; i <= 55; i++) isolatedStore.saveRecord(Jsons.obj("id", "jump-record-" + i,
-                    "staff_id", i, "staff_name", "跳页记录员工 " + i, "staff_no", "R" + i,
-                    "created_at", i, "status", i <= 45 ? 0 : 1, "temperature", "36.5"));
+            for (int i = 1; i <= 55; i++)
+                isolatedStore.saveRecord(Jsons.obj("id", "jump-record-" + i,
+                        "staff_id", i, "staff_name", "跳页记录员工 " + i, "staff_no", "R" + i,
+                        "created_at", i, "status", i <= 45 ? 0 : 1, "temperature", "36.5"));
         }).get(10, TimeUnit.SECONDS);
         scenario = ActivityScenario.launch(new Intent(app, RecordsActivity.class));
         awaitListTestOrientation(RecordsActivity.class);
@@ -1244,11 +1315,13 @@ public final class DataPaginationUiTest {
         });
     }
 
-    @Test public void recordFiltersPageAndStaySelectedAfterRecreationAndRefresh() throws Exception {
+    @Test
+    public void recordFiltersPageAndStaySelectedAfterRecreationAndRefresh() throws Exception {
         app.io.submit(() -> {
-            for (int i = 1; i <= 55; i++) isolatedStore.saveRecord(Jsons.obj("id", "row-" + i,
-                    "staff_id", 1, "staff_name", "测试员工", "created_at", i, "status", i <= 45 ? 0 : 1,
-                    "temperature", "36.5", "upload", i <= 25 ? "结果待核实" : "已上传"));
+            for (int i = 1; i <= 55; i++)
+                isolatedStore.saveRecord(Jsons.obj("id", "row-" + i,
+                        "staff_id", 1, "staff_name", "测试员工", "created_at", i, "status", i <= 45 ? 0 : 1,
+                        "temperature", "36.5", "upload", i <= 25 ? "结果待核实" : "已上传"));
         }).get(10, TimeUnit.SECONDS);
         scenario = ActivityScenario.launch(new Intent(app, RecordsActivity.class));
         awaitListTestOrientation(RecordsActivity.class);
@@ -1268,9 +1341,13 @@ public final class DataPaginationUiTest {
             return null;
         });
         app.io.submit(() -> {
-            for (int i = 46; i <= 55; i++) isolatedStore.patchRecord("row-" + i, Jsons.obj("status", 0));
+            for (int i = 46; i <= 55; i++)
+                isolatedStore.patchRecord("row-" + i, Jsons.obj("status", 0));
         }).get(10, TimeUnit.SECONDS);
-        onMain(() -> { resumed(RecordsActivity.class).reload(false, null); return null; });
+        onMain(() -> {
+            resumed(RecordsActivity.class).reload(false, null);
+            return null;
+        });
         awaitRecordPage("第 1 / 1 页 · 共 0 条", 0);
         onMain(() -> {
             RecordsActivity page = resumed(RecordsActivity.class);
@@ -1280,7 +1357,8 @@ public final class DataPaginationUiTest {
         });
     }
 
-    @Test public void combinedStaffFiltersIncludeDescendantsAndSurviveRecreation() throws Exception {
+    @Test
+    public void combinedStaffFiltersIncludeDescendantsAndSurviveRecreation() throws Exception {
         long parent = seedHierarchyFilters();
         scenario = ActivityScenario.launch(new Intent(app, StaffActivity.class)
                 .putExtra(StaffActivity.EXTRA_DEPARTMENT_ID, parent));
@@ -1328,7 +1406,8 @@ public final class DataPaginationUiTest {
         assertEquals(0, businessRequests.get());
     }
 
-    @Test public void combinedRecordFiltersSearchSnapshotsAndKeepOnlyThreeResultChoices() throws Exception {
+    @Test
+    public void combinedRecordFiltersSearchSnapshotsAndKeepOnlyThreeResultChoices() throws Exception {
         long parent = seedHierarchyFilters();
         scenario = ActivityScenario.launch(new Intent(app, RecordsActivity.class)
                 .putExtra(RecordsActivity.EXTRA_DEPARTMENT_ID, parent));
@@ -1345,7 +1424,10 @@ public final class DataPaginationUiTest {
         });
         awaitRecordPage("第 1 / 1 页 · 共 23 条", 23);
         captureUi("records-combined-filters");
-        onMain(() -> { assertFalse(resumed(RecordsActivity.class).findViewById(R.id.records_next).isEnabled()); return null; });
+        onMain(() -> {
+            assertFalse(resumed(RecordsActivity.class).findViewById(R.id.records_next).isEnabled());
+            return null;
+        });
         awaitRecordPage("第 1 / 1 页 · 共 23 条", 23);
         scenario.recreate();
         awaitRecordPage("第 1 / 1 页 · 共 23 条", 23);
@@ -1393,7 +1475,8 @@ public final class DataPaginationUiTest {
         }).get(10, TimeUnit.SECONDS);
     }
 
-    @Test public void departmentTreeOpensScopedListsAndReturnsToSameDirectory() throws Exception {
+    @Test
+    public void departmentTreeOpensScopedListsAndReturnsToSameDirectory() throws Exception {
         long parent = seedHierarchyFilters();
         scenario = ActivityScenario.launch(new Intent(app, DepartmentsActivity.class));
         awaitListTestOrientation(DepartmentsActivity.class);
@@ -1423,8 +1506,11 @@ public final class DataPaginationUiTest {
         captureUi("department-hierarchy");
         clickDepartmentRowAction(parent, R.id.department_row_staff);
         awaitStaffPage("第 1 / 2 页 · 共 45 条", 24);
-        onMain(() -> { assertEquals(parent, resumed(StaffActivity.class).getIntent().getLongExtra(StaffActivity.EXTRA_DEPARTMENT_ID, 0));
-            resumed(StaffActivity.class).onBackPressed(); return null; });
+        onMain(() -> {
+            assertEquals(parent, resumed(StaffActivity.class).getIntent().getLongExtra(StaffActivity.EXTRA_DEPARTMENT_ID, 0));
+            resumed(StaffActivity.class).onBackPressed();
+            return null;
+        });
         awaitPage(DepartmentsActivity.class, R.id.department_list);
         showDepartmentRow(parent);
         onMain(() -> {
@@ -1446,7 +1532,8 @@ public final class DataPaginationUiTest {
                 for (AccessibilityNodeInfo choice : choices) {
                     AccessibilityNodeInfo action = choice;
                     while (action != null && !action.isClickable()) action = action.getParent();
-                    if (action != null && action.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return true;
+                    if (action != null && action.performAction(AccessibilityNodeInfo.ACTION_CLICK))
+                        return true;
                 }
                 return false;
             } finally {
@@ -1455,7 +1542,10 @@ public final class DataPaginationUiTest {
             }
         }, "部门长按菜单应能查看本部门及下级的晨检记录");
         awaitRecordPage("第 1 / 2 页 · 共 45 条", 24);
-        onMain(() -> { resumed(RecordsActivity.class).onBackPressed(); return null; });
+        onMain(() -> {
+            resumed(RecordsActivity.class).onBackPressed();
+            return null;
+        });
         awaitPage(DepartmentsActivity.class, R.id.department_list);
         awaitDepartmentTree(4);
         onMain(() -> {
@@ -1486,7 +1576,8 @@ public final class DataPaginationUiTest {
             for (int i = 0; i < list.getChildCount(); ++i) {
                 int position = list.getChildAdapterPosition(list.getChildAt(i));
                 if (position == RecyclerView.NO_POSITION) continue;
-                if (((JSONObject) RecyclerListTestHelper.item(list, position)).optLong("id") != departmentId) continue;
+                if (((JSONObject) RecyclerListTestHelper.item(list, position)).optLong("id") != departmentId)
+                    continue;
                 View action = list.getChildAt(i).findViewById(actionId);
                 assertTrue("部门入口应存在且可操作：" + actionId, action != null && action.isShown() && action.isEnabled());
                 action.requestRectangleOnScreen(new Rect(0, 0, action.getWidth(), action.getHeight()), true);
@@ -1521,13 +1612,17 @@ public final class DataPaginationUiTest {
         try {
             down.setSource(InputDevice.SOURCE_TOUCHSCREEN);
             assertTrue("部门入口真实按下应注入成功", instrumentation.getUiAutomation().injectInputEvent(down, true));
-        } finally { down.recycle(); }
+        } finally {
+            down.recycle();
+        }
         SystemClock.sleep(60);
         MotionEvent up = MotionEvent.obtain(downTime, SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, point[0], point[1], 0);
         try {
             up.setSource(InputDevice.SOURCE_TOUCHSCREEN);
             assertTrue("部门入口真实抬起应注入成功", instrumentation.getUiAutomation().injectInputEvent(up, true));
-        } finally { up.recycle(); }
+        } finally {
+            up.recycle();
+        }
     }
 
     private void showDepartmentRow(long departmentId) {
@@ -1543,7 +1638,8 @@ public final class DataPaginationUiTest {
             RecyclerView list = page.findViewById(R.id.department_list);
             if (!list.isEnabled()) return false;
             for (int position = 0; position < RecyclerListTestHelper.count(list); ++position) {
-                if (((JSONObject) RecyclerListTestHelper.item(list, position)).optLong("id") != departmentId) continue;
+                if (((JSONObject) RecyclerListTestHelper.item(list, position)).optLong("id") != departmentId)
+                    continue;
                 RecyclerListTestHelper.scroll(list, position, list.getPaddingTop());
                 return true;
             }
@@ -1556,7 +1652,8 @@ public final class DataPaginationUiTest {
             for (int i = 0; i < list.getChildCount(); ++i) {
                 int position = list.getChildAdapterPosition(list.getChildAt(i));
                 if (position == RecyclerView.NO_POSITION) continue;
-                if (((JSONObject) RecyclerListTestHelper.item(list, position)).optLong("id") != departmentId) continue;
+                if (((JSONObject) RecyclerListTestHelper.item(list, position)).optLong("id") != departmentId)
+                    continue;
                 View row = list.getChildAt(i);
                 if (!departmentRowVerticallyVisible(row, list)) return false;
                 for (int action : new int[]{R.id.business_row_state, R.id.department_row_staff, R.id.department_row_delete}) {
@@ -1588,7 +1685,8 @@ public final class DataPaginationUiTest {
                 && bounds.top >= viewport.top && bounds.bottom <= viewport.bottom;
     }
 
-    @Test public void departmentEditorMovesBranchAndExcludesItsOwnDescendants() throws Exception {
+    @Test
+    public void departmentEditorMovesBranchAndExcludesItsOwnDescendants() throws Exception {
         long parent = seedHierarchyFilters();
         scenario = ActivityScenario.launch(new Intent(app, DepartmentsActivity.class));
         awaitListTestOrientation(DepartmentsActivity.class);
@@ -1644,7 +1742,7 @@ public final class DataPaginationUiTest {
     }
 
     private <T extends BaseMorningActivity> void assertPagerEdges(Class<T> type, int firstId,
-            int previousId, int nextId, int lastId, boolean atFirst, boolean atLast) {
+                                                                  int previousId, int nextId, int lastId, boolean atFirst, boolean atLast) {
         onMain(() -> {
             T page = resumed(type);
             for (int id : new int[]{firstId, previousId, nextId, lastId}) {
@@ -1661,7 +1759,7 @@ public final class DataPaginationUiTest {
     }
 
     private <T extends BaseMorningActivity> void assertInlinePageInput(Class<T> type, int inputId,
-            int confirmId, String expected) {
+                                                                       int confirmId, String expected) {
         onMain(() -> {
             T page = resumed(type);
             EditText input = page.findViewById(inputId);
@@ -1675,7 +1773,7 @@ public final class DataPaginationUiTest {
     }
 
     private <T extends BaseMorningActivity> void rejectPageJump(Class<T> type, int inputId,
-            int confirmId, int infoId, String value) {
+                                                                int confirmId, int infoId, String value) {
         onMain(() -> {
             T page = resumed(type);
             EditText input = page.findViewById(inputId);
@@ -1683,7 +1781,8 @@ public final class DataPaginationUiTest {
             input.setText(value);
             String accepted = input.getText().toString();
             // 数字输入框可先过滤字母；过滤后的空输入同样不能触发翻页。
-            if ("abc".equals(value)) assertTrue("非数字不能成为有效页码", accepted.isEmpty() || !accepted.matches("[0-9]+"));
+            if ("abc".equals(value))
+                assertTrue("非数字不能成为有效页码", accepted.isEmpty() || !accepted.matches("[0-9]+"));
             assertTrue(page.findViewById(confirmId).performClick());
             assertEquals("无效输入不能改变当前分页数据", before, page.<TextView>findViewById(infoId).getText().toString());
             assertTrue("无效输入不能进入读取状态", input.isEnabled());
@@ -1693,7 +1792,7 @@ public final class DataPaginationUiTest {
     }
 
     private <T extends BaseMorningActivity> void jumpToPage(Class<T> type, int inputId,
-            int confirmId, String pageNumber) {
+                                                            int confirmId, String pageNumber) {
         onMain(() -> {
             T page = resumed(type);
             EditText input = page.findViewById(inputId);
@@ -1707,10 +1806,12 @@ public final class DataPaginationUiTest {
         });
     }
 
-    @Test public void staffRecyclerKeepsAdapterAndAnchorAcrossAppendRefreshReturnAndRecreation() throws Exception {
+    @Test
+    public void staffRecyclerKeepsAdapterAndAnchorAcrossAppendRefreshReturnAndRecreation() throws Exception {
         app.io.submit(() -> {
-            for (int index = 1; index <= 80; index++) isolatedStore.saveStaff(Jsons.obj("id", index,
-                    "name", "滚动员工" + index, "staff_no", "SCROLL-" + index, "created_at", index));
+            for (int index = 1; index <= 80; index++)
+                isolatedStore.saveStaff(Jsons.obj("id", index,
+                        "name", "滚动员工" + index, "staff_no", "SCROLL-" + index, "created_at", index));
             AppStore.DataPage window = isolatedStore.staffWindow("", 0, 0, 3, 24);
             assertEquals(3, window.page);
             assertEquals(72, window.rows.size());
@@ -1740,12 +1841,18 @@ public final class DataPaginationUiTest {
             return null;
         });
         awaitPage(StaffEditActivity.class, R.id.staff_edit_save);
-        onMain(() -> { resumed(StaffEditActivity.class).finish(); return null; });
+        onMain(() -> {
+            resumed(StaffEditActivity.class).finish();
+            return null;
+        });
         awaitStaffPage("第 3 / 4 页 · 共 80 条", 72);
         awaitRecyclerAnchor(StaffActivity.class, R.id.staff_list, anchor, offset);
         app.io.submit(() -> isolatedStore.saveStaff(Jsons.obj("id", 81, "name", "最新员工",
                 "staff_no", "SCROLL-81", "created_at", 81))).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.notifyStaffChanged(); return null; });
+        onMain(() -> {
+            app.notifyStaffChanged();
+            return null;
+        });
         awaitStaffPage("第 3 / 4 页 · 共 81 条", 72);
         awaitRecyclerAnchor(StaffActivity.class, R.id.staff_list, anchor, offset);
         onMain(() -> {
@@ -1758,8 +1865,14 @@ public final class DataPaginationUiTest {
         awaitRecyclerAnchor(StaffActivity.class, R.id.staff_list, anchor, offset);
         int oldPosition = onMain(() -> RecyclerListTestHelper.first(resumed(StaffActivity.class)
                 .findViewById(R.id.staff_list)));
-        app.io.submit(() -> { isolatedStore.removeStaff(Long.parseLong(anchor)); return null; }).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.notifyStaffChanged(); return null; });
+        app.io.submit(() -> {
+            isolatedStore.removeStaff(Long.parseLong(anchor));
+            return null;
+        }).get(10, TimeUnit.SECONDS);
+        onMain(() -> {
+            app.notifyStaffChanged();
+            return null;
+        });
         awaitStaffPage("第 3 / 4 页 · 共 80 条", 72);
         await(() -> onMain(() -> {
             RecyclerView list = resumed(StaffActivity.class).findViewById(R.id.staff_list);
@@ -1771,10 +1884,12 @@ public final class DataPaginationUiTest {
         }), "锚点员工删除后应留在邻近行并保留偏移");
     }
 
-    @Test public void recordsRecyclerKeepsAdapterAndAnchorAndClampsAfterLastPageDisappears() throws Exception {
+    @Test
+    public void recordsRecyclerKeepsAdapterAndAnchorAndClampsAfterLastPageDisappears() throws Exception {
         app.io.submit(() -> {
-            for (int index = 1; index <= 80; index++) isolatedStore.saveRecord(Jsons.obj("id", "scroll-record-" + index,
-                    "staff_id", index, "staff_name", "滚动记录" + index, "created_at", index, "status", 1));
+            for (int index = 1; index <= 80; index++)
+                isolatedStore.saveRecord(Jsons.obj("id", "scroll-record-" + index,
+                        "staff_id", index, "staff_name", "滚动记录" + index, "created_at", index, "status", 1));
             AppStore.DataPage window = isolatedStore.recordsWindow("", 0, 0,
                     cc.huoyan.opensource.morningcheck.domain.RecordDateRange.all().resolvedAt(
                             System.currentTimeMillis(), java.util.TimeZone.getDefault()), 3, 24);
@@ -1806,12 +1921,21 @@ public final class DataPaginationUiTest {
             RecordDetailActivity detail = resumed(RecordDetailActivity.class);
             return detail != null && detail.currentRecord != null && anchor.equals(detail.currentRecord.optString("id"));
         }), "真实行点击应打开当前锚点记录详情");
-        onMain(() -> { resumed(RecordDetailActivity.class).finish(); return null; });
+        onMain(() -> {
+            resumed(RecordDetailActivity.class).finish();
+            return null;
+        });
         awaitRecordPage("第 3 / 4 页 · 共 80 条", 72);
         awaitRecyclerAnchor(RecordsActivity.class, R.id.records_list, anchor, offset);
-        app.io.submit(() -> { isolatedStore.saveRecord(Jsons.obj("id", "scroll-record-81", "staff_id", 81,
-                "staff_name", "最新记录", "created_at", 81, "status", 1)); return null; }).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.notifyRecordsChanged(); return null; });
+        app.io.submit(() -> {
+            isolatedStore.saveRecord(Jsons.obj("id", "scroll-record-81", "staff_id", 81,
+                    "staff_name", "最新记录", "created_at", 81, "status", 1));
+            return null;
+        }).get(10, TimeUnit.SECONDS);
+        onMain(() -> {
+            app.notifyRecordsChanged();
+            return null;
+        });
         awaitRecordPage("第 3 / 4 页 · 共 81 条", 72);
         awaitRecyclerAnchor(RecordsActivity.class, R.id.records_list, anchor, offset);
         onMain(() -> {
@@ -1824,10 +1948,16 @@ public final class DataPaginationUiTest {
         awaitRecyclerAnchor(RecordsActivity.class, R.id.records_list, anchor, offset);
         app.io.submit(() -> isolatedStore.getWritableDatabase().delete("records", "id<>?",
                 new String[]{"scroll-record-1"})).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.notifyRecordsChanged(); return null; });
+        onMain(() -> {
+            app.notifyRecordsChanged();
+            return null;
+        });
         awaitRecordPage("第 1 / 1 页 · 共 1 条", 1);
         app.io.submit(() -> isolatedStore.getWritableDatabase().delete("records", null, null)).get(10, TimeUnit.SECONDS);
-        onMain(() -> { app.notifyRecordsChanged(); return null; });
+        onMain(() -> {
+            app.notifyRecordsChanged();
+            return null;
+        });
         awaitRecordPage("第 1 / 1 页 · 共 0 条", 0);
         onMain(() -> {
             assertTrue(resumed(RecordsActivity.class).findViewById(R.id.records_empty).isShown());
@@ -1854,7 +1984,10 @@ public final class DataPaginationUiTest {
     }
 
     private <T extends BaseMorningActivity> void positionRecycler(Class<T> type, int listId, int position, int offset) {
-        onMain(() -> { RecyclerListTestHelper.scroll(resumed(type).findViewById(listId), position, offset); return null; });
+        onMain(() -> {
+            RecyclerListTestHelper.scroll(resumed(type).findViewById(listId), position, offset);
+            return null;
+        });
         await(() -> onMain(() -> {
             T page = resumed(type);
             RecyclerView list = page == null ? null : page.findViewById(listId);
@@ -1891,7 +2024,7 @@ public final class DataPaginationUiTest {
             return list != null && list.isEnabled() && RecyclerListTestHelper.count(list) == count
                     && recyclerIdle(page) && !list.isLayoutRequested()
                     && (count == 0 || ("已显示全部 " + count + " 个部门").contentEquals(
-                            page.<TextView>findViewById(R.id.department_end).getText()));
+                    page.<TextView>findViewById(R.id.department_end).getText()));
         }), "部门完整树未收敛到：" + count);
     }
 
@@ -1901,9 +2034,11 @@ public final class DataPaginationUiTest {
             if (page == null) return false;
             RecyclerView list = page.findViewById(R.id.staff_list);
             if (!expected.contentEquals(((TextView) page.findViewById(R.id.staff_page_info)).getText())
-                    || RecyclerListTestHelper.count(list) != count || !list.isEnabled()) return false;
+                    || RecyclerListTestHelper.count(list) != count || !list.isEnabled())
+                return false;
             if (expected.contains("共 45 条") && ((EditText) page.findViewById(R.id.staff_search)).getText().toString().equals("后厨"))
-                for (int i = 0; i < count; i++) assertEquals("后厨", personAt(page, i).optString("department"));
+                for (int i = 0; i < count; i++)
+                    assertEquals("后厨", personAt(page, i).optString("department"));
             return true;
         }), "员工页未收敛到：" + expected);
     }
@@ -1914,7 +2049,8 @@ public final class DataPaginationUiTest {
             if (page == null) return false;
             RecyclerView list = page.findViewById(R.id.records_list);
             if (!expected.contentEquals(((TextView) page.findViewById(R.id.records_page_info)).getText())
-                    || RecyclerListTestHelper.count(list) != count || !list.isEnabled()) return false;
+                    || RecyclerListTestHelper.count(list) != count || !list.isEnabled())
+                return false;
             int filter = ((Spinner) page.findViewById(R.id.records_filter)).getSelectedItemPosition();
             for (int i = 0; i < count; i++) {
                 JSONObject record = (JSONObject) RecyclerListTestHelper.item(list, i);
@@ -1953,15 +2089,19 @@ public final class DataPaginationUiTest {
     private void finishPages() {
         for (Stage stage : Stage.values())
             for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private <T> T onMain(Callable<T> action) {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(action.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError(failure.get());
         return value.get();

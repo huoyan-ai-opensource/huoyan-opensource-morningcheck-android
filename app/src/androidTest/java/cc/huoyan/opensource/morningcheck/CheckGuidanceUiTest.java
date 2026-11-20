@@ -48,7 +48,9 @@ import cc.huoyan.opensource.morningcheck.domain.CheckGuidance;
 import cc.huoyan.opensource.morningcheck.domain.DetectionClasses;
 import cc.huoyan.opensource.morningcheck.sdk.MorningSdkSession;
 
-/** 实际页面提示出口与 XML 排版验收；不启动 Activity、相机、串口、数据库或系统语音。 */
+/**
+ * 实际页面提示出口与 XML 排版验收；不启动 Activity、相机、串口、数据库或系统语音。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class CheckGuidanceUiTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -57,7 +59,8 @@ public final class CheckGuidanceUiTest {
     private final String preferenceName = "check_guidance_test_" + SystemClock.elapsedRealtimeNanos();
     private int spoken;
 
-    @After public void closeFixtures() {
+    @After
+    public void closeFixtures() {
         onMain(() -> {
             for (CheckActivity check : fixtures) {
                 check.foreground = false;
@@ -75,7 +78,8 @@ public final class CheckGuidanceUiTest {
         assertEquals("文字反馈不应调用系统语音", 0, spoken);
     }
 
-    @Test public void faceAbsenceAndUnmatchedEmployeeImmediatelyChangeVisiblePromptWithVoiceDisabled() {
+    @Test
+    public void faceAbsenceAndUnmatchedEmployeeImmediatelyChangeVisiblePromptWithVoiceDisabled() {
         onMain(() -> {
             CheckActivity check = fixture(CheckPipeline.Stage.IDENTITY);
             assertNormal(check);
@@ -99,7 +103,8 @@ public final class CheckGuidanceUiTest {
         });
     }
 
-    @Test public void facePromptExpiresWhileLayoutRemainsVisible() {
+    @Test
+    public void facePromptExpiresWhileLayoutRemainsVisible() {
         final CheckActivity[] check = new CheckActivity[1];
         onMain(() -> {
             check[0] = fixture(CheckPipeline.Stage.IDENTITY);
@@ -115,7 +120,8 @@ public final class CheckGuidanceUiTest {
         });
     }
 
-    @Test public void headPromptUsesFaceCountWithoutDemandingAnotherIdentityMatch() {
+    @Test
+    public void headPromptUsesFaceCountWithoutDemandingAnotherIdentityMatch() {
         onMain(() -> {
             CheckActivity check = fixture(CheckPipeline.Stage.HEAD);
             CameraSource.Frame present = frame();
@@ -141,7 +147,8 @@ public final class CheckGuidanceUiTest {
         });
     }
 
-    @Test public void headClothingAndHandFindingsAreVisibleWithoutChangingBusinessVerdict() {
+    @Test
+    public void headClothingAndHandFindingsAreVisibleWithoutChangingBusinessVerdict() {
         onMain(() -> {
             CheckActivity head = fixture(CheckPipeline.Stage.HEAD);
             CheckPipeline headPipeline = pipeline(head);
@@ -173,7 +180,8 @@ public final class CheckGuidanceUiTest {
         });
     }
 
-    @Test public void handGuidanceFollowsStageAndDisappearsWhenPausedOrCameraFails() {
+    @Test
+    public void handGuidanceFollowsStageAndDisappearsWhenPausedOrCameraFails() {
         onMain(() -> {
             CheckActivity identity = fixture(CheckPipeline.Stage.IDENTITY);
             assertEquals("未出帧不能显示设备已就绪", "等待设备",
@@ -192,8 +200,9 @@ public final class CheckGuidanceUiTest {
             assertEquals(hand.getString(R.string.design_hand_back_guide),
                     ((TextView) hand.content.findViewById(R.id.check_hand_guide_caption)).getText().toString());
             CheckPipeline pipeline = pipeline(hand);
-            for (int i = 0; i < 3; i++) pipeline.onDetections(Arrays.asList(
-                    detection(DetectionClasses.HAND_BACK), detection(DetectionClasses.HAND_BACK)));
+            for (int i = 0; i < 3; i++)
+                pipeline.onDetections(Arrays.asList(
+                        detection(DetectionClasses.HAND_BACK), detection(DetectionClasses.HAND_BACK)));
             assertEquals(CheckPipeline.Stage.HAND_PALM, pipeline.getStage());
             updateCheck(hand);
             assertEquals(hand.getString(R.string.design_hand_palm_guide),
@@ -217,8 +226,9 @@ public final class CheckGuidanceUiTest {
             int width = portrait ? shortSide : longSide, height = portrait ? longSide : shortSide;
             CheckActivity preview = fixture(CheckPipeline.Stage.HAND_BACK, configuredContext(width, height, 1f));
             saveHandPreview(preview, width, height, "hand-back-fixture");
-            for (int i = 0; i < 3; i++) pipeline(preview).onDetections(Arrays.asList(
-                    detection(DetectionClasses.HAND_BACK), detection(DetectionClasses.HAND_BACK)));
+            for (int i = 0; i < 3; i++)
+                pipeline(preview).onDetections(Arrays.asList(
+                        detection(DetectionClasses.HAND_BACK), detection(DetectionClasses.HAND_BACK)));
             updateCheck(preview);
             saveHandPreview(preview, width, height, "hand-palm-fixture");
         });
@@ -236,11 +246,15 @@ public final class CheckGuidanceUiTest {
         try (FileOutputStream stream = new FileOutputStream(new File(directory, name + ".png"))) {
             root.draw(new Canvas(bitmap));
             assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream));
-        } catch (Exception error) { throw new AssertionError(error); }
-        finally { bitmap.recycle(); }
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        } finally {
+            bitmap.recycle();
+        }
     }
 
-    @Test public void hardwareStateIsNotRenderedAndOnlyActualTemperatureValueRemains() {
+    @Test
+    public void hardwareStateIsNotRenderedAndOnlyActualTemperatureValueRemains() {
         onMain(() -> {
             CheckActivity check = fixture(CheckPipeline.Stage.IDENTITY);
             set(check, "sensorState", "测试串口设备状态不应显示");
@@ -260,7 +274,8 @@ public final class CheckGuidanceUiTest {
         });
     }
 
-    @Test public void portraitLandscapeAndFourFontsKeepPromptReadableAndActionsFixed() {
+    @Test
+    public void portraitLandscapeAndFourFontsKeepPromptReadableAndActionsFixed() {
         onMain(() -> {
             List<String> prompts = new ArrayList<>(Arrays.asList("未检测到人脸\n请进入摄像头画面",
                     "未匹配员工\n请确认已录入人脸", "未匹配当前员工\n请本人继续检测",
@@ -345,12 +360,14 @@ public final class CheckGuidanceUiTest {
         assertTrue("几何验收必须使用真实双项着装异常", headPrompt.contains("工作帽") && headPrompt.contains("口罩"));
         assertEquals("着装未达标应留在头检，不能为了生成手部提示带异常进入下一步",
                 CheckPipeline.Stage.HEAD, pipeline.getStage());
-        for (int i = 0; i < 3; i++) pipeline.onHeadDetections(Arrays.asList(
-                detection(DetectionClasses.HEAD_HAT), detection(DetectionClasses.HEAD_MASK)), true);
-        for (int i = 0; i < 3; i++) pipeline.onDetections(Arrays.asList(
-                detection(DetectionClasses.HAND_BACK), detection(DetectionClasses.HAND_BACK),
-                detection(DetectionClasses.HAND_NAIL), detection(DetectionClasses.HAND_PLASTER),
-                detection(DetectionClasses.HAND_RING), detection(DetectionClasses.HAND_WOUND)));
+        for (int i = 0; i < 3; i++)
+            pipeline.onHeadDetections(Arrays.asList(
+                    detection(DetectionClasses.HEAD_HAT), detection(DetectionClasses.HEAD_MASK)), true);
+        for (int i = 0; i < 3; i++)
+            pipeline.onDetections(Arrays.asList(
+                    detection(DetectionClasses.HAND_BACK), detection(DetectionClasses.HAND_BACK),
+                    detection(DetectionClasses.HAND_NAIL), detection(DetectionClasses.HAND_PLASTER),
+                    detection(DetectionClasses.HAND_RING), detection(DetectionClasses.HAND_WOUND)));
         pipeline.onDetections(Arrays.asList(detection(DetectionClasses.HAND_PALM), detection(DetectionClasses.HAND_PALM),
                 detection(DetectionClasses.HAND_NAIL), detection(DetectionClasses.HAND_PLASTER),
                 detection(DetectionClasses.HAND_RING), detection(DetectionClasses.HAND_WOUND)));
@@ -378,7 +395,9 @@ public final class CheckGuidanceUiTest {
         try {
             check.sdkSession.onStatus(new JSONObject().put("sdk_state", "READY")
                     .put("certificate_valid", true).put("model_ready", true));
-        } catch (Exception error) { throw new AssertionError(error); }
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        }
         check.sdk = check.sdkSession.client();
         CheckPipeline.Rules rules = new CheckPipeline.Rules(1, 3, 3, true, true, true, 37.3);
         CheckPipeline pipeline = new CheckPipeline(rules);
@@ -387,8 +406,9 @@ public final class CheckGuidanceUiTest {
             pipeline.onTemperature(36.6);
         }
         if (stage == CheckPipeline.Stage.HAND_BACK)
-            for (int i = 0; i < 3; i++) pipeline.onHeadDetections(Arrays.asList(
-                    detection(DetectionClasses.HEAD_HAT), detection(DetectionClasses.HEAD_MASK)), true);
+            for (int i = 0; i < 3; i++)
+                pipeline.onHeadDetections(Arrays.asList(
+                        detection(DetectionClasses.HEAD_HAT), detection(DetectionClasses.HEAD_MASK)), true);
         set(check, "pipeline", pipeline);
         set(check, "checkRules", rules);
         set(check, "resumed", true);
@@ -405,11 +425,29 @@ public final class CheckGuidanceUiTest {
             set(check, binding[0], root.findViewById(id));
         }
         MorningVoice voice = new MorningVoice(new Handler(Looper.getMainLooper()), () -> false, listener -> new MorningVoice.Speaker() {
-            @Override public int setLanguage() { return android.speech.tts.TextToSpeech.LANG_AVAILABLE; }
-            @Override public int speak(String text) { spoken++; return android.speech.tts.TextToSpeech.SUCCESS; }
-            @Override public boolean isSpeaking() { return false; }
-            @Override public void stop() { }
-            @Override public void shutdown() { }
+            @Override
+            public int setLanguage() {
+                return android.speech.tts.TextToSpeech.LANG_AVAILABLE;
+            }
+
+            @Override
+            public int speak(String text) {
+                spoken++;
+                return android.speech.tts.TextToSpeech.SUCCESS;
+            }
+
+            @Override
+            public boolean isSpeaking() {
+                return false;
+            }
+
+            @Override
+            public void stop() {
+            }
+
+            @Override
+            public void shutdown() {
+            }
         });
         voices.add(voice);
         voice.resume();
@@ -418,27 +456,57 @@ public final class CheckGuidanceUiTest {
         return check;
     }
 
-    private static CheckPipeline.Detection detection(int id) { return new CheckPipeline.Detection(id, .9f); }
-    private static CameraSource.Frame frame() { return new CameraSource.Frame(new byte[12], 2, 2); }
-    private static JSONArray faceBox() {
-        try { return new JSONArray().put(new JSONObject().put("x", .2).put("y", .2).put("w", .4).put("h", .4)); }
-        catch (Exception error) { throw new AssertionError(error); }
+    private static CheckPipeline.Detection detection(int id) {
+        return new CheckPipeline.Detection(id, .9f);
     }
-    private static CheckPipeline pipeline(CheckActivity check) { return (CheckPipeline) field(check, "pipeline"); }
-    private static String text(CheckActivity check) { return ((TextView) field(check, "checkHint")).getText().toString(); }
+
+    private static CameraSource.Frame frame() {
+        return new CameraSource.Frame(new byte[12], 2, 2);
+    }
+
+    private static JSONArray faceBox() {
+        try {
+            return new JSONArray().put(new JSONObject().put("x", .2).put("y", .2).put("w", .4).put("h", .4));
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        }
+    }
+
+    private static CheckPipeline pipeline(CheckActivity check) {
+        return (CheckPipeline) field(check, "pipeline");
+    }
+
+    private static String text(CheckActivity check) {
+        return ((TextView) field(check, "checkHint")).getText().toString();
+    }
+
     private static void preview(CheckActivity check, CameraSource.Frame frame, JSONArray boxes, boolean available) {
         invoke(check, "acceptFacePreview", new Class<?>[]{CameraSource.Frame.class, JSONArray.class, boolean.class,
                         int.class, CheckPipeline.Stage.class, int.class, boolean.class},
                 frame, boxes, available, check.session, pipeline(check).getStage(), 1, false);
     }
+
     private static void identity(CheckActivity check, CameraSource.Frame frame, boolean available) {
         invoke(check, "acceptIdentity", new Class<?>[]{int.class, int.class, long.class, boolean.class, boolean.class,
                 JSONObject.class, CameraSource.Frame.class}, 1, check.session, 0L, false, available, null, frame);
     }
-    private static void updateVoice(CheckActivity check) { invoke(check, "updateVoice", new Class<?>[0]); }
-    private static void updateCheck(CheckActivity check) { invoke(check, "updateCheck", new Class<?>[0]); }
-    private static void assertWarning(CheckActivity check) { assertPromptStyle(check, true); }
-    private static void assertNormal(CheckActivity check) { assertPromptStyle(check, false); }
+
+    private static void updateVoice(CheckActivity check) {
+        invoke(check, "updateVoice", new Class<?>[0]);
+    }
+
+    private static void updateCheck(CheckActivity check) {
+        invoke(check, "updateCheck", new Class<?>[0]);
+    }
+
+    private static void assertWarning(CheckActivity check) {
+        assertPromptStyle(check, true);
+    }
+
+    private static void assertNormal(CheckActivity check) {
+        assertPromptStyle(check, false);
+    }
+
     private static void assertPromptStyle(CheckActivity check, boolean warning) {
         TextView hint = (TextView) field(check, "checkHint");
         TextView label = (TextView) field(check, "checkPromptLabel");
@@ -448,6 +516,7 @@ public final class CheckGuidanceUiTest {
         Drawable expected = ContextCompat.getDrawable(hint.getContext(), warning ? R.drawable.mc_check_prompt_warning : R.drawable.mc_check_prompt_normal);
         assertEquals("提示背景应随实时状态变化", backgroundColor(expected), backgroundColor(hint.getBackground()));
     }
+
     private static int backgroundColor(Drawable drawable) {
         assertNotNull(drawable);
         Bitmap bitmap = Bitmap.createBitmap(40, 40, Bitmap.Config.ARGB_8888);
@@ -459,6 +528,7 @@ public final class CheckGuidanceUiTest {
         bitmap.recycle();
         return color;
     }
+
     private Context configuredContext(int width, int height, float font) {
         Context app = instrumentation.getTargetContext();
         Configuration configuration = new Configuration(app.getResources().getConfiguration());
@@ -469,6 +539,7 @@ public final class CheckGuidanceUiTest {
         configuration.fontScale = font;
         return new ContextThemeWrapper(app.createConfigurationContext(configuration), R.style.AppTheme);
     }
+
     private static ViewGroup inflate(Context context) {
         ViewGroup root = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.activity_check_design_active, new FrameLayout(context), false);
         LayoutInflater.from(context).inflate(R.layout.view_check_camera_preview,
@@ -477,11 +548,13 @@ public final class CheckGuidanceUiTest {
         ((TextView) root.findViewById(R.id.check_camera_stage)).setText("头部着装检查");
         return root;
     }
+
     private static void prepareHeader(ViewGroup root) {
         ((TextView) root.findViewById(R.id.header_shop)).setText("安和餐饮服务有限公司 · 第一食堂后厨");
         // 离屏布局不触发 TextClock 的附着刷新，使用完整日期时间验证换行与标题对齐。
         ((TextView) root.findViewById(R.id.check_clock)).setText("2026-10-21  10:45:32");
     }
+
     private static void measure(ViewGroup root, int widthDp, int heightDp) {
         float density = root.getResources().getDisplayMetrics().density;
         int width = Math.round(widthDp * density), height = Math.round(heightDp * density);
@@ -489,8 +562,10 @@ public final class CheckGuidanceUiTest {
                 View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
         root.layout(0, 0, width, height);
     }
+
     private void saveRequestedPreview(ViewGroup root, int[] size, int font, String prompt) {
-        if (!"true".equals(InstrumentationRegistry.getArguments().getString("guidance_screenshots")) || font != 3) return;
+        if (!"true".equals(InstrumentationRegistry.getArguments().getString("guidance_screenshots")) || font != 3)
+            return;
         Configuration device = instrumentation.getTargetContext().getResources().getConfiguration();
         boolean landscape = device.screenWidthDp > device.screenHeightDp;
         if (size[0] != (landscape ? 1280 : 360) || size[1] != (landscape ? 800 : 640)) return;
@@ -511,25 +586,36 @@ public final class CheckGuidanceUiTest {
             try (FileOutputStream stream = new FileOutputStream(output)) {
                 assertTrue("布局预览应完整导出", bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream));
             }
-        } catch (Exception error) { throw new AssertionError(error); }
-        finally { bitmap.recycle(); }
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        } finally {
+            bitmap.recycle();
+        }
     }
+
     private static Rect bounds(ViewGroup root, View child) {
-        Rect bounds = new Rect(); child.getDrawingRect(bounds);
-        root.offsetDescendantRectToMyCoords(child, bounds); return bounds;
+        Rect bounds = new Rect();
+        child.getDrawingRect(bounds);
+        root.offsetDescendantRectToMyCoords(child, bounds);
+        return bounds;
     }
+
     private static void assertContained(ViewGroup root, View child, String label) {
-        assertNotNull(label, child); assertEquals(label, View.VISIBLE, child.getVisibility());
+        assertNotNull(label, child);
+        assertEquals(label, View.VISIBLE, child.getVisibility());
         Rect bounds = bounds(root, child);
         assertTrue("控件必须有面积：" + label, bounds.width() > 0 && bounds.height() > 0);
         assertTrue("控件必须完整位于页面：" + label + " " + bounds,
                 bounds.left >= 0 && bounds.top >= 0 && bounds.right <= root.getWidth() && bounds.bottom <= root.getHeight());
     }
+
     private static void assertNoOverlap(ViewGroup root, View first, View second, String label) {
         assertFalse("当前提示不能盖住其他信息：" + label, Rect.intersects(bounds(root, first), bounds(root, second)));
     }
+
     private static void assertFullText(TextView text, String label) {
-        Layout layout = text.getLayout(); assertNotNull(label, layout);
+        Layout layout = text.getLayout();
+        assertNotNull(label, layout);
         String geometry = label + " 控件=" + text.getWidth() + "x" + text.getHeight()
                 + " 字号px=" + text.getTextSize() + " 行数=" + layout.getLineCount() + "/" + text.getMaxLines()
                 + " compoundPadding=" + text.getCompoundPaddingTop() + "," + text.getCompoundPaddingBottom()
@@ -546,6 +632,7 @@ public final class CheckGuidanceUiTest {
                     layout.getLineRight(i) <= text.getWidth() - text.getCompoundPaddingLeft() - text.getCompoundPaddingRight() + 1);
         }
     }
+
     private static void assertCompactPrompt(TextView text, String label) {
         Layout layout = text.getLayout();
         assertNotNull(label, layout);
@@ -559,6 +646,7 @@ public final class CheckGuidanceUiTest {
                         + " minLines=" + text.getMinLines() + " roundingAllowance=" + roundingAllowance,
                 text.getHeight() <= neededHeight + roundingAllowance);
     }
+
     private static void assertPromptScrollEndReachable(ViewGroup root, TextView hint, String label) {
         ScrollView scroll = (ScrollView) hint.getParent().getParent();
         Rect exitBefore = bounds(root, root.findViewById(R.id.check_exit));
@@ -580,32 +668,60 @@ public final class CheckGuidanceUiTest {
         if (view instanceof ViewGroup) for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
             assertOnlyInfoPanelScrolls(((ViewGroup) view).getChildAt(i));
     }
+
     private static void assertRemovedStatusWidgets(ViewGroup root) {
         Context context = root.getContext();
         for (String name : new String[]{"check_device", "check_status_details"}) {
             int id = context.getResources().getIdentifier(name, "id", context.getPackageName());
-            if (id != 0) assertNull("设备文字和查看状态入口应已移除：" + name, root.findViewById(id));
+            if (id != 0)
+                assertNull("设备文字和查看状态入口应已移除：" + name, root.findViewById(id));
         }
     }
+
     private static String collectText(View view) {
         StringBuilder text = new StringBuilder();
         if (view.getVisibility() != View.VISIBLE) return "";
         if (view instanceof TextView) text.append(((TextView) view).getText()).append('\n');
-        if (view instanceof ViewGroup) for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) text.append(collectText(((ViewGroup) view).getChildAt(i)));
+        if (view instanceof ViewGroup) for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
+            text.append(collectText(((ViewGroup) view).getChildAt(i)));
         return text.toString();
     }
+
     private static Object field(Object target, String name) {
-        try { Field field = target.getClass().getDeclaredField(name); field.setAccessible(true); return field.get(target); }
-        catch (Exception error) { throw new AssertionError(error); }
+        try {
+            Field field = target.getClass().getDeclaredField(name);
+            field.setAccessible(true);
+            return field.get(target);
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        }
     }
-    private static void set(Object target, String name, Object value) { setDeclared(target.getClass(), target, name, value); }
+
+    private static void set(Object target, String name, Object value) {
+        setDeclared(target.getClass(), target, name, value);
+    }
+
     private static void setDeclared(Class<?> type, Object target, String name, Object value) {
-        try { Field field = type.getDeclaredField(name); field.setAccessible(true); field.set(target, value); }
-        catch (Exception error) { throw new AssertionError(error); }
+        try {
+            Field field = type.getDeclaredField(name);
+            field.setAccessible(true);
+            field.set(target, value);
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        }
     }
+
     private static Object invoke(Object target, String name, Class<?>[] types, Object... args) {
-        try { Method method = target.getClass().getDeclaredMethod(name, types); method.setAccessible(true); return method.invoke(target, args); }
-        catch (Exception error) { throw new AssertionError(error); }
+        try {
+            Method method = target.getClass().getDeclaredMethod(name, types);
+            method.setAccessible(true);
+            return method.invoke(target, args);
+        } catch (Exception error) {
+            throw new AssertionError(error);
+        }
     }
-    private void onMain(Runnable action) { instrumentation.runOnMainSync(action); }
+
+    private void onMain(Runnable action) {
+        instrumentation.runOnMainSync(action);
+    }
 }

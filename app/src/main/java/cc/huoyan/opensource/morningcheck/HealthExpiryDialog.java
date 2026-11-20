@@ -74,7 +74,8 @@ final class HealthExpiryDialog extends Dialog {
         findViewById(R.id.health_date_panel).addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> fitActionRow());
         firstYear = Math.min(1900, selection.selected().getYear());
         int lastYear = Math.max(LocalDate.now().getYear() + 100, selection.selected().getYear());
-        for (int year = firstYear; year <= lastYear; year++) years.add(getContext().getString(R.string.i18n_a_year, year));
+        for (int year = firstYear; year <= lastYear; year++)
+            years.add(getContext().getString(R.string.i18n_a_year, year));
         yearPicker = findViewById(R.id.health_date_year);
         monthPicker = findViewById(R.id.health_date_month);
         yearPicker.setPopupBackgroundResource(R.drawable.mc_panel);
@@ -82,8 +83,9 @@ final class HealthExpiryDialog extends Dialog {
         List<String> months = new ArrayList<>();
         java.util.Locale locale = UiMessages.isEnglish(getContext()) ? java.util.Locale.US : java.util.Locale.CHINA;
         String[] shortMonths = new java.text.DateFormatSymbols(locale).getShortMonths();
-        for (int month = 1; month <= 12; month++) months.add(locale.getLanguage().equals("zh")
-                ? month + "月" : shortMonths[month - 1]);
+        for (int month = 1; month <= 12; month++)
+            months.add(locale.getLanguage().equals("zh")
+                    ? month + "月" : shortMonths[month - 1]);
         yearPicker.setAdapter(options(years));
         monthPicker.setAdapter(options(months));
         AdapterView.OnItemSelectedListener changed = new AdapterView.OnItemSelectedListener() {
@@ -184,7 +186,7 @@ final class HealthExpiryDialog extends Dialog {
         // 大横窗留出完整六行日历和宽裕触控区；矮横窗按可用高度收缩，保留全部日期与操作。
         int preferredWidth = spaciousLandscape ? size(R.dimen.dp_400, R.dimen.dp_400, R.dimen.dp_100, R.dimen.dp_20)
                 : sideBySide ? size(R.dimen.dp_400, R.dimen.dp_260, R.dimen.dp_44)
-                  : size(R.dimen.dp_400, R.dimen.dp_40);
+                : size(R.dimen.dp_400, R.dimen.dp_40);
         int preferredHeight = sideBySide && !spaciousLandscape
                 ? size(R.dimen.dp_400, R.dimen.dp_28, R.dimen.dp_4)
                 : size(R.dimen.dp_400, R.dimen.dp_100, R.dimen.dp_60);

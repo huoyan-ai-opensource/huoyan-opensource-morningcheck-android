@@ -13,7 +13,7 @@ import cc.huoyan.morningcheck.sdk.client.HuoyanClient;
  * 激活和切换共用选模会话；状态在主线程访问，重建页面不重发查询或写操作。
  */
 final class ModelSelectionSession {
-    enum Stage { IDLE, INPUT, QUERYING, CHOOSING, ACTIVATING, FINISHED }
+    enum Stage {IDLE, INPUT, QUERYING, CHOOSING, ACTIVATING, FINISHED}
 
     interface Data {
         long generation();
@@ -176,7 +176,8 @@ final class ModelSelectionSession {
     }
 
     boolean select(int position) {
-        if (destroyed || stage != Stage.CHOOSING || position < 0 || position >= models.size()) return false;
+        if (destroyed || stage != Stage.CHOOSING || position < 0 || position >= models.size())
+            return false;
         if (!validateConnection()) return false;
         Model model = models.get(position);
         if (switching && model.current) {
@@ -243,6 +244,15 @@ final class ModelSelectionSession {
     void consumed() {
         if (destroyed || stage != Stage.FINISHED) return;
         reset(!submitted && !switching ? Stage.INPUT : Stage.IDLE);
+        changed();
+    }
+
+    /**
+     * 授权引导接管本次失败，关闭激活会话以免输入框叠在引导上。
+     */
+    void consumedForPermission() {
+        if (destroyed || stage != Stage.FINISHED) return;
+        reset(Stage.IDLE);
         changed();
     }
 

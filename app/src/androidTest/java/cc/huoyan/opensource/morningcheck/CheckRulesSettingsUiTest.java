@@ -57,7 +57,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 隔离现场服务，验证规则即时保存、无效草稿与页面重建，以及固定页面的字号适配。 */
+/**
+ * 隔离现场服务，验证规则即时保存、无效草稿与页面重建，以及固定页面的字号适配。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class CheckRulesSettingsUiTest {
     private static final int[][] WINDOWS = {{360, 640}, {640, 360}, {800, 1280},
@@ -75,7 +77,8 @@ public final class CheckRulesSettingsUiTest {
     private MockWebServer endpoint;
     private ActivityScenario<CheckRulesSettingsActivity> scenario;
 
-    @Before public void isolateSdkAndRestoreablePreferences() throws Exception {
+    @Before
+    public void isolateSdkAndRestoreablePreferences() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         device = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         binding = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
@@ -87,10 +90,12 @@ public final class CheckRulesSettingsUiTest {
             app.sdkSession().disconnect();
         });
         instrumentation.waitForIdleSync();
-        app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+        app.io.submit(() -> {
+        }).get(10, TimeUnit.SECONDS);
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 if (request.getPath() == null || !request.getPath().startsWith("/sdk"))
                     businessRequests.incrementAndGet();
                 return new MockResponse().setResponseCode(503).setBody("晨检规则隔离回归");
@@ -109,7 +114,8 @@ public final class CheckRulesSettingsUiTest {
         assertTrue(editor.commit());
     }
 
-    @After public void closePageAndRestorePreferences() throws Exception {
+    @After
+    public void closePageAndRestorePreferences() throws Exception {
         try {
             if (scenario != null) scenario.close();
             if (app != null) instrumentation.runOnMainSync(() -> {
@@ -117,7 +123,8 @@ public final class CheckRulesSettingsUiTest {
                 app.sdkSession().disconnect();
             });
             instrumentation.waitForIdleSync();
-            if (app != null) app.io.submit(() -> { }).get(10, TimeUnit.SECONDS);
+            if (app != null) app.io.submit(() -> {
+            }).get(10, TimeUnit.SECONDS);
             if (binding != null && originalBinding != null)
                 assertEquals("晨检规则不应改变门店归属", originalBinding, binding.getAll());
         } finally {
@@ -131,7 +138,8 @@ public final class CheckRulesSettingsUiTest {
         assertEquals("本地规则调整不应访问业务云", 0, businessRequests.get());
     }
 
-    @Test public void validTemperatureEditsSaveImmediatelyIncludingBothRangeBoundaries() {
+    @Test
+    public void validTemperatureEditsSaveImmediatelyIncludingBothRangeBoundaries() {
         launchPage();
         scenario.onActivity(activity -> {
             assertEquals("37.3", input(activity).getText().toString());
@@ -154,7 +162,8 @@ public final class CheckRulesSettingsUiTest {
         });
     }
 
-    @Test public void invalidAndIncompleteTemperatureDraftsKeepLatestValidRule() {
+    @Test
+    public void invalidAndIncompleteTemperatureDraftsKeepLatestValidRule() {
         launchPage();
         scenario.onActivity(activity -> {
             input(activity).setText("37.8");
@@ -177,7 +186,8 @@ public final class CheckRulesSettingsUiTest {
         });
     }
 
-    @Test public void redrawAndRecreationKeepDraftWithoutAllowingOldInputToChangeSavedRule() {
+    @Test
+    public void redrawAndRecreationKeepDraftWithoutAllowingOldInputToChangeSavedRule() {
         launchPage();
         AtomicReference<EditText> removedInput = new AtomicReference<>();
         scenario.onActivity(activity -> {
@@ -212,7 +222,8 @@ public final class CheckRulesSettingsUiTest {
         });
     }
 
-    @Test public void ruleSwitchesSaveImmediatelyAndSurviveRecreation() {
+    @Test
+    public void ruleSwitchesSaveImmediatelyAndSurviveRecreation() {
         launchPage();
         scenario.onActivity(activity -> {
             // 先调整头部子项，再关闭头部；不依赖父开关关闭后的子项可交互性。
@@ -235,7 +246,8 @@ public final class CheckRulesSettingsUiTest {
         });
     }
 
-    @Test public void temperatureDialogConfirmsCancelsAndRejectsInvalidRangesAtDefaultAndLargestFontSizes() throws Exception {
+    @Test
+    public void temperatureDialogConfirmsCancelsAndRejectsInvalidRangesAtDefaultAndLargestFontSizes() throws Exception {
         for (int font : new int[]{AppFontSettings.DEFAULT_INDEX, 3}) {
             assertTrue(device.edit().putInt(AppFontSettings.KEY, font)
                     .putString("temperature_limit", "37.3").commit());
@@ -246,8 +258,10 @@ public final class CheckRulesSettingsUiTest {
                 assertEquals("页面必须使用当前字号", AppFontSettings.scaleFor(font),
                         activity.getResources().getConfiguration().fontScale, .001f);
                 ViewGroup root = activity.findViewById(R.id.main_root);
-                for (int id : TOGGLE_IDS) assertContained(root, root.findViewById(id), "实际规则页");
-                for (int id : MODEL_IDS) assertNull("晨检规则不再承载模型卡", root.findViewById(id));
+                for (int id : TOGGLE_IDS)
+                    assertContained(root, root.findViewById(id), "实际规则页");
+                for (int id : MODEL_IDS)
+                    assertNull("晨检规则不再承载模型卡", root.findViewById(id));
                 assertContained(root, input(activity), "实际体温输入框");
                 assertEquals("合法温度不占用校验提示区域", View.GONE, status(activity).getVisibility());
             });
@@ -310,51 +324,53 @@ public final class CheckRulesSettingsUiTest {
         }
     }
 
-    @Test public void everyScreenAndFontSizeKeepsRulesAndValidationVisibleWithoutPageScrolling() {
+    @Test
+    public void everyScreenAndFontSizeKeepsRulesAndValidationVisibleWithoutPageScrolling() {
         instrumentation.runOnMainSync(() -> {
-            for (int[] window : WINDOWS) for (int font = 0; font < 4; font++) {
-                Configuration configuration = new Configuration(app.getResources().getConfiguration());
-                configuration.screenWidthDp = window[0];
-                configuration.screenHeightDp = window[1];
-                configuration.smallestScreenWidthDp = Math.min(window[0], window[1]);
-                configuration.orientation = window[0] > window[1]
-                        ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
-                configuration.fontScale = AppFontSettings.scaleFor(font);
-                Context context = new ContextThemeWrapper(app.createConfigurationContext(configuration), R.style.AppTheme);
-                boolean compact = context.getResources().getBoolean(R.bool.mc_compact);
-                String label = window[0] + "×" + window[1] + "，字号 " + Math.round(configuration.fontScale * 100) + "%";
-                LayoutInflater inflater = LayoutInflater.from(context);
-                ViewGroup root = (ViewGroup) inflater.inflate(compact
-                        ? R.layout.activity_devices_compact : R.layout.activity_devices, null);
-                ((TextView) root.findViewById(R.id.header_page_title)).setText("晨检规则");
-                FrameLayout body = root.findViewById(R.id.settings_body);
-                int inset = context.getResources().getDimensionPixelSize(R.dimen.dp_12);
-                root.findViewById(R.id.page_content).setPadding(inset, inset, inset, inset);
-                body.setPadding(0, 0, 0, 0);
-                body.setBackground(null);
-                body.addView(inflater.inflate(R.layout.view_rules_design, body, false));
-                for (int id : new int[]{R.id.rules_head_state, R.id.rules_temperature_state})
-                    ((TextView) root.findViewById(id)).setText(R.string.rules_enabled);
-                for (int id : new int[]{R.id.rules_hat_state, R.id.rules_mask_state})
-                    ((TextView) root.findViewById(id)).setText(R.string.rules_wear);
-                ((EditText) root.findViewById(R.id.settings_temperature_limit)).setText("43.1");
-                ((TextView) root.findViewById(R.id.settings_temperature_limit_status)).setText("请输入 36.1–43°C，仍使用 37.3°C");
-                float density = context.getResources().getDisplayMetrics().density;
-                int width = Math.round(window[0] * density), height = Math.round(window[1] * density);
-                root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
-                root.layout(0, 0, width, height);
-                assertNoPageScroll(root, label);
-                for (int id : MODEL_IDS) {
-                    assertNull(label + "：模型信息与切换入口只放授权页", root.findViewById(id));
+            for (int[] window : WINDOWS)
+                for (int font = 0; font < 4; font++) {
+                    Configuration configuration = new Configuration(app.getResources().getConfiguration());
+                    configuration.screenWidthDp = window[0];
+                    configuration.screenHeightDp = window[1];
+                    configuration.smallestScreenWidthDp = Math.min(window[0], window[1]);
+                    configuration.orientation = window[0] > window[1]
+                            ? Configuration.ORIENTATION_LANDSCAPE : Configuration.ORIENTATION_PORTRAIT;
+                    configuration.fontScale = AppFontSettings.scaleFor(font);
+                    Context context = new ContextThemeWrapper(app.createConfigurationContext(configuration), R.style.AppTheme);
+                    boolean compact = context.getResources().getBoolean(R.bool.mc_compact);
+                    String label = window[0] + "×" + window[1] + "，字号 " + Math.round(configuration.fontScale * 100) + "%";
+                    LayoutInflater inflater = LayoutInflater.from(context);
+                    ViewGroup root = (ViewGroup) inflater.inflate(compact
+                            ? R.layout.activity_devices_compact : R.layout.activity_devices, null);
+                    ((TextView) root.findViewById(R.id.header_page_title)).setText("晨检规则");
+                    FrameLayout body = root.findViewById(R.id.settings_body);
+                    int inset = context.getResources().getDimensionPixelSize(R.dimen.dp_12);
+                    root.findViewById(R.id.page_content).setPadding(inset, inset, inset, inset);
+                    body.setPadding(0, 0, 0, 0);
+                    body.setBackground(null);
+                    body.addView(inflater.inflate(R.layout.view_rules_design, body, false));
+                    for (int id : new int[]{R.id.rules_head_state, R.id.rules_temperature_state})
+                        ((TextView) root.findViewById(id)).setText(R.string.rules_enabled);
+                    for (int id : new int[]{R.id.rules_hat_state, R.id.rules_mask_state})
+                        ((TextView) root.findViewById(id)).setText(R.string.rules_wear);
+                    ((EditText) root.findViewById(R.id.settings_temperature_limit)).setText("43.1");
+                    ((TextView) root.findViewById(R.id.settings_temperature_limit_status)).setText("请输入 36.1–43°C，仍使用 37.3°C");
+                    float density = context.getResources().getDisplayMetrics().density;
+                    int width = Math.round(window[0] * density), height = Math.round(window[1] * density);
+                    root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                            View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+                    root.layout(0, 0, width, height);
+                    assertNoPageScroll(root, label);
+                    for (int id : MODEL_IDS) {
+                        assertNull(label + "：模型信息与切换入口只放授权页", root.findViewById(id));
+                    }
+                    for (int id : TOGGLE_IDS) assertContained(root, root.findViewById(id), label);
+                    assertContained(root, root.findViewById(R.id.settings_temperature_limit), label);
+                    assertContained(root, root.findViewById(R.id.settings_temperature_limit_status), label);
+                    assertTextTree(body, root, label);
+                    assertNull(label, optional(root, "settings_save_threshold"));
+                    assertNull(label, optional(root, "settings_edit_threshold"));
                 }
-                for (int id : TOGGLE_IDS) assertContained(root, root.findViewById(id), label);
-                assertContained(root, root.findViewById(R.id.settings_temperature_limit), label);
-                assertContained(root, root.findViewById(R.id.settings_temperature_limit_status), label);
-                assertTextTree(body, root, label);
-                assertNull(label, optional(root, "settings_save_threshold"));
-                assertNull(label, optional(root, "settings_edit_threshold"));
-            }
         });
     }
 
@@ -457,20 +473,24 @@ public final class CheckRulesSettingsUiTest {
                 assertTrue(label + "：文字横向不能截断 " + text.getText(), layout.getLineWidth(line) <= availableWidth + 1);
             }
         }
-        if (view instanceof ViewGroup) for (int index = 0; index < ((ViewGroup) view).getChildCount(); index++)
-            assertTextTree(((ViewGroup) view).getChildAt(index), root, label);
+        if (view instanceof ViewGroup)
+            for (int index = 0; index < ((ViewGroup) view).getChildCount(); index++)
+                assertTextTree(((ViewGroup) view).getChildAt(index), root, label);
     }
 
     private static void assertNoPageScroll(View view, String label) {
         assertFalse(label + "：规则页不依赖整页滚动", view instanceof ScrollView || view instanceof HorizontalScrollView);
-        if (view instanceof ViewGroup) for (int index = 0; index < ((ViewGroup) view).getChildCount(); index++)
-            assertNoPageScroll(((ViewGroup) view).getChildAt(index), label);
+        if (view instanceof ViewGroup)
+            for (int index = 0; index < ((ViewGroup) view).getChildCount(); index++)
+                assertNoPageScroll(((ViewGroup) view).getChildAt(index), label);
     }
 
     private void finishPages() {
-        for (Stage stage : Stage.values()) for (Activity activity : new ArrayList<>(
-                ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
-            if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing()) activity.finish();
+        for (Stage stage : Stage.values())
+            for (Activity activity : new ArrayList<>(
+                    ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(stage)))
+                if (activity.getPackageName().equals(app.getPackageName()) && !activity.isFinishing())
+                    activity.finish();
     }
 
     private AlertDialog openTemperatureDialog(CheckRulesSettingsActivity activity) {
@@ -547,7 +567,8 @@ public final class CheckRulesSettingsUiTest {
     }
 
     private void capture(CheckRulesSettingsActivity activity, String scene) throws Exception {
-        if (!"true".equalsIgnoreCase(InstrumentationRegistry.getArguments().getString("rulesCapture", "false"))) return;
+        if (!"true".equalsIgnoreCase(InstrumentationRegistry.getArguments().getString("rulesCapture", "false")))
+            return;
         CountDownLatch frames = new CountDownLatch(1);
         onMain(() -> {
             View decor = activity.getWindow().getDecorView();
@@ -576,8 +597,11 @@ public final class CheckRulesSettingsUiTest {
         AtomicReference<T> result = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { result.set(action.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                result.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError(failure.get());
         return result.get();
@@ -586,8 +610,11 @@ public final class CheckRulesSettingsUiTest {
     private void await(Callable<Boolean> condition, String message) {
         long deadline = SystemClock.uptimeMillis() + 10_000;
         while (SystemClock.uptimeMillis() < deadline) {
-            try { if (condition.call()) return; }
-            catch (Exception error) { throw new AssertionError(error); }
+            try {
+                if (condition.call()) return;
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
             SystemClock.sleep(40);
         }
         fail(message);
@@ -595,8 +622,9 @@ public final class CheckRulesSettingsUiTest {
 
     private static Map<String, Object> snapshot(SharedPreferences preferences) {
         Map<String, Object> copy = new HashMap<>();
-        for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) copy.put(entry.getKey(),
-                entry.getValue() instanceof Set ? new HashSet<>((Set<?>) entry.getValue()) : entry.getValue());
+        for (Map.Entry<String, ?> entry : preferences.getAll().entrySet())
+            copy.put(entry.getKey(),
+                    entry.getValue() instanceof Set ? new HashSet<>((Set<?>) entry.getValue()) : entry.getValue());
         return copy;
     }
 

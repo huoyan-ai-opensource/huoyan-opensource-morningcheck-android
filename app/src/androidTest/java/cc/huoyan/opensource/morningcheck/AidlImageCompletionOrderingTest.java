@@ -32,11 +32,14 @@ import cc.huoyan.morningcheck.app.aidl.ISdkCommService;
 import cc.huoyan.morningcheck.app.aidl.RegisterResultParcel;
 import cc.huoyan.morningcheck.sdk.client.HuoyanClient;
 
-/** 用假服务控制真实图像载体与调度线程，不绑定 SDK、不请求业务网络。 */
+/**
+ * 用假服务控制真实图像载体与调度线程，不绑定 SDK、不请求业务网络。
+ */
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 27)
 public final class AidlImageCompletionOrderingTest {
-    @Test public void faceCallbackCanImmediatelyCheckHeadOrRegisterAfterItsCarrierCloses() throws Exception {
+    @Test
+    public void faceCallbackCanImmediatelyCheckHeadOrRegisterAfterItsCarrierCloses() throws Exception {
         for (String nextCommand : new String[]{"checkHead", "register"}) {
             try (Harness harness = new Harness(false, true)) {
                 CountDownLatch finished = new CountDownLatch(1);
@@ -62,14 +65,16 @@ public final class AidlImageCompletionOrderingTest {
                     }
                 });
                 assertTrue("串接图像调用未完成", finished.await(5, TimeUnit.SECONDS));
-                if (failure.get() != null) throw new AssertionError("图像交付顺序不正确", failure.get());
+                if (failure.get() != null)
+                    throw new AssertionError("图像交付顺序不正确", failure.get());
                 assertEquals(List.of(0, 0), codes);
                 assertEquals(1, harness.nextCalls);
             }
         }
     }
 
-    @Test public void cancelAndTimeoutDoNotReleaseImageSlotBeforeRealCallReturns() throws Exception {
+    @Test
+    public void cancelAndTimeoutDoNotReleaseImageSlotBeforeRealCallReturns() throws Exception {
         for (boolean timeout : new boolean[]{false, true}) {
             try (Harness harness = new Harness(true, false)) {
                 CountDownLatch terminal = new CountDownLatch(1), rejected = new CountDownLatch(1);
@@ -79,7 +84,8 @@ public final class AidlImageCompletionOrderingTest {
                     terminal.countDown();
                 });
                 assertTrue(harness.detectEntered.await(3, TimeUnit.SECONDS));
-                if (timeout) harness.timeout(id); else harness.cancel(id);
+                if (timeout) harness.timeout(id);
+                else harness.cancel(id);
                 assertTrue(terminal.await(3, TimeUnit.SECONDS));
                 assertEquals(Integer.valueOf(timeout ? HuoyanClient.ERROR_RESULT_UNKNOWN : HuoyanClient.ERROR_CANCELLED), terminalCode.get());
                 assertTrue("真实调用仍运行时不能关闭载体", harness.detectFrame.get().shmKey.getFileDescriptor().valid());
@@ -146,7 +152,9 @@ public final class AidlImageCompletionOrderingTest {
                     .invoke(client, command, params, new byte[6], callback);
         }
 
-        void cancel(String id) throws Exception { method("cancel", String.class).invoke(client, id); }
+        void cancel(String id) throws Exception {
+            method("cancel", String.class).invoke(client, id);
+        }
 
         void timeout(String id) throws Exception {
             control.submit(() -> {
@@ -154,7 +162,9 @@ public final class AidlImageCompletionOrderingTest {
                     Object pending = ((Map<?, ?>) field("pending").get(client)).get(id);
                     assertNotNull(pending);
                     method("timeout", pending.getClass()).invoke(client, pending);
-                } catch (Exception failure) { throw new AssertionError(failure); }
+                } catch (Exception failure) {
+                    throw new AssertionError(failure);
+                }
             }).get(3, TimeUnit.SECONDS);
         }
 
@@ -162,8 +172,11 @@ public final class AidlImageCompletionOrderingTest {
             long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(3);
             while (System.nanoTime() < deadline) {
                 if (control.submit(() -> {
-                    try { return field("activeImageId").get(client) == null; }
-                    catch (Exception failure) { throw new AssertionError(failure); }
+                    try {
+                        return field("activeImageId").get(client) == null;
+                    } catch (Exception failure) {
+                        throw new AssertionError(failure);
+                    }
                 }).get(1, TimeUnit.SECONDS)) return;
                 Thread.sleep(10);
             }
@@ -182,7 +195,8 @@ public final class AidlImageCompletionOrderingTest {
             return value;
         }
 
-        @Override public void close() throws Exception {
+        @Override
+        public void close() throws Exception {
             releaseDetect.countDown();
             control.callbackSubmitted.countDown();
             method("destroy").invoke(client);
@@ -200,12 +214,14 @@ public final class AidlImageCompletionOrderingTest {
             setRemoveOnCancelPolicy(true);
         }
 
-        @Override public void execute(Runnable command) {
+        @Override
+        public void execute(Runnable command) {
             super.execute(command);
             // 固定旧竞态的时序：工作线程第一次交付后先让主线程回调提交下一帧。
             if ("晨检-AIDL-调用".equals(Thread.currentThread().getName()) && gate.compareAndSet(true, false)) {
                 try {
-                    if (!callbackSubmitted.await(4, TimeUnit.SECONDS)) throw new AssertionError("回调未提交下一帧");
+                    if (!callbackSubmitted.await(4, TimeUnit.SECONDS))
+                        throw new AssertionError("回调未提交下一帧");
                 } catch (InterruptedException interrupted) {
                     Thread.currentThread().interrupt();
                     throw new AssertionError(interrupted);

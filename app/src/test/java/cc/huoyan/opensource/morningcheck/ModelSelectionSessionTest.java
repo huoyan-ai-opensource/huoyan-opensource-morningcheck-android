@@ -210,7 +210,8 @@ public final class ModelSelectionSessionTest {
             assertEquals(ModelSelectionSession.Stage.INPUT, data.session.stage);
             assertFalse(data.session.submitted);
             data.session.detach();
-            data.session.attach(() -> { });
+            data.session.attach(() -> {
+            });
             data.session.input(" RECOVERED-CODE ");
             data.session.input("DUPLICATE");
             assertEquals(1, data.queries);
@@ -266,7 +267,8 @@ public final class ModelSelectionSessionTest {
         data.requestMissingCode();
         data.session.select(1);
         data.session.detach();
-        data.session.attach(() -> { });
+        data.session.attach(() -> {
+        });
         assertEquals(1, data.queries);
         assertEquals(1, data.certificates);
         data.generation++;
@@ -464,7 +466,8 @@ public final class ModelSelectionSessionTest {
             session.open(switching);
             if (!switching) session.input("SERIAL");
             queryReply.onResult(0, "", models());
-            if (switching) certificateReply.onResult(0, "", ModelSelectionSessionTest.certificate("CURRENT"));
+            if (switching)
+                certificateReply.onResult(0, "", ModelSelectionSessionTest.certificate("CURRENT"));
         }
 
         void requestMissingCode() throws Exception {
@@ -501,7 +504,8 @@ public final class ModelSelectionSessionTest {
             this.model = model;
             activationReply = callback;
             if (activationThrows) throw new IllegalStateException("回执丢失");
-            if (synchronousCode != null) callback.onResult(synchronousCode, "同步拒绝", new JSONObject());
+            if (synchronousCode != null)
+                callback.onResult(synchronousCode, "同步拒绝", new JSONObject());
             return accepted;
         }
     }

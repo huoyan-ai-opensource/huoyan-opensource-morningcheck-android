@@ -23,7 +23,9 @@ import okio.ByteString;
 
 import static org.junit.Assert.*;
 
-/** 通过可控传输验证关联、断线和取消，不访问真实 SDK 或业务服务。 */
+/**
+ * 通过可控传输验证关联、断线和取消，不访问真实 SDK 或业务服务。
+ */
 public class WsSdkClientTest {
     private ScheduledThreadPoolExecutor io;
     private FakeConnector connector;
@@ -31,9 +33,11 @@ public class WsSdkClientTest {
     private boolean fastTimeout;
     private boolean fastRetries;
 
-    @Before public void createClient() {
+    @Before
+    public void createClient() {
         io = new ScheduledThreadPoolExecutor(1) {
-            @Override public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+            @Override
+            public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
                 if (fastTimeout && unit.toMillis(delay) == 40_000) {
                     return super.schedule(command, 30, TimeUnit.MILLISECONDS);
                 }
@@ -48,7 +52,8 @@ public class WsSdkClientTest {
         client = new WsSdkClient("1.2.3", null, Runnable::run, io, connector);
     }
 
-    @After public void shutdown() throws Exception {
+    @After
+    public void shutdown() throws Exception {
         if (!io.isShutdown()) {
             client.close();
             idle();
@@ -56,7 +61,8 @@ public class WsSdkClientTest {
         }
     }
 
-    @Test public void connectsWithExplicitInitAndNeverAssumesReadyFromInitSuccess() throws Exception {
+    @Test
+    public void connectsWithExplicitInitAndNeverAssumesReadyFromInitSuccess() throws Exception {
         FakeSocket socket = connect();
         assertEquals("init", command(socket.frames.get(0)));
         assertEquals("1.2.3", new JSONObject((String) socket.frames.get(0))
@@ -79,7 +85,8 @@ public class WsSdkClientTest {
         assertTrue(client.isReady());
     }
 
-    @Test public void offlineReadinessAndOnlineRecoveryUseStatusWithoutRepeatingInitialization() throws Exception {
+    @Test
+    public void offlineReadinessAndOnlineRecoveryUseStatusWithoutRepeatingInitialization() throws Exception {
         FakeSocket socket = connect();
         reply(socket, requestId(socket, "init"), 0, new JSONObject());
         reply(socket, requestId(socket, "getStatus"), 0,
@@ -98,7 +105,8 @@ public class WsSdkClientTest {
         assertFalse(client.isReady());
     }
 
-    @Test public void offlineCannotOverrideMissingOrInvalidReadinessEvidence() throws Exception {
+    @Test
+    public void offlineCannotOverrideMissingOrInvalidReadinessEvidence() throws Exception {
         FakeSocket socket = connect();
         reply(socket, requestId(socket, "getStatus"), 0,
                 new JSONObject().put("sdk_state", "OFFLINE"));
@@ -125,7 +133,8 @@ public class WsSdkClientTest {
         }
     }
 
-    @Test public void initializationCompletionDoesNotRequireCertificateOrReady() throws Exception {
+    @Test
+    public void initializationCompletionDoesNotRequireCertificateOrReady() throws Exception {
         List<Boolean> completions = new CopyOnWriteArrayList<>();
         client.setInitializationListener(() -> completions.add(true));
         FakeSocket socket = connect();
@@ -138,7 +147,8 @@ public class WsSdkClientTest {
         assertEquals(1, countCommands(socket, "init"));
     }
 
-    @Test public void initializationCompletionWaitsForBusyRetryAndAcceptsTerminalFailure() throws Exception {
+    @Test
+    public void initializationCompletionWaitsForBusyRetryAndAcceptsTerminalFailure() throws Exception {
         fastRetries = true;
         List<Boolean> completions = new CopyOnWriteArrayList<>();
         client.setInitializationListener(() -> completions.add(true));
@@ -158,7 +168,8 @@ public class WsSdkClientTest {
         assertEquals(2, countCommands(socket, "init"));
     }
 
-    @Test public void unknownInitializationDoesNotPretendTheServerFinished() throws Exception {
+    @Test
+    public void unknownInitializationDoesNotPretendTheServerFinished() throws Exception {
         List<Boolean> completions = new CopyOnWriteArrayList<>();
         client.setInitializationListener(() -> completions.add(true));
         FakeSocket socket = connect();
@@ -168,7 +179,8 @@ public class WsSdkClientTest {
         assertTrue(completions.isEmpty());
     }
 
-    @Test public void explicitBusyAndNotReadyReturnOnceWithoutHiddenStatusTriggeredRetries() throws Exception {
+    @Test
+    public void explicitBusyAndNotReadyReturnOnceWithoutHiddenStatusTriggeredRetries() throws Exception {
         fastRetries = true;
         List<Boolean> completions = new CopyOnWriteArrayList<>();
         List<Integer> results = new CopyOnWriteArrayList<>();
@@ -194,12 +206,14 @@ public class WsSdkClientTest {
         assertEquals(3, completions.size());
     }
 
-    @Test public void explicitInitializationCancelsPreviouslyScheduledConnectionRetry() throws Exception {
+    @Test
+    public void explicitInitializationCancelsPreviouslyScheduledConnectionRetry() throws Exception {
         FakeSocket socket = connect();
         reply(socket, requestId(socket, "getStatus"), 0,
                 new JSONObject().put("sdk_state", "INITIALIZING"));
         reply(socket, requestId(socket, "init"), WsSdkClient.ERROR_BUSY, new JSONObject());
-        String id = client.request("init", null, null, (code, message, data) -> { });
+        String id = client.request("init", null, null, (code, message, data) -> {
+        });
         idle();
         reply(socket, id, -3, new JSONObject());
         reply(socket, lastRequestId(socket, "getStatus"), 0,
@@ -209,7 +223,8 @@ public class WsSdkClientTest {
         assertEquals(2, countCommands(socket, "init"));
     }
 
-    @Test public void explicitInitializationSuccessReportsCompletionButUnknownDoesNot() throws Exception {
+    @Test
+    public void explicitInitializationSuccessReportsCompletionButUnknownDoesNot() throws Exception {
         fastRetries = true;
         List<Boolean> completions = new CopyOnWriteArrayList<>();
         client.setInitializationListener(() -> completions.add(true));
@@ -217,11 +232,13 @@ public class WsSdkClientTest {
         reply(socket, requestId(socket, "init"), 0, new JSONObject());
         reply(socket, requestId(socket, "getStatus"), 0,
                 new JSONObject().put("sdk_state", "NOT_ACTIVATED"));
-        String success = client.request("init", null, null, (code, message, data) -> { });
+        String success = client.request("init", null, null, (code, message, data) -> {
+        });
         idle();
         reply(socket, success, 0, new JSONObject());
         assertEquals(2, completions.size());
-        String unknown = client.request("init", null, null, (code, message, data) -> { });
+        String unknown = client.request("init", null, null, (code, message, data) -> {
+        });
         idle();
         reply(socket, unknown, WsSdkClient.ERROR_RESULT_UNKNOWN, new JSONObject());
         reply(socket, lastRequestId(socket, "getStatus"), 0,
@@ -232,7 +249,8 @@ public class WsSdkClientTest {
         assertEquals(3, countCommands(socket, "init"));
     }
 
-    @Test public void sendsTextThenBinaryAndRejectsSecondInFlightImage() throws Exception {
+    @Test
+    public void sendsTextThenBinaryAndRejectsSecondInFlightImage() throws Exception {
         FakeSocket socket = connect();
         byte[] pixels = {1, 2, 3, 4, 5, 6};
         List<Integer> secondResult = new CopyOnWriteArrayList<>();
@@ -258,7 +276,8 @@ public class WsSdkClientTest {
         assertEquals(8, socket.frames.size());
     }
 
-    @Test public void cancelDeliversOnceButKeepsImageSlotUntilServerFinishes() throws Exception {
+    @Test
+    public void cancelDeliversOnceButKeepsImageSlotUntilServerFinishes() throws Exception {
         FakeSocket socket = connect();
         List<Integer> results = new CopyOnWriteArrayList<>();
         String id = client.request("identify", rgbParams(), new byte[6],
@@ -280,7 +299,8 @@ public class WsSdkClientTest {
         assertEquals(8, socket.frames.size());
     }
 
-    @Test public void faceDetectionUsesImageSlotAndReturnsFacesFromMatchingRequest() throws Exception {
+    @Test
+    public void faceDetectionUsesImageSlotAndReturnsFacesFromMatchingRequest() throws Exception {
         FakeSocket socket = connect();
         List<JSONObject> results = new CopyOnWriteArrayList<>();
         List<Integer> blocked = new CopyOnWriteArrayList<>();
@@ -314,7 +334,8 @@ public class WsSdkClientTest {
         assertEquals(8, socket.frames.size());
     }
 
-    @Test public void faceDetectionRejectsInvalidLimitBeforeSendingAnyImage() throws Exception {
+    @Test
+    public void faceDetectionRejectsInvalidLimitBeforeSendingAnyImage() throws Exception {
         FakeSocket socket = connect();
         List<Integer> results = new CopyOnWriteArrayList<>();
         for (Object limit : new Object[]{0, -1, 1.5, "3", JSONObject.NULL, 2147483648L}) {
@@ -323,7 +344,8 @@ public class WsSdkClientTest {
         }
         idle();
         assertEquals(6, results.size());
-        for (Integer result : results) assertEquals(Integer.valueOf(WsSdkClient.ERROR_INVALID_REQUEST), result);
+        for (Integer result : results)
+            assertEquals(Integer.valueOf(WsSdkClient.ERROR_INVALID_REQUEST), result);
         assertEquals(4, socket.frames.size());
         String id = client.request("detectFace", rgbParams().put("max_faces", 65), new byte[6], null);
         idle();
@@ -334,7 +356,8 @@ public class WsSdkClientTest {
         assertEquals(8, socket.frames.size());
     }
 
-    @Test public void reconnectNeverReplaysUncertainWriteAndIgnoresOldSocketCallbacks() throws Exception {
+    @Test
+    public void reconnectNeverReplaysUncertainWriteAndIgnoresOldSocketCallbacks() throws Exception {
         FakeSocket socket = connect();
         reply(socket, requestId(socket, "getStatus"), 0,
                 new JSONObject().put("sdk_state", "NOT_ACTIVATED"));
@@ -367,7 +390,8 @@ public class WsSdkClientTest {
         assertTrue(client.isReady());
     }
 
-    @Test public void localTimeoutIsUnknownAndLateResponseDoesNotDeliverTwice() throws Exception {
+    @Test
+    public void localTimeoutIsUnknownAndLateResponseDoesNotDeliverTwice() throws Exception {
         FakeSocket socket = connect();
         fastTimeout = true;
         List<Integer> results = new CopyOnWriteArrayList<>();
@@ -380,7 +404,8 @@ public class WsSdkClientTest {
         assertEquals(1, results.size());
     }
 
-    @Test public void closeCancelsReconnectAndFailsPendingOnlyOnce() throws Exception {
+    @Test
+    public void closeCancelsReconnectAndFailsPendingOnlyOnce() throws Exception {
         FakeSocket socket = connect();
         List<Integer> results = new CopyOnWriteArrayList<>();
         client.request("forget", new JSONObject().put("person_id", 1), null,
@@ -396,7 +421,8 @@ public class WsSdkClientTest {
         assertEquals(0, client.getStatus().length());
     }
 
-    @Test public void invalidRgbNeverSendsDeclaration() throws Exception {
+    @Test
+    public void invalidRgbNeverSendsDeclaration() throws Exception {
         FakeSocket socket = connect();
         List<Integer> results = new CopyOnWriteArrayList<>();
         client.request("identify", rgbParams(), new byte[5],
@@ -406,14 +432,16 @@ public class WsSdkClientTest {
         assertEquals(Integer.valueOf(WsSdkClient.ERROR_INVALID_REQUEST), results.get(0));
     }
 
-    @Test public void classTableAliasMatchesActualSdkCommandAndBackoffIsCapped() {
+    @Test
+    public void classTableAliasMatchesActualSdkCommandAndBackoffIsCapped() {
         assertEquals("get_class_table", MorningWsProtocol.command("getClassTable"));
         assertEquals(500, MorningWsProtocol.reconnectDelayMs(0));
         assertEquals(1000, MorningWsProtocol.reconnectDelayMs(1));
         assertEquals(30_000, MorningWsProtocol.reconnectDelayMs(100));
     }
 
-    @Test public void initialBusyRetriesOnlySixTimesWithFreshIds() throws Exception {
+    @Test
+    public void initialBusyRetriesOnlySixTimesWithFreshIds() throws Exception {
         fastRetries = true;
         FakeSocket socket = connect();
         reply(socket, requestId(socket, "getStatus"), 0, new JSONObject().put("sdk_state", "NOT_INIT"));
@@ -432,7 +460,8 @@ public class WsSdkClientTest {
         assertFalse(client.isReady());
     }
 
-    @Test public void notReadyOnlyRetriesTemporaryStateAndStopsForExpiredCertificate() throws Exception {
+    @Test
+    public void notReadyOnlyRetriesTemporaryStateAndStopsForExpiredCertificate() throws Exception {
         fastRetries = true;
         FakeSocket socket = connect();
         reply(socket, requestId(socket, "getStatus"), 0, new JSONObject().put("sdk_state", "MODEL_NOT_READY"));
@@ -447,7 +476,8 @@ public class WsSdkClientTest {
         assertEquals(2, countCommands(socket, "init"));
     }
 
-    @Test public void readyStateWithExplicitInvalidCertificateNeverEnablesRecognition() throws Exception {
+    @Test
+    public void readyStateWithExplicitInvalidCertificateNeverEnablesRecognition() throws Exception {
         FakeSocket socket = connect();
         reply(socket, requestId(socket, "getStatus"), 0,
                 new JSONObject().put("sdk_state", "READY").put("certificate_valid", false));
@@ -459,7 +489,8 @@ public class WsSdkClientTest {
         assertTrue(client.isReady());
     }
 
-    @Test public void destroyShutsDownSchedulerAndSuppressesAlreadyQueuedCallbacks() throws Exception {
+    @Test
+    public void destroyShutsDownSchedulerAndSuppressesAlreadyQueuedCallbacks() throws Exception {
         List<Runnable> deliveries = new CopyOnWriteArrayList<>();
         List<Integer> results = new CopyOnWriteArrayList<>();
         client = new WsSdkClient("1.2.3", null, deliveries::add, io, connector);
@@ -481,9 +512,11 @@ public class WsSdkClientTest {
         assertEquals(1, connector.sockets.size());
     }
 
-    @Test public void explicitInitAndReconnectCarryHostVersion() throws Exception {
+    @Test
+    public void explicitInitAndReconnectCarryHostVersion() throws Exception {
         FakeSocket socket = connect();
-        client.request("init", null, null, (code, message, data) -> { });
+        client.request("init", null, null, (code, message, data) -> {
+        });
         idle();
         assertEquals(2, countCommands(socket, "init"));
         client.close();
@@ -498,7 +531,8 @@ public class WsSdkClientTest {
 
     private void awaitCommands(FakeSocket socket, String command, int expected) throws Exception {
         long until = System.nanoTime() + TimeUnit.SECONDS.toNanos(2);
-        while (countCommands(socket, command) < expected && System.nanoTime() < until) Thread.sleep(5);
+        while (countCommands(socket, command) < expected && System.nanoTime() < until)
+            Thread.sleep(5);
         idle();
         assertEquals(expected, countCommands(socket, command));
     }
@@ -545,7 +579,8 @@ public class WsSdkClientTest {
     }
 
     private void idle() throws Exception {
-        io.submit(() -> { }).get(3, TimeUnit.SECONDS);
+        io.submit(() -> {
+        }).get(3, TimeUnit.SECONDS);
     }
 
     private JSONObject rgbParams() throws Exception {
@@ -569,12 +604,18 @@ public class WsSdkClientTest {
     private static final class FakeConnector implements WsSdkClient.Connector {
         final List<FakeSocket> sockets = new CopyOnWriteArrayList<>();
         boolean destroyed;
-        @Override public WebSocket open(Request request, WebSocketListener listener) {
+
+        @Override
+        public WebSocket open(Request request, WebSocketListener listener) {
             FakeSocket socket = new FakeSocket(request, listener);
             sockets.add(socket);
             return socket;
         }
-        @Override public void destroy() { destroyed = true; }
+
+        @Override
+        public void destroy() {
+            destroyed = true;
+        }
     }
 
     private static final class FakeSocket implements WebSocket {
@@ -588,11 +629,37 @@ public class WsSdkClientTest {
             this.listener = listener;
         }
 
-        @Override public Request request() { return request; }
-        @Override public long queueSize() { return 0; }
-        @Override public boolean send(String text) { frames.add(text); return !cancelled; }
-        @Override public boolean send(ByteString bytes) { frames.add(bytes); return !cancelled; }
-        @Override public boolean close(int code, String reason) { cancelled = true; return true; }
-        @Override public void cancel() { cancelled = true; }
+        @Override
+        public Request request() {
+            return request;
+        }
+
+        @Override
+        public long queueSize() {
+            return 0;
+        }
+
+        @Override
+        public boolean send(String text) {
+            frames.add(text);
+            return !cancelled;
+        }
+
+        @Override
+        public boolean send(ByteString bytes) {
+            frames.add(bytes);
+            return !cancelled;
+        }
+
+        @Override
+        public boolean close(int code, String reason) {
+            cancelled = true;
+            return true;
+        }
+
+        @Override
+        public void cancel() {
+            cancelled = true;
+        }
     }
 }

@@ -40,14 +40,17 @@ import java.util.regex.Pattern;
 
 import cc.huoyan.opensource.morningcheck.sdk.MorningSdkSettings;
 
-/** 验证语言资源、实际绑定与关键操作的排版，不访问业务云或操作真实硬件。 */
+/**
+ * 验证语言资源、实际绑定与关键操作的排版，不访问业务云或操作真实硬件。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class LocalizationUiTest {
     private static final Pattern HAN = Pattern.compile("[\\p{IsHan}]");
     private static final int[][] WINDOWS = {{1280, 800}, {800, 1280}, {360, 800}};
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
 
-    @Test public void configurationContextsChooseLanguageWithoutChangingProcessLocale() {
+    @Test
+    public void configurationContextsChooseLanguageWithoutChangingProcessLocale() {
         Locale original = Locale.getDefault();
         Context english = context(Locale.ENGLISH, 1280, 800);
         Context chinese = context(Locale.SIMPLIFIED_CHINESE, 1280, 800);
@@ -60,7 +63,8 @@ public final class LocalizationUiTest {
                 UiMessages.text(english, "正常餐饮有限公司 · 员工甲"));
     }
 
-    @Test public void englishStaticPagesAndDialogsResolveTranslatedTextAndFormatArguments() {
+    @Test
+    public void englishStaticPagesAndDialogsResolveTranslatedTextAndFormatArguments() {
         instrumentation.runOnMainSync(() -> {
             Context english = context(Locale.ENGLISH, 1280, 800);
             for (int resource : new int[]{R.layout.activity_home_design, R.layout.activity_check_design_ready,
@@ -82,7 +86,8 @@ public final class LocalizationUiTest {
         });
     }
 
-    @Test public void localizedStaffStatusPreservesUserFieldsEvenWhenTheyMatchMessageKeys() throws Exception {
+    @Test
+    public void localizedStaffStatusPreservesUserFieldsEvenWhenTheyMatchMessageKeys() throws Exception {
         Context english = context(Locale.ENGLISH, 1280, 800);
         JSONObject person = new JSONObject().put("name", "正常").put("staff_no", "无")
                 .put("department", "未分配").put("enabled", true).put("health_expiry", "2099-12-31");
@@ -111,7 +116,8 @@ public final class LocalizationUiTest {
         });
     }
 
-    @Test public void largestAppFontKeepsPrimaryActionsReachableAcrossScreenSizes() {
+    @Test
+    public void largestAppFontKeepsPrimaryActionsReachableAcrossScreenSizes() {
         instrumentation.runOnMainSync(() -> {
             for (int[] size : WINDOWS) {
                 Context english = context(Locale.ENGLISH, size[0], size[1]);
@@ -140,7 +146,8 @@ public final class LocalizationUiTest {
         });
     }
 
-    @Test public void englishTemperatureSelectionRetainsCanonicalStoredMode() throws Exception {
+    @Test
+    public void englishTemperatureSelectionRetainsCanonicalStoredMode() throws Exception {
         MorningApplication app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         Assume.assumeTrue("真实 Activity 用系统英文运行；局部语言 Context 测试不依赖此条件",
                 "en".equals(app.getResources().getConfiguration().locale.getLanguage()));
@@ -170,7 +177,9 @@ public final class LocalizationUiTest {
                     java.lang.reflect.Field field = ChoiceSpinner.class.getDeclaredField("choiceDialog");
                     field.setAccessible(true);
                     choices.set((AlertDialog) field.get(mode));
-                } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+                } catch (ReflectiveOperationException error) {
+                    throw new AssertionError(error);
+                }
             });
             await(() -> {
                 AtomicReference<Boolean> ready = new AtomicReference<>(false);

@@ -1,14 +1,19 @@
 package cc.huoyan.morningcheck.sdk.client;
 
 import cc.huoyan.morningcheck.app.aidl.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
-/** Binder 与 WS 数据语义一致性；保留未知状态、长 ID、时间单位和真正业务错误。 */
+/**
+ * Binder 与 WS 数据语义一致性；保留未知状态、长 ID、时间单位和真正业务错误。
+ */
 public class AidlResultMapperTest {
-    @Test public void licenseModelsPreserveWireFieldsAndFailureCode() throws Exception {
+    @Test
+    public void licenseModelsPreserveWireFieldsAndFailureCode() throws Exception {
         cc.huoyan.morningcheck.app.aidl.LicenseModelParcel model =
                 new cc.huoyan.morningcheck.app.aidl.LicenseModelParcel("mc", "晨检", "rk3576", true);
         AidlResultMapper.Reply reply = AidlResultMapper.map(
@@ -25,18 +30,21 @@ public class AidlResultMapperTest {
         assertEquals("无授权", failure.message);
     }
 
-    @Test public void nullableStatusRemainsUnknown() throws Exception {
+    @Test
+    public void nullableStatusRemainsUnknown() throws Exception {
         StatusSnapshotParcel p = new StatusSnapshotParcel(0, null, "dev", null, null, null,
                 null, false, "NOT_ACTIVATED", false, false, null, 1234567890123L, null, "未激活");
         JSONObject data = AidlResultMapper.map(p).data;
-        assertTrue(data.has("key_lost")); assertTrue(data.isNull("key_lost"));
+        assertTrue(data.has("key_lost"));
+        assertTrue(data.isNull("key_lost"));
         assertTrue(data.isNull("certificate_valid"));
         assertFalse(data.getBoolean("backend_connected"));
         assertEquals(1234567890123L, data.getLong("state_updated_at"));
         assertEquals("未激活", data.getString("recent_error"));
     }
 
-    @Test public void offlineStatusPreservesLocalReadinessAndUncalibratedState() throws Exception {
+    @Test
+    public void offlineStatusPreservesLocalReadinessAndUncalibratedState() throws Exception {
         StatusSnapshotParcel p = new StatusSnapshotParcel(0, null, "dev", null, null, "cached-model",
                 false, false, "OFFLINE", true, false, null, 1234567890123L, true, null);
         AidlResultMapper.Reply reply = AidlResultMapper.map(p);
@@ -49,7 +57,8 @@ public class AidlResultMapperTest {
         assertEquals("cached-model", reply.data.getString("model_version"));
     }
 
-    @Test public void unmatchedIdentityAndLongIdKeepOriginalEvidence() throws Exception {
+    @Test
+    public void unmatchedIdentityAndLongIdKeepOriginalEvidence() throws Exception {
         JSONObject data = AidlResultMapper.map(IdentityResultParcel.ok(
                 new McIdentityParcel(9_007_199_254_740_999L, -0.5f, false))).data;
         assertEquals(9_007_199_254_740_999L, data.getLong("person_id"));
@@ -57,15 +66,19 @@ public class AidlResultMapperTest {
         assertEquals(-0.5, data.getDouble("similarity"), 0.000001);
     }
 
-    @Test public void emptyDetectionIsSuccessfulAndErrorStaysError() throws Exception {
+    @Test
+    public void emptyDetectionIsSuccessfulAndErrorStaysError() throws Exception {
         AidlResultMapper.Reply empty = AidlResultMapper.map(DetectionListParcel.emptyOk());
-        assertEquals(0, empty.code); assertEquals(0, empty.data.getJSONArray("boxes").length());
+        assertEquals(0, empty.code);
+        assertEquals(0, empty.data.getJSONArray("boxes").length());
         AidlResultMapper.Reply error = AidlResultMapper.map(DetectionListParcel.err(-3, "证书过期"));
-        assertEquals(-3, error.code); assertEquals("证书过期", error.message);
+        assertEquals(-3, error.code);
+        assertEquals("证书过期", error.message);
         assertFalse(error.data.has("boxes"));
     }
 
-    @Test public void boxesUseNormalizedCoordinatesAndSnakeCaseClassId() throws Exception {
+    @Test
+    public void boxesUseNormalizedCoordinatesAndSnakeCaseClassId() throws Exception {
         JSONObject box = AidlResultMapper.map(new DetectionListParcel(0, null, 1,
                 new float[]{0.1f}, new float[]{0.2f}, new float[]{0.3f}, new float[]{0.4f},
                 new int[]{6}, new float[]{0.9f})).data.getJSONArray("boxes").getJSONObject(0);
@@ -74,7 +87,8 @@ public class AidlResultMapperTest {
         assertEquals(0.4, box.getDouble("h"), 0.000001);
     }
 
-    @Test public void faceDetectionKeepsEachBoxAndItsLandmarksWithoutIdentity() throws Exception {
+    @Test
+    public void faceDetectionKeepsEachBoxAndItsLandmarksWithoutIdentity() throws Exception {
         float[] points = new float[20];
         for (int i = 0; i < points.length; i++) points[i] = i / 25f;
         FaceListParcel reply = new FaceListParcel(0, null, 2,
@@ -95,7 +109,8 @@ public class AidlResultMapperTest {
         assertFalse(data.has("boxes"));
     }
 
-    @Test public void emptyFaceDetectionSucceedsButErrorsNeverLookLikeNoFace() throws Exception {
+    @Test
+    public void emptyFaceDetectionSucceedsButErrorsNeverLookLikeNoFace() throws Exception {
         AidlResultMapper.Reply empty = AidlResultMapper.map(FaceListParcel.emptyOk());
         assertEquals(0, empty.code);
         assertEquals(0, empty.data.getJSONArray("faces").length());
@@ -105,7 +120,8 @@ public class AidlResultMapperTest {
         assertFalse(error.data.has("faces"));
     }
 
-    @Test public void capabilityIncludesFaceDetectionAndPreservesShellVersionTail() throws Exception {
+    @Test
+    public void capabilityIncludesFaceDetectionAndPreservesShellVersionTail() throws Exception {
         JSONObject data = AidlResultMapper.map(new CapabilityParcel(0, null, 3,
                 true, true, true, true, true, true, "1.2.3", 123, true)).data;
         assertTrue(data.getBoolean("detect_face"));
@@ -118,7 +134,8 @@ public class AidlResultMapperTest {
         assertEquals(-1, legacy.getInt("sdk_version_code"));
     }
 
-    @Test public void classTableGroupsModelsWithoutConfusingClassIds() throws Exception {
+    @Test
+    public void classTableGroupsModelsWithoutConfusingClassIds() throws Exception {
         JSONObject data = AidlResultMapper.map(new ClassTableParcel(0,
                 new String[]{"head", "hand", "head"}, new int[]{0, 0, 1},
                 new String[]{"帽子", "手背", "口罩"}, new String[]{"hat", "back", "mask"})).data;
@@ -127,7 +144,8 @@ public class AidlResultMapperTest {
         assertEquals(1, data.getJSONArray("head").getJSONObject(1).getInt("classId"));
     }
 
-    @Test public void certificateUsesSecondsAndWsVersionKey() throws Exception {
+    @Test
+    public void certificateUsesSecondsAndWsVersionKey() throws Exception {
         JSONObject data = AidlResultMapper.map(new CertInfoParcel(0, null, "morning", "stable", "daily",
                 1_700_000_001L, 1_700_000_002L, 0, false, 1_700_100_000L, true,
                 1_700_200_000L, "0.9.0", 9, "code")).data;
@@ -138,7 +156,8 @@ public class AidlResultMapperTest {
         assertFalse(data.has("sdk_version_name"));
     }
 
-    @Test public void bindingSeparatesExternalRequestAndInternalResponse() throws Exception {
+    @Test
+    public void bindingSeparatesExternalRequestAndInternalResponse() throws Exception {
         JSONObject data = AidlResultMapper.map(new BindingResultParcel(0, null,
                 new BindDeviceParcel(123, "erp-007", null, null),
                 "123", "account", "999", "一店", "001")).data;
@@ -146,12 +165,14 @@ public class AidlResultMapperTest {
         assertEquals("999", data.getJSONObject("response").getString("shop_id"));
     }
 
-    @Test public void missingReplyIsUnknownNeverSuccess() throws Exception {
+    @Test
+    public void missingReplyIsUnknownNeverSuccess() throws Exception {
         assertEquals(HuoyanClient.ERROR_RESULT_UNKNOWN, AidlResultMapper.map(null).code);
         assertEquals(-110, AidlResultMapper.map(new BaseResultParcel(-110, "等待审核")).code);
     }
 
-    @Test public void registrationUsesSdkImageUrlAndKeepsLongUid() throws Exception {
+    @Test
+    public void registrationUsesSdkImageUrlAndKeepsLongUid() throws Exception {
         long uid = 9_007_199_254_740_999L;
         String url = "http://127.0.0.1:18087/face-images/9/" + uid;
         JSONObject data = AidlResultMapper.map(RegisterResultParcel.ok(uid, url)).data;
@@ -161,7 +182,8 @@ public class AidlResultMapperTest {
         assertFalse(AidlResultMapper.map(RegisterResultParcel.err(-3, "授权未完成")).data.has("image_url"));
     }
 
-    @Test public void userDetailItemsBindUidToImageAndKeepLegacyProjection() throws Exception {
+    @Test
+    public void userDetailItemsBindUidToImageAndKeepLegacyProjection() throws Exception {
         long[] uids = {77101L, 9_007_199_254_740_999L};
         String firstUrl = "http://127.0.0.1:18087/face-images/9/77101";
         JSONObject data = AidlResultMapper.map(UserDetailParcel.ok(uids, new String[]{firstUrl, ""})).data;
@@ -184,7 +206,8 @@ public class AidlResultMapperTest {
         assertEquals(uids[1], data.getJSONArray("uids").getLong(1));
     }
 
-    @Test public void oldUserDetailAndAbsentEmployeeDoNotFabricateImages() throws Exception {
+    @Test
+    public void oldUserDetailAndAbsentEmployeeDoNotFabricateImages() throws Exception {
         JSONArray legacy = AidlResultMapper.map(UserDetailParcel.ok(new long[]{42L})).data.getJSONArray("items");
         assertEquals(42L, legacy.getJSONObject(0).getLong("uid"));
         assertEquals("", legacy.getJSONObject(0).getString("image_url"));
@@ -197,7 +220,8 @@ public class AidlResultMapperTest {
         assertFalse(absent.data.has("items"));
     }
 
-    @Test public void optionalFeedbackTypeDefaultsToZero() throws Exception {
+    @Test
+    public void optionalFeedbackTypeDefaultsToZero() throws Exception {
         JSONObject input = feedback();
         assertEquals(0, AidlResultMapper.feedback(input).getFeedbackType());
         input.put("feedback_type", JSONObject.NULL);
@@ -205,29 +229,43 @@ public class AidlResultMapperTest {
         assertFalse(AidlResultMapper.feedback(input).getGoods().get(0).hasDistance());
     }
 
-    @Test public void feedbackRejectsFractionalOrStringInteger() throws Exception {
+    @Test
+    public void feedbackRejectsFractionalOrStringInteger() throws Exception {
         for (Object invalid : new Object[]{1.5, "1"}) {
             JSONObject input = feedback().put("feedback_type", invalid);
-            try { AidlResultMapper.feedback(input); fail("应拒绝不符合线契约的反馈类型"); }
-            catch (IllegalArgumentException expected) { }
+            try {
+                AidlResultMapper.feedback(input);
+                fail("应拒绝不符合线契约的反馈类型");
+            } catch (IllegalArgumentException expected) {
+            }
         }
         JSONObject input = feedback();
         input.getJSONArray("goods").getJSONObject(0).put("distance", "0.2");
-        try { AidlResultMapper.feedback(input); fail("不能把文本数值转换为反馈距离"); }
-        catch (IllegalArgumentException expected) { }
+        try {
+            AidlResultMapper.feedback(input);
+            fail("不能把文本数值转换为反馈距离");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 
-    @Test public void feedbackAllowsNoGoodsButRejectsCoercedIdentityFields() throws Exception {
+    @Test
+    public void feedbackAllowsNoGoodsButRejectsCoercedIdentityFields() throws Exception {
         JSONObject input = feedback();
         input.remove("goods");
         assertTrue(AidlResultMapper.feedback(input).getGoods().isEmpty());
         input.put("goods", JSONObject.NULL);
         assertTrue(AidlResultMapper.feedback(input).getGoods().isEmpty());
         input.put("request_id", 7);
-        try { AidlResultMapper.feedback(input); fail("请求标识不能强转字符串"); }
-        catch (IllegalArgumentException expected) { }
-        try { AidlResultMapper.optionalString(new JSONObject().put("shop_name", 7), "shop_name"); fail("门店名不能强转字符串"); }
-        catch (IllegalArgumentException expected) { }
+        try {
+            AidlResultMapper.feedback(input);
+            fail("请求标识不能强转字符串");
+        } catch (IllegalArgumentException expected) {
+        }
+        try {
+            AidlResultMapper.optionalString(new JSONObject().put("shop_name", 7), "shop_name");
+            fail("门店名不能强转字符串");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 
     private static JSONObject feedback() throws Exception {

@@ -6,24 +6,22 @@
 
     <TextView
         android:id="@+id/settings_font_current"
-        style="@style/PenCaption"
+        style="@style/FontChoiceSubtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:accessibilityLiveRegion="polite"
-        android:textSize="@dimen/mc_choice_subtitle_text_size" />
+        android:accessibilityLiveRegion="polite" />
 
     <TextView
         android:id="@+id/settings_font_preview"
-        style="@style/PenText"
+        style="@style/FontChoicePreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mc_choice_subtitle_margin"
+        android:layout_marginTop="@dimen/dp_2"
         android:background="@drawable/mc_field"
         android:gravity="center"
-        android:minHeight="@dimen/mc_choice_action_min_height"
-        android:paddingStart="@dimen/mc_choice_option_padding_horizontal"
-        android:paddingTop="@dimen/mc_choice_option_padding_vertical"
-        android:paddingEnd="@dimen/mc_choice_option_padding_horizontal"
-        android:paddingBottom="@dimen/mc_choice_option_padding_vertical"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_4"
         android:text="@string/app_font_size_preview" />
 </LinearLayout>

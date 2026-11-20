@@ -55,7 +55,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-/** 仅在本机夹具验证真实 Activity/WS/持久化路径，不访问任何 SDK 云端。 */
+/**
+ * 仅在本机夹具验证真实 Activity/WS/持久化路径，不访问任何 SDK 云端。
+ */
 @RunWith(AndroidJUnit4.class)
 public class ShopLoginNavigationTest {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -81,7 +83,8 @@ public class ShopLoginNavigationTest {
     private HomeActivity originalHome;
     private Application.ActivityLifecycleCallbacks loginCameraIsolation;
 
-    @Before public void prepareIsolatedEndpoint() throws Exception {
+    @Before
+    public void prepareIsolatedEndpoint() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         device = app.getSharedPreferences("device", Context.MODE_PRIVATE);
         bindingPrefs = app.getSharedPreferences("sdk_binding", Context.MODE_PRIVATE);
@@ -89,10 +92,16 @@ public class ShopLoginNavigationTest {
         originalBinding = bindingPrefs.getAll();
         server = new MockWebServer();
         server.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 return new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-                    @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-                    @Override public void onMessage(WebSocket socket, String text) {
+                    @Override
+                    public void onOpen(WebSocket socket, Response response) {
+                        sockets.add(socket);
+                    }
+
+                    @Override
+                    public void onMessage(WebSocket socket, String text) {
                         try {
                             JSONObject envelope = new JSONObject(text);
                             String command = envelope.getString("cmd");
@@ -108,8 +117,8 @@ public class ShopLoginNavigationTest {
                             if ("queryLicenseModels".equals(command)) {
                                 modelQueries.add(envelope);
                                 data.put("models", new org.json.JSONArray().put(new JSONObject()
-                                        .put("model_code", "morningcheck").put("model_name", "晨检模型")
-                                        .put("current", "morningcheck".equals(currentModel)))
+                                                .put("model_code", "morningcheck").put("model_name", "晨检模型")
+                                                .put("current", "morningcheck".equals(currentModel)))
                                         .put(new JSONObject().put("model_code", "morningcheck-next")
                                                 .put("model_name", "新版晨检模型")
                                                 .put("current", "morningcheck-next".equals(currentModel))));
@@ -127,11 +136,13 @@ public class ShopLoginNavigationTest {
                                         .put("model_ready", "READY".equals(fixtureState))
                                         .put("certificate_valid", !"NOT_ACTIVATED".equals(fixtureState));
                             } else if ("getCertInfo".equals(command)) {
-                                if (certificateHasSerial) data.put("activation_serial", "TEST-ONLY-CERT-SERIAL");
+                                if (certificateHasSerial)
+                                    data.put("activation_serial", "TEST-ONLY-CERT-SERIAL");
                                 data.put("model_code", currentModel)
                                         .put("model_version", "morningcheck-next".equals(currentModel) ? "fixture-v2" : "fixture-v1");
                             } else if ("getDownloadProgress".equals(command)) {
-                                if (activationCount.get() > 0) activationProgressCount.incrementAndGet();
+                                if (activationCount.get() > 0)
+                                    activationProgressCount.incrementAndGet();
                                 data.put("downloaded", downloadBytes).put("total", downloadTotal);
                             } else if ("getCloudStatus".equals(command)) {
                                 data.put("enabled", false);
@@ -140,7 +151,9 @@ public class ShopLoginNavigationTest {
                             reply(socket, envelope, "init".equals(command) ? -3
                                     : "getDownloadProgress".equals(command) ? progressCode
                                     : "queryLicenseModels".equals(command) ? modelQueryCode : 0, data);
-                        } catch (Throwable error) { serverFailure.set(error); }
+                        } catch (Throwable error) {
+                            serverFailure.set(error);
+                        }
                     }
                 });
             }
@@ -151,7 +164,8 @@ public class ShopLoginNavigationTest {
                         server.url("/").toString().replaceFirst("http", "ws")).commit());
         instrumentation.runOnMainSync(() -> app.shopLogin().clearResult());
         loginCameraIsolation = new Application.ActivityLifecycleCallbacks() {
-            @Override public void onActivityCreated(Activity activity, Bundle state) {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle state) {
                 if (!(activity instanceof LoginActivity)) return;
                 if (state != null) {
                     state.putBoolean("permission_requested", true);
@@ -165,12 +179,30 @@ public class ShopLoginNavigationTest {
                 writeLoginField((LoginActivity) activity, "selectedCamera", "usb:SHOP-LOGIN-TEST-NO-DEVICE");
                 writeLoginField((LoginActivity) activity, "cameraFailure", "绑定测试不采集摄像头");
             }
-            @Override public void onActivityStarted(Activity activity) { }
-            @Override public void onActivityResumed(Activity activity) { }
-            @Override public void onActivityPaused(Activity activity) { }
-            @Override public void onActivityStopped(Activity activity) { }
-            @Override public void onActivitySaveInstanceState(Activity activity, Bundle state) { }
-            @Override public void onActivityDestroyed(Activity activity) { }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle state) {
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+            }
         };
         app.registerActivityLifecycleCallbacks(loginCameraIsolation);
         homeScenario = ActivityScenario.launch(new Intent(app, HomeActivity.class));
@@ -181,14 +213,16 @@ public class ShopLoginNavigationTest {
         await(() -> resumed(LoginActivity.class) != null, "应从首页任务栈进入登录页");
     }
 
-    @After public void restoreUserConfiguration() throws Exception {
+    @After
+    public void restoreUserConfiguration() throws Exception {
         try {
             if (homeScenario != null) homeScenario.close();
         } finally {
             try {
                 // 先停止页面与夹具连接，等进程协调器收尾后才能恢复，避免迟到保存覆盖原归属。
                 instrumentation.runOnMainSync(() -> {
-                    if (loginCameraIsolation != null) app.unregisterActivityLifecycleCallbacks(loginCameraIsolation);
+                    if (loginCameraIsolation != null)
+                        app.unregisterActivityLifecycleCallbacks(loginCameraIsolation);
                     for (Stage stage : Stage.values()) {
                         for (Activity activity : new ArrayList<>(ActivityLifecycleMonitorRegistry.getInstance()
                                 .getActivitiesInStage(stage))) {
@@ -205,7 +239,8 @@ public class ShopLoginNavigationTest {
                 try {
                     if (device != null && originalDevice != null) restore(device, originalDevice);
                 } finally {
-                    if (bindingPrefs != null && originalBinding != null) restore(bindingPrefs, originalBinding);
+                    if (bindingPrefs != null && originalBinding != null)
+                        restore(bindingPrefs, originalBinding);
                 }
                 instrumentation.runOnMainSync(() -> app.shopLogin().clearResult());
                 if (server != null) server.shutdown();
@@ -213,7 +248,8 @@ public class ShopLoginNavigationTest {
         }
     }
 
-    @Test public void successSurvivesRecreationAndReturnsHomeAfterSaving() throws Exception {
+    @Test
+    public void successSurvivesRecreationAndReturnsHomeAfterSaving() throws Exception {
         String raw = "  TEST-ONLY-007  ";
         BindCall call = scan(raw);
         JSONObject params = call.request.getJSONObject("params");
@@ -236,7 +272,8 @@ public class ShopLoginNavigationTest {
             AtomicReference<String> label = new AtomicReference<>("");
             instrumentation.runOnMainSync(() -> {
                 HomeActivity home = resumedOnMain(HomeActivity.class);
-                if (home != null) label.set(((TextView) home.findViewById(R.id.header_shop)).getText().toString());
+                if (home != null)
+                    label.set(((TextView) home.findViewById(R.id.header_shop)).getText().toString());
             });
             return label.get().contains("测试夹具门店");
         }, "首页应刷新已登录门店");
@@ -250,19 +287,22 @@ public class ShopLoginNavigationTest {
         assertNull(serverFailure.get());
     }
 
-    @Test public void requestEchoWithoutCloudScopeCannotLoginOrOverwriteOldBinding() throws Exception {
+    @Test
+    public void requestEchoWithoutCloudScopeCannotLoginOrOverwriteOldBinding() throws Exception {
         BindCall call = scan("TEST-ONLY-INVALID");
         call.respond(0, new JSONObject().put("request", call.request.getJSONObject("params")));
         assertFailedWithoutReplay("归属不完整");
     }
 
-    @Test public void unknownResultStaysOnLoginAndDoesNotReplayAfterRecreation() throws Exception {
+    @Test
+    public void unknownResultStaysOnLoginAndDoesNotReplayAfterRecreation() throws Exception {
         BindCall call = scan("TEST-ONLY-UNKNOWN");
         call.respond(40009, new JSONObject());
         assertFailedWithoutReplay("结果未知");
     }
 
-    @Test public void activationReceiptFinishesImmediatelyAcrossRecreationAndPages() throws Exception {
+    @Test
+    public void activationReceiptFinishesImmediatelyAcrossRecreationAndPages() throws Exception {
         LicenseSettingsActivity license = openLicense();
         BindCall activation = submitActivation(license);
         instrumentation.runOnMainSync(() -> {
@@ -317,7 +357,8 @@ public class ShopLoginNavigationTest {
         assertNull(serverFailure.get());
     }
 
-    @Test public void failedActivationShowsFailureAndNeverInitializes() throws Exception {
+    @Test
+    public void failedActivationShowsFailureAndNeverInitializes() throws Exception {
         LicenseSettingsActivity license = openLicense();
         BindCall activation = submitActivation(license);
         await(() -> activationDialogShowing(license), "应显示激活等待");
@@ -333,7 +374,8 @@ public class ShopLoginNavigationTest {
         assertNull(serverFailure.get());
     }
 
-    @Test public void homeActivationOpensInputWithoutOpeningLicensePage() throws Exception {
+    @Test
+    public void homeActivationOpensInputWithoutOpeningLicensePage() throws Exception {
         HomeActivity home = returnHome();
         downloadBytes = 0;
         downloadTotal = 0;
@@ -354,7 +396,8 @@ public class ShopLoginNavigationTest {
         assertNull(serverFailure.get());
     }
 
-    @Test public void homeActivationRestoresInputDraftAfterCancellingModelAndQueryFailure() throws Exception {
+    @Test
+    public void homeActivationRestoresInputDraftAfterCancellingModelAndQueryFailure() throws Exception {
         HomeActivity home = returnHome();
         instrumentation.runOnMainSync(() -> clickHomeEntry(R.id.home_start));
         await(() -> inputDialogShowing(home), "首页应先展示激活输入框");
@@ -396,7 +439,8 @@ public class ShopLoginNavigationTest {
         assertNull(serverFailure.get());
     }
 
-    @Test public void switchingUsesCurrentCertificateWithoutInputAndOnlyWritesForNewModel() throws Exception {
+    @Test
+    public void switchingUsesCurrentCertificateWithoutInputAndOnlyWritesForNewModel() throws Exception {
         returnHome();
         assertTrue(device.edit().putString("sdk_activation_code", "TEST-ONLY-STALE-DRAFT").commit());
         fixtureState = "READY";
@@ -459,7 +503,8 @@ public class ShopLoginNavigationTest {
         assertNull(serverFailure.get());
     }
 
-    @Test public void rotatedCertificateWithoutSerialRequestsExplicitCodeAndRetainsSwitchSemantics() throws Exception {
+    @Test
+    public void rotatedCertificateWithoutSerialRequestsExplicitCodeAndRetainsSwitchSemantics() throws Exception {
         returnHome();
         assertTrue(device.edit().putString("sdk_activation_code", "TEST-ONLY-STALE-DRAFT").commit());
         certificateHasSerial = false;
@@ -619,7 +664,8 @@ public class ShopLoginNavigationTest {
             Dialog input = fragment.getDialog();
             assertNotNull("专用激活输入框应已创建", input);
             assertTrue("激活输入框应实际显示", input.isShowing());
-            if (code != null) ((EditText) input.findViewById(R.id.activation_code_editor)).setText(code);
+            if (code != null)
+                ((EditText) input.findViewById(R.id.activation_code_editor)).setText(code);
             View submit = input.findViewById(R.id.activation_code_activate);
             assertTrue("合法激活码应允许提交", submit.isEnabled());
             modelQueries.clear();
@@ -750,7 +796,9 @@ public class ShopLoginNavigationTest {
             Field dialog = LoadingDialog.class.getDeclaredField("dialog");
             dialog.setAccessible(true);
             return (android.app.Dialog) dialog.get(loading);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private static AlertDialog modelDialog(FragmentActivity host) {
@@ -760,7 +808,9 @@ public class ShopLoginNavigationTest {
             Field field = flow.getClass().getDeclaredField("modelDialog");
             field.setAccessible(true);
             return (AlertDialog) field.get(flow);
-        } catch (ReflectiveOperationException error) { throw new AssertionError(error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError(error);
+        }
     }
 
     private String sdkStateName() {
@@ -842,7 +892,9 @@ public class ShopLoginNavigationTest {
             Field field = LoginActivity.class.getDeclaredField(name);
             field.setAccessible(true);
             field.set(activity, value);
-        } catch (ReflectiveOperationException error) { throw new AssertionError("登录测试相机隔离失败：" + name, error); }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("登录测试相机隔离失败：" + name, error);
+        }
     }
 
     private static void await(BooleanSupplier condition, String message) {
@@ -863,8 +915,15 @@ public class ShopLoginNavigationTest {
     private static final class BindCall {
         final WebSocket socket;
         final JSONObject request;
-        BindCall(WebSocket socket, JSONObject request) { this.socket = socket; this.request = request; }
-        void respond(int code, JSONObject data) throws Exception { reply(socket, request, code, data); }
+
+        BindCall(WebSocket socket, JSONObject request) {
+            this.socket = socket;
+            this.request = request;
+        }
+
+        void respond(int code, JSONObject data) throws Exception {
+            reply(socket, request, code, data);
+        }
     }
 
     @SuppressWarnings("unchecked")

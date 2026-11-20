@@ -520,7 +520,9 @@
     <dimen name="sp_4">4sp</dimen>
     <dimen name="sp_5">5sp</dimen>
     <dimen name="sp_6">6sp</dimen>
+    <dimen name="sp_6_5">6.5sp</dimen>
     <dimen name="sp_7">7sp</dimen>
+    <dimen name="sp_7_5">7.5sp</dimen>
     <dimen name="sp_8">8sp</dimen>
     <dimen name="sp_9">9sp</dimen>
     <dimen name="sp_10">10sp</dimen>

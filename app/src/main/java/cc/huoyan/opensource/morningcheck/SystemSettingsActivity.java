@@ -53,6 +53,7 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
         bindVersion(form);
         bindFontSize(form);
         bindSecurity(form);
+        settingsAction(form, R.id.settings_sdk_permissions, () -> SdkPermissionGuide.open(this));
         settingsToggle(form, R.id.settings_voice, "voice", true);
         android.widget.Switch voice = form.findViewById(R.id.settings_voice);
         TextView voiceState = form.findViewById(R.id.settings_voice_state);
@@ -111,7 +112,7 @@ public final class SystemSettingsActivity extends BaseDeviceSettingsActivity {
         configuration.fontScale = AppFontSettings.scaleFor(index);
         Resources resources = context.createConfigurationContext(configuration).getResources();
         // 预览沿用选择弹窗的可读字号，直接按目标档换算，避免叠加当前应用的缩放。
-        return resources.getDimension(R.dimen.mc_choice_option_text_size);
+        return resources.getDimension(R.dimen.sp_8);
     }
 
     private void showCapabilities() {

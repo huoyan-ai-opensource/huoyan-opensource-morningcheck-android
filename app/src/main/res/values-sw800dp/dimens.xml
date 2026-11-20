@@ -516,7 +516,9 @@
     <dimen name="sp_4">8.8889sp</dimen>
     <dimen name="sp_5">11.1111sp</dimen>
     <dimen name="sp_6">13.3333sp</dimen>
+    <dimen name="sp_6_5">14.4444sp</dimen>
     <dimen name="sp_7">15.5556sp</dimen>
+    <dimen name="sp_7_5">16.6667sp</dimen>
     <dimen name="sp_8">17.7778sp</dimen>
     <dimen name="sp_9">20.0000sp</dimen>
     <dimen name="sp_10">22.2222sp</dimen>

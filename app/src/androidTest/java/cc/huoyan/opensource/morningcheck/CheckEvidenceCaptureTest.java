@@ -75,7 +75,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.ByteString;
 
-/** 人工 RGB 图只进入独立数据库与本机 SDK 夹具，验证实际保存的异常框和完整页面链路。 */
+/**
+ * 人工 RGB 图只进入独立数据库与本机 SDK 夹具，验证实际保存的异常框和完整页面链路。
+ */
 @RunWith(AndroidJUnit4.class)
 public final class CheckEvidenceCaptureTest {
     private static final int WIDTH = 640, HEIGHT = 480;
@@ -106,7 +108,8 @@ public final class CheckEvidenceCaptureTest {
     private volatile long sdkPersonId;
     private volatile JSONArray nextBoxes = new JSONArray();
 
-    @Before public void isolateHardwareCloudAndRecords() throws Exception {
+    @Before
+    public void isolateHardwareCloudAndRecords() throws Exception {
         app = (MorningApplication) instrumentation.getTargetContext().getApplicationContext();
         assumeTrue("设备需预先授权相机，测试不弹权限窗口",
                 ContextCompat.checkSelfPermission(app, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
@@ -122,10 +125,15 @@ public final class CheckEvidenceCaptureTest {
         Constructor<AppStore> constructor = AppStore.class.getDeclaredConstructor(Context.class, String.class);
         constructor.setAccessible(true);
         testStore = constructor.newInstance(app, databaseName);
-        onMain(() -> { originalStore = app.store; app.store = testStore; return null; });
+        onMain(() -> {
+            originalStore = app.store;
+            app.store = testStore;
+            return null;
+        });
         endpoint = new MockWebServer();
         endpoint.setDispatcher(new Dispatcher() {
-            @Override public MockResponse dispatch(RecordedRequest request) {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) {
                 try {
                     assertEquals("只允许本机 SDK 通道，不允许业务云请求", "/sdk", request.getPath());
                     return new MockResponse().withWebSocketUpgrade(new SdkFixture());
@@ -156,13 +164,23 @@ public final class CheckEvidenceCaptureTest {
         resultMonitor = instrumentation.addMonitor(ResultActivity.class.getName(), null, false);
     }
 
-    @After public void cleanOnlyOwnUuidEvidenceAndRestoreStore() throws Exception {
+    @After
+    public void cleanOnlyOwnUuidEvidenceAndRestoreStore() throws Exception {
         try {
-            if (photoActivity != null) onMain(() -> { photoActivity.finish(); return null; });
-            if (resultActivity != null) onMain(() -> { resultActivity.finish(); return null; });
+            if (photoActivity != null) onMain(() -> {
+                photoActivity.finish();
+                return null;
+            });
+            if (resultActivity != null) onMain(() -> {
+                resultActivity.finish();
+                return null;
+            });
             if (scenario != null) scenario.close();
             if (app != null && originalStore != null) {
-                onMain(() -> { app.sdkSession().disconnect(); return null; });
+                onMain(() -> {
+                    app.sdkSession().disconnect();
+                    return null;
+                });
                 onIo(() -> null);
                 instrumentation.waitForIdleSync();
                 onIo(() -> {
@@ -175,7 +193,8 @@ public final class CheckEvidenceCaptureTest {
                         String id = record.optString("id");
                         assertEquals("清理范围必须来自本用例的 UUID 记录", id, UUID.fromString(id).toString());
                         Set<String> files = new HashSet<>();
-                        for (RecordPhotos.Photo photo : RecordPhotos.read(record)) if (!photo.file.isEmpty()) files.add(photo.file);
+                        for (RecordPhotos.Photo photo : RecordPhotos.read(record))
+                            if (!photo.file.isEmpty()) files.add(photo.file);
                         for (String key : new String[]{"face_img_file", "back_hand_img_file", "front_hand_img_file"})
                             if (!record.optString(key).isEmpty()) files.add(record.optString(key));
                         for (String name : files) {
@@ -191,10 +210,15 @@ public final class CheckEvidenceCaptureTest {
         } finally {
             if (resultMonitor != null) instrumentation.removeMonitor(resultMonitor);
             if (photoMonitor != null) instrumentation.removeMonitor(photoMonitor);
-            if (app != null && originalStore != null) onMain(() -> { app.store = originalStore; return null; });
+            if (app != null && originalStore != null) onMain(() -> {
+                app.store = originalStore;
+                return null;
+            });
             if (testStore != null) testStore.close();
-            if (databaseName != null) assertTrue("清理独立测试数据库", app.deleteDatabase(databaseName));
-            if (preferences != null && originalPreferences != null) restore(preferences, originalPreferences);
+            if (databaseName != null)
+                assertTrue("清理独立测试数据库", app.deleteDatabase(databaseName));
+            if (preferences != null && originalPreferences != null)
+                restore(preferences, originalPreferences);
             for (WebSocket socket : sockets) socket.close(1001, "证据测试结束");
             if (endpoint != null) endpoint.shutdown();
         }
@@ -202,7 +226,8 @@ public final class CheckEvidenceCaptureTest {
         assertTrue("正常身份流程必须提交 identify 请求", identifyRequests.get() > 0);
     }
 
-    @Test public void earlyRingEvidenceSurvivesLaterNormalFrameAndFaceHasWatermarks() throws Exception {
+    @Test
+    public void earlyRingEvidenceSurvivesLaterNormalFrameAndFaceHasWatermarks() throws Exception {
         launchAndCollectHead();
         feed(handBoxes(DetectionClasses.HAND_BACK, DetectionClasses.HAND_RING), RING_COLOR);
         for (int i = 0; i < 4; i++) feed(handBoxes(DetectionClasses.HAND_BACK), NORMAL_COLOR);
@@ -215,19 +240,24 @@ public final class CheckEvidenceCaptureTest {
         try {
             assertBackground(back, RING_COLOR);
             assertRingAnnotation(back);
-        } finally { back.recycle(); }
+        } finally {
+            back.recycle();
+        }
         Bitmap face = decode(record.optString("face_img_file"));
         try {
             assertBackground(face, FACE_COLOR);
             assertTrue("保存 JPEG 左上应有时间水印", differentPixels(face, new Rect(0, 0, 300, 100), FACE_COLOR) > 150);
             assertTrue("保存 JPEG 右上应有温度水印", differentPixels(face, new Rect(400, 0, WIDTH, 100), FACE_COLOR) > 80);
-        } finally { face.recycle(); }
+        } finally {
+            face.recycle();
+        }
         assertEquals("36.6", record.optString("temperature"));
         assertFalse("正常身份结果不应带 identity_skipped", record.optBoolean("identity_skipped", false));
         saveResultScreenshot("异常结果");
     }
 
-    @Test public void rejectedPoseAndPauseClearTheirRingEvidenceBeforeNormalCompletion() throws Exception {
+    @Test
+    public void rejectedPoseAndPauseClearTheirRingEvidenceBeforeNormalCompletion() throws Exception {
         launchAndCollectHead();
         feed(handBoxes(DetectionClasses.HAND_BACK, DetectionClasses.HAND_RING), RING_COLOR);
         feed(handBoxes(DetectionClasses.HAND_BACK, DetectionClasses.HAND_INCORRECT), RING_COLOR);
@@ -252,13 +282,16 @@ public final class CheckEvidenceCaptureTest {
                 try {
                     assertBackground(back, NORMAL_COLOR);
                     assertEquals("正常手背不应出现异常红框", 0, redPixels(back, new Rect(110, 235, 245, 330)));
-                } finally { back.recycle(); }
+                } finally {
+                    back.recycle();
+                }
             }
         }
         saveResultScreenshot("正常结果");
     }
 
-    @Test public void separatePalmAbnormalitiesSaveOwnFramesAndShowAllEvidenceInline() throws Exception {
+    @Test
+    public void separatePalmAbnormalitiesSaveOwnFramesAndShowAllEvidenceInline() throws Exception {
         launchAndCollectHead();
         for (int i = 0; i < 5; i++) feed(handBoxes(DetectionClasses.HAND_BACK), NORMAL_COLOR);
         feed(handBoxes(DetectionClasses.HAND_PALM, DetectionClasses.HAND_RING), RING_COLOR);
@@ -290,8 +323,12 @@ public final class CheckEvidenceCaptureTest {
         assertNotEquals("两种异常不能共用不同帧的坐标", ringPhoto.getString("file"), woundPhoto.getString("file"));
         assertEquals("异常种类数相同时用更新异常帧作为代表图", woundPhoto.getString("file"), record.getString("front_hand_img_file"));
         Bitmap ring = decode(ringPhoto.getString("file"));
-        try { assertBackground(ring, RING_COLOR); assertRingAnnotation(ring); }
-        finally { ring.recycle(); }
+        try {
+            assertBackground(ring, RING_COLOR);
+            assertRingAnnotation(ring);
+        } finally {
+            ring.recycle();
+        }
         Bitmap wound = decode(woundPhoto.getString("file"));
         try {
             assertBackground(wound, WOUND_COLOR);
@@ -299,7 +336,9 @@ public final class CheckEvidenceCaptureTest {
             assertTrue("伤口右边框必须落在伤口自己的位置", redPixels(wound, new Rect(506, 200, 517, 289)) > 60);
             assertTrue("伤口标签应在伤口框附近", differentPixels(wound, new Rect(425, 150, 540, 202), WOUND_COLOR) > 100);
             assertEquals("伤口帧不能画入另一帧的戒指框", 0, redPixels(wound, new Rect(123, 264, 236, 323)));
-        } finally { wound.recycle(); }
+        } finally {
+            wound.recycle();
+        }
         copySavedJpeg(record.getString("face_img_file"), "face-watermark.jpg");
         copySavedJpeg(record.getString("back_hand_img_file"), "hand-back-normal.jpg");
         copySavedJpeg(woundPhoto.getString("file"), "hand-palm-wound.jpg");
@@ -466,8 +505,9 @@ public final class CheckEvidenceCaptureTest {
             ((TemperatureSource.Listener) field(source, "listener")).onTemperature(36.6);
             assertEquals(CheckPipeline.Stage.HEAD, pipeline.getStage());
         });
-        for (int i = 0; i < 4; i++) feed(new JSONArray().put(box(DetectionClasses.HEAD_HAT, .2, .1, .6, .2))
-                .put(box(DetectionClasses.HEAD_MASK, .25, .35, .5, .3)), FACE_COLOR);
+        for (int i = 0; i < 4; i++)
+            feed(new JSONArray().put(box(DetectionClasses.HEAD_HAT, .2, .1, .6, .2))
+                    .put(box(DetectionClasses.HEAD_MASK, .25, .35, .5, .3)), FACE_COLOR);
         assertEquals(CheckPipeline.Stage.HAND_BACK, onMain(pipeline::getStage));
         assertEquals("头检四次采样先检测人脸，不再重识别戴口罩的员工", 4, identifyRequests.get());
         assertEquals(4, faceRequests.get());
@@ -478,14 +518,17 @@ public final class CheckEvidenceCaptureTest {
         nextBoxes = boxes;
         scenario.onActivity(activity -> activity.onCameraFrame(frame(background)));
         await(() -> detectionsReplied.get() >= expectedReplies && onMain(() ->
-                pipeline.getStage() == CheckPipeline.Stage.RESULT || !(Boolean) field(checkActivity, "frameBusy")),
+                        pipeline.getStage() == CheckPipeline.Stage.RESULT || !(Boolean) field(checkActivity, "frameBusy")),
                 "SDK 本帧回执应完成处理");
     }
 
     private JSONObject waitForSavedResult(String label) throws Exception {
         await(() -> {
-            try { return onIo(() -> testStore.recordsPage(0, 1, 20).totalRows) == 1; }
-            catch (Exception error) { throw new AssertionError(error); }
+            try {
+                return onIo(() -> testStore.recordsPage(0, 1, 20).totalRows) == 1;
+            } catch (Exception error) {
+                throw new AssertionError(error);
+            }
         }, "实际照片和完成记录应保存到独立数据库");
         JSONObject record = onIo(() -> testStore.recordsPage(0, 1, 20).rows.get(0));
         ownedRecords.add(record);
@@ -493,7 +536,10 @@ public final class CheckEvidenceCaptureTest {
         assertNotNull(label + "应自动打开独立结果 Activity", resultActivity);
         await(() -> onMain(() -> resultActivity.loaded && resultActivity.currentRecord != null
                 && resultActivity.findViewById(R.id.result_stay) != null), "结果页应读到刚完成的本地记录");
-        onMain(() -> { resultActivity.findViewById(R.id.result_stay).performClick(); return null; });
+        onMain(() -> {
+            resultActivity.findViewById(R.id.result_stay).performClick();
+            return null;
+        });
         assertFalse("正常身份记录不应保留跳过身份标记", record.has("identity_skipped"));
         assertEquals("未上传", record.optString("upload"));
         return record;
@@ -521,8 +567,9 @@ public final class CheckEvidenceCaptureTest {
 
     private static int differentPixels(Bitmap image, Rect region, int color) {
         int count = 0;
-        for (int y = region.top; y < region.bottom; y++) for (int x = region.left; x < region.right; x++)
-            if (colorDistance(image.getPixel(x, y), color) > 70) count++;
+        for (int y = region.top; y < region.bottom; y++)
+            for (int x = region.left; x < region.right; x++)
+                if (colorDistance(image.getPixel(x, y), color) > 70) count++;
         return count;
     }
 
@@ -533,11 +580,12 @@ public final class CheckEvidenceCaptureTest {
 
     private static int redPixels(Bitmap image, Rect region) {
         int count = 0;
-        for (int y = region.top; y < region.bottom; y++) for (int x = region.left; x < region.right; x++) {
-            int color = image.getPixel(x, y);
-            if (Color.red(color) > 150 && Color.red(color) - Color.green(color) > 70
-                    && Color.red(color) - Color.blue(color) > 55) count++;
-        }
+        for (int y = region.top; y < region.bottom; y++)
+            for (int x = region.left; x < region.right; x++) {
+                int color = image.getPixel(x, y);
+                if (Color.red(color) > 150 && Color.red(color) - Color.green(color) > 70
+                        && Color.red(color) - Color.blue(color) > 55) count++;
+            }
         return count;
     }
 
@@ -558,10 +606,14 @@ public final class CheckEvidenceCaptureTest {
                 label + "-" + root.getWidth() + "x" + root.getHeight() + ".png"))) {
             root.draw(new Canvas(bitmap));
             assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output));
-        } finally { bitmap.recycle(); }
+        } finally {
+            bitmap.recycle();
+        }
     }
 
-    /** 仅复制本用例真正保存的 JPEG，便于导出目视核验；业务原图仍按精确 UUID 清理。 */
+    /**
+     * 仅复制本用例真正保存的 JPEG，便于导出目视核验；业务原图仍按精确 UUID 清理。
+     */
     private void copySavedJpeg(String file, String artifactName) throws Exception {
         onIo(() -> {
             File directory = new File(app.getFilesDir(), "evidence-result-qa");
@@ -569,7 +621,7 @@ public final class CheckEvidenceCaptureTest {
             try (FileInputStream input = new FileInputStream(testStore.photo(file));
                  FileOutputStream output = new FileOutputStream(new File(directory, artifactName))) {
                 byte[] bytes = new byte[8192];
-                for (int count; (count = input.read(bytes)) != -1;) output.write(bytes, 0, count);
+                for (int count; (count = input.read(bytes)) != -1; ) output.write(bytes, 0, count);
             }
             return null;
         });
@@ -599,8 +651,14 @@ public final class CheckEvidenceCaptureTest {
 
     private final class SdkFixture extends WebSocketListener {
         private final Map<String, JSONObject> images = new ConcurrentHashMap<>();
-        @Override public void onOpen(WebSocket socket, Response response) { sockets.add(socket); }
-        @Override public void onMessage(WebSocket socket, String text) {
+
+        @Override
+        public void onOpen(WebSocket socket, Response response) {
+            sockets.add(socket);
+        }
+
+        @Override
+        public void onMessage(WebSocket socket, String text) {
             try {
                 JSONObject request = new JSONObject(text);
                 String command = request.getString("cmd");
@@ -624,17 +682,23 @@ public final class CheckEvidenceCaptureTest {
                         || "get_class_table".equals(command) || "getCertInfo".equals(command)
                         || "getDownloadProgress".equals(command) || "getCloudStatus".equals(command));
                 JSONObject data = new JSONObject();
-                if ("getStatus".equals(command)) data.put("sdk_state", "READY").put("model_ready", true)
-                        .put("certificate_valid", true).put("device_id", "EVIDENCE-TEST-DEVICE");
+                if ("getStatus".equals(command))
+                    data.put("sdk_state", "READY").put("model_ready", true)
+                            .put("certificate_valid", true).put("device_id", "EVIDENCE-TEST-DEVICE");
                 reply(socket, request.getString("requestId"), data);
-            } catch (Throwable error) { serverFailure.compareAndSet(null, error); }
+            } catch (Throwable error) {
+                serverFailure.compareAndSet(null, error);
+            }
         }
-        @Override public void onMessage(WebSocket socket, ByteString bytes) {
+
+        @Override
+        public void onMessage(WebSocket socket, ByteString bytes) {
             try {
                 ByteBuffer buffer = bytes.asByteBuffer();
                 int length = buffer.getInt();
                 assertTrue(length > 0 && length < buffer.remaining());
-                byte[] rawId = new byte[length]; buffer.get(rawId);
+                byte[] rawId = new byte[length];
+                buffer.get(rawId);
                 String id = new String(rawId, StandardCharsets.UTF_8);
                 JSONObject request = images.remove(id);
                 assertNotNull("二进制帧必须对应检测或身份声明", request);
@@ -654,8 +718,11 @@ public final class CheckEvidenceCaptureTest {
                     reply(socket, id, new JSONObject().put("boxes", new JSONArray(nextBoxes.toString())));
                     detectionsReplied.incrementAndGet();
                 }
-            } catch (Throwable error) { serverFailure.compareAndSet(null, error); }
+            } catch (Throwable error) {
+                serverFailure.compareAndSet(null, error);
+            }
         }
+
         private void reply(WebSocket socket, String id, JSONObject data) throws Exception {
             assertTrue(socket.send(new JSONObject().put("requestId", id).put("code", 0)
                     .put("reason", "隔离图片证据验收").put("data", data).toString()));
@@ -664,9 +731,14 @@ public final class CheckEvidenceCaptureTest {
 
     private static Object field(Object target, String name) {
         for (Class<?> type = target.getClass(); type != null; type = type.getSuperclass()) {
-            try { Field field = type.getDeclaredField(name); field.setAccessible(true); return field.get(target); }
-            catch (NoSuchFieldException ignored) {}
-            catch (IllegalAccessException error) { throw new AssertionError(error); }
+            try {
+                Field field = type.getDeclaredField(name);
+                field.setAccessible(true);
+                return field.get(target);
+            } catch (NoSuchFieldException ignored) {
+            } catch (IllegalAccessException error) {
+                throw new AssertionError(error);
+            }
         }
         throw new AssertionError("不存在的测试状态：" + name);
     }
@@ -675,26 +747,33 @@ public final class CheckEvidenceCaptureTest {
         AtomicReference<T> value = new AtomicReference<>();
         AtomicReference<Throwable> failure = new AtomicReference<>();
         instrumentation.runOnMainSync(() -> {
-            try { value.set(action.call()); }
-            catch (Throwable error) { failure.set(error); }
+            try {
+                value.set(action.call());
+            } catch (Throwable error) {
+                failure.set(error);
+            }
         });
         if (failure.get() != null) throw new AssertionError("主线程证据验收失败", failure.get());
         return value.get();
     }
 
-    private <T> T onIo(Callable<T> action) throws Exception { return app.io.submit(action).get(10, TimeUnit.SECONDS); }
+    private <T> T onIo(Callable<T> action) throws Exception {
+        return app.io.submit(action).get(10, TimeUnit.SECONDS);
+    }
 
     private void await(BooleanSupplier condition, String message) {
         long deadline = SystemClock.elapsedRealtime() + 15_000;
         do {
-            if (serverFailure.get() != null) throw new AssertionError("本机 SDK 夹具失败", serverFailure.get());
+            if (serverFailure.get() != null)
+                throw new AssertionError("本机 SDK 夹具失败", serverFailure.get());
             if (condition.getAsBoolean()) return;
             SystemClock.sleep(25);
         } while (SystemClock.elapsedRealtime() < deadline);
         fail(message);
     }
 
-    @SuppressWarnings("unchecked") private static void restore(SharedPreferences preferences, Map<String, Object> original) {
+    @SuppressWarnings("unchecked")
+    private static void restore(SharedPreferences preferences, Map<String, Object> original) {
         SharedPreferences.Editor editor = preferences.edit().clear();
         for (Map.Entry<String, Object> entry : original.entrySet()) {
             Object value = entry.getValue();
