@@ -40,18 +40,18 @@ public final class FaceResultPolicy {
     }
 
     public static boolean isAbsentOrDeleted(int code) {
-        return code == 0 || code == -6;
+        // forget 和 forgetByUid 对外用 -7 表示目标已不存在。
+        return code == 0 || code == -7;
     }
 
     /**
-     * -6 是人脸库目标不存在，不是通信故障；其他错误不允许清空本机登记状态。
+     * userDetail 用成功回执中的空列表表示没有样本；查询失败时保留本地登记状态。
      */
     public static JSONArray verifiedUids(int code, JSONObject data) {
         return verifiedSamples(code, data).uids;
     }
 
     public static VerifiedSamples verifiedSamples(int code, JSONObject data) {
-        if (code == -6) return new VerifiedSamples(new JSONArray(), Collections.emptyMap());
         if (code != 0) throw new IllegalArgumentException("SDK 尚未确认人脸明细");
         // 新协议只认同一项里的 UID 和图片；有 items 但内容无效时不能回退旧字段冒充成功。
         if (data != null && data.has("items")) return items(data.opt("items"));

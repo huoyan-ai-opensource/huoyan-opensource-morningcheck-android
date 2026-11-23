@@ -30,12 +30,20 @@ public class FaceResultPolicyTest {
     }
 
     @Test
-    public void missingPersonCanConvergeLocalFaceAndDeletionState() {
-        assertTrue(FaceResultPolicy.isAbsentOrDeleted(-6));
+    public void forgetCanFinishWhenSdkConfirmsTargetIsAlreadyAbsent() {
+        assertTrue(FaceResultPolicy.isAbsentOrDeleted(-7));
         assertTrue(FaceResultPolicy.isAbsentOrDeleted(0));
-        assertEquals(0, FaceResultPolicy.verifiedUids(-6, null).length());
+        assertFalse(FaceResultPolicy.isAbsentOrDeleted(-6));
         assertFalse(FaceResultPolicy.isAbsentOrDeleted(40009));
         assertFalse(FaceResultPolicy.isAbsentOrDeleted(-3));
+    }
+
+    @Test
+    public void onlySuccessfulDetailCanConfirmAnEmptyFaceList() throws Exception {
+        JSONObject empty = new JSONObject().put("items", new JSONArray());
+        assertEquals(0, FaceResultPolicy.verifiedUids(0, empty).length());
+        assertThrows(IllegalArgumentException.class, () -> FaceResultPolicy.verifiedUids(-6, empty));
+        assertThrows(IllegalArgumentException.class, () -> FaceResultPolicy.verifiedUids(-7, empty));
     }
 
     @Test
