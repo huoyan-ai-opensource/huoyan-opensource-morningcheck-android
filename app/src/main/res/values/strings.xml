@@ -3,7 +3,7 @@
     <string name="app_name">火眼晨检-开源版</string>
     <string name="ui_activity_check_design_active_check_progress_text">识别到员工后自动开始</string>
     <string name="ui_activity_check_design_active_check_pause_text">暂停</string>
-    <string name="ui_activity_check_design_ready_label_text">请正对相机，开始自动晨检</string>
+    <string name="check_ready_no_staff_hint">暂无员工，摄像头尚未开启。\n请在员工管理添加员工并录入人脸。</string>
     <string name="ui_activity_check_disconnected_label_text">设备连接已断开</string>
     <string name="ui_activity_check_disconnected_label_text_2">检查已暂停，请检查设备连接。\n恢复后可重新开始，已保存记录不受影响。</string>
     <string name="ui_activity_check_disconnected_check_disconnected_settings_text">检查连接</string>

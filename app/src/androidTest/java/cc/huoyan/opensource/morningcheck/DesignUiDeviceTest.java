@@ -1067,6 +1067,30 @@ public final class DesignUiDeviceTest {
     }
 
     @Test
+    public void emptyStaffListExplainsWhyCameraHasNotStarted() throws Exception {
+        AtomicReference<Throwable> serverFailure = prepareCheckReadySdk();
+        app.io.submit(() -> fixture.getWritableDatabase().execSQL("UPDATE staff SET deleted = 1"))
+                .get(10, TimeUnit.SECONDS);
+
+        try {
+            CheckActivity check = launch(CheckActivity.class);
+            await(() -> check.loaded && check.sdkReady());
+            main(() -> {
+                TextView hint = check.findViewById(R.id.check_ready_hint);
+                visible(check, hint);
+                assertEquals(check.getString(R.string.check_ready_no_staff_hint), hint.getText().toString());
+                assertNull(check.findViewById(R.id.camera_texture));
+                assertNull(check.camera);
+                return null;
+            });
+            assertNull(serverFailure.get());
+        } finally {
+            app.io.submit(() -> fixture.getWritableDatabase().execSQL("UPDATE staff SET deleted = 0"))
+                    .get(10, TimeUnit.SECONDS);
+        }
+    }
+
+    @Test
     public void readmeScreensFollowSystemLanguage() throws Exception {
         boolean english = "en".equals(app.getResources().getConfiguration().locale.getLanguage());
         AtomicReference<Throwable> serverFailure = prepareCheckReadySdk();

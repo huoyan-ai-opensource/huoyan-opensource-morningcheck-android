@@ -502,8 +502,15 @@ public final class CheckActivity extends CameraMorningActivity {
                 return;
             }
             ((TextView) content.findViewById(R.id.check_person)).setText(getString(R.string.i18n_a_not_ready));
-            ((TextView) content.findViewById(R.id.check_hint)).setText(!hasEmployeeForCheck()
-                    ? getString(R.string.i18n_a_add_staff_and_enroll_their_faces_first) : getString(R.string.i18n_a_connect_the_device_to_start_a_check));
+            TextView readyHint = content.findViewById(R.id.check_ready_hint);
+            if (!loaded) {
+                readyHint.setText(R.string.i18n_a_not_ready);
+            } else if (!hasEmployeeForCheck()) {
+                readyHint.setText(R.string.check_ready_no_staff_hint);
+            } else if (!sdkReady()) {
+                readyHint.setText(R.string.i18n_a_connect_the_device_to_start_a_check);
+            }
+            content.findViewById(R.id.check_hint).setVisibility(View.GONE);
             content.findViewById(R.id.check_temperature).setVisibility(View.GONE);
             content.findViewById(R.id.check_prompt_label).setVisibility(View.GONE);
             // 自动检查尚未启动，不能把设计中的“已连接”示例当作真实硬件状态。
@@ -1122,7 +1129,9 @@ public final class CheckActivity extends CameraMorningActivity {
         boolean paused = pipeline != null && capturePaused();
         boolean ready = pipeline != null && !paused && sdkReady() && captureIsCurrent()
                 && cameraError.isEmpty() && latestFrame != null;
-        status.setText(paused ? getString(R.string.i18n_a_check_paused) : ready ? getString(R.string.i18n_a_device_ready) : getString(R.string.i18n_a_waiting_for_device));
+        status.setText(pipeline == null ? R.string.i18n_a_not_ready
+                : paused ? R.string.i18n_a_check_paused
+                : ready ? R.string.i18n_a_device_ready : R.string.i18n_a_waiting_for_device);
         status.setTextColor(ContextCompat.getColor(this, ready ? R.color.mc_green : R.color.mc_muted));
         status.setBackgroundResource(ready ? R.drawable.mc_badge_success : R.drawable.mc_field);
         String[] names = {getString(R.string.i18n_a_face_recognition), getString(R.string.i18n_a_headwear_check),

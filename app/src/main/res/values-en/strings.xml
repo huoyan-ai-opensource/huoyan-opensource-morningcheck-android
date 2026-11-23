@@ -335,7 +335,7 @@
     <string name="staff_row_title_number">Staff No.</string>
     <string name="ui_activity_check_design_active_check_progress_text">Starts after staff identification</string>
     <string name="ui_activity_check_design_active_check_pause_text">Pause</string>
-    <string name="ui_activity_check_design_ready_label_text">Face the camera to start your check</string>
+    <string name="check_ready_no_staff_hint">No staff added. The camera is off.\nAdd staff and enroll their faces in Staff Management.</string>
     <string name="ui_activity_check_disconnected_label_text">Device disconnected</string>
     <string name="ui_activity_check_disconnected_label_text_2">Check paused. Check the device connection.\nRestart once restored. Saved records are unaffected.</string>
     <string name="ui_activity_check_disconnected_check_disconnected_settings_text">Check connection</string>

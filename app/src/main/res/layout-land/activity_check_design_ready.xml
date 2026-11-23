@@ -51,12 +51,15 @@
                         app:tint="@color/mc_muted" />
 
                     <TextView
+                        android:id="@+id/check_ready_hint"
                         style="@style/PenText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_12"
                         android:gravity="center"
-                        android:text="@string/ui_activity_check_design_ready_label_text"
+                        android:paddingStart="@dimen/dp_8"
+                        android:paddingEnd="@dimen/dp_8"
+                        android:text="@string/i18n_a_not_ready"
                         android:textColor="@color/mc_muted" />
                 </LinearLayout>
             </LinearLayout>
